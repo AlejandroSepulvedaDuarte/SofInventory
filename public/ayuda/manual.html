@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Ayuda - SofInventory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <link rel="stylesheet" href="../assets/styles/ayuda.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+
+</head>
+
+<body>
+    <div class="help-container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-question-circle"></i> Centro de Ayuda SofInventory</h1>
+            <p class="subtitle">Manual de usuario generado dinámicamente desde XML</p>
+        </div>
+
+        <!-- Búsqueda -->
+        <div class="search-box">
+            <input type="text" id="searchInput"
+                placeholder="🔍 Buscar en la ayuda (ej: 'productos', 'ventas', 'stock')">
+        </div>
+
+        <!-- Módulos se cargan aquí -->
+        <div class="modules" id="modulesContainer">
+            <p style="text-align: center; padding: 40px; color: #64748b;">
+                <i class="fas fa-spinner fa-spin"></i> Cargando manual desde XML...
+            </p>
+        </div>
+
+        <!-- Demostración XML -->
+        <div class="support">
+            <h3>📄 Demostración Técnica</h3>
+            <p>Esta ayuda se genera desde un archivo XML. Puedes ver la estructura:</p>
+            <button class="btn" onclick="showXMLStructure()">
+                <i class="fas fa-code"></i> Ver Estructura XML
+            </button>
+            <button class="btn" onclick="window.close()">
+                <i class="fas fa-times"></i> Cerrar Ayuda
+            </button>
+
+
+            <div id="xmlDemo" style="display:none;">
+                <pre><code id="xmlCode" class="language-markup"></code></pre>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../assets/javaScript/components/ayuda.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<div class="almacenes-container">
+    <!-- Formulario de Creación/Edición de Almacenes -->
+    <div id="form-almacen" class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-warehouse"></i> 
+                <span id="form-title">Nuevo Almacén</span>
+            </h2>
+            <span class="badge badge-info" id="form-mode">CREAR</span>
+        </div>
+        <form id="formAlmacen">
+            <input type="hidden" id="almacenId">
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nombre del Almacén *</label>
+                    <input type="text" id="almacenNombre" required placeholder="Ej: Almacén Principal, Bodega Norte...">
+                </div>
+                
+                <div class="form-group">
+                    <label>Código *</label>
+                    <input type="text" id="almacenCodigo" required placeholder="Código único (3-5 caracteres)">
+                    <span class="hint">Ej: ALM01, BOD02, etc.</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Dirección</label>
+                <textarea id="almacenDireccion" rows="2" placeholder="Dirección completa del almacén"></textarea>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Responsable</label>
+                    <input type="text" id="almacenResponsable" placeholder="Nombre del encargado">
+                </div>
+                
+                <div class="form-group">
+                    <label>Teléfono de Contacto</label>
+                    <input type="tel" id="almacenTelefono" placeholder="Número de contacto">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Capacidad Total</label>
+                <input type="number" id="almacenCapacidad" placeholder="Capacidad en unidades" min="1">
+                <span class="hint">Dejar vacío si no hay límite de capacidad</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Estado</label>
+                <select id="almacenEstado">
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                    <option value="mantenimiento">En Mantenimiento</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Notas Adicionales</label>
+                <textarea id="almacenNotas" rows="2" placeholder="Información adicional sobre el almacén"></textarea>
+            </div>
+            
+            <button type="button" class="btn-save" onclick="guardarAlmacen()">
+                <i class="fas fa-save"></i> <span id="btn-text">Crear Almacén</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Lista de Almacenes -->
+    <div id="lista-almacenes" class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-list"></i> Almacenes Registrados</h2>
+            <span class="badge badge-success" id="contador-almacenes">0</span>
+        </div>
+        <div id="contenido-almacenes">
+            <!-- Se llenará dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Confirmar Acción</h3>
+            <p id="modalMessage">¿Estás seguro de que quieres realizar esta acción?</p>
+            <div class="modal-actions">
+                <button type="button" class="btn-config" onclick="cancelarAccion()">Cancelar</button>
+                <button type="button" class="btn-config btn-danger" id="confirmActionBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/public/assets/javaScript/inventario/almacenes.js"></script>
+

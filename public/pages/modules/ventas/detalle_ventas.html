@@ -1,0 +1,70 @@
+<div id="listVentas" class="lisventas">
+    <div class="modal-content" style="max-width: 900px; max-height: 80vh;">
+        <div class="modal-header">
+            <h3><i class="fas fa-list"></i> Ventas Realizadas</h3>
+            <button type="button" class="btn-close" onclick="cerrarVentasModal()">&times;</button>
+        </div>
+
+        <div class="filtros-container" style="margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+            <div class="filtro-group">
+                <label>Fecha Desde</label>
+                <input type="date" id="filtroFechaDesde" onchange="filtrarVentas()">
+            </div>
+            <div class="filtro-group">
+                <label>Fecha Hasta</label>
+                <input type="date" id="filtroFechaHasta" onchange="filtrarVentas()">
+            </div>
+            <div class="filtro-group">
+                <label>Buscar</label>
+                <input type="text" id="buscarVenta" placeholder="ID, cliente, vendedor..." onkeyup="filtrarVentas()">
+            </div>
+        </div>
+
+        <div class="ventas-list-container" style="max-height: 400px; overflow-y: auto;">
+            <table class="ventas-table" style="width: 100%; border-collapse: collapse;">
+                <thead style="position: sticky; top: 0; background: #343a40; color: white;">
+                    <tr>
+                        <th style="padding: 10px; text-align: left;">No. Venta</th>
+                        <th style="padding: 10px; text-align: left;">Fecha</th>
+                        <th style="padding: 10px; text-align: left;">Cliente</th>
+                        <th style="padding: 10px; text-align: left;">Vendedor</th>
+                        <th style="padding: 10px; text-align: right;">Total</th>
+                        <th style="padding: 10px; text-align: center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-ventas">
+                    <!-- Las ventas se cargarán aquí -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 15px;">
+            <button type="button" class="btn-primary btn-warning" onclick="cerrarVentasModal()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Factura — se muestra al hacer clic en ojo o recibo -->
+<div id="facturaModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+        <div class="modal-header">
+            <h3><i class="fas fa-receipt"></i> Factura de Venta</h3>
+            <button type="button" class="btn-close" onclick="cerrarFacturaModal()">&times;</button>
+        </div>
+
+        <div id="factura-content" style="background: white; padding: 20px; border-radius: 6px;">
+            <!-- Contenido de la factura se carga aquí -->
+        </div>
+
+        <div class="modal-actions" style="margin-top: 15px;">
+            <button type="button" class="btn-primary btn-info" onclick="imprimirFactura()">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+            <button type="button" class="btn-primary btn-warning" onclick="cerrarFacturaModal()">
+                Cerrar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="/public/assets/javaScript/ventas/lista_ventas.js"></script>

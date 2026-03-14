@@ -1,0 +1,119 @@
+<div class="container">
+    <h2>Listado de Proveedores</h2>
+
+    <div class="search-box">
+        <input type="text" id="buscarProveedor" placeholder="Buscar proveedor...">
+    </div>
+
+    <table id="tablaProveedores">
+        <thead>
+            <tr>
+                <th>Tipo Doc.</th>
+                <th>N° Documento</th>
+                <th>Razón Social</th>
+                <th>Contacto</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Tipo Proveedor</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- MODAL EDITAR PROVEEDOR -->
+<div id="modalEditar" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Editar Proveedor</h3>
+
+        <form id="formEditarProveedor">
+            <input type="hidden" id="editId">
+
+            <div class="form-group">
+                <label>Tipo de Documento</label>
+                <select id="editTipoDoc" required></select>
+            </div>
+
+            <div class="form-group">
+                <label>Número Documento</label>
+                <input type="text" id="editNumDoc" required>
+            </div>
+
+            <div class="form-group">
+                <label>Razón Social</label>
+                <input type="text" id="editRazon" required>
+            </div>
+
+            <div class="form-group">
+                <label>Nombre Contacto</label>
+                <input type="text" id="editNombreContacto" required>
+            </div>
+
+            <div class="form-group">
+                <label>Cargo Contacto</label>
+                <input type="text" id="editCargoContacto">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="editEmail" required>
+            </div>
+
+            <div class="form-group">
+                <label>Teléfono</label>
+                <input type="text" id="editTelefono" required>
+            </div>
+
+            <div class="form-group">
+                <label>Dirección</label>
+                <input type="text" id="editDireccion" required>
+            </div>
+
+            <div class="form-group">
+                <label>País</label>
+                <input type="text" id="editPais" required>
+            </div>
+
+            <div class="form-group">
+                <label>Departamento / Estado</label>
+                <input type="text" id="editDepartamento" required>
+            </div>
+
+            <div class="form-group">
+                <label>Ciudad</label>
+                <input type="text" id="editCiudad" required>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo Proveedor</label>
+                <select id="editTipoProveedor" required>
+                    <option value="Bienes">Bienes (Productos)</option>
+                    <option value="Servicios">Servicios</option>
+                    <option value="Mixto">Mixto</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Estado</label>
+                <select id="editEstado" required>
+                    <option value="Activo">🟢 Activo</option>
+                    <option value="Inactivo">🔴 Inactivo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Observaciones</label>
+                <textarea id="editObservaciones" rows="3"></textarea>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="submit" class="btn-guardar">Guardar Cambios</button>
+                <button type="button" class="btn-cerrar" onclick="cerrarModalProveedor()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/public/assets/javaScript/clientes-proveedores/listado-proveedores.js"></script>

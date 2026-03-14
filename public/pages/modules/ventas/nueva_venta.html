@@ -1,0 +1,313 @@
+<div class="ventas-container">
+    <!-- Panel Principal - Productos y Carrito -->
+    <div class="main-panel">
+        <!-- Búsqueda y Filtros -->
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-search"></i> Buscar Productos</h2>
+            </div>
+
+            <div class="filtros-container">
+                <div class="filtro-group">
+                    <label>Buscar Producto</label>
+                    <input type="text" id="buscarProducto" placeholder="Nombre, marca, código..."
+                        onkeyup="filtrarProductos()">
+                </div>
+                <div class="filtro-group">
+                    <label>Categoría</label>
+                    <select id="filtroCategoria" onchange="filtrarProductos()">
+                        <option value="">Todas las categorías</option>
+                    </select>
+                </div>
+                <div class="filtro-group">
+                    <label>Mostrar</label>
+                    <select id="filtroStock" onchange="filtrarProductos()">
+                        <option value="todos">Todos los productos</option>
+                        <option value="con-stock">Solo con stock</option>
+                        <option value="sin-stock">Sin stock</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Productos -->
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-boxes"></i> Productos Disponibles</h2>
+                <span class="badge badge-info" id="contador-productos">0 productos</span>
+            </div>
+
+            <div class="productos-grid" id="lista-productos">
+                <!-- Productos se cargarán aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel Lateral - Carrito y Checkout -->
+    <div class="sidebar-panel">
+        <!-- Información del Cliente -->
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-user"></i> Cliente</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Seleccionar Cliente</label>
+                <select id="clienteVenta" onchange="actualizarCliente()">
+                    <option value="">Cliente General</option>
+                </select>
+            </div>
+            <!-- Almacén desde donde se despacha la venta -->
+            <div class="form-group" style="margin-top:10px;">
+                <label>Almacén de Despacho <span style="color:#e74c3c;">*</span></label>
+                <select id="almacenVenta" onchange="actualizarAlmacen()" required>
+                    <option value="">Seleccionar almacén...</option>
+                </select>
+                <small class="hint">El stock se descontará de este almacén</small>
+            </div>
+
+            <div id="info-cliente" style="display: none;">
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                    <strong id="cliente-nombre"></strong><br>
+                    <small id="cliente-documento"></small><br>
+                    <small id="cliente-contacto"></small>
+                </div>
+            </div>
+
+            <button class="btn-primary" style="margin-top: 10px; background-color: #262B50;"
+                onclick="gestionarClientes()">
+                <i class="fas fa-users"></i> Gestionar Clientes
+            </button>
+        </div>
+
+        <!-- Carrito de Compras -->
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-shopping-cart"></i> Carrito de Venta</h2>
+                <span class="badge badge-success" id="contador-carrito">0 items</span>
+            </div>
+
+            <div class="carrito-items" id="items-carrito">
+                <!-- Items del carrito se cargarán aquí -->
+            </div>
+
+            <div class="resumen-venta">
+                <div class="resumen-linea">
+                    <span>Subtotal:</span>
+                    <span id="subtotal-venta">$0.00</span>
+                </div>
+                <div class="resumen-linea">
+                    <span>IVA:</span>
+                    <span id="iva-venta">$0.00</span>
+                </div>
+                <div class="resumen-linea">
+                    <span>Descuento:</span>
+                    <span id="descuento-venta">$0.00</span>
+                </div>
+                <div class="resumen-linea resumen-total">
+                    <span>TOTAL:</span>
+                    <span id="total-venta">$0.00</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Descuento ($)</label>
+                <input type="number" id="descuento" min="0" value="0" onchange="calcularTotales()">
+            </div>
+
+            <!-- Nuevo: Control de IVA manual -->
+            <div class="form-group">
+                <label>IVA</label>
+                <div class="iva-toggle">
+                    <div class="iva-toggle-btn active" id="iva-automatico" onclick="cambiarTipoIVA('automatico')">
+                        Automático (19%)
+                    </div>
+                    <div class="iva-toggle-btn" id="iva-manual" onclick="cambiarTipoIVA('manual')">
+                        Manual
+                    </div>
+                </div>
+                <div id="iva-manual-control" style="display: none;">
+                    <div class="iva-controls">
+                        <input type="number" id="iva-manual-valor" min="0" max="100" step="0.1" value="19"
+                            style="flex: 1;" onchange="calcularTotales()">
+                        <span>%</span>
+                        <input type="number" id="iva-manual-monto" min="0" step="0.01" value="0" style="flex: 2;"
+                            onchange="calcularTotales()">
+                    </div>
+                    <small class="hint">Puede ingresar el porcentaje o el monto manualmente</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Observaciones</label>
+                <textarea id="observaciones-venta" rows="2" placeholder="Observaciones de la venta..."></textarea>
+            </div>
+
+            <button class="btn-primary btn-success" onclick="procesarVenta()">
+                <i class="fas fa-credit-card"></i> Procesar Venta
+            </button>
+
+            <button class="btn-primary btn-warning" style="margin-top: 10px;" onclick="limpiarCarrito()">
+                <i class="fas fa-trash"></i> Limpiar Carrito
+            </button>
+
+            <button class="btn-primary btn-info" style="margin-top: 10px;" onclick="mostrarListaVentas()">
+                <i class="fas fa-list"></i> Ver Ventas Realizadas
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div id="confirmModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">Confirmar Venta</h3>
+        <p id="modalMessage">¿Está seguro de procesar esta venta?</p>
+        <div class="modal-actions">
+            <button type="button" class="btn-primary btn-warning" onclick="cancelarAccion()">Cancelar</button>
+            <button type="button" class="btn-primary btn-success" id="confirmActionBtn">Confirmar Venta</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Métodos de Pago -->
+<div id="pagoModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <h3><i class="fas fa-credit-card"></i> Método de Pago</h3>
+
+        <div class="form-group">
+            <label>Seleccionar Método de Pago *</label>
+            <select id="metodoPago" required onchange="mostrarCamposPago()">
+                <option value="">Seleccione método...</option>
+                <option value="efectivo">Efectivo</option>
+                <option value="debito">Tarjeta Débito</option>
+                <option value="credito">Tarjeta Crédito</option>
+                <option value="transferencia">Transferencia</option>
+                <option value="nequi">Nequi</option>
+                <option value="daviplata">DaviPlata</option>
+                <option value="otro">Otro</option>
+            </select>
+        </div>
+
+        <div id="campos-efectivo" class="pago-campos" style="display: none;">
+            <div class="form-group">
+                <label>Efectivo Recibido *</label>
+                <input type="number" id="efectivoRecibido" min="0" placeholder="Monto recibido"
+                    oninput="calcularCambio()">
+            </div>
+            <div class="resumen-linea">
+                <span>Cambio:</span>
+                <span id="cambio-calculado">$0.00</span>
+            </div>
+        </div>
+
+        <div id="campos-tarjeta" class="pago-campos" style="display: none;">
+            <div class="form-group">
+                <label>Últimos 4 dígitos</label>
+                <input type="text" id="numeroTarjeta" maxlength="4" placeholder="1234">
+            </div>
+            <div class="form-group">
+                <label>Aprobación</label>
+                <input type="text" id="aprobacionTarjeta" placeholder="Número de aprobación">
+            </div>
+        </div>
+
+        <div id="campos-transferencia" class="pago-campos" style="display: none;">
+            <div class="form-group">
+                <label>Número de Comprobante</label>
+                <input type="text" id="comprobanteTransferencia" placeholder="Número de transacción">
+            </div>
+        </div>
+
+        <div id="campos-otro" class="pago-campos" style="display: none;">
+            <div class="form-group">
+                <label>Especificar Método</label>
+                <input type="text" id="otroMetodo" placeholder="Especificar método de pago">
+            </div>
+        </div>
+
+        <div class="resumen-venta" style="margin: 15px 0;">
+            <div class="resumen-linea">
+                <span>Total a Pagar:</span>
+                <span id="total-pagar">$0.00</span>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-primary btn-warning" onclick="cerrarPagoModal()">Cancelar</button>
+            <button type="button" class="btn-primary btn-success" onclick="confirmarPago()">Confirmar Pago</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para Lista de Ventas -->
+<div id="ventasModal" class="modal">
+    <div class="modal-content" style="max-width: 900px; max-height: 80vh;">
+        <div class="modal-header">
+            <h3><i class="fas fa-list"></i> Ventas Realizadas</h3>
+            <button type="button" class="btn-close" onclick="cerrarVentasModal()">&times;</button>
+        </div>
+
+        <div class="filtros-container" style="margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+            <div class="filtro-group">
+                <label>Fecha Desde</label>
+                <input type="date" id="filtroFechaDesde" onchange="filtrarVentas()">
+            </div>
+            <div class="filtro-group">
+                <label>Fecha Hasta</label>
+                <input type="date" id="filtroFechaHasta" onchange="filtrarVentas()">
+            </div>
+            <div class="filtro-group">
+                <label>Buscar</label>
+                <input type="text" id="buscarVenta" placeholder="ID, cliente, producto..." onkeyup="filtrarVentas()">
+            </div>
+        </div>
+
+        <div class="ventas-list-container" style="max-height: 400px; overflow-y: auto;">
+            <table class="ventas-table" style="width: 100%; border-collapse: collapse;">
+                <thead style="position: sticky; top: 0; background: #343a40; color: white;">
+                    <tr class="detalle-ventas">
+                        <th style="padding: 10px; text-align: left;">ID Venta</th>
+                        <th style="padding: 10px; text-align: left;">Fecha</th>
+                        <th style="padding: 10px; text-align: left;">Cliente</th>
+                        <th style="padding: 10px; text-align: left;">Vendedor</th> <!-- NUEVA COLUMNA -->
+                        <th style="padding: 10px; text-align: right;">Total</th>
+                        <th style="padding: 10px; text-align: center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-ventas">
+                    <!-- Las ventas se cargarán aquí -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 15px;">
+            <button type="button" class="btn-primary btn-warning" onclick="cerrarVentasModal()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Factura -->
+<div id="facturaModal" class="modal">
+    <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-header">
+            <h3><i class="fas fa-receipt"></i> Factura de Venta</h3>
+            <button type="button" class="btn-close" onclick="cerrarFacturaModal()">&times;</button>
+        </div>
+
+        <div id="factura-content" style="background: white; padding: 20px; border-radius: 6px;">
+            <!-- Contenido de la factura se cargará aquí -->
+        </div>
+
+        <div class="modal-actions" style="margin-top: 15px;">
+            <button type="button" class="btn-primary btn-info" onclick="imprimirFactura()">
+                <i class="fas fa-print"></i> Imprimir Factura
+            </button>
+            <button type="button" class="btn-primary btn-warning" onclick="cerrarFacturaModal()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script src="/public/assets/javaScript/ventas/ventas.js"></script>

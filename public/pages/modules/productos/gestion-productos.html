@@ -1,0 +1,102 @@
+<div class="main-container">
+
+    <!-- Productos Pendientes -->
+    <div id="productos-pendientes" class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-clock"></i> Productos Pendientes por Configurar</h2>
+            <span class="badge badge-warning" id="contador-pendientes">0</span>
+        </div>
+        <div id="lista-pendientes"></div>
+    </div>
+
+    <!-- Formulario Configuración -->
+    <div id="form-config-producto" class="card" style="display: none;">
+        <div class="card-header">
+            <h2><i class="fas fa-cog"></i> Configurar Producto</h2>
+            <button type="button" onclick="cancelarConfiguracion()" class="btn-config"
+                style="background-color: #dc3545;">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+        </div>
+        <form id="formProductoConfig" enctype="multipart/form-data">
+            <input type="hidden" id="productoId">
+            <div class="form-group">
+                <label>SKU</label>
+                <input type="text" id="productoSku" readonly class="readonly-field">
+            </div>
+            <div class="form-group">
+                <label>Producto</label>
+                <input type="text" id="productoNombre" readonly class="readonly-field">
+            </div>
+
+            <div class="form-group">
+                <label>Marca</label>
+                <input type="text" id="productoMarca" readonly class="readonly-field">
+            </div>
+
+            <div class="form-group">
+                <label>Referencia</label>
+                <input type="text" id="productoReferencia" readonly class="readonly-field">
+            </div>
+
+            <div class="form-group">
+                <label>Categoría</label>
+                <input type="text" id="productoCategoriaNombre" readonly class="readonly-field">
+            </div>
+
+            <div class="form-group">
+                <label>Stock actual</label>
+                <input type="text" id="productoStock" readonly class="readonly-field">
+            </div>
+
+            <div class="form-group">
+                <label>Precio de Compra</label>
+                <input type="text" id="productoPrecioCompra" readonly class="readonly-field">
+            </div>
+
+            <div class="form-group">
+                <label>Precio de Venta *</label>
+                <input type="number" id="productoPrecioVenta" required placeholder="Precio de venta al público" min="1">
+            </div>
+
+            <div class="form-group">
+                <label>Stock Mínimo *</label>
+                <input type="number" id="productoStockMinimo" required placeholder="Cantidad mínima en bodega" min="0"
+                    value="0">
+            </div>
+
+            <div class="form-group">
+                <label>Descripción</label>
+                <textarea id="productoDescripcion" rows="2" placeholder="Descripción adicional del producto"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Observaciones</label>
+                <textarea id="productoObservaciones" rows="2" placeholder="Observaciones adicionales"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Imagen del Producto</label>
+                <input type="file" id="productoImagen" accept="image/*" onchange="previsualizarImagen(this)">
+                <span class="hint">Se recomienda una imagen cuadrada.</span>
+                <img id="previewImagen" style="display:none; width:120px; margin-top:10px; border-radius:8px;"
+                    alt="Vista previa">
+            </div>
+
+            <!-- Campos dinámicos según tipo de control -->
+            <div id="campos-tipo-control"></div>
+
+            <button type="button" class="btn-save" id="btnGuardarConfig" onclick="guardarConfiguracion()">
+                <i class="fas fa-check"></i> Completar Configuración
+            </button>
+        </form>
+    </div>
+
+    <!-- Productos Configurados -->
+    <div id="productos-configurados" class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-check-circle"></i> Productos Configurados</h2>
+            <span class="badge badge-success" id="contador-configurados">0</span>
+        </div>
+        <div id="lista-configurados"></div>
+    </div>
+</div>
+<script src="../assets/javaScript/productos/gestion-productos.js"></script>

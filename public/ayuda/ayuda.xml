@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manual_sistema nombre="SofInventory" version="2.1.3" fecha="2025-12-5">
+    <modulos>
+        <!-- Módulo: Productos e Inventario -->
+        <modulo nombre="Productos e Inventario" icono="📦">
+            <descripcion>Gestión de productos, categorías y control de stock</descripcion>
+            <datos_muestra>SKU: MARTILLO_6318 | Stock: 23 | Categoría: Ferretería</datos_muestra>
+            <pasos>
+                <paso orden="1">Vaya al menú principal → Productos</paso>
+                <paso orden="2">Haga clic en "Nuevo Producto"</paso>
+                <paso orden="3">Complete los campos obligatorios: SKU, nombre, categoría</paso>
+                <paso orden="4">Configure precios de compra y venta</paso>
+                <paso orden="5">Guarde el producto</paso>
+            </pasos>
+            <consejos>
+                <consejo>Los SKU deben ser únicos (ej: MARTILLO_6318)</consejo>
+                <consejo>El stock se actualiza automáticamente con compras/ventas</consejo>
+                <consejo>Configure alertas para stock bajo (&lt; 5 unidades)</consejo>
+            </consejos>
+            <campos_importantes>
+                <campo nombre="SKU" obligatorio="true" tipo="texto">Identificador único del producto</campo>
+                <campo nombre="Nombre" obligatorio="true" tipo="texto">Nombre comercial</campo>
+                <campo nombre="Categoría" obligatorio="true" tipo="select">Ferretería, Papelería, etc.</campo>
+                <campo nombre="Precio Venta" obligatorio="true" tipo="numero">Precio de venta al público</campo>
+            </campos_importantes>
+        </modulo>
+        
+        <!-- Módulo: Ventas y Clientes -->
+        <modulo nombre="Ventas y Clientes" icono="💰">
+            <descripcion>Proceso de ventas, facturación y gestión de clientes</descripcion>
+            <datos_muestra>Cliente: Diana Giraldo | Documento: 45454545 | Tipo: Natural</datos_muestra>
+            <pasos>
+                <paso orden="1">Vaya a Ventas → Nueva Venta</paso>
+                <paso orden="2">Seleccione cliente existente o cree uno nuevo</paso>
+                <paso orden="3">Agregue productos al carrito de venta</paso>
+                <paso orden="4">Revise totales (subtotal, IVA, total)</paso>
+                <paso orden="5">Seleccione tipo de venta (Contado/Crédito)</paso>
+                <paso orden="6">Genere factura</paso>
+            </pasos>
+            <consejos>
+                <consejo>Clientes pueden ser "Natural" o "Jurídica"</consejo>
+                <consejo>El sistema calcula automáticamente IVA según producto</consejo>
+                <consejo>Puede imprimir factura o enviar por email</consejo>
+            </consejos>
+        </modulo>
+        
+        <!-- Módulo: Compras y Proveedores -->
+        <modulo nombre="Compras y Proveedores" icono="📋">
+            <descripcion>Registro de compras, gestión de proveedores y entrada de inventario</descripcion>
+            <datos_muestra>Proveedor: Carlos mario | Factura: Fac-09 | Total: $31,500.00</datos_muestra>
+            <pasos>
+                <paso orden="1">Vaya a Compras → Nueva Compra</paso>
+                <paso orden="2">Seleccione proveedor existente</paso>
+                <paso orden="3">Ingrese número de factura del proveedor</paso>
+                <paso orden="4">Agregue productos comprados con cantidades y costos</paso>
+                <paso orden="5">Revise cálculos automáticos de subtotal, IVA y total</paso>
+                <paso orden="6">Registre compra (el stock se actualiza automáticamente)</paso>
+            </pasos>
+            <consejos>
+                <consejo>Las compras pueden ser "Contado" o "Crédito"</consejo>
+                <consejo>El stock se actualiza inmediatamente al registrar</consejo>
+                <consejo>Mantenga registro de todas las facturas de proveedores</consejo>
+            </consejos>
+        </modulo>
+        
+        <!-- Módulo: Usuarios y Seguridad -->
+        <modulo nombre="Usuarios y Seguridad" icono="👥">
+            <descripcion>Administración de usuarios, roles y permisos del sistema</descripcion>
+            <datos_muestra>Roles: Administrador, Vendedor, Bodeguero, Supervisor</datos_muestra>
+            <pasos>
+                <paso orden="1">Vaya a Configuración → Usuarios</paso>
+                <paso orden="2">Haga clic en "Nuevo Usuario"</paso>
+                <paso orden="3">Complete datos personales y credenciales</paso>
+                <paso orden="4">Asigne rol según responsabilidades</paso>
+                <paso orden="5">Active/desactive usuario según necesidad</paso>
+                <paso orden="6">Guarde los cambios</paso>
+            </pasos>
+            <consejos>
+                <consejo>Los roles definen permisos de acceso a módulos</consejo>
+                <consejo>Siempre mantenga al menos un usuario Administrador activo</consejo>
+                <consejo>Las contraseñas se almacenan de forma segura</consejo>
+            </consejos>
+        </modulo>
+        
+        <!-- Módulo: Reportes y Análisis -->
+        <modulo nombre="Reportes y Análisis" icono="📊">
+            <descripcion>Generación de reportes, análisis de ventas y control de inventario</descripcion>
+            <datos_muestra>Rangos de stock: Bajo (&lt;5), Medio (5-20), Alto (&gt;20)</datos_muestra>
+            <pasos>
+                <paso orden="1">Vaya a Reportes → Seleccione tipo de reporte</paso>
+                <paso orden="2">Defina rango de fechas y filtros</paso>
+                <paso orden="3">Genere reporte en pantalla</paso>
+                <paso orden="4">Exporte a PDF o Excel si es necesario</paso>
+            </pasos>
+            <consejos>
+                <consejo>Los reportes se pueden filtrar por fecha, categoría, etc.</consejo>
+                <consejo>Exporte reportes para análisis externos</consejo>
+                <consejo>Monitoree productos con stock bajo regularmente</consejo>
+            </consejos>
+        </modulo>
+    </modulos>
+    
+    <!-- Sección de soporte técnico -->
+    <soporte_tecnico>
+        <contacto tipo="email">soporte@sofinventory.com</contacto>
+        <contacto tipo="telefono">+57 3197751596</contacto>
+        <horario>Lunes a Viernes: 8:00 AM - 6:00 PM</horario>
+        <horario_emergencia>Soporte urgente: 24/7 para problemas críticos</horario_emergencia>
+        
+        <preguntas_frecuentes>
+            <faq id="1">
+                <pregunta>¿Cómo restablezco mi contraseña?</pregunta>
+                <respuesta>Contacte al administrador del sistema o al soporte técnico.</respuesta>
+            </faq>
+            <faq id="2">
+                <pregunta>¿Puedo tener múltiples usuarios simultáneos?</pregunta>
+                <respuesta>Sí, SofInventory soporta múltiples usuarios con diferentes permisos.</respuesta>
+            </faq>
+            <faq id="3">
+                <pregunta>¿El sistema hace backup automático?</pregunta>
+                <respuesta>Depende de la configuración. Consulte con su administrador.</respuesta>
+            </faq>
+        </preguntas_frecuentes>
+    </soporte_tecnico>
+    
+    <metadata_proyecto>
+        <estudiante>SofInventory Team</estudiante>
+        <asignatura>Proyecto Final</asignatura>
+        <requisito>Implementación de sistema de ayuda con XML</requisito>
+        <descripcion_tecnica>
+            Este archivo XML demuestra cómo estructurar datos para un sistema de ayuda.
+            Se carga dinámicamente y se transforma a HTML usando JavaScript puro.
+            Los datos de ejemplo son casi reales, extraídos del sistema SofInventory.
+        </descripcion_tecnica>
+    </metadata_proyecto>
+</manual_sistema>

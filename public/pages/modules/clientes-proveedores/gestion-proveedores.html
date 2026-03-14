@@ -1,0 +1,119 @@
+<div class="main-wrapper">
+    <div class="proveedores-container">
+
+        <div class="form-header">
+            <h2 class="titulo-modulo">Nuevo Proveedor</h2>
+            <p class="subtitulo">Complete la información para registrar un aliado comercial.</p>
+        </div>
+
+        <form id="formProveedores" class="form-card">
+
+            <!-- Tipo documento -->
+            <div class="form-group">
+                <label for="tipoDocumento">Tipo de documento <span class="required">*</span></label>
+                <select id="tipoDocumento" required>
+                    <option value="">Seleccione...</option>
+                </select>
+            </div>
+
+            <!-- Número documento -->
+            <div class="form-group">
+                <label for="numeroDocumento">Número de documento <span class="required">*</span></label>
+                <input type="text" id="numeroDocumento" placeholder="Ej: 9001234561" required>
+            </div>
+
+            <!-- Razón social -->
+            <div class="form-group">
+                <label for="razonSocial">Razón social / Nombre <span class="required">*</span></label>
+                <input type="text" id="razonSocial" placeholder="Ej: Insumos y Suministros SAS" required>
+            </div>
+
+            <!-- Nombre contacto -->
+            <div class="form-group">
+                <label for="nombreContacto">Nombre de contacto <span class="required">*</span></label>
+                <input type="text" id="nombreContacto" placeholder="Ej: Carlos Pérez" required>
+            </div>
+
+            <!-- Cargo contacto -->
+            <div class="form-group">
+                <label for="cargoContacto">Cargo del contacto</label>
+                <input type="text" id="cargoContacto" placeholder="Ej: Gerente de ventas">
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="emailProveedor">Correo electrónico <span class="required">*</span></label>
+                <input type="email" id="emailProveedor" placeholder="contacto@empresa.com" required>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="form-group">
+                <label for="telefonoProveedor">Teléfono / Móvil <span class="required">*</span></label>
+                <input type="text" id="telefonoProveedor" placeholder="Ej: 300 123 4567" required>
+            </div>
+
+            <!-- Dirección -->
+            <div class="form-group">
+                <label for="direccionProveedor">Dirección física <span class="required">*</span></label>
+                <input type="text" id="direccionProveedor" placeholder="Calle 10 # 20 - 30" required>
+            </div>
+
+            <!-- País -->
+            <div class="form-group">
+                <label for="paisProveedor">País <span class="required">*</span></label>
+                <input type="text" id="paisProveedor" placeholder="Ej: Colombia" required>
+            </div>
+
+            <!-- Departamento -->
+            <div class="form-group">
+                <label for="departamentoProveedor">Departamento / Estado <span class="required">*</span></label>
+                <input type="text" id="departamentoProveedor" placeholder="Ej: Antioquia" required>
+            </div>
+
+            <!-- Ciudad -->
+            <div class="form-group">
+                <label for="ciudadProveedor">Ciudad <span class="required">*</span></label>
+                <input type="text" id="ciudadProveedor" placeholder="Ej: Medellín" required>
+            </div>
+
+            <!-- Tipo proveedor -->
+            <div class="form-group">
+                <label for="tipoProveedor">Tipo de proveedor <span class="required">*</span></label>
+                <select id="tipoProveedor" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Bienes">Bienes (Productos)</option>
+                    <option value="Servicios">Servicios</option>
+                    <option value="Mixto">Mixto</option>
+                </select>
+            </div>
+
+            <!-- Estado -->
+            <div class="form-group">
+                <label for="estadoProveedor">Estado <span class="required">*</span></label>
+                <select id="estadoProveedor" required>
+                    <option value="Activo">🟢 Activo</option>
+                    <option value="Inactivo">🔴 Inactivo</option>
+                </select>
+            </div>
+
+            <!-- Observaciones -->
+            <div class="form-group full">
+                <label for="observacionesProveedor">Observaciones adicionales</label>
+                <textarea id="observacionesProveedor" rows="3"
+                    placeholder="Información extra sobre pagos, entregas, etc."></textarea>
+            </div>
+
+            <!-- Botones -->
+            <div class="form-actions">
+                <button type="button" class="btn-cancelar-proveedor" id="cancelarProveedor">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-guardar-proveedor">
+                    Guardar Proveedor
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+<script src="/public/assets/javaScript/clientes-proveedores/gestion-proveedores.js"></script>

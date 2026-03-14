@@ -1,0 +1,146 @@
+<button class="hamburger-btn" id="hamburgerBtn">☰</button>
+
+<div class="overlay" id="overlay"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="logo">
+    <h3>SofInventory</h3>
+  </div>
+
+  <div>
+    <ul>
+      <!-- Inicio - Todos pueden ver -->
+      <li class="active" data-section="inicio" data-roles="Administrador,Vendedor,Bodeguero">
+        <a href="../pages/dashboard.html">
+          <i class="fas fa-home" style="margin-right: 15px;"></i>
+          <span>Inicio</span>
+        </a>
+      </li>
+
+      <!-- Productos -->
+      <li class="has-submenu" data-section="productos" data-roles="Administrador,Bodeguero">
+        <i class="fas fa-box"></i>
+        <span>Productos</span>
+        <i class="fas fa-chevron-right submenu-toggle"></i>
+      </li>
+      <ul class="submenu" data-roles="Administrador,Bodeguero">
+        <li data-section="gestion-productos" data-roles="Administrador,Bodeguero">
+          <a href="#" class="submenu-link" data-module="../pages/modules/productos/gestion-productos.html"><i
+              class="fas fa-list" style="margin-right: 10px;"></i> Gestionar Productos</a>
+        </li>
+        <li data-section="categorias" data-roles="Administrador,Bodeguero">
+          <a href="#" class="submenu-link" data-module="../pages/modules/productos/categorias.html"><i
+              class="fas fa-tags" style="margin-right: 10px;"></i> Categorías</a>
+        </li>
+
+      </ul>
+
+      <!-- Inventario -->
+      <li class="has-submenu" data-section="inventario" data-roles="Administrador,Vendedor,Bodeguero">
+        <i class="fas fa-warehouse"></i>
+        <span>Inventario</span>
+        <i class="fas fa-chevron-right submenu-toggle"></i>
+      </li>
+      <ul class="submenu" data-roles="Administrador,Vendedor,Bodeguero">
+        <li data-section="stock" data-roles="Administrador,Vendedor,Bodeguero">
+          <a href="#" class="submenu-link" data-module="../pages/modules/inventario/stock_actual.html"><i
+              class="fas fa-cubes" style="margin-right: 10px;"></i> Stock Actual</a>
+        </li>
+
+        <li data-section="almacenes" data-roles="Administrador,Bodeguero">
+          <a href="#" class="submenu-link" data-module="../pages/modules/inventario/almacenes.html"><i
+              class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Almacenes</a>
+        </li>
+      </ul>
+
+      <!-- Ventas -->
+      <li class="has-submenu" data-section="ventas" data-roles="Administrador,Vendedor">
+        <i class="fas fa-cash-register"></i>
+        <span>Ventas</span>
+        <i class="fas fa-chevron-right submenu-toggle"></i>
+      </li>
+      <ul class="submenu" data-roles="Administrador,Vendedor">
+        <li data-section="nueva-venta" data-roles="Administrador,Vendedor">
+          <a href="#" class="submenu-link" data-module="../pages/modules/ventas/nueva_venta.html"><i
+              class="fas fa-plus-circle" style="margin-right: 10px;"></i> Nueva Venta</a>
+        </li>
+      </ul>
+
+      <!-- Compras -->
+      <li class="has-submenu" data-section="compras" data-roles="Administrador,Bodeguero">
+        <i class="fas fa-shopping-cart"></i>
+        <span>Compras</span>
+        <i class="fas fa-chevron-right submenu-toggle"></i>
+      </li>
+      <ul class="submenu" data-roles="Administrador,Bodeguero">
+        <li data-section="nueva-compra" data-roles="Administrador">
+          <a href="#" class="submenu-link" data-module="../pages/modules/compras/nueva-compra.html"><i
+              class="fas fa-cart-plus" style="margin-right: 10px;"></i> Nueva Compra</a>
+        </li>
+        <li data-section="historial-compras" data-roles="Administrador,Bodeguero">
+          <a href="#" class="submenu-link" data-module="../pages/modules/compras/listado-compras.html"><i
+              class="fas fa-list-alt" style="margin-right: 10px;"></i> Historial</a>
+        </li>
+      </ul>
+
+      <!-- Clientes/Proveedores -->
+      <li class="has-submenu" data-section="clientes" data-roles="Administrador,Vendedor,Bodeguero">
+        <i class="fas fa-users"></i>
+        <span>Clientes / Proveedores</span>
+        <i class="fas fa-chevron-right submenu-toggle"></i>
+      </li>
+      <ul class="submenu" data-roles="Administrador,Vendedor,Bodeguero">
+        <li data-section="gestion-clientes" data-roles="Administrador,Vendedor">
+          <a href="#" class="submenu-link" data-module="../pages/modules/clientes-proveedores/gestion-clientes.html"><i
+              class="fas fa-user-friends" style="margin-right: 10px;"></i> Gestionar
+            Clientes</a>
+        </li>
+        <li data-section="gestion-proveedores" data-roles="Administrador,Bodeguero">
+          <a href="#" class="submenu-link"
+            data-module="../pages/modules/clientes-proveedores/gestion-proveedores.html"><i class="fas fa-truck" style="margin-right: 10px;"></i>
+            Gestionar Proveedores</a>
+        </li>
+        <li data-section="gestion-proveedores" data-roles="Administrador,Bodeguero">
+          <a href="#" class="submenu-link"
+            data-module="../pages/modules/clientes-proveedores/listado-proveedores.html"><i
+              class="fas fa-truck" style="margin-right: 10px;"></i>Lista de Proveedores</a>
+        </li>
+      </ul>
+
+      <!-- Usuarios y Roles - SOLO ADMIN -->
+      <li class="has-submenu" data-section="usuarios" data-roles="Administrador">
+        <i class="fas fa-user-shield"></i>
+        <span>Usuarios y Roles</span>
+        <i class="fas fa-chevron-right submenu-toggle"></i>
+      </li>
+      <ul class="submenu" data-roles="Administrador">
+        <li data-section="gestion-usuarios" data-roles="Administrador">
+          <a href="#" class="submenu-link" data-module="../pages/modules/usuarios/usuarios.html">
+            <i class="fas fa-users-cog" style="margin-right: 10px;"></i> Gestionar Usuarios
+          </a>
+        </li>
+        <li data-section="listado-usuarios" data-roles="Administrador">
+          <a href="#" class="submenu-link" data-module="../pages/modules/usuarios/usuarios-listado.html">
+            <i class="fas fa-list" style="margin-right: 10px;"></i> Lista de Usuarios
+          </a>
+        </li>
+
+        <li data-section="gestion-roles" data-roles="Administrador">
+          <a href="#" class="submenu-link" data-module="../pages/modules/roles/roles.html">
+            <i class="fas fa-user-tag" style="margin-right: 10px;"></i>Roles
+          </a>
+        </li>
+      </ul>
+
+      <li data-roles="Administrador,Vendedor,Bodeguero">
+        <a href="#" class="logout"
+          onclick="sessionStorage.removeItem('currentUser'); window.location.href='../index.html';">
+          <strong style="margin-right: 10px; font-size: 1rem;">X</strong> Cerrar sesión
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<script src="/public/assets/javaScript/components/menu.js"></script>
+ 

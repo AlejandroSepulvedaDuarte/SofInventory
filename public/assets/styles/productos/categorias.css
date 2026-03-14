@@ -1,0 +1,114 @@
+    /* Tus estilos CSS se mantienen igual */
+    :root {
+        --primary: #2c3e50;
+        --accent: #3498db;
+        --success: #27ae60;
+        --warning: #f39c12;
+        --danger: #c0392b;
+        --light: #f8f9fa;
+        --dark: #343a40;
+    }
+
+    .main-container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 25px;
+    }
+
+    .card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        padding: 25px;
+        height: fit-content;
+    }
+
+    .card-header {
+        border-bottom: 2px solid #eee;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-header h2 { margin: 0; font-size: 1.25rem; color: var(--primary); }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; font-size: 0.9rem; }
+    
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+    }
+
+    input:focus, select:focus { border-color: var(--accent); outline: none; }
+    
+    .hint { font-size: 0.8rem; color: #888; margin-top: 4px; display: block; }
+
+    #categoryForm button {
+        width: 100%;
+        padding: 12px;
+        background-color: #262B50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: background 0.3s;
+    }
+    #categoryForm button:hover { background-color: #145593; }
+
+    /* Tabla */
+    .table-categorias { 
+        width: 100%; 
+        border-collapse: collapse; 
+        margin-top: 10px; 
+    }
+
+    .table-categorias th, td{
+        text-align: left; padding: 12px; border-bottom: 1px solid #eee;
+
+    }
+
+    
+    .table-categorias th { background-color: #262B50; color: white; font-weight: 600; }
+    
+    /* Badges para los Tipos */
+    .badge { 
+        padding: 4px 8px; 
+        border-radius: 12px; 
+        font-size: 0.75rem; 
+        font-weight: bold; 
+        text-transform: uppercase; 
+    }
+    .badge-general { background-color: #e2e6ea; color: #666; }
+    .badge-perecedero { background-color: #fcebeb; color: var(--danger); }
+    .badge-tecnologia { background-color: #e3f2fd; color: var(--accent); }
+    .badge-ropa { background-color: #f3e5f5; color: #8e24aa; }
+
+    .user-tag { font-size: 0.85rem; color: #666; font-style: italic; }
+    
+    .btn-delete { 
+        color: var(--danger); 
+        background: none; 
+        border: none; 
+        cursor: pointer; 
+        font-size: 1rem; 
+        padding: 5px;
+    }
+    .btn-delete:hover { transform: scale(1.1); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .main-container { grid-template-columns: 1fr; }
+    }

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SofInventory | Panel de Control</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../assets/styles/dashboard.css">
+  <link rel="stylesheet" href="../assets/styles/components/header.css">
+  <link rel="stylesheet" href="../assets/styles/components/menu.css">
+  <link rel="stylesheet" href="../assets/styles/productos/gestion-productos.css">
+  <link rel="stylesheet" href="../assets/styles/productos/categorias.css">
+  <link rel="stylesheet" href="../assets/styles/inventario/stock_actual.css">
+  <link rel="stylesheet" href="../assets/styles/inventario/almacenes.css">
+  <link rel="stylesheet" href="../assets/styles/ventas/nueva_venta.css">
+  <link rel="stylesheet" href="../assets/styles/compras/nueva-compra.css">
+  <link rel="stylesheet" href="../assets/styles/compras/listado-compras.css">
+  <link rel="stylesheet" href="../assets/styles/clientes-proveedores/gestion-clientes.css">
+  <link rel="stylesheet" href="../assets/styles/clientes-proveedores/gestion-proveedores.css">
+  <link rel="stylesheet" href="../assets/styles/clientes-proveedores/listado-proveedores.css">
+  <link rel="stylesheet" href="../assets/styles/usuarios-roles/usuarios.css">
+  <link rel="stylesheet" href="../assets/styles/usuarios-roles/listado-usuarios.css">
+  <link rel="stylesheet" href="../assets/styles/usuarios-roles/roles.css">
+  <link rel="stylesheet" href="../assets/styles/components/footer.css">
+
+</head>
+
+<body class="cuerpo-dashboard">
+
+  <app-header></app-header>
+
+  <app-menu></app-menu>
+
+  <main id="app" class="container-dashboard">
+
+    <div class="dashboard-container">
+      <!-- Header del Dashboard -->
+      <div class="dashboard-header">
+        <h1><i class="fas fa-tachometer-alt"></i> Panel de Control</h1>
+        <p>Resumen general del sistema</p>
+      </div>
+
+      <!-- Cards de Métricas Principales -->
+      <div class="metrics-grid">
+        <div class="metric-card" id="card-total-productos">
+          <div class="metric-icon">
+            <i class="fas fa-boxes"></i>
+          </div>
+          <div class="metric-info">
+            <h3>0</h3>
+            <p>Productos Totales</p>
+          </div>
+        </div>
+
+        <div class="metric-card" id="card-productos-stock">
+          <div class="metric-icon">
+            <i class="fas fa-cubes"></i>
+          </div>
+          <div class="metric-info">
+            <h3>0</h3>
+            <p>En Stock</p>
+          </div>
+        </div>
+
+        <div class="metric-card" id="card-total-ventas">
+          <div class="metric-icon">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <div class="metric-info">
+            <h3>0</h3>
+            <p>Ventas Totales</p>
+          </div>
+        </div>
+
+        <div class="metric-card" id="card-ventas-mes">
+          <div class="metric-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="metric-info">
+            <h3>$0</h3>
+            <p>Ventas Este Mes</p>
+          </div>
+        </div>
+
+        <div class="metric-card" id="card-total-clientes">
+          <div class="metric-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="metric-info">
+            <h3>0</h3>
+            <p>Clientes Activos</p>
+          </div>
+        </div>
+
+        <div class="metric-card" id="card-stock-bajo">
+          <div class="metric-icon warning">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <div class="metric-info">
+            <h3>0</h3>
+            <p>Stock Bajo</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-card" id="card-ventas-dia">
+        <div class="metric-icon"><i class="fas fa-sun"></i></div>
+        <div class="metric-info">
+          <h3>$0</h3>
+          <p>Ventas Hoy</p>
+        </div>
+      </div>
+      <div class="metric-card" id="card-compras-mes">
+        <div class="metric-icon"><i class="fas fa-shopping-bag"></i></div>
+        <div class="metric-info">
+          <h3>$0</h3>
+          <p>Compras Este Mes</p>
+        </div>
+      </div>
+      <div class="metric-card" id="card-margen-mes">
+        <div class="metric-icon"><i class="fas fa-chart-pie"></i></div>
+        <div class="metric-info">
+          <h3>$0</h3>
+          <p>Margen del Mes</p>
+        </div>
+      </div>
+      <div class="metric-card" id="card-total-proveedores">
+        <div class="metric-icon"><i class="fas fa-truck"></i></div>
+        <div class="metric-info">
+          <h3>0</h3>
+          <p>Proveedores Activos</p>
+        </div>
+      </div>
+
+      <!-- GRÁFICAS NUEVAS -->
+      <div class="charts-grid">
+        <!-- Gráfica de Ventas Mensuales -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="fas fa-chart-line"></i> Ventas Mensuales</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="ventasChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfica de Métodos de Pago -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="fas fa-credit-card"></i> Métodos de Pago</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="pagosChart"></canvas>
+          </div>
+        </div>
+
+        <!-- NUEVA: Gráfica de Top Vendedores -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="fas fa-trophy"></i> Top Vendedores</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="vendedoresChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfica de Estado de Stock -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3><i class="fas fa-boxes"></i> Estado del Stock</h3>
+          </div>
+          <div class="chart-container">
+            <canvas id="stockChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección de Alertas y Resumen -->
+      <div class="dashboard-content">
+        <!-- NUEVA: Mejor Vendedor del Mes -->
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h3><i class="fas fa-crown"></i> Mejor Vendedor del Mes</h3>
+          </div>
+          <div class="section-body">
+            <div id="mejor-vendedor">
+              <!-- Información del mejor vendedor se cargará aquí -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Alertas de Stock -->
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h3><i class="fas fa-exclamation-circle"></i> Alertas de Stock</h3>
+          </div>
+          <div class="section-body">
+            <div id="alertas-stock">
+              <!-- Las alertas se cargarán aquí -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Ventas Recientes -->
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h3><i class="fas fa-clock"></i> Ventas Recientes</h3>
+          </div>
+          <div class="section-body">
+            <div id="ventas-recientes">
+              <!-- Ventas recientes se cargarán aquí -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Productos Más Vendidos -->
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h3><i class="fas fa-star"></i> Productos Más Vendidos</h3>
+          </div>
+          <div class="section-body">
+            <div id="productos-populares">
+              <!-- Productos populares se cargarán aquí -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones Rápidas -->
+      <div class="quick-actions">
+        <h3><i class="fas fa-bolt"></i> Acciones Rápidas</h3>
+        <div class="actions-grid">
+          <button class="action-btn" onclick="loadModule('../pages/modules/ventas/nueva_venta.html')">
+            <i class="fas fa-cash-register"></i>
+            <span>Nueva Venta</span>
+          </button>
+          <button class="action-btn" onclick="loadModule('../pages/modules/productos/gestion-productos.html')">
+            <i class="fas fa-boxes"></i>
+            <span>Gestionar Productos</span>
+          </button>
+          <button class="action-btn"
+            onclick="loadModule('../pages/modules/clientes-proveedores/gestion-clientes.html')">
+            <i class="fas fa-users"></i>
+            <span>Gestionar Clientes</span>
+          </button>
+          <button class="action-btn" onclick="loadModule('../pages/modules/inventario/stock_actual.html')">
+            <i class="fas fa-warehouse"></i>
+            <span>Ver Inventario</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+  <app-footer></app-footer>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../assets/javaScript/loader.js"></script>
+  <script src="../assets/javaScript/dashboard.js"></script>
+  <script type="module" src="../assets/javaScript/auth.js"></script>
+  <script src="../assets/javaScript/router.js"></script>
+
+
+</body>
+
+</html>

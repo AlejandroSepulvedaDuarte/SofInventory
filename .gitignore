@@ -1,0 +1,31 @@
+# variables de entorno
+.env
+
+# entorno virtual
+env/
+venv/
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# base de datos local
+db.sqlite3
+*.sqlite3
+
+# archivos de logs
+*.log
+
+# archivos temporales
+*.tmp
+
+# configuraciones de VS Code
+.vscode/
+
+# archivos del sistema
+.DS_Store
+Thumbs.db
+
+# archivos de migraciones compiladas
+*.pyc

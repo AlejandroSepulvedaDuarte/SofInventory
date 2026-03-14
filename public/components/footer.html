@@ -1,0 +1,61 @@
+<footer class="footer" id="footer">
+    <div class="footer-container fade-up">
+
+        <div class="footer-brand">
+            <img src="../assets/images/logo.png" alt="SofInventory Logo">
+            <p>Gestión inteligente de inventarios para negocios modernos.</p>
+
+            <span class="version-badge">Versión 1.0</span>
+        </div>
+
+        <div class="footer-links">
+            <h4>Enlaces rápidos</h4>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Productos</a></li>
+                <li><a href="#">Clientes</a></li>
+                <li><a href="#">Reportes</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-support">
+            <h4>Soporte</h4>
+            <ul>
+                <li><a href="#">Centro de ayuda</a></li>
+                <li><a href="#">Documentación</a></li>
+                <li><a href="#">Contacto</a></li>
+            </ul>
+        </div>
+       
+        <div class="footer-social">
+            <h4>Síguenos</h4>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom fade-up">
+        <p>© 2025 SofInventory. Todos los derechos reservados.</p>
+    </div>
+</footer>
+<script>
+    const animatedElements = document.querySelectorAll('.fade-up');
+
+    const footerObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.2 });
+
+    animatedElements.forEach(el => footerObserver.observe(el));
+
+    
+</script>
+
+

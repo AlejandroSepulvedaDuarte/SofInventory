@@ -1,0 +1,240 @@
+<div class="inventario-container">
+
+    <!-- =====================================================
+         ESTADÍSTICAS
+    ====================================================== -->
+    <div class="stats-grid">
+        <div class="stat-card total" onclick="filtrarPorEstado('todos')">
+            <div class="stat-number" id="total-productos">0</div>
+            <div class="stat-label">Total Productos</div>
+        </div>
+        <div class="stat-card configurados" onclick="filtrarPorEstado('configurado')">
+            <div class="stat-number" id="productos-configurados">0</div>
+            <div class="stat-label">Configurados</div>
+        </div>
+        <div class="stat-card pendientes" onclick="filtrarPorEstado('pendiente')">
+            <div class="stat-number" id="productos-pendientes">0</div>
+            <div class="stat-label">Pendientes</div>
+        </div>
+        <div class="stat-card stock-bajo" onclick="filtrarPorStock('bajo')">
+            <div class="stat-number" id="stock-bajo">0</div>
+            <div class="stat-label">🔴 Stock Bajo</div>
+        </div>
+        <div class="stat-card almacenes" onclick="mostrarResumenAlmacenes()">
+            <div class="stat-number" id="total-almacenes">0</div>
+            <div class="stat-label">Almacenes Activos</div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         FILTROS Y BÚSQUEDA
+    ====================================================== -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-filter"></i> Filtros y Búsqueda</h2>
+            <button class="btn-exportar" onclick="exportarInventario()">
+                <i class="fas fa-file-export"></i> Exportar
+            </button>
+        </div>
+        <div class="filtros-container">
+            <div class="filtro-group">
+                <label>Buscar Producto</label>
+                <input type="text" id="buscarProducto"
+                    placeholder="Nombre, marca o SKU..."
+                    onkeyup="filtrarInventario()">
+            </div>
+            <div class="filtro-group">
+                <label>Categoría</label>
+                <select id="filtroCategoria" onchange="filtrarInventario()">
+                    <option value="">Todas las categorías</option>
+                </select>
+            </div>
+            <div class="filtro-group">
+                <label>Almacén</label>
+                <select id="filtroAlmacen" onchange="filtrarInventario()">
+                    <option value="">Todos los almacenes</option>
+                </select>
+            </div>
+            <div class="filtro-group">
+                <label>Estado Stock</label>
+                <select id="filtroStock" onchange="filtrarInventario()">
+                    <option value="">Todo el stock</option>
+                    <option value="alto">🟢 Stock Alto</option>
+                    <option value="medio">🟡 Stock Medio</option>
+                    <option value="bajo">🔴 Stock Bajo</option>
+                    <option value="agotado">⛔ Agotado</option>
+                </select>
+            </div>
+            <div class="filtro-group">
+                <label>Estado Producto</label>
+                <select id="filtroEstado" onchange="filtrarInventario()">
+                    <option value="">Todos</option>
+                    <option value="configurado">Configurados</option>
+                    <option value="pendiente">Pendientes</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         ALERTAS DE STOCK
+         Se muestra automáticamente si hay productos en bajo o agotado
+    ====================================================== -->
+    <div class="card" id="card-alertas" style="display: none;">
+        <div class="card-header">
+            <h2><i class="fas fa-exclamation-triangle"></i> Alertas de Stock</h2>
+            <span class="badge badge-danger" id="contador-alertas">0</span>
+        </div>
+        <div class="alertas-container" id="lista-alertas"></div>
+    </div>
+
+    <!-- =====================================================
+         TRANSFERENCIA ENTRE ALMACENES
+         Mueve unidades de un almacén a otro sin afectar
+         el stock total del producto.
+    ====================================================== -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-truck"></i> Transferencia entre Almacenes</h2>
+        </div>
+        <div class="movimientos-panel">
+            <div class="movimiento-form">
+
+                <div class="filtro-group">
+                    <label>Producto <small style="color:#888;">(SKU | Nombre | Stock total)</small></label>
+                    <select id="movimientoProducto" onchange="actualizarStockOrigen()">
+                        <option value="">Seleccionar producto</option>
+                    </select>
+                </div>
+
+                <div class="filtro-group">
+                    <label>Almacén Origen</label>
+                    <select id="movimientoAlmacen" onchange="actualizarStockOrigen()">
+                        <option value="">Seleccionar almacén origen</option>
+                    </select>
+                </div>
+
+                <!-- Stock disponible en almacén origen — se actualiza dinámicamente -->
+                <div class="filtro-group" id="contenedor-stock-origen" style="display:none;">
+                    <label>Stock disponible en origen</label>
+                    <div id="stock-origen-display"
+                        style="padding:8px 12px;background:#f8f9fa;border:1px solid #dee2e6;
+                               border-radius:4px;font-weight:bold;color:#495057;">
+                        —
+                    </div>
+                </div>
+
+                <div class="filtro-group">
+                    <label>Almacén Destino</label>
+                    <select id="movimientoAlmacenDestino">
+                        <option value="">Seleccionar almacén destino</option>
+                    </select>
+                </div>
+
+                <div class="filtro-group">
+                    <label>Cantidad a Transferir</label>
+                    <input type="number" id="movimientoCantidad" min="1" value="1">
+                </div>
+
+                <button class="btn-movimiento" onclick="realizarTransferencia()">
+                    <i class="fas fa-exchange-alt"></i> Transferir
+                </button>
+            </div>
+            <small style="color:#666;display:block;margin-top:12px;">
+                🔄 <strong>Transferencia:</strong> Mueve unidades entre almacenes.
+                El stock total del producto no cambia, solo se redistribuye.
+            </small>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         AJUSTE MANUAL DE INVENTARIO
+         Solo para corregir errores de conteo.
+         NO es una compra ni una venta.
+    ====================================================== -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-tools"></i> Ajuste Manual de Inventario</h2>
+            <small style="color:#e74c3c;font-weight:600;">
+                ⚠️ Solo para corregir errores de conteo
+            </small>
+        </div>
+        <div class="movimientos-panel">
+            <div class="movimiento-form">
+
+                <div class="filtro-group">
+                    <label>Producto <small style="color:#888;">(SKU | Nombre | Stock actual)</small></label>
+                    <select id="ajusteProducto">
+                        <option value="">Seleccionar producto</option>
+                    </select>
+                </div>
+
+                <div class="filtro-group">
+                    <label>Almacén</label>
+                    <select id="ajusteAlmacen">
+                        <option value="">Seleccionar almacén</option>
+                    </select>
+                </div>
+
+                <div class="filtro-group">
+                    <label>Tipo de Ajuste</label>
+                    <select id="ajusteTipo">
+                        <option value="entrada">➕ Ajuste positivo — agregar unidades</option>
+                        <option value="salida">➖ Ajuste negativo — retirar unidades</option>
+                    </select>
+                </div>
+
+                <div class="filtro-group">
+                    <label>Cantidad</label>
+                    <input type="number" id="ajusteCantidad" min="1" value="1">
+                </div>
+
+                <div class="filtro-group">
+                    <label>Motivo del ajuste <small style="color:#888;">(obligatorio)</small></label>
+                    <input type="text" id="ajusteMotivo"
+                        placeholder="Ej: Error de conteo, producto dañado, etc.">
+                </div>
+
+                <button class="btn-movimiento"
+                    onclick="realizarAjuste()"
+                    style="background:#e67e22;">
+                    <i class="fas fa-edit"></i> Aplicar Ajuste
+                </button>
+            </div>
+            <small style="color:#666;display:block;margin-top:12px;">
+                ⚠️ <strong>Ajuste positivo:</strong> Agrega unidades por error de conteo &nbsp;|&nbsp;
+                <strong>Ajuste negativo:</strong> Retira unidades por pérdida o daño
+            </small>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         TABLA DE INVENTARIO
+    ====================================================== -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
+            <span class="badge badge-info" id="contador-resultados">0 productos</span>
+        </div>
+        <table class="tabla-inventario">
+            <thead>
+                <tr>
+                    <th>Producto / SKU</th>
+                    <th>Categoría</th>
+                    <th>Almacén</th>
+                    <th>Stock Actual</th>
+                    <th>Estado Stock</th>
+                    <th>Precio Compra</th>
+                    <th>Precio Venta</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-inventario">
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="../assets/javaScript/inventario/stock_actual.js"></script>

@@ -1,0 +1,70 @@
+<div class="container">
+    <h2>Listado de Compras</h2>
+
+    <div class="search-box">
+        <input type="text" id="buscarCompra" placeholder="Buscar por proveedor o factura..." style="flex: 1; min-width: 250px;">
+        <div class="rango-fechas">
+            <label>Desde:</label>
+            <input type="date" id="fechaDesde">
+            <label>Hasta:</label>
+            <input type="date" id="fechaHasta">
+        </div>
+    </div>
+
+    <table id="tablaCompras">
+        <thead>
+            <tr>
+                <th>Factura</th>
+                <th>Proveedor</th>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- MODAL DETALLES -->
+<div id="modalDetallesCompra" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Detalles de Compra</h3>
+
+        <div class="detalle-info">
+            <p><strong>Factura:</strong> <span id="detalleFactura"></span></p>
+            <p><strong>Proveedor:</strong> <span id="detalleProveedor"></span></p>
+            <p><strong>Fecha:</strong> <span id="detalleFecha"></span></p>
+            <p><strong>Tipo:</strong> <span id="detalleTipo"></span></p>
+            <p><strong>Subtotal:</strong> $<span id="detalleSubtotal"></span></p>
+            <p><strong>IVA:</strong> $<span id="detalleIva"></span></p>
+            <p><strong>Total:</strong> $<span id="detalleTotal"></span></p>
+        </div>
+
+        <h4>Productos Comprados</h4>
+        <table class="tabla-detalle">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Marca</th>
+                    <th>Referencia</th>
+                    <th>Unidad</th>
+                    <th>Cantidad</th>
+                    <th>Costo Unit.</th>
+                    <th>IVA %</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="detalleProductos"></tbody>
+        </table>
+
+        <div class="modal-buttons">
+            <button class="btn-cerrar" onclick="cerrarModalDetalles()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script src="/public/assets/javaScript/compras/listado-compras.js"></script>
+
+

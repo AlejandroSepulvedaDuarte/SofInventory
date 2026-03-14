@@ -1,0 +1,240 @@
+<div class="clientes-container">
+    <!-- Formulario de Creación/Edición de Clientes -->
+    <div id="form-cliente" class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-user-plus"></i>
+                <span id="form-title">Nuevo Cliente</span>
+            </h2>
+            <span class="badge badge-info" id="form-mode">CREAR</span>
+        </div>
+
+        <form id="formCliente">
+            <input type="hidden" id="clienteId">
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Tipo de Cliente *</label>
+                    <!-- SIN onchange — el JS lo escucha con addEventListener -->
+                    <select id="clienteTipo" required>
+                        <option value="">Seleccione tipo</option>
+                        <option value="natural">Persona Natural</option>
+                        <option value="juridica">Persona Jurídica</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="clienteCategoria">
+                        <option value="general">General</option>
+                        <option value="minorista">Minorista</option>
+                        <option value="mayorista">Mayorista</option>
+                        <option value="corporativo">Corporativo</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Campos Persona Natural — ocultos hasta que el usuario elija -->
+            <div id="campos-natural" style="display: none;">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nombres *</label>
+                        <input type="text" id="clienteNombres" placeholder="Nombres del cliente">
+                    </div>
+                    <div class="form-group">
+                        <label>Apellidos *</label>
+                        <input type="text" id="clienteApellidos" placeholder="Apellidos del cliente">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Documento *</label>
+                    <!-- Opciones cargadas dinámicamente desde la BD -->
+                    <select id="clienteTipoDocumento">
+                        <option value="">Seleccione documento</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Campos Persona Jurídica — ocultos hasta que el usuario elija -->
+            <div id="campos-juridica" style="display: none;">
+                <div class="form-group">
+                    <label>Razón Social *</label>
+                    <input type="text" id="clienteRazonSocial" placeholder="Nombre legal de la empresa">
+                </div>
+                <div class="form-group">
+                    <label>Nombre Comercial</label>
+                    <input type="text" id="clienteNombreComercial" placeholder="Nombre comercial (opcional)">
+                </div>
+                <div class="form-group">
+                    <label>RUC/NIT *</label>
+                    <input type="text" id="clienteRuc" placeholder="Número de RUC/NIT">
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Número de Documento *</label>
+                    <input type="text" id="clienteDocumento" required placeholder="Número de documento">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="clienteEmail" placeholder="correo@ejemplo.com">
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Teléfono Principal</label>
+                    <input type="tel" id="clienteTelefono" placeholder="Número de teléfono">
+                </div>
+                <div class="form-group">
+                    <label>Teléfono Secundario</label>
+                    <input type="tel" id="clienteTelefono2" placeholder="Teléfono adicional (opcional)">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Dirección</label>
+                <textarea id="clienteDireccion" rows="2" placeholder="Dirección completa"></textarea>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Ciudad</label>
+                    <input type="text" id="clienteCiudad" placeholder="Ciudad">
+                </div>
+                <div class="form-group">
+                    <label>Departamento/Provincia</label>
+                    <!-- id="clienteDepartamento" — coincide con campo 'departamento' del modelo -->
+                    <input type="text" id="clienteDepartamento" placeholder="Departamento o provincia">
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>País</label>
+                    <input type="text" id="clientePais" placeholder="País" value="Colombia">
+                </div>
+                <div class="form-group">
+                    <label>Código Postal</label>
+                    <input type="text" id="clienteCodigoPostal" placeholder="Código postal">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Notas Adicionales</label>
+                <textarea id="clienteNotas" rows="2" placeholder="Información adicional del cliente"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Estado</label>
+                <select id="clienteEstadoCliente">
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                    <option value="bloqueado">Bloqueado</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <!-- id="btn-guardar" — el JS lo escucha con addEventListener -->
+                <button type="button" id="btn-guardar" class="btn-save">
+                    <i class="fas fa-save"></i> <span id="btn-text">Crear Cliente</span>
+                </button>
+                <!-- id="btn-cancelar" — visible solo en modo editar -->
+                <button type="button" id="btn-cancelar" class="btn-config" style="display: none;">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="stats-grid">
+        <div class="stat-card total">
+            <div class="stat-number" id="total-clientes">0</div>
+            <div class="stat-label">Total Clientes</div>
+        </div>
+        <div class="stat-card activos">
+            <div class="stat-number" id="clientes-activos">0</div>
+            <div class="stat-label">Clientes Activos</div>
+        </div>
+        <div class="stat-card inactivos">
+            <div class="stat-number" id="clientes-inactivos">0</div>
+            <div class="stat-label">Clientes Inactivos</div>
+        </div>
+        <div class="stat-card corporativos">
+            <div class="stat-number" id="clientes-corporativos">0</div>
+            <div class="stat-label">Clientes Corporativos</div>
+        </div>
+    </div>
+
+    <!-- Filtros y Búsqueda -->
+    <div class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-filter"></i> Filtros y Búsqueda</h2>
+            <!-- id="btn-exportar" — el JS lo escucha con addEventListener -->
+            <button id="btn-exportar" class="btn-exportar">
+                <i class="fas fa-file-export"></i> Exportar CSV
+            </button>
+        </div>
+
+        <div class="filtros-container">
+            <div class="filtro-group">
+                <label>Buscar Cliente</label>
+                <input type="text" id="buscarCliente" placeholder="Nombre, documento, email...">
+            </div>
+            <div class="filtro-group">
+                <label>Tipo de Cliente</label>
+                <select id="filtroTipo">
+                    <option value="">Todos los tipos</option>
+                    <option value="natural">Persona Natural</option>
+                    <option value="juridica">Persona Jurídica</option>
+                </select>
+            </div>
+            <div class="filtro-group">
+                <label>Categoría</label>
+                <select id="filtroCategoria">
+                    <option value="">Todas las categorías</option>
+                    <option value="general">General</option>
+                    <option value="minorista">Minorista</option>
+                    <option value="mayorista">Mayorista</option>
+                    <option value="corporativo">Corporativo</option>
+                </select>
+            </div>
+            <div class="filtro-group">
+                <label>Estado</label>
+                <select id="filtroEstado">
+                    <option value="">Todos los estados</option>
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                    <option value="bloqueado">Bloqueado</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Clientes -->
+    <div id="lista-clientes" class="card">
+        <div class="card-header">
+            <h2><i class="fas fa-users"></i> Clientes Registrados</h2>
+            <span class="badge badge-success" id="contador-clientes">0</span>
+        </div>
+        <div id="contenido-clientes">
+            <!-- Se llenará dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Confirmar Acción</h3>
+            <p id="modalMessage">¿Estás seguro de que quieres realizar esta acción?</p>
+            <div class="modal-actions">
+                <!-- SIN onclick inline — el JS lo escucha con addEventListener -->
+                <button type="button" class="btn-config">Cancelar</button>
+                <button type="button" class="btn-config btn-danger" id="confirmActionBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/public/assets/javaScript/clientes-proveedores/gestion-clientes.js"></script>

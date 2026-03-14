@@ -1,0 +1,222 @@
+/* ============================= */
+/*    TIPOGRAFÍA MODERNA         */
+/* ============================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --sidebar-bg: #181C32 !important;
+    --sidebar-hover: #1F2343;
+    --sidebar-active: #2A2F55;
+    --submenu-bg: #1C2040;
+    --submenu-hover: #262B50;
+    --text-light: #E5E7F3;
+    --text-muted: #A0A3BD;
+    --accent: #4C6EF5;
+}
+
+/* ============================= */
+/*      SIDEBAR PRINCIPAL        */
+/* ============================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 270px;
+    height: 100vh;
+    background: var(--sidebar-bg);
+    box-shadow: 4px 0 18px rgba(0, 0, 0, 0.25);
+    padding-top: 20px;
+    overflow-y: auto;
+    transform: translateX(-270px);
+    transition: transform .3s ease;
+    z-index: 2000;
+    font-family: 'Inter', sans-serif;
+}
+
+
+
+
+.sidebar.open {
+    transform: translateX(0);
+}
+
+/* Scroll */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+/* LOGO */
+.sidebar .logo h3 {
+    color: var(--text-light);
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 21px;
+    letter-spacing: .5px;
+    font-weight: 600;
+}
+
+/* ============================= */
+/*      ITEMS PRINCIPALES        */
+/* ============================= */
+.sidebar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar ul li {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 15px;
+    transition: all .25s ease;
+    border-left: 3px solid transparent;
+}
+
+.sidebar ul li i {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+/* Hover */
+.sidebar ul li:hover {
+    background: var(--sidebar-hover);
+    color: var(--text-light);
+    padding-left: 25px;
+}
+
+/* Activo */
+.sidebar ul li.active {
+    background: var(--sidebar-active);
+    color: #fff;
+    border-left: 3px solid var(--accent);
+}
+
+/* Enlaces */
+.sidebar ul li a {
+    color: inherit;
+    text-decoration: none;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* ============================= */
+/*           SUBMENÚ             */
+/* ============================= */
+.has-submenu {
+    position: relative;
+    font-weight: 500;
+}
+
+/* Animación para el ícono del submenú */
+.submenu-toggle {
+    margin-left: auto;
+    font-size: 14px !important;
+    transition: transform 0.3s ease;
+    transform: rotate(0deg); /* Posición inicial: derecha */
+}
+
+/* Cuando el submenú está abierto, gira 90 grados para apuntar hacia abajo */
+.has-submenu.open .submenu-toggle {
+    transform: rotate(90deg);
+}
+
+.submenu {
+    background: var(--submenu-bg);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.submenu.open {
+    max-height: 500px;
+}
+
+/* Elementos del submenú */
+.submenu li {
+    padding: 10px 48px;
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: all .25s ease;
+}
+
+.submenu li:hover {
+    background: var(--submenu-hover);
+    color: #fff;
+    padding-left: 55px;
+}
+
+.submenu-link i {
+    font-size: 15px;
+    width: 20px;
+}
+
+/* ============================= */
+/*       CERRAR SESIÓN           */
+/* ============================= */
+.logout {
+    margin-top: 20px;
+    padding: 14px 22px;
+    display: block;
+    color: #ff6b6b !important;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform .25s, background .25s;
+}
+
+.logout:hover {
+    background: rgba(255, 80, 80, .15);
+    transform: translateX(6px);
+}
+
+/* ============================= */
+/*     BOTÓN HAMBURGUESA         */
+/* ============================= */
+.hamburger-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 3000;
+    background: var(--sidebar-bg);
+    border: none;
+    font-size: 25px;
+    color: var(--text-light);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .25s;
+}
+
+.hamburger-btn:hover {
+    background: var(--sidebar-hover);
+}
+
+/* ============================= */
+/*            OVERLAY            */
+/* ============================= */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s ease;
+    z-index: 1500;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+
