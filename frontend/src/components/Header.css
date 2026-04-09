@@ -1,0 +1,140 @@
+:root {
+  --primary-color: #262B50;
+  --sidebar-width: 270px;
+  --header-height: 80px;
+}
+
+.main-content {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  min-height: var(--header-height);
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hamburger-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #374151;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.hamburger-btn:hover {
+  background: #f3f4f6;
+}
+
+.header-inner img {
+  max-height: 70px;
+  width: auto;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.search-container input {
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  width: 260px;
+  font-size: 14px;
+  background-color: #f9fafb;
+  transition: all 0.2s;
+}
+
+.search-container input:focus {
+  border-color: #3b82f6;
+  background: white;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+  width: 300px;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+}
+
+#user-name {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.9rem;
+}
+
+.user-role {
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid #e5e7eb;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: #374151;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    gap: 10px;
+    padding: 10px;
+  }
+  .search-container input {
+    width: 180px;
+  }
+  #user-name, .user-role {
+    display: none;
+  }
+}

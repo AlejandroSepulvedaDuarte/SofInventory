@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --sidebar-bg: #181C32;
+  --sidebar-hover: #1F2343;
+  --sidebar-active: #2A2F55;
+  --submenu-bg: #1C2040;
+  --submenu-hover: #262B50;
+  --text-light: #E5E7F3;
+  --text-muted: #A0A3BD;
+  --accent: #4C6EF5;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 999;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 270px;
+  height: 100vh;
+  background: var(--sidebar-bg);
+  box-shadow: 4px 0 18px rgba(0,0,0,0.25);
+  padding-top: 20px;
+  overflow-y: auto;
+  transform: translateX(-270px);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+  font-family: 'Inter', sans-serif;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar::-webkit-scrollbar { width: 5px; }
+.sidebar::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+.sidebar .logo h3 {
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Items principales */
+.sidebar > ul,
+.sidebar > div {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sidebar ul li,
+.sidebar .has-submenu {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 14.5px;
+  transition: all 0.22s ease;
+  border-left: 3px solid transparent;
+  list-style: none;
+}
+
+.sidebar ul li i,
+.sidebar .has-submenu i {
+  font-size: 17px;
+  width: 22px;
+  text-align: center;
+}
+
+.sidebar ul li:hover,
+.sidebar .has-submenu:hover {
+  background: var(--sidebar-hover);
+  color: var(--text-light);
+  padding-left: 25px;
+}
+
+.sidebar ul li.active {
+  background: var(--sidebar-active);
+  color: #fff;
+  border-left-color: var(--accent);
+}
+
+/* Submenú */
+.submenu {
+  background: var(--submenu-bg);
+  padding: 4px 0;
+  list-style: none;
+}
+
+.submenu li {
+  padding: 10px 20px 10px 52px !important;
+  font-size: 13.5px;
+}
+
+.submenu li:hover {
+  background: var(--submenu-hover);
+  padding-left: 58px !important;
+}
+
+.submenu li.active {
+  background: var(--sidebar-active);
+  color: #fff;
+  border-left-color: var(--accent);
+}
+
+/* Flecha del submenú */
+.submenu-toggle {
+  margin-left: auto;
+  font-size: 11px !important;
+  transition: transform 0.25s ease;
+}
+
+.submenu-toggle.rotated {
+  transform: rotate(90deg);
+}
+
+.has-submenu.expanded {
+  background: var(--sidebar-hover);
+  color: var(--text-light);
+}
