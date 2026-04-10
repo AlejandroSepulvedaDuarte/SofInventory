@@ -1,0 +1,141 @@
+
+.container-usuarios {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+.container-usuarios h2 {
+    color: #2c3e50;
+    margin-bottom: 18px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 12px;
+}
+
+#formUsuarios {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    padding: 26px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 24px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+    position: relative;
+    width: 100%;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.rejistrar-usuarios {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 13px;
+    background-color: #262B50 !important;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rejistrar-usuarios:hover {
+    background-color: #145593 !important;
+}
+
+#formUsuarios label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #4a5568;
+    font-size: 0.93rem;
+}
+
+#formUsuarios input,
+#formUsuarios select,
+#formUsuarios textarea {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+#formUsuarios input:focus,
+#formUsuarios select:focus,
+#formUsuarios textarea:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.22);
+}
+
+#formUsuarios input.invalid,
+#formUsuarios select.invalid,
+#formUsuarios textarea.invalid {
+    border-color: #e53e3e !important;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #64748b;
+    font-size: 18px;
+    transition: color 0.2s ease;
+}
+
+.toggle-password:hover {
+    color: #1e3a8a;
+}
+
+.error-text {
+    color: #e53e3e;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: none;
+}
+
+.error-text.active {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .container-usuarios {
+        max-width: 100%;
+        padding: 15px;
+    }
+    #formUsuarios {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 20px;
+    }
+    .form-group.full-width {
+        grid-column: 1;
+    }
+    .rejistrar-usuarios {
+        grid-column: 1;
+    }
+}
