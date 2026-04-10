@@ -4,10 +4,16 @@ import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import DashboardHome from '../modules/DashboardHome'
 import './Dashboard.css'
+import Usuarios from '../modules/usuarios/Usuarios';
+import UsuariosListado from '../modules/usuarios/UsuariosListado';
+import RolesReporte from '../modules/roles/RolesReporte';
 
 // Mapa de módulos — se irán agregando conforme se migren
 const MODULE_MAP = {
   'dashboard': <DashboardHome />,
+  'registro-usuarios': <Usuarios />,
+  'listado-usuarios': <UsuariosListado />,
+  'roles': <RolesReporte />,
   // Próximos módulos:
   // 'gestion-productos': <GestionProductos />,
   // 'categorias': <Categorias />,

@@ -17,7 +17,7 @@ export default function Header({ onMenuToggle }) {
         <button className="hamburger-btn" onClick={onMenuToggle} title="Menú">
           ☰
         </button>
-        <img src="/logo.png" alt="SofInventory Logo" id="headerLogo" />
+        <img src="/logo-loginB.jpg" alt="SofInventory Logo" id="headerLogo" />
       </div>
 
       <div className="header-actions">

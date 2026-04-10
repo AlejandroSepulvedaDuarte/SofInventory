@@ -68,7 +68,7 @@ const MENU_ITEMS = [
     icon: 'fa-user-cog',
     roles: ['Administrador'],
     submenu: [
-      { label: 'Gestionar Usuarios', icon: 'fa-user-edit', module: 'usuarios',          roles: ['Administrador'] },
+      { label: 'Gestionar Usuarios', icon: 'fa-user-edit', module: 'registro-usuarios',          roles: ['Administrador'] },
       { label: 'Listado Usuarios',   icon: 'fa-list',      module: 'listado-usuarios',  roles: ['Administrador'] },
       { label: 'Roles',              icon: 'fa-shield-alt', module: 'roles',            roles: ['Administrador'] },
     ],
