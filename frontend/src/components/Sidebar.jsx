@@ -16,7 +16,7 @@ const MENU_ITEMS = [
     roles: ['Administrador', 'Bodeguero'],
     submenu: [
       { label: 'Gestionar Productos', icon: 'fa-list', module: 'gestion-productos', roles: ['Administrador', 'Bodeguero'] },
-      { label: 'Categorías',          icon: 'fa-tags', module: 'categorias',        roles: ['Administrador', 'Bodeguero'] },
+      { label: 'Categorías', icon: 'fa-tags', module: 'categorias', roles: ['Administrador', 'Bodeguero'] },
     ],
   },
   {
@@ -24,8 +24,8 @@ const MENU_ITEMS = [
     icon: 'fa-warehouse',
     roles: ['Administrador', 'Vendedor', 'Bodeguero'],
     submenu: [
-      { label: 'Stock Actual', icon: 'fa-cubes',         module: 'stock',     roles: ['Administrador', 'Vendedor', 'Bodeguero'] },
-      { label: 'Almacenes',    icon: 'fa-map-marker-alt', module: 'almacenes', roles: ['Administrador', 'Bodeguero'] },
+      { label: 'Stock Actual', icon: 'fa-cubes', module: 'stock', roles: ['Administrador', 'Vendedor', 'Bodeguero'] },
+      { label: 'Almacenes', icon: 'fa-map-marker-alt', module: 'almacenes', roles: ['Administrador', 'Bodeguero'] },
     ],
   },
   {
@@ -33,8 +33,8 @@ const MENU_ITEMS = [
     icon: 'fa-cash-register',
     roles: ['Administrador', 'Vendedor'],
     submenu: [
-      { label: 'Nueva Venta',    icon: 'fa-plus-circle', module: 'nueva-venta',  roles: ['Administrador', 'Vendedor'] },
-      { label: 'Lista de Ventas', icon: 'fa-list-alt',   module: 'lista-ventas', roles: ['Administrador', 'Vendedor'] },
+      { label: 'Nueva Venta', icon: 'fa-plus-circle', module: 'nueva-venta', roles: ['Administrador', 'Vendedor'] },
+      { label: 'Lista de Ventas', icon: 'fa-list-alt', module: 'lista-ventas', roles: ['Administrador', 'Vendedor'] },
     ],
   },
   {
@@ -42,7 +42,7 @@ const MENU_ITEMS = [
     icon: 'fa-shopping-cart',
     roles: ['Administrador', 'Bodeguero'],
     submenu: [
-      { label: 'Nueva Compra',    icon: 'fa-cart-plus', module: 'nueva-compra',    roles: ['Administrador'] },
+      { label: 'Nueva Compra', icon: 'fa-cart-plus', module: 'nueva-compra', roles: ['Administrador'] },
       { label: 'Historial Compras', icon: 'fa-history', module: 'historial-compras', roles: ['Administrador', 'Bodeguero'] },
     ],
   },
@@ -54,13 +54,14 @@ const MENU_ITEMS = [
       { label: 'Gestión Clientes', icon: 'fa-user-friends', module: 'gestion-clientes', roles: ['Administrador', 'Vendedor'] },
     ],
   },
+  // En MENU_ITEMS, actualiza la sección de Proveedores:
   {
     label: 'Proveedores',
     icon: 'fa-truck',
     roles: ['Administrador', 'Bodeguero'],
     submenu: [
-      { label: 'Gestión Proveedores', icon: 'fa-truck-loading', module: 'gestion-proveedores', roles: ['Administrador', 'Bodeguero'] },
-      { label: 'Listado Proveedores', icon: 'fa-list',          module: 'listado-proveedores', roles: ['Administrador', 'Bodeguero'] },
+      { label: 'Registrar Proveedor', icon: 'fa-plus-circle', module: 'registro-proveedores', roles: ['Administrador', 'Bodeguero'] },
+      { label: 'Listado Proveedores', icon: 'fa-list', module: 'listado-proveedores', roles: ['Administrador', 'Bodeguero'] },
     ],
   },
   {
@@ -68,9 +69,9 @@ const MENU_ITEMS = [
     icon: 'fa-user-cog',
     roles: ['Administrador'],
     submenu: [
-      { label: 'Gestionar Usuarios', icon: 'fa-user-edit', module: 'registro-usuarios',          roles: ['Administrador'] },
-      { label: 'Listado Usuarios',   icon: 'fa-list',      module: 'listado-usuarios',  roles: ['Administrador'] },
-      { label: 'Roles',              icon: 'fa-shield-alt', module: 'roles',            roles: ['Administrador'] },
+      { label: 'Gestionar Usuarios', icon: 'fa-user-edit', module: 'registro-usuarios', roles: ['Administrador'] },
+      { label: 'Listado Usuarios', icon: 'fa-list', module: 'listado-usuarios', roles: ['Administrador'] },
+      { label: 'Roles', icon: 'fa-shield-alt', module: 'roles', roles: ['Administrador'] },
     ],
   },
 ]

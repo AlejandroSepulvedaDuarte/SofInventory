@@ -1,0 +1,211 @@
+/* Variables CSS */
+:root {
+  --primary-color: #007bff;
+  --primary-dark: #0056b3;
+  --danger-color: #e74c3c;
+  --success-color: #28a745;
+  --text-color: #333;
+  --light-gray: #f8f9fa;
+  --border-color: #e1e5eb;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s ease;
+}
+
+/* Contenedor principal */
+.main-wrapper {
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 20px 20px !important;
+  background-color: #f4f6f9 !important;
+  min-height: 40vh !important;
+}
+
+.proveedores-container {
+  width: 100% !important;
+  max-width: 900px !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: var(--shadow) !important;
+  overflow: hidden !important;
+  animation: slideUp 0.5s ease-out !important;
+}
+
+/* Header */
+.form-header {
+  color: rgb(16, 15, 15) !important;
+  text-align: center !important;
+  padding: 20px;
+}
+
+.titulo-modulo {
+  font-size: 26px !important;
+  margin: 0 !important;
+  font-weight: 700 !important;
+}
+
+.subtitulo {
+  margin: 5px 0 0 !important;
+  font-size: 14px !important;
+  opacity: 0.9 !important;
+  font-weight: 300 !important;
+}
+
+/* Grid del formulario */
+.form-card {
+  width: 100% !important;
+  max-width: 950px !important;
+  padding: 20px !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px !important;
+  box-sizing: border-box !important;
+}
+
+.form-group {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.form-group.full {
+  grid-column: span 2 !important;
+}
+
+/* Labels */
+label {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #555 !important;
+  margin-bottom: 5px !important;
+  letter-spacing: 0.5px !important;
+}
+
+.required {
+  color: var(--danger-color) !important;
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  width: 100% !important;
+  padding: 12px 12px !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+  background-color: var(--light-gray) !important;
+  transition: var(--transition) !important;
+  color: var(--text-color) !important;
+  box-sizing: border-box !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  background-color: #fff !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1) !important;
+}
+
+/* Botones */
+.form-actions {
+  grid-column: span 2 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 15px !important;
+  margin-top: 15px !important;
+  padding: 0 !important;
+}
+
+.btn-cancelar-proveedor,
+.btn-guardar-proveedor {
+  all: initial;
+  box-sizing: border-box !important;
+  width: 400px !important;
+  height: 50px !important;
+  min-width: 400px !important;
+  max-width: 400px !important;
+  min-height: 50px !important;
+  max-height: 50px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: var(--transition) !important;
+  text-align: center !important;
+  line-height: 1 !important;
+}
+
+.btn-guardar-proveedor {
+  background-color: #262B50 !important;
+  color: white !important;
+}
+
+.btn-cancelar-proveedor {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+.btn-guardar-proveedor:hover {
+  background-color: #145593 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 15px rgba(38, 43, 80, 0.3) !important;
+}
+
+.btn-cancelar-proveedor:hover {
+  background-color: #856404 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3) !important;
+}
+
+/* Animación */
+@keyframes slideUp {
+  from {
+    opacity: 0 !important;
+    transform: translateY(20px) !important;
+  }
+  to {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-card {
+    grid-template-columns: 1fr !important;
+    padding: 25px !important;
+  }
+  .form-group.full,
+  .form-actions {
+    grid-column: span 1 !important;
+  }
+  .form-actions {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .btn-cancelar-proveedor,
+  .btn-guardar-proveedor {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: unset !important;
+    height: 52px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-card {
+    padding: 20px 15px !important;
+  }
+  .titulo-modulo {
+    font-size: 22px !important;
+  }
+}

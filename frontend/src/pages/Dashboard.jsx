@@ -7,6 +7,8 @@ import './Dashboard.css'
 import Usuarios from '../modules/usuarios/Usuarios';
 import UsuariosListado from '../modules/usuarios/UsuariosListado';
 import RolesReporte from '../modules/roles/RolesReporte';
+import Proveedores from '../modules/proveedores/Proveedores';
+import ProveedoresListado from '../modules/proveedores/ProveedoresListado';
 
 // Mapa de módulos — se irán agregando conforme se migren
 const MODULE_MAP = {
@@ -14,6 +16,8 @@ const MODULE_MAP = {
   'registro-usuarios': <Usuarios />,
   'listado-usuarios': <UsuariosListado />,
   'roles': <RolesReporte />,
+  'registro-proveedores': <Proveedores />,
+  'listado-proveedores': <ProveedoresListado />,
   // Próximos módulos:
   // 'gestion-productos': <GestionProductos />,
   // 'categorias': <Categorias />,
