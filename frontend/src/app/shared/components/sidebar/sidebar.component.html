@@ -1,0 +1,75 @@
+<aside class="sidebar" [class.collapsed]="collapsed()" [class.mobile-open]="mobileOpen()">
+  <!-- Marca del sistema y control para expandir o colapsar la navegación -->
+  <div class="sidebar-brand">
+    <div class="brand-logo">
+      <div class="logo-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" fill="var(--accent)" opacity="0.9"/>
+          <path d="M2 17l10 5 10-5" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M2 12l10 5 10-5" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+        </svg>
+      </div>
+      <span class="brand-name">ERP<strong>Pro</strong></span>
+    </div>
+    <button class="toggle-btn" (click)="toggleCollapse()" [title]="collapsed() ? 'Expandir menú' : 'Colapsar menú'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path *ngIf="!collapsed()" d="M15 18l-6-6 6-6"/>
+        <path *ngIf="collapsed()" d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Capa de cierre para navegación móvil -->
+  <div class="mobile-backdrop" *ngIf="mobileOpen()" (click)="closeMobile()"></div>
+
+  <!-- Navegación principal y accesos administrativos según rol -->
+  <nav class="sidebar-nav">
+    <div class="nav-section-label" *ngIf="!collapsed()">Principal</div>
+
+    <ng-container *ngFor="let item of visibleNav()">
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [title]="collapsed() ? item.label : ''"
+        (click)="closeMobile()"
+      >
+        <span class="nav-icon" [innerHTML]="item.icon"></span>
+        <span class="nav-label">{{ item.label }}</span>
+        <span class="nav-badge" *ngIf="item.badge">{{ item.badge }}</span>
+      </a>
+    </ng-container>
+
+    <div class="nav-divider" *ngIf="!collapsed() && isAdmin()"></div>
+    <div class="nav-section-label" *ngIf="!collapsed() && isAdmin()">Administración</div>
+
+    <ng-container *ngFor="let item of adminNav()">
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [title]="collapsed() ? item.label : ''"
+        (click)="closeMobile()"
+      >
+        <span class="nav-icon" [innerHTML]="item.icon"></span>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    </ng-container>
+  </nav>
+
+  <!-- Pie lateral con datos cortos del usuario y cierre de sesión -->
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">{{ userInitial() }}</div>
+      <div class="user-meta">
+        <span class="user-name">{{ userName() }}</span>
+        <span class="user-role">{{ userRole() }}</span>
+      </div>
+    </div>
+    <button class="logout-btn" (click)="logout()" title="Cerrar sesión">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+      </svg>
+    </button>
+  </div>
+</aside>
