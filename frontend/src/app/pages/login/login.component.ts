@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { finalize } from 'rxjs'; // <-- El import va aquí arriba
+import { finalize } from 'rxjs'; 
 
 @Component({
   selector: 'app-login',
