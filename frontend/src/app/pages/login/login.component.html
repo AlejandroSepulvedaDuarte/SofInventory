@@ -7,15 +7,12 @@
     <!-- Panel izquierdo: branding y beneficios resumidos del sistema -->
     <div class="login-brand">
       <div class="brand-content">
+        <!-- DESPUÉS -->
         <div class="brand-logo">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7l10 5 10-5-10-5z" fill="var(--accent)" opacity="0.9"/>
-            <path d="M2 17l10 5 10-5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-            <path d="M2 12l10 5 10-5" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
-          </svg>
-          <h1>ERP<span class="brand-accent">Pro</span></h1>
+          <img src="assets/sofinventory.jpg" alt="SofInventory" />
+          <h1><span class="brand-accent">Sistema de Gestión Empresarial</span></h1>
         </div>
-        <p class="brand-tagline">Sistema de Gestión Empresarial</p>
+        
 
         <div class="feature-list">
           <div class="feature-item">
@@ -51,19 +48,13 @@
           <div class="field">
             <label for="username">Usuario</label>
             <div class="input-wrap">
-              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
               </svg>
-              <input
-                id="username"
-                type="text"
-                name="username"
-                [(ngModel)]="username"
-                placeholder="Tu nombre de usuario"
-                autocomplete="username"
-                required
-                [disabled]="loading()"
-              />
+              <input id="username" type="text" name="username" [(ngModel)]="username" placeholder="Tu nombre de usuario"
+                autocomplete="username" required [disabled]="loading()" />
             </div>
           </div>
 
@@ -71,25 +62,23 @@
           <div class="field">
             <label for="password">Contraseña</label>
             <div class="input-wrap">
-              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0110 0v4" />
               </svg>
-              <input
-                id="password"
-                [type]="showPass() ? 'text' : 'password'"
-                name="password"
-                [(ngModel)]="password"
-                placeholder="Tu contraseña"
-                autocomplete="current-password"
-                required
-                [disabled]="loading()"
-              />
+              <input id="password" [type]="showPass() ? 'text' : 'password'" name="password" [(ngModel)]="password"
+                placeholder="Tu contraseña" autocomplete="current-password" required [disabled]="loading()" />
               <button type="button" class="eye-btn" (click)="togglePass()" [title]="showPass() ? 'Ocultar' : 'Mostrar'">
-                <svg *ngIf="!showPass()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                <svg *ngIf="!showPass()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
                 </svg>
-                <svg *ngIf="showPass()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22"/>
+                <svg *ngIf="showPass()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2">
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" />
                 </svg>
               </button>
             </div>
@@ -98,7 +87,9 @@
           <!-- Error visible de autenticación -->
           <div class="error-msg" *ngIf="error()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
             {{ error() }}
           </div>
@@ -108,7 +99,8 @@
             <span *ngIf="!loading()">
               Entrar al sistema
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
               </svg>
             </span>
             <span class="loading-text" *ngIf="loading()">
@@ -119,7 +111,7 @@
         </form>
 
         <div class="card-footer">
-          <span>ERP Pro v2.0 - Sistema Universitario</span>
+        
         </div>
       </div>
     </div>
