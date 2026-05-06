@@ -1,0 +1,146 @@
+<app-layout>
+  <div class="page">
+    <!-- Encabezado con búsqueda directa y acción principal de creación -->
+    <div class="page-header">
+      <div>
+        <h1>Productos</h1>
+        <p>{{ productos().length }} productos registrados</p>
+      </div>
+      <div class="header-actions">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar productos..."
+          [value]="searchTerm()"
+          (input)="searchTerm.set($any($event.target).value)"
+        />
+        <button class="btn-primary" (click)="openModal()">+ Nuevo Producto</button>
+      </div>
+    </div>
+
+    <!-- Filtros rápidos para segmentar el catálogo por estado -->
+    <div class="filter-tabs">
+      <button [class.active]="filtroEstado() === ''" (click)="filtroEstado.set('')">Todos</button>
+      <button [class.active]="filtroEstado() === 'activo'" (click)="filtroEstado.set('activo')">Activos</button>
+      <button [class.active]="filtroEstado() === 'pendiente'" (click)="filtroEstado.set('pendiente')">Pendientes</button>
+      <button [class.active]="filtroEstado() === 'inactivo'" (click)="filtroEstado.set('inactivo')">Inactivos</button>
+    </div>
+
+    <!-- Tabla principal del catálogo con acciones por fila -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Categoría</th>
+            <th>Precio Venta</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filteredProductos()">
+            <td><code>{{ p.sku }}</code></td>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.marca }}</td>
+            <td>{{ getCatNombre(p.categoria) }}</td>
+            <td>{{ p.precio_venta | currency:'COP':'symbol':'1.0-0' }}</td>
+            <td>
+              <span [class.low-stock]="p.stock <= p.stock_minimo">
+                {{ p.stock }} {{ p.unidad_medida }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [class]="'badge-' + p.estado">
+                {{ p.estado === 'activo' ? 'Activo' : p.estado === 'inactivo' ? 'Inactivo' : 'Pendiente' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-icon" title="Editar" (click)="openModal(p)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon" [class.btn-active]="p.estado === 'activo'" [class.btn-inactive]="p.estado !== 'activo'" title="Cambiar estado" (click)="cambiarEstado(p)">
+                  <i class="fas" [class.fa-toggle-on]="p.estado === 'activo'" [class.fa-toggle-off]="p.estado !== 'activo'"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filteredProductos().length === 0">
+            <td colspan="8" class="empty-row">No se encontraron productos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal reutilizado para alta y edición del catálogo -->
+    <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>{{ editing() ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+          <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario base del producto con atributos comerciales y operativos -->
+          <div class="form-grid">
+            <div class="field">
+              <label>Nombre *</label>
+              <input type="text" [(ngModel)]="form.nombre" placeholder="Nombre del producto" />
+            </div>
+            <div class="field">
+              <label>Marca *</label>
+              <input type="text" [(ngModel)]="form.marca" placeholder="Marca" />
+            </div>
+            <div class="field">
+              <label>Referencia *</label>
+              <input type="text" [(ngModel)]="form.referencia" placeholder="Referencia" />
+            </div>
+            <div class="field">
+              <label>Categoría *</label>
+              <select [(ngModel)]="form.categoria">
+                <option value="">Seleccionar...</option>
+                <option *ngFor="let c of categorias()" [value]="c.id">{{ c.nombre }}</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Unidad de Medida</label>
+              <select [(ngModel)]="form.unidad_medida">
+                <option *ngFor="let u of unidades" [value]="u">{{ u }}</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Precio Compra</label>
+              <input type="number" [(ngModel)]="form.precio_compra" placeholder="0" />
+            </div>
+            <div class="field">
+              <label>Precio Venta</label>
+              <input type="number" [(ngModel)]="form.precio_venta" placeholder="0" />
+            </div>
+            <div class="field">
+              <label>IVA %</label>
+              <input type="number" [(ngModel)]="form.iva_porcentaje" placeholder="0" />
+            </div>
+            <div class="field">
+              <label>Stock Mínimo</label>
+              <input type="number" [(ngModel)]="form.stock_minimo" placeholder="0" />
+            </div>
+            <div class="field full">
+              <label>Descripción</label>
+              <textarea [(ngModel)]="form.descripcion" rows="3" placeholder="Descripción opcional"></textarea>
+            </div>
+          </div>
+          <div class="error-msg" *ngIf="formError()">{{ formError() }}</div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-primary" (click)="save()" [disabled]="saving()">
+            {{ saving() ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>
