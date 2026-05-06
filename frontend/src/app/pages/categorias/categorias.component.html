@@ -1,0 +1,73 @@
+<app-layout>
+  <div class="page">
+    <!-- Encabezado del módulo con acceso directo a la creación de categorías -->
+    <div class="page-header">
+      <div>
+        <h1>Categorías</h1>
+        <p>{{ categorias().length }} categorías registradas</p>
+      </div>
+      <button class="btn-primary" (click)="openModal()">+ Nueva Categoría</button>
+    </div>
+
+    <!-- Tabla de consulta rápida para categorías disponibles -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Tipo de Control</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of categorias()">
+            <td><strong>{{ c.nombre }}</strong></td>
+            <td><span class="badge badge-activo">{{ c.tipo_control }}</span></td>
+            <td>{{ c.descripcion || '—' }}</td>
+            <td>
+              <button class="btn-icon btn-danger" title="Eliminar" (click)="eliminar(c)">🗑️</button>
+            </td>
+          </tr>
+          <tr *ngIf="categorias().length === 0">
+            <td colspan="4" class="empty-row">No hay categorías registradas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal simple para registrar una nueva categoría -->
+    <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
+      <div class="modal modal-sm" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Nueva Categoría</h2>
+          <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario mínimo con nombre, tipo de control y descripción -->
+          <div class="field">
+            <label>Nombre *</label>
+            <input type="text" [(ngModel)]="form.nombre" placeholder="Nombre de la categoría" />
+          </div>
+          <div class="field">
+            <label>Tipo de Control *</label>
+            <select [(ngModel)]="form.tipo_control">
+              <option *ngFor="let t of tiposControl" [value]="t.value">{{ t.label }}</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Descripción</label>
+            <textarea [(ngModel)]="form.descripcion" rows="3" placeholder="Descripción opcional"></textarea>
+          </div>
+          <div class="error-msg" *ngIf="formError()">{{ formError() }}</div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-primary" (click)="save()" [disabled]="saving()">
+            {{ saving() ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>
