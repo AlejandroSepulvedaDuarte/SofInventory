@@ -1,0 +1,83 @@
+.page {
+    padding: 32px;
+}
+
+.page-header h1,
+.page-header p,
+.tipo-badge,
+.email-link,
+.muted-line,
+.entity-cell,
+.contact-cell,
+.error-msg {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-header h1 i,
+.icon-muted,
+.search-icon {
+    color: var(--accent);
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    pointer-events: none;
+    font-size: 13px;
+}
+
+.search-input {
+    padding-left: 32px;
+}
+
+.entity-cell,
+.contact-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.entity-cell strong {
+    color: var(--text-primary);
+}
+
+.entity-cell small,
+.muted-line {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.email-link {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.email-link:hover {
+    text-decoration: underline;
+}
+
+.sku-code {
+    color: var(--text-secondary);
+}
+
+.tipo-badge {
+    color: var(--text-secondary);
+}
+
+.error-msg {
+    margin-top: 12px;
+}

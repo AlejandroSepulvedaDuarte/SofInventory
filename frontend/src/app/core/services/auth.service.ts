@@ -1,3 +1,7 @@
+/*
+ * Servicio de autenticación en memoria.
+ * Administra login, logout, token y usuario actual.
+ */
 import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -80,7 +84,3 @@ export class AuthService {
     this.isLoggedIn.set(false);
   }
 }
-/*
- * Servicio de autenticación en memoria.
- * Administra login, logout, token y usuario actual sin usar localStorage ni sessionStorage.
- */

@@ -62,7 +62,7 @@
 
 .active-tab {
   background: var(--accent) !important;
-  color: white !important;
+  color: rgb(14, 1, 1);
   border-color: var(--accent) !important;
 }
 

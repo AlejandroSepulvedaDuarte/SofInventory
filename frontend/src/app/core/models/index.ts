@@ -1,3 +1,7 @@
+/*
+ * Contratos de datos del frontend.
+ * Reúne las interfaces TypeScript que describen usuarios, productos, compras, ventas e inventario.
+ */
 // ==================== AUTH ====================
 export interface LoginRequest {
   username: string;
@@ -207,7 +211,4 @@ export interface DashboardData {
   total_proveedores?: number;
   [key: string]: any;
 }
-/*
- * Contratos de datos del frontend.
- * Reúne las interfaces TypeScript que describen usuarios, productos, compras, ventas e inventario.
- */
+
