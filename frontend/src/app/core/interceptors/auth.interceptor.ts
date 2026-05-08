@@ -1,3 +1,7 @@
+/*
+ * Interceptor HTTP de autenticación.
+ * Agrega el token en memoria a cada petición y redirige al login si el backend responde 401.
+ */
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
@@ -25,7 +29,3 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     })
   );
 };
-/*
- * Interceptor HTTP de autenticación.
- * Agrega el token en memoria a cada petición y redirige al login si el backend responde 401.
- */

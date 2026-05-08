@@ -1,12 +1,21 @@
+<!--
+  Pantalla de gestión de proveedores.
+  Permite listar, buscar, crear, editar, cambiar estado (Activo/Inactivo)
+  y eliminar proveedores. El formulario incluye todos los campos requeridos
+  por el backend: datos de contacto, ubicación, tipo de proveedor, etc.
+-->
+
 <app-layout>
   <div class="page">
-    <!-- Encabezado del módulo con buscador y acceso al formulario principal -->
+    
+    <!-- Encabezado: título, contador, buscador y botón de nuevo -->
     <div class="page-header">
       <div>
         <h1><i class="fas fa-truck"></i> Proveedores</h1>
         <p><i class="fas fa-circle-info"></i> {{ proveedores().length }} proveedores registrados</p>
       </div>
       <div class="header-actions">
+        <!-- Buscador local (filtra en frontend por razón social, documento o contacto) -->
         <div class="search-wrapper">
           <i class="fas fa-magnifying-glass search-icon"></i>
           <input type="text" class="search-input" placeholder="Buscar..." [(ngModel)]="searchTerm" />
@@ -17,7 +26,7 @@
       </div>
     </div>
 
-    <!-- Tabla de consulta y acciones rápidas sobre proveedores existentes -->
+    <!-- Tabla de proveedores con acciones: editar, cambiar estado, eliminar -->
     <div class="table-container">
       <table class="data-table">
         <thead>
@@ -33,6 +42,7 @@
           </tr>
         </thead>
         <tbody>
+          <!-- filteredProveedores() actualiza la lista en tiempo real según searchTerm -->
           <tr *ngFor="let p of filteredProveedores()">
             <td><strong><i class="fas fa-building icon-muted"></i> {{ p.razon_social }}</strong></td>
             <td><code class="sku-code">{{ p.numero_documento }}</code></td>
@@ -44,6 +54,7 @@
             </td>
             <td><i class="fas fa-phone icon-muted"></i> {{ p.telefono }}</td>
             <td>
+              <!-- Icono según tipo: Bienes(caja), Servicios(herramienta), Mixto(capas) -->
               <span class="tipo-badge">
                 <i class="fas fa-box" *ngIf="p.tipo_proveedor === 'Bienes'"></i>
                 <i class="fas fa-screwdriver-wrench" *ngIf="p.tipo_proveedor === 'Servicios'"></i>
@@ -52,6 +63,7 @@
               </span>
             </td>
             <td>
+              <!-- Badge dinámico: verde si Activo, rojo si Inactivo -->
               <span class="badge" [class]="p.estado === 'Activo' ? 'badge-activo' : 'badge-inactivo'">
                 <i class="fas" [class.fa-circle-check]="p.estado === 'Activo'" [class.fa-circle-xmark]="p.estado !== 'Activo'"></i>
                 {{ p.estado }}
@@ -59,18 +71,22 @@
             </td>
             <td>
               <div class="action-btns">
+                <!-- Editar: abre modal con datos del proveedor -->
                 <button class="btn-icon" title="Editar" (click)="openModal(p)">
                   <i class="fas fa-pen"></i>
                 </button>
+                <!-- Cambiar estado: alterna entre Activo/Inactivo -->
                 <button class="btn-icon" title="Cambiar estado" (click)="cambiarEstado(p)">
                   <i class="fas fa-arrows-rotate"></i>
                 </button>
+                <!-- Eliminar: requiere confirmación previa en el componente -->
                 <button class="btn-icon btn-danger" title="Eliminar" (click)="eliminar(p)">
                   <i class="fas fa-trash"></i>
                 </button>
               </div>
             </td>
           </tr>
+          <!-- Fila vacía cuando no hay resultados (búsqueda sin coincidencias) -->
           <tr *ngIf="filteredProveedores().length === 0">
             <td colspan="8" class="empty-row">
               <i class="fas fa-inbox"></i> No se encontraron proveedores
@@ -80,10 +96,11 @@
       </table>
     </div>
 
-    <!-- Modal del formulario para alta y edición de proveedores -->
+    <!-- Modal: formulario para crear o editar proveedor -->
     <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
       <div class="modal modal-lg" (click)="$event.stopPropagation()">
         <div class="modal-header">
+          <!-- Cambia título e ícono según modo: edición o creación -->
           <h2>
             <i class="fas" [class.fa-pen]="editing()" [class.fa-truck]="!editing()"></i>
             {{ editing() ? 'Editar Proveedor' : 'Nuevo Proveedor' }}
@@ -92,9 +109,10 @@
             <i class="fas fa-xmark"></i>
           </button>
         </div>
+        
         <div class="modal-body">
-          <!-- Formulario principal alineado con el contrato de proveedores del backend -->
           <div class="form-grid">
+            <!-- Tipo documento (cargado desde catálogo de tipos_documento) -->
             <div class="field">
               <label><i class="fas fa-file-lines"></i> Tipo Documento *</label>
               <select [(ngModel)]="form.tipo_documento">
@@ -102,30 +120,38 @@
                 <option *ngFor="let t of tiposDoc()" [ngValue]="t.id">{{ t.codigo }} - {{ t.nombre }}</option>
               </select>
             </div>
+            
             <div class="field">
               <label><i class="fas fa-id-card"></i> Número Documento *</label>
               <input type="text" [(ngModel)]="form.numero_documento" placeholder="NIT o documento" />
             </div>
+            
             <div class="field">
               <label><i class="fas fa-building"></i> Razón Social *</label>
               <input type="text" [(ngModel)]="form.razon_social" placeholder="Nombre o razón social" />
             </div>
+            
             <div class="field">
               <label><i class="fas fa-user"></i> Nombre Contacto *</label>
               <input type="text" [(ngModel)]="form.nombre_contacto" placeholder="Nombre del contacto" />
             </div>
+            
             <div class="field">
               <label><i class="fas fa-briefcase"></i> Cargo</label>
               <input type="text" [(ngModel)]="form.cargo_contacto" placeholder="Cargo del contacto" />
             </div>
+            
             <div class="field">
               <label><i class="fas fa-envelope"></i> Email *</label>
               <input type="email" [(ngModel)]="form.email" placeholder="correo@empresa.com" />
             </div>
+            
             <div class="field">
               <label><i class="fas fa-phone"></i> Teléfono *</label>
               <input type="text" [(ngModel)]="form.telefono" placeholder="Teléfono" />
             </div>
+            
+            <!-- Tipo proveedor: afecta iconos mostrados en la tabla -->
             <div class="field">
               <label><i class="fas fa-tag"></i> Tipo Proveedor *</label>
               <select [(ngModel)]="form.tipo_proveedor">
@@ -134,35 +160,46 @@
                 <option value="Mixto">Mixto</option>
               </select>
             </div>
+            
+            <!-- Ubicación geográfica (opcional pero recomendado para reporting) -->
             <div class="field">
               <label><i class="fas fa-earth-americas"></i> País *</label>
               <input type="text" [(ngModel)]="form.pais" placeholder="País" />
             </div>
+            
             <div class="field">
               <label><i class="fas fa-map"></i> Departamento *</label>
               <input type="text" [(ngModel)]="form.departamento" placeholder="Departamento" />
             </div>
+            
             <div class="field">
               <label><i class="fas fa-city"></i> Ciudad *</label>
               <input type="text" [(ngModel)]="form.ciudad" placeholder="Ciudad" />
             </div>
+            
             <div class="field full">
               <label><i class="fas fa-location-dot"></i> Dirección *</label>
               <input type="text" [(ngModel)]="form.direccion" placeholder="Dirección completa" />
             </div>
+            
+            <!-- Campo texto libre para notas internas -->
             <div class="field full">
               <label><i class="fas fa-clipboard"></i> Observaciones</label>
               <textarea [(ngModel)]="form.observaciones" rows="2" placeholder="Notas adicionales"></textarea>
             </div>
           </div>
+          
+          <!-- Mensaje de error visible (validaciones frontend o errores del backend) -->
           <div class="error-msg" *ngIf="formError()">
             <i class="fas fa-circle-xmark"></i> {{ formError() }}
           </div>
         </div>
+        
         <div class="modal-footer">
           <button class="btn-secondary" (click)="closeModal()">
             <i class="fas fa-xmark"></i> Cancelar
           </button>
+          <!-- Botón dinámico: muestra spinner mientras saving() es true -->
           <button class="btn-primary" (click)="save()" [disabled]="saving()">
             <i class="fas" [class.fa-spinner]="saving()" [class.fa-spin]="saving()" [class.fa-floppy-disk]="!saving()"></i>
             {{ saving() ? 'Guardando...' : 'Guardar' }}
@@ -171,4 +208,5 @@
       </div>
     </div>
   </div>
+
 </app-layout>

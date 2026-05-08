@@ -1,3 +1,7 @@
+/*
+ * Fachada de servicios HTTP del sistema.
+ * Centraliza los endpoints consumidos por Angular y adapta payloads del frontend al backend.
+ */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -338,7 +342,4 @@ export class DashboardService {
     return this.http.get(`${API}/dashboard/`);
   }
 }
-/*
- * Fachada de servicios HTTP del sistema.
- * Centraliza los endpoints consumidos por Angular y adapta payloads del frontend al backend.
- */
+

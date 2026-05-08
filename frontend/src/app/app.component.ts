@@ -1,3 +1,8 @@
+/*
+ * Archivo raíz de la aplicación.
+ * Su responsabilidad es montar el árbol principal de Angular y delegar
+ * la navegación real a las rutas configuradas en app.routes.ts.
+ */
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -8,8 +13,4 @@ import { RouterOutlet } from '@angular/router';
   template: `<router-outlet />`,
 })
 export class AppComponent {}
-/*
- * Archivo raíz de la aplicación.
- * Su responsabilidad es montar el árbol principal de Angular y delegar
- * la navegación real a las rutas configuradas en app.routes.ts.
- */
+

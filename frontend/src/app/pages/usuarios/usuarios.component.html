@@ -1,0 +1,143 @@
+<!--
+  Pantalla de usuarios.
+  Gestiona listado, búsqueda, creación, edición, cambio de estado y eliminación de usuarios.
+-->
+
+<app-layout>
+  <div class="page">
+    
+    <!-- Encabezado: título, contador, buscador y botón nuevo usuario -->
+    <div class="page-header">
+      <div>
+        <h1>Usuarios</h1>
+        <p>{{ usuarios().length }} usuarios registrados</p>
+      </div>
+      <div class="header-actions">
+        <input type="text" class="search-input" placeholder="🔍 Buscar..." [(ngModel)]="searchTerm" />
+        <button class="btn-primary" (click)="openModal()">+ Nuevo Usuario</button>
+      </div>
+    </div>
+
+    <!-- Tabla principal de usuarios -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Nombre Completo</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Fecha Creación</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of filteredUsuarios()">
+            <td><code>{{ u.username }}</code></td>
+            <td>{{ u.nombre_completo }}</td>
+            <td>{{ u.email }}</td>
+            <!-- getRolNombre() resuelve nombre del rol desde ID u objeto -->
+            <td><span class="badge badge-activo">{{ getRolNombre(u.rol) }}</span></td>
+            <!-- Badge dinámico según estado -->
+            <td><span class="badge" [class]="u.estado === 'activo' ? 'badge-activo' : 'badge-inactivo'">
+              {{ u.estado }}
+            </span></td>
+            <td>{{ u.fecha_creacion }}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-icon" title="Editar" (click)="openModal(u)">✏️</button>
+                <button class="btn-icon" title="Cambiar estado" (click)="cambiarEstado(u)">🔄</button>
+                <button class="btn-icon btn-danger" title="Eliminar" (click)="eliminar(u)">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <!-- Fila vacía cuando no hay resultados -->
+          <tr *ngIf="filteredUsuarios().length === 0">
+            <td colspan="7" class="empty-row">No se encontraron usuarios</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal de creación/edición de usuario -->
+    <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
+      <div class="modal modal-lg" (click)="$event.stopPropagation()">
+        
+        <div class="modal-header">
+          <h2>{{ editing() ? 'Editar Usuario' : 'Nuevo Usuario' }}</h2>
+          <button class="close-btn" (click)="closeModal()">✕</button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="form-grid">
+            <!-- Campos comunes -->
+            <div class="field">
+              <label>Tipo Documento *</label>
+              <select [(ngModel)]="form.tipo_documento">
+                <option value="">Seleccionar...</option>
+                <option *ngFor="let t of tiposDoc()" [value]="t.id">{{ t.codigo }} - {{ t.nombre }}</option>
+              </select>
+            </div>
+            
+            <div class="field">
+              <label>Número Documento *</label>
+              <input type="text" [(ngModel)]="form.numero_documento" placeholder="Número de documento" />
+            </div>
+            
+            <div class="field">
+              <label>Nombre Completo *</label>
+              <input type="text" [(ngModel)]="form.nombre_completo" placeholder="Nombre completo" />
+            </div>
+            
+            <div class="field">
+              <label>Email *</label>
+              <input type="email" [(ngModel)]="form.email" placeholder="correo@empresa.com" />
+            </div>
+            
+            <div class="field">
+              <label>Username *</label>
+              <input type="text" [(ngModel)]="form.username" placeholder="nombre.usuario" />
+            </div>
+            
+            <!-- Contraseña: obligatoria en creación, opcional en edición -->
+            <div class="field">
+              <label>{{ editing() ? 'Nueva Contraseña (opcional)' : 'Contraseña *' }}</label>
+              <input type="password" [(ngModel)]="form.password" 
+                     [placeholder]="editing() ? 'Dejar vacío para no cambiar' : 'Contraseña'" />
+            </div>
+            
+            <div class="field">
+              <label>Rol *</label>
+              <select [(ngModel)]="form.rol">
+                <option value="">Seleccionar...</option>
+                <option *ngFor="let r of roles()" [value]="r.id">{{ r.nombre }}</option>
+              </select>
+            </div>
+            
+            <div class="field">
+              <label>Fecha Creación *</label>
+              <input type="date" [(ngModel)]="form.fecha_creacion" />
+            </div>
+            
+            <div class="field full">
+              <label>Observaciones</label>
+              <textarea [(ngModel)]="form.observaciones" rows="2" placeholder="Observaciones adicionales"></textarea>
+            </div>
+          </div>
+          
+          <div class="error-msg" *ngIf="formError()">{{ formError() }}</div>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-primary" (click)="save()" [disabled]="saving()">
+            {{ saving() ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+        
+      </div>
+    </div>
+    
+  </div>
+</app-layout>

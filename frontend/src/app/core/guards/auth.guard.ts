@@ -1,3 +1,8 @@
+/*
+ * Guards de navegación.
+ * Encapsulan las reglas para permitir acceso a rutas públicas, privadas y de administración.
+ */
+
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
@@ -32,7 +37,3 @@ export const adminGuard: CanActivateFn = () => {
   }
   return router.createUrlTree(['/dashboard']);
 };
-/*
- * Guards de navegación.
- * Encapsulan las reglas para permitir acceso a rutas públicas, privadas y de administración.
- */
