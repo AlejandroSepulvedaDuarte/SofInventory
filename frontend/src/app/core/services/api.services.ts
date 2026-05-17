@@ -330,7 +330,7 @@ export class InventarioService {
 }
 
 // ══════════════════════════════════════════════════════════
-// DASHBOARD - Adaptado de React
+// DASHBOARD
 // ══════════════════════════════════════════════════════════
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
