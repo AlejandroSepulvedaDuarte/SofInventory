@@ -126,13 +126,12 @@ Verificar y validar el correcto funcionamiento de los módulos de **Login** y **
 
 | Documento | Enlace |
 |-----------|--------|
-| 📁 Módulo Usuarios — README | [test-cases/01-modulo-usuarios/README.md](./test-cases/01-modulo-usuarios/README.md) |
-| 🧪 Casos de Prueba — Usuarios | [test-cases/01-modulo-usuarios/casos-usuarios.md](./test-cases/01-modulo-usuarios/casos-usuarios.md) |
-| 📁 Módulo Login — README | [test-cases/02-modulo-login/README.md](./test-cases/02-modulo-login/README.md) |
-| 🧪 Casos de Prueba — Login | [test-cases/02-modulo-login/casos-login.md](./test-cases/02-modulo-login/casos-login.md) |
-| 🐛 Registro de Defectos | [test-cases/DEFECTOS.md](./test-cases/DEFECTOS.md) |
-| 📖 Glosario y Ambiente | [test-cases/GLOSARIO.md](./test-cases/GLOSARIO.md) |
-
+| 📁 Módulo Usuarios — README | [Abrir](./test-cases/01-modulo-usuarios/README.md) |
+| 🧪 Casos de Prueba — Usuarios | [Abrir](./test-cases/01-modulo-usuarios/casos-usuarios.md) |
+| 📁 Módulo Login — README | [Abrir](./test-cases/02-modulo-login/README.md) |
+| 🧪 Casos de Prueba — Login | [Abrir](./test-cases/02-modulo-login/casos-login.md) |
+| 🐛 Registro de Defectos | [Abrir](./test-cases/DEFECTOS.md) |
+| 📖 Glosario y Ambiente | [Abrir](./test-cases/GLOSARIO.md) |
 ---
 
 ## 8. 📅 Control de Versiones del Documento
