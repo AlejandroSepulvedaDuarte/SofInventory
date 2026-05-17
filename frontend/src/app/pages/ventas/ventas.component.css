@@ -1,7 +1,21 @@
+/**
+ * @file ventas.component.css
+ * @description
+ * Estilos específicos para el componente de ventas.
+ * Define la estructura del modal, tabla de productos, totales y elementos de detalle.
+ */
+
 .page {
     padding: 32px;
 }
 
+/* ── Iconos en encabezados ──────────────────────────────────────────────── */
+.page-header h1 i,
+.detalle-header h3 i {
+    color: var(--accent);
+}
+
+/* Alinea iconos con texto en elementos que los contienen */
 .page-header h1,
 .page-header p,
 .detalle-header h3,
@@ -12,11 +26,7 @@
     gap: 8px;
 }
 
-.page-header h1 i,
-.detalle-header h3 i {
-    color: var(--accent);
-}
-
+/* ── Sección de productos (detalle) ──────────────────────────────────────── */
 .detalle-section {
     margin-top: 24px;
     border-top: 1px solid var(--border);
@@ -43,6 +53,7 @@
     font-size: 12px;
 }
 
+/* ── Totales de la venta ────────────────────────────────────────────────── */
 .totales {
     display: flex;
     gap: 24px;
@@ -63,10 +74,12 @@
     font-size: 16px;
 }
 
+/* Totales dentro del modal de detalle */
 .detail-totals {
     margin-top: 16px;
 }
 
+/* ── Resumen de cliente y método en detalle ─────────────────────────────── */
 .detalle-summary {
     display: flex;
     flex-wrap: wrap;
@@ -75,6 +88,7 @@
     color: var(--text-secondary);
 }
 
+/* ── Mensaje de error ───────────────────────────────────────────────────── */
 .error-msg {
     margin-top: 12px;
 }
