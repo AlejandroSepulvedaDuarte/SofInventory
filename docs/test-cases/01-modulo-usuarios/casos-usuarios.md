@@ -1,10 +1,10 @@
 # 🧪 Casos de Prueba — Módulo Usuarios
 
-> **Versión:** 1.0.0 <br>
+> **Versión:** 1.0.1 <br>
 > **Módulo:** Gestión de Usuarios <br>
 > **Prefijo de código:** TC-USR <br>
 > **Total de casos:** 8 <br>
-> **Fecha:** 15 de mayo de 2026 <br>
+> **Fecha:** 16 de mayo de 2026 <br>
 > **Autor:** Lucy Estefany Izquierdo Jaramillo
 
 ---
@@ -41,9 +41,9 @@ El módulo de Usuarios permite al administrador registrar nuevas cuentas en el s
 | Componente | Detalle |
 |---|---|
 | Backend | Django 4.x + Django REST Framework |
-| Base de datos | PostgreSQL 15 |
-| Frontend | Angular 17 |
-| Herramienta API | Postman v11 |
+| Base de datos | PostgreSQL 18+ |
+| Frontend | Angular 19 |
+| Herramienta API | Postman v12 |
 | Herramienta BD | pgAdmin 4 |
 | Ambiente | Local (desarrollo) |
 
@@ -579,4 +579,4 @@ El usuario accedió correctamente. Se generó un token Bearer válido almacenado
 
 ---
 
-*© 2026 SofInventory — Área de Calidad de Software | Versión 1.0.0*
+*© 2026 SofInventory — Área de Calidad de Software | Versión 1.0.1*

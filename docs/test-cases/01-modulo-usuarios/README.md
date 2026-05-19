@@ -1,9 +1,9 @@
 # 👤 Módulo 01 — Gestión de Usuarios
 
-> **Versión:** 1.0.0 <br>
+> **Versión:** 1.0.1 <br>
 > **Módulo:** Usuarios <br>
 > **Código de módulo:** MOD-USR <br>
-> **Fecha:** 15 de mayo de 2026
+> **Fecha:** 16 de mayo de 2026
 
 ---
 
@@ -82,7 +82,7 @@ Este módulo es la base del sistema de autenticación: **un usuario debe existir
 | TC-USR-007 | Verificación de contraseña hasheada en BD | ✅ Pasó |
 | TC-USR-008 | Usuario creado puede iniciar sesión | ✅ Pasó |
 
-**Resultado:** 7/8 casos aprobados — **87.5% de éxito**
+**Resultado:** 6/8 casos aprobados — **75.0% de éxito**
 
 ---
 
