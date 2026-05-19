@@ -4,7 +4,7 @@
 > **Fecha de elaboración:** 15 de mayo de 2026 <br>
 > **Última actualización:** 16 de mayo de 2026 <br>
 > **Estado del documento:** ✅ Aprobado para revisión <br>
-> **Equipo QA:** Alejandro Sepúlveda Duarte & Lucy Estefany Izquierdo Jaramillo — Calidad de Software, SofInventory
+> **Equipo QA:** Alejandro Sepúlveda Duarte & Lucy Estefany Izquierdo Jaramillo
 
 ---
 
@@ -118,7 +118,7 @@ Verificar y validar el correcto funcionamiento de los módulos de **Login** y **
 ### 🏁 Decisión Final del Proceso Evaluativo
 
 > **CONDICIONALMENTE APROBADO** para ambiente de pruebas de aceptación (UAT).
-> Se recomienda corregir los **3 defectos encontrados** (1 en Login, 1 en Usuarios) antes del despliegue en producción. El sistema demuestra una base funcional sólida con áreas de mejora en seguridad de entradas y manejo de sesiones en el frontend.
+> Se recomienda corregir los **3 defectos encontrados** (1 en Login, 2 en Usuarios) antes del despliegue en producción. El sistema demuestra una base funcional sólida con áreas de mejora en seguridad de entradas y manejo de sesiones en el frontend.
 
 ---
 
@@ -138,7 +138,8 @@ Verificar y validar el correcto funcionamiento de los módulos de **Login** y **
 
 | Versión | Fecha | Autor | Cambios |
 |---------|-------|-------|---------|
-| 1.0.0 | 15/05/2026 | Equipo QA | Creación inicial del plan de pruebas |
+| 1.0.0 | 15/05/2026 | Alejandro Sepúlveda Duarte | Creación inicial del plan de pruebas |
+| 1.0.1 | 16/05/2026 | Licy Estefany Izquierdo Jaramillo | Creación inicial del test-cases de usuarios |
 
 ---
 
