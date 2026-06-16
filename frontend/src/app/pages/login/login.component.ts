@@ -60,6 +60,12 @@ export class LoginComponent {
   // Mensaje de error visible en pantalla
   error = signal('');
 
+  // Intentos fallidos restantes (para mostrar al usuario)
+  intentosRestantes = signal<number | null>(null);
+
+  // Indica si la cuenta está bloqueada
+  cuentaBloqueada = signal(false);
+
   // Controla si la contraseña se muestra o se oculta
   showPass = signal(false);
 
@@ -93,6 +99,8 @@ export class LoginComponent {
 
     // Limpia errores previos
     this.error.set('');
+    this.intentosRestantes.set(null);
+    this.cuentaBloqueada.set(false);
 
     this.auth.login({
       username: this.username,
@@ -117,12 +125,21 @@ export class LoginComponent {
       // Error de autenticación o conexión
       error: (err) => {
         console.error('Error detectado:', err);
-        // Usa mensaje del backend si existe; de lo contrario muestra mensaje genérico.
-        this.error.set(
-          err.error?.error ??
-          'Credenciales incorrectas. Intenta de nuevo.'
-        );
-
+        
+        // Extraer información de la respuesta del backend
+        const errorResponse = err.error || {};
+        const mensajeError = errorResponse.error ?? 'Credenciales incorrectas. Intenta de nuevo.';
+        
+        // Mostrar mensaje de error
+        this.error.set(mensajeError);
+        
+        // Si la cuenta está bloqueada
+        if (errorResponse.cuenta_bloqueada) {
+          this.cuentaBloqueada.set(true);
+        } else if (errorResponse.intentos_restantes !== undefined) {
+          // Mostrar intentos restantes si están disponibles
+          this.intentosRestantes.set(errorResponse.intentos_restantes);
+        }
       },
 
     });

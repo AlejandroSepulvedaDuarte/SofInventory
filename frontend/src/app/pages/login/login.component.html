@@ -131,6 +131,30 @@
             {{ error() }}
           </div>
 
+          <!-- Advertencia de cuenta bloqueada -->
+          <div class="warning-msg" *ngIf="cuentaBloqueada()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+            Cuenta bloqueada. Contacta con el administrador para desbloquearla.
+          </div>
+
+          <!-- Contador de intentos restantes -->
+          <div class="attempts-info" *ngIf="intentosRestantes() !== null && !cuentaBloqueada()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <span *ngIf="intentosRestantes() === 1">
+              ⚠️ Último intento. Una falla más bloqueará tu cuenta.
+            </span>
+            <span *ngIf="intentosRestantes() !== null && intentosRestantes()! > 1">
+              Intentos restantes: <strong>{{ intentosRestantes() }}</strong>
+            </span>
+          </div>
+
           <!-- Acción principal de autenticación -->
           <button type="submit" class="btn-login" [disabled]="loading() || !username || !password">
             <!-- Estado normal -->

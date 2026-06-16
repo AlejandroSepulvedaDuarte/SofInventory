@@ -263,6 +263,49 @@ label {
   font-size: 13px;
 }
 
+/* ── Warning (cuenta bloqueada) ── */
+.warning-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  animation: pulse-danger 2s infinite;
+}
+
+/* ── Info (intentos restantes) ── */
+.attempts-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.attempts-info strong {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+@keyframes pulse-danger {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
 /* ── Login button ── */
 .btn-login {
   display: flex;
