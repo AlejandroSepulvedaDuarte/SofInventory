@@ -3,8 +3,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import check_password
+from django.utils import timezone
 
-from .models import Usuario, Rol, TipoDocumento, SesionAPI
+from .models import Usuario, Rol, TipoDocumento, SesionAPI, IntentoFallidoLogin
 from .permissions import require_roles
 from .serializers import UsuarioSerializer, RolSerializer, TipoDocumentoSerializer, LoginSerializer
 
@@ -20,6 +21,14 @@ def serializar_usuario_publico(user):
     }
 
 
+def obtener_ip_cliente(request):
+    """Obtiene la dirección IP del cliente."""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR', '')
+
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
@@ -29,22 +38,55 @@ def login(request):
 
     username = serializer.validated_data['username']
     password = serializer.validated_data['password']
+    ip_address = obtener_ip_cliente(request)
+    user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
 
     try:
         user = Usuario.objects.select_related('rol').get(username=username)
     except Usuario.DoesNotExist:
         return Response({'error': 'Usuario o contrasena incorrectos'}, status=status.HTTP_401_UNAUTHORIZED)
 
+    if user.cuenta_bloqueada:
+        return Response({
+            'error': 'Cuenta bloqueada. Contacte al administrador para desbloquearla.',
+            'cuenta_bloqueada': True
+        }, status=status.HTTP_403_FORBIDDEN)
+
     if user.estado == 'inactivo':
         return Response({'error': 'Usuario inactivo. Contacte al administrador.'}, status=status.HTTP_403_FORBIDDEN)
 
     if not check_password(password, user.password):
-        return Response({'error': 'Usuario o contrasena incorrectos'}, status=status.HTTP_401_UNAUTHORIZED)
+        IntentoFallidoLogin.objects.create(
+            usuario=user,
+            ip_address=ip_address,
+            user_agent=user_agent
+        )
+        
+        intentos_count = IntentoFallidoLogin.objects.filter(usuario=user).count()
+        
+        if intentos_count >= 5:
+            user.cuenta_bloqueada = True
+            user.fecha_bloqueo = timezone.now()
+            user.save(update_fields=['cuenta_bloqueada', 'fecha_bloqueo'])
+            IntentoFallidoLogin.objects.filter(usuario=user).delete()
+            
+            return Response({
+                'error': f'Cuenta bloqueada tras {intentos_count} intentos fallidos. Contacte al administrador.',
+                'cuenta_bloqueada': True
+            }, status=status.HTTP_403_FORBIDDEN)
+        
+        return Response({
+            'error': 'Usuario o contrasena incorrectos',
+            'intentos_fallidos': intentos_count,
+            'intentos_restantes': 5 - intentos_count
+        }, status=status.HTTP_401_UNAUTHORIZED)
+
+    IntentoFallidoLogin.objects.filter(usuario=user).delete()
 
     SesionAPI.objects.filter(usuario=user, activa=True).update(activa=False)
     sesion = SesionAPI.objects.create(
         usuario=user,
-        user_agent=request.META.get('HTTP_USER_AGENT', '')[:255],
+        user_agent=user_agent,
     )
 
     return Response({

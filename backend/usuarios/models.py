@@ -63,6 +63,8 @@ class Usuario(models.Model):
     fecha_creacion = models.DateField()
     observaciones = models.TextField(blank=True, null=True)
     fecha_registro = models.DateTimeField(auto_now_add=True)
+    cuenta_bloqueada = models.BooleanField(default=False)
+    fecha_bloqueo = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.password.startswith('pbkdf2_'):
@@ -127,3 +129,26 @@ class SesionAPI(models.Model):
         verbose_name = 'Sesion API'
         verbose_name_plural = 'Sesiones API'
         ordering = ['-creada_en']
+
+
+class IntentoFallidoLogin(models.Model):
+    usuario = models.ForeignKey(
+        Usuario,
+        on_delete=models.CASCADE,
+        related_name='intentos_fallidos'
+    )
+    fecha_intento = models.DateTimeField(auto_now_add=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.usuario.username} - {self.fecha_intento.strftime("%Y-%m-%d %H:%M:%S")}'
+
+    class Meta:
+        db_table = 'intentos_fallidos_login'
+        verbose_name = 'Intento Fallido de Login'
+        verbose_name_plural = 'Intentos Fallidos de Login'
+        ordering = ['-fecha_intento']
+        indexes = [
+            models.Index(fields=['usuario', '-fecha_intento']),
+        ]
