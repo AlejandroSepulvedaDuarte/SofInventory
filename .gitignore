@@ -58,3 +58,8 @@ Thumbs.db
 node_modules/
 .angular/
 dist/
+
+# ==============================
+# base de datos de respaldo
+# ==============================
+sofinventory.backup
