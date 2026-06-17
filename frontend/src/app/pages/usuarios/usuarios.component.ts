@@ -47,7 +47,7 @@ export class UsuariosComponent implements OnInit {
     );
   });
 
-  constructor(private svc: UsuariosService, private auth: AuthService) {}
+  constructor(private svc: UsuariosService, public auth: AuthService) {}
 
   ngOnInit(): void {
     this.load();

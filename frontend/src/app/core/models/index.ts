@@ -37,6 +37,10 @@ export interface Usuario {
   estado: 'activo' | 'inactivo';
   fecha_creacion: string;
   observaciones?: string;
+  // Nuevo campo que indica si la cuenta está bloqueada por intentos fallidos
+  cuenta_bloqueada?: boolean;
+  // Fecha del bloqueo (si aplica)
+  fecha_bloqueo?: string | null;
 }
 
 export interface Rol {
