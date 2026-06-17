@@ -188,6 +188,30 @@ def cambiar_estado(request, id):
         return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
 
+@api_view(['POST'])
+@require_roles('Administrador')
+def desbloquear_usuario(request, id):
+    """Desbloquea una cuenta de usuario. Solo administradores pueden llamar este endpoint."""
+    try:
+        user = Usuario.objects.get(id=id)
+    except Usuario.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+
+    if not user.cuenta_bloqueada:
+        return Response({'mensaje': 'La cuenta no está bloqueada', 'cuenta_bloqueada': False}, status=status.HTTP_200_OK)
+
+    # Limpiar intentos fallidos y desbloquear
+    IntentoFallidoLogin.objects.filter(usuario=user).delete()
+    user.cuenta_bloqueada = False
+    user.fecha_bloqueo = None
+    user.save(update_fields=['cuenta_bloqueada', 'fecha_bloqueo'])
+
+    # Opcional: invalidar sesiones existentes por seguridad (no estrictamente necesario al desbloquear)
+    SesionAPI.objects.filter(usuario=user, activa=True).update(activa=False)
+
+    return Response({'mensaje': 'Cuenta desbloqueada correctamente', 'cuenta_bloqueada': False}, status=status.HTTP_200_OK)
+
+
 @api_view(['PUT'])
 @require_roles('Administrador')
 def editar_usuario(request, id):

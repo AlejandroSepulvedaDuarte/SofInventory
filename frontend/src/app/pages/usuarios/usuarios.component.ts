@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LayoutComponent } from '../../shared/components/layout.component';
 import { UsuariosService } from '../../core/services/api.services';
+import { AuthService } from '../../core/services/auth.service';
 import { Usuario, Rol, TipoDocumento } from '../../core/models';
 
 @Component({
@@ -46,7 +47,7 @@ export class UsuariosComponent implements OnInit {
     );
   });
 
-  constructor(private svc: UsuariosService) {}
+  constructor(private svc: UsuariosService, private auth: AuthService) {}
 
   ngOnInit(): void {
     this.load();
@@ -138,6 +139,25 @@ export class UsuariosComponent implements OnInit {
     this.svc.eliminar(u.id!).subscribe({
       next: () => this.load(),
       error: (e) => alert(e.error?.error ?? 'Error al eliminar'),
+    });
+  }
+
+  desbloquear(u: Usuario): void {
+    if (!this.auth.isAdmin()) {
+      alert('No tienes permisos para desbloquear cuentas.');
+      return;
+    }
+
+    if (!confirm(`¿Desbloquear la cuenta del usuario "${u.username}"?`)) return;
+
+    this.svc.desbloquear(u.id!).subscribe({
+      next: () => {
+        alert('Cuenta desbloqueada correctamente.');
+        this.load();
+      },
+      error: (e) => {
+        alert(e.error?.error ?? 'Error al desbloquear la cuenta');
+      }
     });
   }
 }

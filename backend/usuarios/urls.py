@@ -12,6 +12,7 @@ urlpatterns = [
     path('usuarios/editar/<int:id>/',       views.editar_usuario,         name='editar_usuario'),
     path('usuarios/eliminar/<int:id>/',     views.eliminar_usuario,       name='eliminar_usuario'),
     path('usuarios/estado/<int:id>/',       views.cambiar_estado,         name='cambiar_estado'),
+    path('usuarios/desbloquear/<int:id>/',  views.desbloquear_usuario,    name='desbloquear_usuario'),
     # Catálogos
     path('roles/listar/',                   views.listar_roles,           name='listar_roles'),
     path('tipos-documento/listar/',         views.listar_tipos_documento, name='listar_tipos_documento'),

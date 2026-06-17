@@ -39,16 +39,20 @@
             <td>{{ u.email }}</td>
             <!-- getRolNombre() resuelve nombre del rol desde ID u objeto -->
             <td><span class="badge badge-activo">{{ getRolNombre(u.rol) }}</span></td>
-            <!-- Badge dinámico según estado -->
-            <td><span class="badge" [class]="u.estado === 'activo' ? 'badge-activo' : 'badge-inactivo'">
-              {{ u.estado }}
-            </span></td>
+            <!-- Badge dinámico según estado o bloqueo de cuenta -->
+            <td>
+              <span class="badge" [class]="u.cuenta_bloqueada ? 'badge-bloqueado' : (u.estado === 'activo' ? 'badge-activo' : 'badge-inactivo')">
+                {{ u.cuenta_bloqueada ? 'Bloqueado' : u.estado }}
+              </span>
+            </td>
             <td>{{ u.fecha_creacion }}</td>
             <td>
               <div class="action-btns">
                 <button class="btn-icon" title="Editar" (click)="openModal(u)">✏️</button>
                 <button class="btn-icon" title="Cambiar estado" (click)="cambiarEstado(u)">🔄</button>
                 <button class="btn-icon btn-danger" title="Eliminar" (click)="eliminar(u)">🗑️</button>
+                <!-- Botón de desbloqueo visible solo para administradores -->
+                <button *ngIf="auth.isAdmin() && u.cuenta_bloqueada" class="btn-icon btn-success" title="Desbloquear" (click)="desbloquear(u)">🔓</button>
               </div>
             </td>
           </tr>

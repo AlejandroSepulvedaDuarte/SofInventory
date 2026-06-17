@@ -48,6 +48,10 @@ export class UsuariosService {
     return this.http.patch(`${API}/usuarios/estado/${id}/`, {});
   }
 
+  desbloquear(id: number): Observable<any> {
+    return this.http.post(`${API}/usuarios/desbloquear/${id}/`, {});
+  }
+
   listarRoles(): Observable<Rol[]> {
     return this.http.get<Rol[]>(`${API}/roles/listar/`);
   }
