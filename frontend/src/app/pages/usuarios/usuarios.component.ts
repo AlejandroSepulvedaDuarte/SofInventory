@@ -32,9 +32,11 @@ export class UsuariosComponent implements OnInit {
   editing = signal<Usuario | null>(null);    // null = creación, con datos = edición
   saving = signal(false);
   formError = signal('');
+  showPassword = signal(false);
+  showConfirmPassword = signal(false);
   
   searchTerm = '';
-  form: Partial<Usuario> = {};
+  form: Partial<Usuario> & { confirm_password?: string } = {};
 
   // Búsqueda por username, nombre completo o email
   filteredUsuarios = computed(() => {
@@ -70,13 +72,14 @@ export class UsuariosComponent implements OnInit {
   openModal(u?: Usuario): void {
     this.editing.set(u ?? null);
     const today = new Date().toISOString().split('T')[0];
-    this.form = u
+    const initialForm: any = u
       ? {
           ...u,
           // Normaliza tipo_documento y rol de objeto a ID para los selects
           tipo_documento: (u.tipo_documento as any)?.id ?? u.tipo_documento,
           rol: (u.rol as any)?.id ?? u.rol,
           password: '',  // Limpia contraseña en edición
+          confirm_password: '',
         }
       : {
           tipo_documento: undefined as any,
@@ -85,10 +88,15 @@ export class UsuariosComponent implements OnInit {
           email: '',
           username: '',
           password: '',
+          confirm_password: '',
           rol: undefined as any,
           estado: 'activo',
           fecha_creacion: today,
         };
+
+    this.form = initialForm;
+    this.showPassword.set(false);
+    this.showConfirmPassword.set(false);
     this.formError.set('');
     this.showModal.set(true);
   }
@@ -98,35 +106,111 @@ export class UsuariosComponent implements OnInit {
   }
 
   save(): void {
-    // Validaciones: campos obligatorios + contraseña requerida en creación
     const required = ['nombre_completo', 'email', 'username', 'rol', 'tipo_documento', 'numero_documento'];
     const missing = required.some(k => !(this.form as any)[k]);
-    if (missing || (!this.editing() && !this.form.password)) {
+    const documento = String(this.form.numero_documento ?? '').trim();
+    const password = String(this.form.password ?? '').trim();
+    const confirmPassword = String((this.form as any).confirm_password ?? '').trim();
+
+    if (missing) {
       this.formError.set('Completa todos los campos obligatorios.');
       return;
     }
-    
+
+    if (!/^[0-9]{1,10}$/.test(documento)) {
+      this.formError.set('El número de documento debe contener solo números y máximo 10 caracteres.');
+      return;
+    }
+
+    if (!this.editing() || password) {
+      if (!password) {
+        this.formError.set('La contraseña es obligatoria.');
+        return;
+      }
+      if (!confirmPassword) {
+        this.formError.set('Confirma la contraseña.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        this.formError.set('Las contraseñas no coinciden.');
+        return;
+      }
+    }
+
     this.saving.set(true);
 
-    // En edición, elimina password del payload si está vacío (no actualizar)
-    const payload = { ...this.form };
-    if (this.editing() && !payload.password) delete payload.password;
+    const payload: any = { ...this.form, numero_documento: documento };
+    if (this.editing() && !password) {
+      delete payload.password;
+      delete payload.confirm_password;
+    }
 
     const req = this.editing()
       ? this.svc.editar(this.editing()!.id!, payload)
       : this.svc.crear(payload);
 
     req.subscribe({
-      next: () => { 
-        this.load(); 
-        this.closeModal(); 
-        this.saving.set(false); 
+      next: () => {
+        this.load();
+        this.closeModal();
+        this.saving.set(false);
       },
-      error: (e) => { 
-        this.formError.set(e.error?.error ?? JSON.stringify(e.error)); 
-        this.saving.set(false); 
+      error: (e) => {
+        this.formError.set(this.formatFormError(e.error));
+        this.saving.set(false);
       },
     });
+  }
+
+  formatFormError(error: any): string {
+    if (!error) {
+      return 'Error desconocido. Intenta nuevamente.';
+    }
+
+    if (typeof error === 'string') {
+      return error;
+    }
+
+    if (error.error) {
+      return error.error;
+    }
+
+    const messages: string[] = [];
+    const fieldMap: Record<string, string> = {
+      username: 'El nombre de usuario ya se encuentra registrado.',
+      email: 'El correo electrónico ya se encuentra registrado.',
+      numero_documento: 'El número de documento ya se encuentra registrado.',
+      password: 'La contraseña no es válida o ya está en uso.',
+      confirm_password: 'Las contraseñas no coinciden.',
+    };
+
+    Object.keys(error).forEach((key) => {
+      const value = error[key];
+      if (Array.isArray(value)) {
+        const rawMessage = value.join(' ');
+        messages.push(fieldMap[key] ?? rawMessage);
+      } else if (typeof value === 'string') {
+        messages.push(fieldMap[key] ?? value);
+      }
+    });
+
+    return messages.length > 0 ? messages.join(' ') : 'Ocurrió un error. Verifica los datos e intenta nuevamente.';
+  }
+
+  togglePassword(): void {
+    this.showPassword.set(!this.showPassword());
+  }
+
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword.set(!this.showConfirmPassword());
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
+    if (allowedKeys.includes(event.key)) return;
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
   }
 
   // Cambia entre activo ↔ inactivo
