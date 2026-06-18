@@ -158,20 +158,38 @@ export class ProveedoresComponent implements OnInit {
    * Normaliza errores del backend a mensajes legibles.
    * Prioridad: error.error.error → error.error.mensaje → primer campo de validación
    */
+  isNumeroDocumentoValido(numero: string | undefined | null): boolean {
+    if (!numero) return false;
+    return /^[0-9]{1,10}$/.test(String(numero));
+  }
+
+  onNumeroInput(event: Event): void {
+    const el = event.target as HTMLInputElement;
+    let v = String(el.value || '');
+    v = v.replace(/\D/g, '').slice(0, 10);
+    el.value = v;
+    this.form.numero_documento = v;
+  }
+
   private getErrorMessage(error: any): string {
     if (typeof error?.error?.error === 'string') return error.error.error;
     if (typeof error?.error?.mensaje === 'string') return error.error.mensaje;
     if (error?.error && typeof error.error === 'object') {
-      const [field, firstValue] = Object.entries(error.error)[0] ?? [];
       const fieldMap: Record<string, string> = {
         'numero_documento': 'Número de documento',
         'email': 'Correo electrónico',
         'razon_social': 'Razón social',
         'nombre_contacto': 'Nombre de contacto',
       };
-      const label = fieldMap[field] ?? (field ? field.replace('_', ' ') : 'Error');
-      if (Array.isArray(firstValue)) return `${label}: ${String(firstValue[0])}`;
-      if (typeof firstValue === 'string') return `${label}: ${firstValue}`;
+      const parts: string[] = [];
+      for (const [field, val] of Object.entries(error.error)) {
+        let msg = '';
+        if (Array.isArray(val) && val.length) msg = String(val[0]);
+        else msg = String(val);
+        const label = fieldMap[field] ?? (field ? field.replace('_', ' ') : 'Error');
+        parts.push(`${label}: ${msg}`);
+      }
+      if (parts.length) return parts.join('. ');
     }
     return 'No fue posible guardar la información del proveedor.';
   }

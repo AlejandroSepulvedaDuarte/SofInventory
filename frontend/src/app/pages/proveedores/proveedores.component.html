@@ -123,8 +123,8 @@
             
             <div class="field">
               <label><i class="fas fa-id-card"></i> Número Documento *</label>
-              <input type="text" [(ngModel)]="form.numero_documento" placeholder="NIT o documento" maxlength="10" inputmode="numeric" pattern="[0-9]*" />
-              <div class="help-text" *ngIf="form.numero_documento && !/^[0-9]{1,10}$/.test(form.numero_documento)">
+              <input type="text" [(ngModel)]="form.numero_documento" placeholder="NIT o documento" maxlength="10" inputmode="numeric" pattern="[0-9]*" (input)="onNumeroInput($event)" />
+              <div class="help-text" *ngIf="form.numero_documento && !isNumeroDocumentoValido(form.numero_documento)">
                 El número de documento debe contener solo números y máximo 10 dígitos.
               </div>
             </div>
