@@ -9,6 +9,18 @@ class ProveedorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Proveedor
         fields = '__all__'
+        extra_kwargs = {
+            'numero_documento': {
+                'error_messages': {
+                    'unique': 'El número de documento ya se encuentra registrado.'
+                }
+            },
+            'email': {
+                'error_messages': {
+                    'unique': 'El correo electrónico ya se encuentra registrado.'
+                }
+            }
+        }
 
     def validate_razon_social(self, value):
         value = value.strip()
@@ -29,7 +41,20 @@ class ProveedorSerializer(serializers.ModelSerializer):
         return value
 
     def validate_numero_documento(self, value):
-        return value.strip()
+        value = value.strip()
+        # Debe contener solo dígitos
+        if not value.isdigit():
+            raise serializers.ValidationError('El número de documento debe contener solo dígitos.')
+        # Máximo 10 dígitos
+        if len(value) > 10:
+            raise serializers.ValidationError('El número de documento debe tener máximo 10 dígitos.')
+        # Unicidad (ignorando la instancia actual en edición)
+        queryset = Proveedor.objects.filter(numero_documento__iexact=value)
+        if self.instance:
+            queryset = queryset.exclude(pk=self.instance.pk)
+        if queryset.exists():
+            raise serializers.ValidationError('El número de documento ya se encuentra registrado.')
+        return value
 
     def validate_nombre_contacto(self, value):
         return value.strip()

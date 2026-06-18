@@ -94,6 +94,13 @@ export class ProveedoresComponent implements OnInit {
    * En creación, asigna creado_por con el ID del usuario logueado.
    */
   save(): void {
+    // Validación de documento: solo números y máximo 10 dígitos
+    const numero = String(this.form.numero_documento ?? '').trim();
+    if (!/^[0-9]{1,10}$/.test(numero)) {
+      this.formError.set('El número de documento debe contener solo números y máximo 10 dígitos.');
+      return;
+    }
+
     // Validación de campos obligatorios
     if (!this.form.tipo_documento || !this.form.numero_documento || !this.form.razon_social ||
         !this.form.nombre_contacto || !this.form.email || !this.form.telefono ||
@@ -156,8 +163,15 @@ export class ProveedoresComponent implements OnInit {
     if (typeof error?.error?.mensaje === 'string') return error.error.mensaje;
     if (error?.error && typeof error.error === 'object') {
       const [field, firstValue] = Object.entries(error.error)[0] ?? [];
-      if (Array.isArray(firstValue)) return field ? `${field}: ${String(firstValue[0])}` : String(firstValue[0]);
-      if (typeof firstValue === 'string') return field ? `${field}: ${firstValue}` : firstValue;
+      const fieldMap: Record<string, string> = {
+        'numero_documento': 'Número de documento',
+        'email': 'Correo electrónico',
+        'razon_social': 'Razón social',
+        'nombre_contacto': 'Nombre de contacto',
+      };
+      const label = fieldMap[field] ?? (field ? field.replace('_', ' ') : 'Error');
+      if (Array.isArray(firstValue)) return `${label}: ${String(firstValue[0])}`;
+      if (typeof firstValue === 'string') return `${label}: ${firstValue}`;
     }
     return 'No fue posible guardar la información del proveedor.';
   }

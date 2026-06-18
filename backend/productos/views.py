@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction
+from django.db.models.deletion import ProtectedError
 
 from .models import Categoria, Producto
 from .serializers import CategoriaSerializer, ProductoSerializer
@@ -44,8 +45,14 @@ def listar_categorias(request):
 def eliminar_categoria(request, id):
     try:
         categoria = Categoria.objects.get(id=id)
-        categoria.delete()
-        return Response({'mensaje': 'Categoria eliminada correctamente'}, status=status.HTTP_200_OK)
+        try:
+            categoria.delete()
+            return Response({'mensaje': 'Categoria eliminada correctamente'}, status=status.HTTP_200_OK)
+        except ProtectedError:
+            return Response(
+                {'error': 'No se puede eliminar esta categoría porque tiene productos asociados.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
     except Categoria.DoesNotExist:
         return Response({'error': 'Categoria no encontrada'}, status=status.HTTP_404_NOT_FOUND)
 

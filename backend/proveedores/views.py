@@ -7,6 +7,32 @@ from .models import Proveedor
 from .serializers import ProveedorSerializer
 from usuarios.permissions import require_roles
 
+
+def _format_serializer_errors(errors):
+    """Convierte errors de serializer a un mensaje legible en español."""
+    if isinstance(errors, dict):
+        field, first = next(iter(errors.items()))
+        # first puede ser lista o string
+        msg = first[0] if isinstance(first, (list, tuple)) and first else str(first)
+        field_map = {
+            'numero_documento': 'Número de documento',
+            'email': 'Correo electrónico',
+            'razon_social': 'Razón social',
+            'nombre_contacto': 'Nombre de contacto',
+        }
+        label = field_map.get(field, field.replace('_', ' ').capitalize())
+        # Normalizar mensajes generados por validadores automáticos en inglés
+        lower_msg = msg.lower()
+        if 'already exists' in lower_msg or 'already' in lower_msg:
+            if field == 'numero_documento':
+                return f"{label}: El número de documento ya se encuentra registrado."
+            if field == 'email':
+                return f"{label}: El correo electrónico ya se encuentra registrado."
+            if field == 'razon_social':
+                return f"{label}: Ya existe un proveedor con esa razón social."
+        return f"{label}: {msg}"
+    return str(errors)
+
 # ── CREAR PROVEEDOR ────────────────────────────────────────
 @api_view(['POST'])
 @require_roles('Administrador', 'Supervisor')
@@ -21,7 +47,8 @@ def crear_proveedor(request):
                 status=status.HTTP_400_BAD_REQUEST
             )
         return Response({'mensaje': 'Proveedor creado exitosamente'}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # Formatear errores para devolver mensaje amigable
+    return Response({'error': _format_serializer_errors(serializer.errors)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # ── LISTAR PROVEEDORES ─────────────────────────────────────
@@ -62,7 +89,8 @@ def editar_proveedor(request, id):
                 status=status.HTTP_400_BAD_REQUEST
             )
         return Response({'mensaje': 'Proveedor actualizado correctamente'}, status=status.HTTP_200_OK)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # Formatear errores del serializer
+    return Response({'error': _format_serializer_errors(serializer.errors)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # ── CAMBIAR ESTADO PROVEEDOR ───────────────────────────────

@@ -90,7 +90,10 @@ export class CategoriasComponent implements OnInit {
 
     this.svc.eliminarCategoria(c.id!).subscribe({
       next: () => this.load(),
-      error: (e) => alert(e.error?.error ?? 'Error al eliminar'),
+      error: (e) => {
+        const msg = e.error?.error || e.error?.detail || 'Error al eliminar';
+        alert(msg);
+      },
     });
   }
 }
