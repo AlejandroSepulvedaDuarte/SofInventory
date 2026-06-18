@@ -58,3 +58,12 @@ class ProveedorSerializer(serializers.ModelSerializer):
 
     def validate_nombre_contacto(self, value):
         return value.strip()
+
+    def validate_telefono(self, value):
+        value = value.strip()
+        if not value.isdigit():
+            raise serializers.ValidationError('El teléfono debe contener solo números.')
+        # opcional: longitud máxima coherente con modelo
+        if len(value) > 20:
+            raise serializers.ValidationError('El teléfono debe tener máximo 20 dígitos.')
+        return value

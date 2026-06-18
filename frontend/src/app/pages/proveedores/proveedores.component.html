@@ -151,7 +151,10 @@
             
             <div class="field">
               <label><i class="fas fa-phone"></i> Teléfono *</label>
-              <input type="text" [(ngModel)]="form.telefono" placeholder="Teléfono" />
+              <input type="text" [(ngModel)]="form.telefono" placeholder="Teléfono" maxlength="15" inputmode="numeric" pattern="[0-9]*" (input)="onTelefonoInput($event)" />
+              <div class="help-text" *ngIf="form.telefono && !isTelefonoValido(form.telefono)">
+                El teléfono debe contener solo números.
+              </div>
             </div>
             
             <!-- Tipo proveedor: afecta iconos mostrados en la tabla -->

@@ -171,6 +171,19 @@ export class ProveedoresComponent implements OnInit {
     this.form.numero_documento = v;
   }
 
+  isTelefonoValido(telefono: string | undefined | null): boolean {
+    if (!telefono) return false;
+    return /^[0-9]{1,15}$/.test(String(telefono));
+  }
+
+  onTelefonoInput(event: Event): void {
+    const el = event.target as HTMLInputElement;
+    let v = String(el.value || '');
+    v = v.replace(/\D/g, '').slice(0, 15);
+    el.value = v;
+    this.form.telefono = v;
+  }
+
   private getErrorMessage(error: any): string {
     if (typeof error?.error?.error === 'string') return error.error.error;
     if (typeof error?.error?.mensaje === 'string') return error.error.mensaje;
@@ -180,6 +193,7 @@ export class ProveedoresComponent implements OnInit {
         'email': 'Correo electrónico',
         'razon_social': 'Razón social',
         'nombre_contacto': 'Nombre de contacto',
+        'telefono': 'Teléfono',
       };
       const parts: string[] = [];
       for (const [field, val] of Object.entries(error.error)) {
