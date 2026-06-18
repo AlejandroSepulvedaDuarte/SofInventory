@@ -67,3 +67,50 @@ class ProveedorAPITests(TestCase):
         self.assertEqual(response.status_code, 201)
         proveedor = Proveedor.objects.get(numero_documento='900100200')
         self.assertEqual(proveedor.razon_social, 'Distribuciones Norte')
+
+    def test_telefono_valido_permite_crear(self):
+        self.autenticar()
+        payload = {**self.payload, 'telefono': '3123456789', 'numero_documento': '900200300', 'email': 'telvalido@example.com'}
+        response = self.client.post('/api/proveedores/crear/', payload, format='json')
+        self.assertEqual(response.status_code, 201)
+
+    def test_telefono_con_letras_rechazado(self):
+        self.autenticar()
+        payload = {**self.payload, 'telefono': '300ABC123', 'numero_documento': '900200301', 'email': 'telletras@example.com'}
+        response = self.client.post('/api/proveedores/crear/', payload, format='json')
+        self.assertEqual(response.status_code, 400)
+        # Espera mensaje claro en español
+        msg = ''
+        if isinstance(response.data, dict):
+            msg = ' '.join([str(v) for v in response.data.values()])
+        else:
+            msg = str(response.data)
+        self.assertIn('teléfon', msg.lower() or msg.lower())
+        self.assertIn('númer', msg.lower() or msg.lower())
+
+    def test_telefono_con_especiales_rechazado(self):
+        self.autenticar()
+        payload = {**self.payload, 'telefono': '+57-300-123-4567', 'numero_documento': '900200302', 'email': 'telesp@example.com'}
+        response = self.client.post('/api/proveedores/crear/', payload, format='json')
+        self.assertEqual(response.status_code, 400)
+        msg = ''
+        if isinstance(response.data, dict):
+            msg = ' '.join([str(v) for v in response.data.values()])
+        else:
+            msg = str(response.data)
+        self.assertIn('teléfon', msg.lower() or msg.lower())
+        self.assertIn('númer', msg.lower() or msg.lower())
+
+    def test_telefono_mas_largo_rechazado(self):
+        self.autenticar()
+        long_tel = '1' * 25
+        payload = {**self.payload, 'telefono': long_tel, 'numero_documento': '900200303', 'email': 'tellong@example.com'}
+        response = self.client.post('/api/proveedores/crear/', payload, format='json')
+        self.assertEqual(response.status_code, 400)
+        msg = ''
+        if isinstance(response.data, dict):
+            msg = ' '.join([str(v) for v in response.data.values()])
+        else:
+            msg = str(response.data)
+        self.assertIn('teléfon', msg.lower() or msg.lower())
+        self.assertIn('máximo', msg.lower() or msg.lower())
