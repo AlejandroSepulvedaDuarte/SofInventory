@@ -7,49 +7,51 @@ from .serializers import ClienteSerializer
 from usuarios.models import TipoDocumento
 from usuarios.permissions import require_roles
 
+
+def _format_serializer_errors(errors):
+    """Convierte errors de serializer a un dict campo->mensaje (string) para respuestas amigables."""
+    flat = {}
+    if isinstance(errors, dict):
+        for field, val in errors.items():
+            if isinstance(val, list) and val:
+                flat[field] = str(val[0])
+            else:
+                flat[field] = str(val)
+    else:
+        flat['error'] = str(errors)
+    return flat
+
+
 # ── CREAR CLIENTE ──────────────────────────────────────────
 @api_view(['POST'])
 @require_roles('Administrador', 'Supervisor', 'Vendedor')
 def crear_cliente(request):
-    data = request.data
+    data = request.data.copy()
 
-    # Validar documento duplicado
-    if Cliente.objects.filter(numero_documento=data.get('numero_documento')).exists():
-        return Response({'error': 'Ya existe un cliente con ese número de documento.'}, status=status.HTTP_400_BAD_REQUEST)
+    # Compatibilidad: aceptar campo tipo_documento_id (usado por algunas vistas)
+    if 'tipo_documento_id' in data and 'tipo_documento' not in data:
+        data['tipo_documento'] = data.get('tipo_documento_id')
 
-    try:
-        tipo_documento = TipoDocumento.objects.get(id=data['tipo_documento_id'])
-        cliente = Cliente.objects.create(
-            tipo_cliente     = data['tipo_cliente'],
-            categoria        = data.get('categoria', 'general'),
-            tipo_documento   = tipo_documento,
-            numero_documento = data['numero_documento'],
-            nombres          = data.get('nombres', ''),
-            apellidos        = data.get('apellidos', ''),
-            razon_social     = data.get('razon_social', ''),
-            nombre_comercial = data.get('nombre_comercial', ''),
-            email            = data.get('email', ''),
-            telefono         = data.get('telefono', ''),
-            telefono2        = data.get('telefono2', ''),
-            direccion        = data.get('direccion', ''),
-            ciudad           = data.get('ciudad', ''),
-            departamento     = data.get('departamento', ''),
-            pais             = data.get('pais', 'Colombia'),
-            codigo_postal    = data.get('codigo_postal', ''),
-            estado           = data.get('estado', 'activo'),
-            notas            = data.get('notas', ''),
-            creado_por       = request.user,
-        )
+    # Valores por defecto (coherentes con el modelo y con el frontend)
+    data.setdefault('tipo_cliente', 'natural')
+    data.setdefault('categoria', 'general')
+    data.setdefault('estado', 'activo')
 
+    serializer = ClienteSerializer(data=data)
+    if serializer.is_valid():
+        try:
+            # validar que el tipo_documento exista
+            TipoDocumento.objects.get(id=data.get('tipo_documento'))
+        except TipoDocumento.DoesNotExist:
+            return Response({'error': 'Tipo de documento no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+
+        cliente = serializer.save(creado_por=request.user)
         return Response({
             'mensaje': '✅ Cliente creado correctamente.',
             'cliente': ClienteSerializer(cliente).data
         }, status=status.HTTP_201_CREATED)
 
-    except TipoDocumento.DoesNotExist:
-        return Response({'error': 'Tipo de documento no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(_format_serializer_errors(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
 
 
 # ── LISTAR CLIENTES ────────────────────────────────────────
@@ -73,41 +75,24 @@ def editar_cliente(request, id):
     except Cliente.DoesNotExist:
         return Response({'error': 'Cliente no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
 
-    data = request.data
+    data = request.data.copy()
+    if 'tipo_documento_id' in data and 'tipo_documento' not in data:
+        data['tipo_documento'] = data.get('tipo_documento_id')
 
-    # Validar documento duplicado en edición
-    if Cliente.objects.filter(numero_documento=data.get('numero_documento')).exclude(id=id).exists():
-        return Response({'error': 'Ya existe otro cliente con ese número de documento.'}, status=status.HTTP_400_BAD_REQUEST)
+    serializer = ClienteSerializer(instance=cliente, data=data)
+    if serializer.is_valid():
+        try:
+            TipoDocumento.objects.get(id=data.get('tipo_documento'))
+        except TipoDocumento.DoesNotExist:
+            return Response({'error': 'Tipo de documento no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
 
-    try:
-        tipo_documento = TipoDocumento.objects.get(id=data['tipo_documento_id'])
-    except TipoDocumento.DoesNotExist:
-        return Response({'error': 'Tipo de documento no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        cliente = serializer.save()
+        return Response({
+            'mensaje': '✅ Cliente actualizado correctamente.',
+            'cliente': ClienteSerializer(cliente).data
+        }, status=status.HTTP_200_OK)
 
-    cliente.tipo_cliente     = data.get('tipo_cliente',     cliente.tipo_cliente)
-    cliente.categoria        = data.get('categoria',        cliente.categoria)
-    cliente.tipo_documento   = tipo_documento
-    cliente.numero_documento = data.get('numero_documento', cliente.numero_documento)
-    cliente.nombres          = data.get('nombres',          cliente.nombres)
-    cliente.apellidos        = data.get('apellidos',        cliente.apellidos)
-    cliente.razon_social     = data.get('razon_social',     cliente.razon_social)
-    cliente.nombre_comercial = data.get('nombre_comercial', cliente.nombre_comercial)
-    cliente.email            = data.get('email',            cliente.email)
-    cliente.telefono         = data.get('telefono',         cliente.telefono)
-    cliente.telefono2        = data.get('telefono2',        cliente.telefono2)
-    cliente.direccion        = data.get('direccion',        cliente.direccion)
-    cliente.ciudad           = data.get('ciudad',           cliente.ciudad)
-    cliente.departamento     = data.get('departamento',     cliente.departamento)
-    cliente.pais             = data.get('pais',             cliente.pais)
-    cliente.codigo_postal    = data.get('codigo_postal',    cliente.codigo_postal)
-    cliente.estado           = data.get('estado',           cliente.estado)
-    cliente.notas            = data.get('notas',            cliente.notas)
-    cliente.save()
-
-    return Response({
-        'mensaje': '✅ Cliente actualizado correctamente.',
-        'cliente': ClienteSerializer(cliente).data
-    }, status=status.HTTP_200_OK)
+    return Response(_format_serializer_errors(serializer.errors), status=status.HTTP_400_BAD_REQUEST)
 
 
 # ── CAMBIAR ESTADO CLIENTE ─────────────────────────────────

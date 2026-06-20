@@ -136,8 +136,19 @@ export class ClientesComponent implements OnInit {
 
   save(): void {
     // Validaciones según tipo de cliente
-    if (!this.form.numero_documento || !this.form.tipo_documento) {
+    const numero = String(this.form.numero_documento ?? '').trim();
+    if (!numero || !this.form.tipo_documento) {
       this.formError.set('Tipo y número de documento son obligatorios.');
+      return;
+    }
+
+    // Documento: solo números, 6-10 dígitos
+    if (!/^[0-9]+$/.test(numero)) {
+      this.formError.set('No se permiten letras en el número de documento.');
+      return;
+    }
+    if (numero.length < 6 || numero.length > 10) {
+      this.formError.set('El número de documento debe tener entre 6 y 10 dígitos.');
       return;
     }
 
@@ -151,7 +162,34 @@ export class ClientesComponent implements OnInit {
       return;
     }
 
-    this.saving.set(true);
+  if (this.form.tipo_cliente === 'juridica' && this.form.razon_social && this.form.nombre_comercial) {
+    const razon = String(this.form.razon_social).trim().toLowerCase();
+    const nombre = String(this.form.nombre_comercial).trim().toLowerCase();
+    if (razon && nombre && razon === nombre) {
+      this.formError.set('El nombre comercial no debe ser igual a la razón social.');
+      return;
+    }
+  }
+
+  // Teléfono (opcional): solo números, máximo 15
+  const tel = String(this.form.telefono ?? '').trim();
+  if (tel && !/^[0-9]{1,15}$/.test(tel)) {
+    this.formError.set('El teléfono debe contener solo números y máximo 15 dígitos.');
+    return;
+  }
+  const tel2 = String(this.form.telefono2 ?? '').trim();
+  if (tel2 && !/^[0-9]{1,15}$/.test(tel2)) {
+    this.formError.set('El teléfono alterno debe contener solo números y máximo 15 dígitos.');
+    return;
+  }
+
+  // Los teléfonos no pueden ser iguales
+  if (tel && tel2 && tel === tel2) {
+    this.formError.set('Los teléfonos no pueden ser iguales.');
+    return;
+  }
+
+  this.saving.set(true);
 
     const request = this.editing()
       ? this.svc.editar(this.editing()!.id!, this.form)
@@ -189,6 +227,37 @@ export class ClientesComponent implements OnInit {
       next: () => this.load(),
       error: (error) => this.formError.set(this.getErrorMessage(error)),
     });
+  }
+
+  // ── Inputs helpers: normalizar solo números y límites ─────────────────────
+  isNumeroDocumentoValido(numero: string | undefined | null): boolean {
+    if (!numero) return false;
+    return /^[0-9]{6,10}$/.test(String(numero));
+  }
+
+  onNumeroInput(event: Event): void {
+    const el = event.target as HTMLInputElement;
+    let v = String(el.value || '');
+    v = v.replace(/\D/g, '').slice(0, 10);
+    el.value = v;
+    this.form.numero_documento = v;
+  }
+
+  isTelefonoValido(telefono: string | undefined | null): boolean {
+    if (!telefono) return false;
+    return /^[0-9]{1,15}$/.test(String(telefono));
+  }
+
+  onTelefonoInput(event: Event, field: 'telefono' | 'telefono2'): void {
+    const el = event.target as HTMLInputElement;
+    let v = String(el.value || '');
+    v = v.replace(/\D/g, '').slice(0, 15);
+    el.value = v;
+    if (field === 'telefono') {
+      this.form.telefono = v;
+    } else {
+      this.form.telefono2 = v;
+    }
   }
 
   // Normaliza errores del backend: error.error → mensaje → campo específico

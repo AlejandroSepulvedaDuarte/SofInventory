@@ -16,19 +16,41 @@
             "outputPath": "dist/erp-frontend",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["zone.js"],
-            "tsConfig": "tsconfig.app.json",
-            "assets": ["src/assets",
-              { "glob": "**/*", "input": "public" }
+            "polyfills": [
+              "zone.js"
             ],
-            "styles": ["src/styles.css"],
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "public"
+              }
+            ],
+            "styles": [
+              "src/styles.css"
+            ],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
-                { "type": "initial", "maximumWarning": "500kB", "maximumError": "1MB" },
-                { "type": "anyComponentStyle", "maximumWarning": "8kB", "maximumError": "16kB" }
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "8kB",
+                  "maximumError": "16kB"
+                }
               ],
               "outputHashing": "all"
             },
@@ -43,8 +65,12 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": { "buildTarget": "erp-frontend:build:production" },
-            "development": { "buildTarget": "erp-frontend:build:development" }
+            "production": {
+              "buildTarget": "erp-frontend:build:production"
+            },
+            "development": {
+              "buildTarget": "erp-frontend:build:development"
+            }
           },
           "defaultConfiguration": "development"
         }

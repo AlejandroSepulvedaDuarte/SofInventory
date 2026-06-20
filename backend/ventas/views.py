@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.db.models import Q, Sum
 from django.utils import timezone
 from decimal import Decimal
@@ -59,34 +59,51 @@ def crear_venta(request):
             subtotal_productos = Decimal('0')
             iva_total = Decimal('0')
             iva_porcentajes = set()
+            items = []
 
+            # Validaciones y bloqueo de filas de stock para evitar concurrencia
             for item in productos_data:
+                prod_id = item.get('producto_id')
+                if prod_id is None:
+                    raise ValueError('Producto inválido en la lista.')
+
                 try:
-                    producto = Producto.objects.get(pk=item['producto_id'])
+                    producto = Producto.objects.select_for_update().get(pk=prod_id)
                 except Producto.DoesNotExist:
-                    raise ValueError(f'Producto ID {item["producto_id"]} no encontrado.')
+                    raise ValueError(f'Producto ID {prod_id} no encontrado.')
 
                 try:
-                    stock_obj = StockAlmacen.objects.get(producto=producto, almacen=almacen)
+                    stock_obj = StockAlmacen.objects.select_for_update().get(producto=producto, almacen=almacen)
                 except StockAlmacen.DoesNotExist:
-                    raise ValueError(
-                        f'"{producto.nombre}" no tiene stock en el almacén "{almacen.nombre}".'
-                    )
+                    raise ValueError(f'El producto "{producto.nombre}" no tiene stock en el almacén "{almacen.nombre}".')
 
-                cantidad = int(item['cantidad'])
+                # Validar cantidad
+                try:
+                    cantidad = int(item.get('cantidad', 0))
+                except (ValueError, TypeError):
+                    raise ValueError('La cantidad ingresada no es válida.')
+                if cantidad <= 0:
+                    raise ValueError('La cantidad ingresada no es válida. Debe ser mayor a 0.')
+
+                # Validar precio
+                try:
+                    precio = Decimal(str(item.get('precio_unitario', '0')))
+                except Exception:
+                    raise ValueError('El precio unitario no es válido.')
+                if precio < 0:
+                    raise ValueError('El precio unitario no puede ser negativo.')
+
                 if stock_obj.cantidad < cantidad:
-                    raise ValueError(
-                        f'Stock insuficiente para "{producto.nombre}". '
-                        f'Disponible en {almacen.nombre}: {stock_obj.cantidad} unidades.'
-                    )
+                    raise ValueError(f'El producto "{producto.nombre}" no tiene suficiente stock disponible. Disponible en {almacen.nombre}: {stock_obj.cantidad} unidades.')
 
-                precio = Decimal(str(item['precio_unitario']))
                 subtotal_linea = precio * cantidad
                 iva_producto = Decimal(str(producto.iva_porcentaje))
 
                 subtotal_productos += subtotal_linea
                 iva_total += subtotal_linea * (iva_producto / Decimal('100'))
                 iva_porcentajes.add(float(iva_producto))
+
+                items.append({'producto': producto, 'stock_obj': stock_obj, 'cantidad': cantidad, 'precio': precio})
 
             descuento = Decimal(str(data.get('descuento', 0) or 0))
             total_venta = (subtotal_productos - descuento) + iva_total
@@ -110,11 +127,12 @@ def crear_venta(request):
                 otro_metodo=metodo_pago_data.get('otroMetodo'),
             )
 
-            for item in productos_data:
-                producto = Producto.objects.get(pk=item['producto_id'])
-                cantidad = int(item['cantidad'])
-                precio = Decimal(str(item['precio_unitario']))
-                stock_obj = StockAlmacen.objects.get(producto=producto, almacen=almacen)
+            # Crear detalles y actualizar stocks (filas ya bloqueadas)
+            for it in items:
+                producto = it['producto']
+                cantidad = it['cantidad']
+                precio = it['precio']
+                stock_obj = it['stock_obj']
 
                 DetalleVenta.objects.create(
                     venta=venta,
@@ -149,9 +167,10 @@ def crear_venta(request):
 
     except ValueError as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        return Response({'error': f'Error al procesar la venta: {str(e)}'},
-                        status=status.HTTP_400_BAD_REQUEST)
+    except IntegrityError:
+        return Response({'error': 'Error de integridad al guardar la venta. Por favor intente nuevamente.'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception:
+        return Response({'error': 'Ocurrió un error al procesar la venta.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -222,7 +241,7 @@ def anular_venta(request, pk):
 
     try:
         with transaction.atomic():
-            for detalle in venta.detalles.all():
+            for detalle in venta.detalles.select_related('producto').all():
                 producto = detalle.producto
 
                 movimiento = MovimientoInventario.objects.filter(
@@ -237,12 +256,13 @@ def anular_venta(request, pk):
                 if not almacen:
                     raise ValueError(f'No se encontró almacén para devolver "{producto.nombre}".')
 
-                stock_obj, _ = StockAlmacen.objects.get_or_create(
-                    producto=producto, almacen=almacen,
-                    defaults={'cantidad': 0}
-                )
-                stock_obj.cantidad += detalle.cantidad
-                stock_obj.save()
+                # Intentar bloquear fila de stock; si no existe, crearla
+                try:
+                    stock_obj = StockAlmacen.objects.select_for_update().get(producto=producto, almacen=almacen)
+                    stock_obj.cantidad += detalle.cantidad
+                    stock_obj.save()
+                except StockAlmacen.DoesNotExist:
+                    StockAlmacen.objects.create(producto=producto, almacen=almacen, cantidad=detalle.cantidad)
 
                 total_stock = producto.stocks.aggregate(t=Sum('cantidad'))['t'] or 0
                 Producto.objects.filter(pk=producto.id).update(stock=total_stock)
@@ -269,6 +289,7 @@ def anular_venta(request, pk):
 
     except ValueError as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        return Response({'error': f'Error al anular la venta: {str(e)}'},
-                        status=status.HTTP_400_BAD_REQUEST)
+    except IntegrityError:
+        return Response({'error': 'Error de integridad al anular la venta. Por favor intente nuevamente.'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception:
+        return Response({'error': 'Ocurrió un error al anular la venta.'}, status=status.HTTP_400_BAD_REQUEST)

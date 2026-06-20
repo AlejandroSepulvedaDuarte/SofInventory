@@ -1,0 +1,24 @@
+# Dependencias y compilación
+**/node_modules/
+**/.angular/
+**/dist/
+
+# Python y entornos virtuales
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+**/venv/
+**/env/
+
+# Archivos locales y bases de datos
+.env
+db.sqlite3
+*.sqlite3
+**/sofinventory.backup
+
+# Herramientas y Git
+.git
+.github
+.vscode/
+.idea/

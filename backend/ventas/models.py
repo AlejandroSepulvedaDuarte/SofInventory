@@ -90,11 +90,16 @@ class Venta(models.Model):
     motivo_anulacion  = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # Generar número de venta automático: VTA-00001
+        # Generar número de venta seguro basado en el id para evitar race conditions.
         if not self.numero_venta:
-            ultimo = Venta.objects.order_by('-id').first()
-            siguiente = (ultimo.id + 1) if ultimo else 1
-            self.numero_venta = f'VTA-{siguiente:05d}'
+            # Guardar primero para obtener el id
+            super().save(*args, **kwargs)
+            if not self.numero_venta:
+                numero = f'VTA-{self.id:05d}'
+                # Actualizar directamente para evitar hooks adicionales
+                Venta.objects.filter(pk=self.pk).update(numero_venta=numero)
+                self.numero_venta = numero
+            return
         super().save(*args, **kwargs)
 
     def __str__(self):

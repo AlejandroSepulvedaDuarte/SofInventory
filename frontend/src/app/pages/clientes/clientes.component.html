@@ -155,7 +155,10 @@
 
             <div class="field">
               <label><i class="fas fa-id-card"></i> Número Documento *</label>
-              <input type="text" [(ngModel)]="form.numero_documento" placeholder="Número de documento" />
+              <input type="text" [(ngModel)]="form.numero_documento" placeholder="Número de documento" maxlength="10" inputmode="numeric" pattern="[0-9]*" (input)="onNumeroInput($event)" />
+              <div class="help-text" *ngIf="form.numero_documento && !isNumeroDocumentoValido(form.numero_documento)">
+                No se permiten letras. Debe tener entre 6 y 10 dígitos.
+              </div>
             </div>
 
             <!-- Campos para Persona Natural -->
@@ -190,12 +193,18 @@
 
             <div class="field">
               <label><i class="fas fa-phone"></i> Teléfono</label>
-              <input type="text" [(ngModel)]="form.telefono" placeholder="Teléfono principal" />
+              <input type="text" [(ngModel)]="form.telefono" placeholder="Teléfono principal" maxlength="15" inputmode="numeric" pattern="[0-9]*" (input)="onTelefonoInput($event, 'telefono')" />
+              <div class="help-text" *ngIf="form.telefono && !isTelefonoValido(form.telefono)">
+                El teléfono debe contener solo números y como máximo 15 dígitos.
+              </div>
             </div>
 
             <div class="field">
               <label><i class="fas fa-phone-volume"></i> Teléfono 2</label>
-              <input type="text" [(ngModel)]="form.telefono2" placeholder="Teléfono alterno" />
+              <input type="text" [(ngModel)]="form.telefono2" placeholder="Teléfono alterno" maxlength="15" inputmode="numeric" pattern="[0-9]*" (input)="onTelefonoInput($event, 'telefono2')" />
+              <div class="help-text" *ngIf="form.telefono2 && !isTelefonoValido(form.telefono2)">
+                El teléfono alterno debe contener solo números y como máximo 15 dígitos.
+              </div>
             </div>
 
             <!-- Ubicación -->
@@ -228,8 +237,7 @@
               </select>
             </div>
 
-            <!-- Campos de ancho completo -->
-            <div class="field full">
+            <div class="field">
               <label><i class="fas fa-location-dot"></i> Dirección</label>
               <input type="text" [(ngModel)]="form.direccion" placeholder="Dirección" />
             </div>

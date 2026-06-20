@@ -19,6 +19,7 @@ def _format_serializer_errors(errors):
             'email': 'Correo electrónico',
             'razon_social': 'Razón social',
             'nombre_contacto': 'Nombre de contacto',
+            'telefono': 'Teléfono',
         }
         label = field_map.get(field, field.replace('_', ' ').capitalize())
         # Normalizar mensajes generados por validadores automáticos en inglés
@@ -30,6 +31,11 @@ def _format_serializer_errors(errors):
                 return f"{label}: El correo electrónico ya se encuentra registrado."
             if field == 'razon_social':
                 return f"{label}: Ya existe un proveedor con esa razón social."
+        if 'no more than' in lower_msg or 'ensure this field' in lower_msg or 'maximum' in lower_msg:
+            if field == 'telefono':
+                return f"{label}: El teléfono debe tener máximo 20 dígitos."
+            if field == 'numero_documento':
+                return f"{label}: El número de documento debe tener máximo 10 dígitos."
         return f"{label}: {msg}"
     return str(errors)
 
