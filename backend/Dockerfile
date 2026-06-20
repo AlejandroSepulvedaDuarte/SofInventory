@@ -27,4 +27,4 @@ EXPOSE 8000
 
 # 8 .Comando para arrancar con Gunicorn en producción
 # 'config.wsgi:application' asume que tu carpeta principal de Django se llama 'config'
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+CMD psql -U postgres -d db_sofinventory -f respaldo.sql && python manage.py runserver 0.0.0.0:10000
