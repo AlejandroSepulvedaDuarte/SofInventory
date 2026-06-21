@@ -17,4 +17,5 @@ for i in 1 2 3 4 5 6 7 8 9 10; do
 done
 
 python manage.py migrate --noinput
+python manage.py seed_data
 exec gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 4 --timeout 120 --access-logfile -
