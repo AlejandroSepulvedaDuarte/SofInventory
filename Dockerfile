@@ -30,6 +30,9 @@ COPY backend/ .
 # Copiar el build de Angular dentro de Django
 COPY --from=frontend-build /frontend/dist/erp-frontend/browser /app/frontend_dist
 
+# Copiar webfonts de Font Awesome (Angular no siempre las copia al output)
+COPY --from=frontend-build /frontend/node_modules/@fortawesome/fontawesome-free/webfonts /app/frontend_dist/webfonts
+
 # Build-time SECRET_KEY para collectstatic
 ARG SECRET_KEY=build-key-only
 ENV SECRET_KEY=$SECRET_KEY
