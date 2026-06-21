@@ -1,0 +1,9 @@
+﻿Auditoría/Deploy: prepare Railway deployment and bootstrap admin
+
+- Add DATABASE_URL parsing and safer production settings
+- Use Gunicorn and docker entrypoint to run migrations on start
+- Frontend runtime API config (env.js) and nginx adjustments
+- Add post_migrate signal to seed TipoDocumento, Rol and initial admin user
+- Add .env.example files and entrypoint scripts
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>

@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED=1
 # 3. Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# 4. Instalar dependencias del sistema necesarias (por si usas librerías pesadas de Postgres)
+# 4. Instalar dependencias del sistema necesarias para Postgres y compilación
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
@@ -21,10 +21,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 6. Copiar todo el código de tu proyecto de Django al contenedor
 COPY . /app/
 
-# 7. Exponer el puerto por donde corre Django por defecto
+# 7. Copiar el entrypoint para ejecutar migraciones antes de iniciar el servidor
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# 8. Exponer el puerto de la aplicación
 EXPOSE 8000
 
-
-# 8 .Comando para arrancar con Gunicorn en producción
-# 'config.wsgi:application' asume que tu carpeta principal de Django se llama 'config'
-CMD psql -U postgres -d db_sofinventory -f respaldo.sql && python manage.py runserver 0.0.0.0:10000
+# 9. Ejecutar migraciones y luego Gunicorn en producción
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:8000", "config.wsgi:application"]

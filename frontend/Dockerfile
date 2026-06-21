@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Instalar dependencias
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 # Copiar el código y compilar para producción
 COPY . .
@@ -13,12 +13,16 @@ RUN npm run build -- --configuration=production
 # Etapa 2: Servir los archivos con Nginx
 FROM nginx:alpine
 
-# Copiar la configuración que creamos en el Paso 1
+# Copiar la configuración de Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copiar los archivos compilados de Angular al directorio web de Nginx
-# NOTA: Verifica que en tu angular.json el outputPath sea "dist/erp-frontend"
-COPY --from=build /app/dist/erp-frontend/browser /usr/share/nginx/html
+COPY --from=build /app/dist/erp-frontend /usr/share/nginx/html
+
+# Generar configuración runtime para la URL de la API y arrancar NGINX
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 80
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
