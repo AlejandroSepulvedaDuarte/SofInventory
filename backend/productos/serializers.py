@@ -9,7 +9,7 @@ class CategoriaSerializer(serializers.ModelSerializer):
         model = Categoria
         fields = '__all__'
         extra_kwargs = {
-            'creado_por': {'write_only': True}
+            'creado_por': {'write_only': True, 'required': False}
         }
 
 
