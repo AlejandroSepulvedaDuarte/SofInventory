@@ -1,4 +1,4 @@
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.core.validators import RegexValidator
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
@@ -83,6 +83,17 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
         return attrs
 
+    def create(self, validated_data):
+        validated_data.pop('confirm_password', None)
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        validated_data.pop('confirm_password', None)
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data['password'])
+        return super().update(instance, validated_data)
 
 
 class LoginSerializer(serializers.Serializer):
