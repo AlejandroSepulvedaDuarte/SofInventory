@@ -165,6 +165,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend_dist')
+if not os.path.isdir(FRONTEND_DIR):
+    FRONTEND_DIR = None
+
 STORAGES = {
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',

@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -30,4 +30,12 @@ urlpatterns = [
     path('api/inventario/', include('inventario.urls')),
     path('api/', include('ventas.urls')),
     path('api/', include('dashboard.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.FRONTEND_DIR:
+    from config.views import frontend_spa
+    urlpatterns += [
+        re_path(r'^(?!(?:api|admin|media)/)(?P<path>.*)$', frontend_spa),
+    ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
