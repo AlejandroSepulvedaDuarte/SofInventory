@@ -20,6 +20,8 @@ services:
       - "8000:8000"
     env_file:
       - ./backend/.env
+    environment:
+      - DB_HOST=db
 
   frontend:
     build: ./frontend
@@ -28,6 +30,8 @@ services:
       - "80:80"
     depends_on:
       - backend
+    environment:
+      - BACKEND_URL=http://backend:8000
 
 volumes:
   postgres_data:
