@@ -178,8 +178,5 @@ FRONTEND_DIR = os.path.join(BASE_DIR, 'frontend_dist')
 if not os.path.isdir(FRONTEND_DIR):
     FRONTEND_DIR = None
 
-STORAGES = {
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
+
+STATICFILES_STORAGE = 'whitenoise.storage.WhiteNoiseStaticFilesStorage'
