@@ -17,6 +17,10 @@ def require_roles(*roles):
     allowed_roles = set(roles)
 
     def decorator(view_func):
+        # Anula los permission_classes por defecto (IsAuthenticatedUsuario)
+        # para que @require_roles sea el único guardián de auth+rol.
+        view_func.permission_classes = []
+
         @wraps(view_func)
         def wrapped(request, *args, **kwargs):
             user = getattr(request, 'user', None)
