@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Instalar dependencias
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 # Copiar el código y compilar para producción
 COPY . .
@@ -13,21 +13,16 @@ RUN npm run build -- --configuration=production
 # Etapa 2: Servir los archivos con Nginx
 FROM nginx:alpine
 
-# gettext provee envsubst para reemplazar variables en templates
-RUN apk add --no-cache gettext
-
-# Copiar template de nginx (contiene ${BACKEND_URL})
+# Copiar la configuración de Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copiar los archivos compilados de Angular
-# NOTA: En angular.json el outputPath es "dist/erp-frontend"
-COPY --from=build /app/dist/erp-frontend/browser /usr/share/nginx/html
+# Copiar los archivos compilados de Angular al directorio web de Nginx
+COPY --from=build /app/dist/erp-frontend /usr/share/nginx/html
+
+# Generar configuración runtime para la URL de la API y arrancar NGINX
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 EXPOSE 80
-
-# Reemplazar ${BACKEND_URL} en nginx.conf, default http://backend:8000
-# Luego iniciar nginx en primer plano
-CMD sh -c 'export BACKEND_URL="${BACKEND_URL:-http://backend:8000}" && \
-  envsubst '"'"'${BACKEND_URL}'"'"' < /etc/nginx/conf.d/default.conf > /etc/nginx/conf.d/default.conf.tmp && \
-  mv /etc/nginx/conf.d/default.conf.tmp /etc/nginx/conf.d/default.conf && \
-  nginx -g "daemon off;"'
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
