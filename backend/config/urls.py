@@ -35,7 +35,7 @@ urlpatterns = [
 if settings.FRONTEND_DIR:
     from config.views import frontend_spa
     urlpatterns += [
-        re_path(r'^(?!(?:api|admin|media)/)(?P<path>.*)$', frontend_spa),
+        re_path(r'^(?!(?:api|admin)/)(?P<path>.*)$', frontend_spa),
     ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
