@@ -2,9 +2,10 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
-# Instalar dependencias
+# Instalar dependencias (con límite de memoria para evitar OOM en builds cloud)
 COPY package*.json ./
-RUN npm ci
+ENV NODE_OPTIONS="--max-old-space-size=512"
+RUN npm ci --no-optional --no-audit --no-fund
 
 # Copiar el código y compilar para producción
 COPY . .
