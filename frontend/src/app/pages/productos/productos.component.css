@@ -1,0 +1,352 @@
+.page {
+  padding: 32px;
+}
+
+/* Encabezado del catálogo y acciones superiores */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-header h1 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.page-header p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Buscador y filtros rápidos del listado */
+.search-input {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: var(--font-body);
+  outline: none;
+  width: 220px;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filter-tabs button {
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font-body);
+  transition: all 0.15s;
+}
+
+.filter-tabs button.active,
+.filter-tabs button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: rgb(14, 1, 1);
+}
+
+.low-stock {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Tabla principal del catálogo */
+.table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-table thead {
+  background: var(--bg-hover);
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table th {
+  text-align: left;
+  padding: 14px 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+.data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+}
+
+.data-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.empty-row {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+}
+
+/* Estados visuales de disponibilidad */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-activo {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+}
+
+.badge-inactivo {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+}
+
+.badge-pendiente {
+  background: rgba(251, 146, 60, 0.15);
+  color: #fb923c;
+}
+
+/* Botones de acción del listado y formulario */
+.action-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  color: var(--text-secondary);
+}
+
+.btn-icon:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
+}
+
+.btn-active {
+  color: #4ade80;
+}
+
+.btn-inactive {
+  color: #f87171;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  color: rgb(18, 18, 18);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+/* Modal del formulario de creación y edición */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 700px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 0;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field.full {
+  grid-column: span 2;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+}
+
+.error-msg {
+  margin-top: 16px;
+  padding: 10px;
+  background: rgba(248, 113, 113, 0.1);
+  border-radius: var(--radius-md);
+  color: var(--danger);
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field.full {
+    grid-column: span 1;
+  }
+
+  .table-container {
+    overflow-x: scroll;
+  }
+}

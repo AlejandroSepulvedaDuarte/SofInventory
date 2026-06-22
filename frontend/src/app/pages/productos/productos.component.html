@@ -1,0 +1,174 @@
+<!--
+  Pantalla de productos.
+  Gestiona catálogo completo: listado, búsqueda, filtros por estado,
+  y edición/creación de productos con sus atributos comerciales.
+-->
+<app-layout>
+  <div class="page">
+    <!-- Encabezado: título, contador, buscador y botón nuevo -->
+    <div class="page-header">
+      <div>
+        <h1>Productos</h1>
+        <p>{{ productos().length }} productos registrados</p>
+      </div>
+      <div class="header-actions">
+        <!-- Búsqueda en tiempo real (searchTerm se actualiza en cada input) -->
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar productos..."
+          [value]="searchTerm()"
+          (input)="searchTerm.set($any($event.target).value)"
+        />
+        <button class="btn-primary" (click)="openModal()">+ Nuevo Producto</button>
+      </div>
+    </div>
+
+    <!-- Filtros rápidos por estado: Todos / Activos / Pendientes / Inactivos -->
+    <div class="filter-tabs">
+      <button [class.active]="filtroEstado() === ''" (click)="filtroEstado.set('')">Todos</button>
+      <button [class.active]="filtroEstado() === 'activo'" (click)="filtroEstado.set('activo')">Activos</button>
+      <button [class.active]="filtroEstado() === 'pendiente'" (click)="filtroEstado.set('pendiente')">Pendientes</button>
+      <button [class.active]="filtroEstado() === 'inactivo'" (click)="filtroEstado.set('inactivo')">Inactivos</button>
+    </div>
+
+    <!-- Tabla principal del catálogo -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Categoría</th>
+            <th>Precio Venta</th>
+            <th>Stock</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filteredProductos()">
+            <td><code>{{ p.sku }}</code></td>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.marca }}</td>
+            <!-- getCatNombre() resuelve el nombre de categoría desde ID o objeto -->
+            <td>{{ getCatNombre(p.categoria) }}</td>
+            <td>{{ p.precio_venta | currency:'COP':'symbol':'1.0-0' }}</td>
+            <td>
+              <!-- Resalta visualmente si el stock está por debajo del mínimo -->
+              <span [class.low-stock]="p.stock <= p.stock_minimo">
+                {{ p.stock }} {{ p.unidad_medida }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [class]="'badge-' + p.estado">
+                {{ p.estado === 'activo' ? 'Activo' : p.estado === 'inactivo' ? 'Inactivo' : 'Pendiente' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-btns">
+                <!-- Editar: abre modal con datos del producto -->
+                <button class="btn-icon" title="Editar" (click)="openModal(p)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <!-- Cambiar estado: ícono toggle (encendido/apagado) según estado actual -->
+                <button class="btn-icon" [class.btn-active]="p.estado === 'activo'" [class.btn-inactive]="p.estado !== 'activo'" title="Cambiar estado" (click)="cambiarEstado(p)">
+                  <i class="fas" [class.fa-toggle-on]="p.estado === 'activo'" [class.fa-toggle-off]="p.estado !== 'activo'"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <!-- Fila vacía cuando no hay resultados -->
+          <tr *ngIf="filteredProductos().length === 0">
+            <td colspan="8" class="empty-row">No se encontraron productos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal: formulario para crear o editar producto -->
+    <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>{{ editing() ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+          <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="form-grid">
+            <!-- Campos básicos del producto -->
+            <div class="field">
+              <label>Nombre *</label>
+              <input type="text" [(ngModel)]="form.nombre" placeholder="Nombre del producto" />
+            </div>
+            
+            <div class="field">
+              <label>Marca *</label>
+              <input type="text" [(ngModel)]="form.marca" placeholder="Marca" />
+            </div>
+            
+            <div class="field">
+              <label>Referencia *</label>
+              <input type="text" [(ngModel)]="form.referencia" placeholder="Referencia" />
+            </div>
+            
+            <!-- Categoría: carga desde catálogo de categorías -->
+            <div class="field">
+              <label>Categoría *</label>
+              <select [(ngModel)]="form.categoria">
+                <option value="">Seleccionar...</option>
+                <option *ngFor="let c of categorias()" [value]="c.id">{{ c.nombre }}</option>
+              </select>
+            </div>
+            
+            <div class="field">
+              <label>Unidad de Medida</label>
+              <select [(ngModel)]="form.unidad_medida">
+                <option *ngFor="let u of unidades" [value]="u">{{ u }}</option>
+              </select>
+            </div>
+            
+            <!-- Precios e impuestos -->
+            <div class="field">
+              <label>Precio Compra</label>
+              <input type="number" [(ngModel)]="form.precio_compra" placeholder="0" />
+            </div>
+            
+            <div class="field">
+              <label>Precio Venta</label>
+              <input type="number" [(ngModel)]="form.precio_venta" placeholder="0" />
+            </div>
+            
+            <div class="field">
+              <label>IVA %</label>
+              <input type="number" [(ngModel)]="form.iva_porcentaje" placeholder="0" />
+            </div>
+            
+            <!-- Control de inventario -->
+            <div class="field">
+              <label>Stock Mínimo</label>
+              <input type="number" [(ngModel)]="form.stock_minimo" placeholder="0" />
+            </div>
+            
+            <!-- Campo texto largo para descripción detallada -->
+            <div class="field full">
+              <label>Descripción</label>
+              <textarea [(ngModel)]="form.descripcion" rows="3" placeholder="Descripción opcional"></textarea>
+            </div>
+          </div>
+          
+          <!-- Mensaje de error (validaciones frontend o backend) -->
+          <div class="error-msg" *ngIf="formError()">{{ formError() }}</div>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+          <button class="btn-primary" (click)="save()" [disabled]="saving()">
+            {{ saving() ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

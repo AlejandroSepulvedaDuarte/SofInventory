@@ -1,0 +1,52 @@
+<header class="header">
+  <!-- Bloque izquierdo: acceso móvil y contexto de navegación actual -->
+  <div class="header-left">
+    <button class="hamburger" (click)="toggleMobile()" title="Abrir menú">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+
+    <!-- Breadcrumb simple para ubicar al usuario dentro del módulo activo -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <span class="breadcrumb-item muted">ERP</span>
+      <span class="breadcrumb-sep">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </span>
+      <span class="breadcrumb-item current">{{ pageTitle() }}</span>
+    </nav>
+  </div>
+
+  <!-- Bloque derecho: hora, acciones rápidas y resumen del usuario -->
+  <div class="header-right">
+    <div class="header-time">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+      <span>{{ currentTime() }}</span>
+    </div>
+
+    <!-- Botón reservado para futuras notificaciones -->
+    <button class="icon-btn notif-btn" title="Notificaciones">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>
+      </svg>
+    </button>
+
+    <div class="header-divider"></div>
+
+    <!-- Chip del usuario autenticado con nombre y rol -->
+    <div class="user-chip">
+      <div class="chip-avatar">{{ userInitial() }}</div>
+      <div class="chip-info">
+        <span class="chip-name">{{ userName() }}</span>
+        <span class="chip-role">{{ userRole() }}</span>
+      </div>
+    </div>
+  </div>
+</header>

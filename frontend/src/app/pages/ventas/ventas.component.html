@@ -1,0 +1,238 @@
+<!--
+  Pantalla de ventas.
+  Gestiona el registro de ventas con cabecera (cliente, almacén, método de pago, descuento)
+  y detalle de productos. Calcula subtotales, IVA y total en tiempo real.
+  Permite ver detalle histórico y anular ventas.
+-->
+<app-layout>
+  <div class="page">
+    <!-- Encabezado: título, contador y botón nueva venta -->
+    <div class="page-header">
+      <div>
+        <h1><i class="fas fa-cash-register"></i> Ventas</h1>
+        <p><i class="fas fa-circle-info"></i> {{ ventas().length }} ventas registradas</p>
+      </div>
+      <button class="btn-primary" (click)="openModal()">
+        <i class="fas fa-plus"></i> Nueva Venta
+      </button>
+    </div>
+
+    <!-- Tabla resumen de ventas registradas -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th><i class="fas fa-receipt"></i> Venta</th>
+            <th><i class="fas fa-user"></i> Cliente</th>
+            <th><i class="fas fa-warehouse"></i> Método</th>
+            <th><i class="fas fa-sack-dollar"></i> Total</th>
+            <th><i class="fas fa-circle-half-stroke"></i> Estado</th>
+            <th><i class="fas fa-calendar"></i> Fecha</th>
+            <th><i class="fas fa-gear"></i> Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let v of ventas()">
+            <td><code>{{ v.numero_venta }}</code></td>
+            <!-- getClienteNombre() resuelve nombre desde ID u objeto -->
+            <td>{{ v.cliente_nombre || getClienteNombre(v.cliente) }}</td>
+            <td>{{ formatMetodoPago(v.metodo_pago) }}</td>
+            <td>{{ v.total | currency:'COP':'symbol':'1.0-0' }}</td>
+            <!-- Badge según estado: completada (verde) o anulada (rojo) -->
+            <td><span class="badge" [class]="v.estado === 'completada' ? 'badge-activo' : 'badge-inactivo'">{{ v.estado }}</span></td>
+            <td>{{ v.fecha_creacion | date:'dd/MM/yy HH:mm' }}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-icon" title="Ver detalle" (click)="verDetalle(v)">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <!-- Botón anular oculto si ya está anulada -->
+                <button class="btn-icon btn-danger" title="Anular" *ngIf="v.estado !== 'anulada'" (click)="anular(v)">
+                  <i class="fas fa-ban"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <!-- Fila vacía cuando no hay ventas -->
+          <tr *ngIf="ventas().length === 0">
+            <td colspan="7" class="empty-row"><i class="fas fa-inbox"></i> No hay ventas registradas</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal de registro de venta -->
+    <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
+      <div class="modal modal-xl" (click)="$event.stopPropagation()">
+        
+        <div class="modal-header">
+          <h2><i class="fas fa-cash-register"></i> Nueva Venta</h2>
+          <button class="close-btn" (click)="closeModal()"><i class="fas fa-xmark"></i></button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Cabecera: cliente, almacén, método de pago, descuento -->
+          <div class="form-grid">
+            <div class="field">
+              <label><i class="fas fa-user"></i> Cliente</label>
+              <select [(ngModel)]="form.cliente">
+                <option [ngValue]="null">Cliente General</option>
+                <option *ngFor="let c of clientes()" [ngValue]="c.id">{{ getClienteNombreObj(c) }}</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label><i class="fas fa-warehouse"></i> Almacén *</label>
+              <select [(ngModel)]="almacenId">
+                <option [ngValue]="null">Seleccionar...</option>
+                <option *ngFor="let a of almacenesActivos()" [ngValue]="a.id">
+                  {{ a.codigo ? a.codigo + ' - ' : '' }}{{ a.nombre }}
+                </option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label><i class="fas fa-credit-card"></i> Método de Pago *</label>
+              <select [(ngModel)]="form.metodo_pago">
+                <option *ngFor="let m of metodosPago" [ngValue]="m.value">{{ m.label }}</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label><i class="fas fa-percent"></i> Descuento</label>
+              <input type="number" [(ngModel)]="form.descuento" min="0" (input)="recalc()" />
+            </div>
+
+            <!-- Campos específicos para pago en efectivo -->
+            <ng-container *ngIf="form.metodo_pago === 'efectivo'">
+              <div class="field">
+                <label><i class="fas fa-money-bill-wave"></i> Efectivo Recibido</label>
+                <input type="number" [(ngModel)]="form.efectivo_recibido" min="0" (input)="recalc()" />
+              </div>
+              <div class="field">
+                <label><i class="fas fa-arrow-right-arrow-left"></i> Cambio</label>
+                <input type="number" [value]="calcCambioVal()" readonly />
+              </div>
+            </ng-container>
+
+            <div class="field full">
+              <label><i class="fas fa-clipboard"></i> Observaciones</label>
+              <textarea [(ngModel)]="form.observaciones" rows="2" placeholder="Observaciones de la venta"></textarea>
+            </div>
+          </div>
+
+          <!-- Detalle de productos -->
+          <div class="detalle-section">
+            <div class="detalle-header">
+              <div>
+                <h3><i class="fas fa-box-open"></i> Productos</h3>
+                <p>Agrega los productos que formarán parte de la venta.</p>
+              </div>
+              <button type="button" class="btn-secondary btn-sm" (click)="addLinea()">
+                <i class="fas fa-plus"></i> Agregar
+              </button>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Precio Unit.</th>
+                  <th>Cantidad</th>
+                  <th>Stock</th>
+                  <th>Subtotal</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let d of detalles(); let i = index">
+                  <td>
+                    <select [(ngModel)]="d.producto" (ngModelChange)="onProductoChange(d)" style="width:100%">
+                      <option [ngValue]="0">Seleccionar...</option>
+                      <option *ngFor="let p of productos()" [ngValue]="p.id">{{ getProductoLabel(p) }}</option>
+                    </select>
+                  </td>
+                  <td><input type="number" [(ngModel)]="d.precio_unitario" min="0" style="width:120px" (input)="recalc()" /></td>
+                  <td><input type="number" [(ngModel)]="d.cantidad" min="1" style="width:80px" (input)="recalc()" /></td>
+                  <td>{{ getStockProducto(d.producto) }}</td>
+                  <td>{{ (d.precio_unitario * d.cantidad) | currency:'COP':'symbol':'1.0-0' }}</td>
+                  <td>
+                    <button class="btn-icon btn-danger" title="Quitar" (click)="removeLinea(i)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Totales calculados en tiempo real -->
+            <div class="totales">
+              <div>Subtotal: <strong>{{ totales().subtotal | currency:'COP':'symbol':'1.0-0' }}</strong></div>
+              <div>Descuento: <strong>{{ (form.descuento || 0) | currency:'COP':'symbol':'1.0-0' }}</strong></div>
+              <div>IVA estimado: <strong>{{ totales().iva | currency:'COP':'symbol':'1.0-0' }}</strong></div>
+              <div class="total-final">Total: <strong>{{ totales().total | currency:'COP':'symbol':'1.0-0' }}</strong></div>
+            </div>
+          </div>
+
+          <div class="error-msg" *ngIf="formError()">
+            <i class="fas fa-circle-xmark"></i> {{ formError() }}
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeModal()">
+            <i class="fas fa-xmark"></i> Cancelar
+          </button>
+          <button class="btn-primary" (click)="save()" [disabled]="saving()">
+            <i class="fas" [class.fa-spinner]="saving()" [class.fa-spin]="saving()" [class.fa-floppy-disk]="!saving()"></i>
+            {{ saving() ? 'Registrando...' : 'Registrar Venta' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de detalle de venta (solo lectura) -->
+    <div class="modal-overlay" *ngIf="detalleVenta()" (click)="detalleVenta.set(null)">
+      <div class="modal modal-lg" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2><i class="fas fa-receipt"></i> Venta {{ detalleVenta()?.numero_venta }}</h2>
+          <button class="close-btn" (click)="detalleVenta.set(null)">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <!-- Resumen de cabecera -->
+          <div class="detalle-summary">
+            <span><strong>Cliente:</strong> {{ detalleVenta()?.cliente_nombre || getClienteNombre(detalleVenta()?.cliente) }}</span>
+            <span><strong>Método:</strong> {{ formatMetodoPago(detalleVenta()?.metodo_pago) }}</span>
+          </div>
+          
+          <!-- Tabla de productos vendidos -->
+          <table class="data-table">
+            <thead>
+              <tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Subtotal</th></tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of detalleVenta()!.detalles">
+                <!-- getDetalleProductoLabel() resuelve nombre desde SKU o ID -->
+                <td>{{ getDetalleProductoLabel(d) }}</td>
+                <td>{{ d.cantidad }}</td>
+                <td>{{ d.precio_unitario | currency:'COP':'symbol':'1.0-0' }}</td>
+                <td>{{ d.subtotal | currency:'COP':'symbol':'1.0-0' }}</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <!-- Totales almacenados en backend -->
+          <div class="totales detail-totals">
+            <div>Subtotal: <strong>{{ detalleVenta()?.subtotal | currency:'COP':'symbol':'1.0-0' }}</strong></div>
+            <div>IVA: <strong>{{ detalleVenta()?.iva_monto | currency:'COP':'symbol':'1.0-0' }}</strong></div>
+            <div class="total-final">Total: <strong>{{ detalleVenta()?.total | currency:'COP':'symbol':'1.0-0' }}</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</app-layout>

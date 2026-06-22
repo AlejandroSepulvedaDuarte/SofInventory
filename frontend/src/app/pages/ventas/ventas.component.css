@@ -1,0 +1,94 @@
+/**
+ * @file ventas.component.css
+ * @description
+ * Estilos específicos para el componente de ventas.
+ * Define la estructura del modal, tabla de productos, totales y elementos de detalle.
+ */
+
+.page {
+    padding: 32px;
+}
+
+/* ── Iconos en encabezados ──────────────────────────────────────────────── */
+.page-header h1 i,
+.detalle-header h3 i {
+    color: var(--accent);
+}
+
+/* Alinea iconos con texto en elementos que los contienen */
+.page-header h1,
+.page-header p,
+.detalle-header h3,
+.error-msg,
+.detalle-summary span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ── Sección de productos (detalle) ──────────────────────────────────────── */
+.detalle-section {
+    margin-top: 24px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+}
+
+.detalle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.detalle-header h3 {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.detalle-header p {
+    margin: 4px 0 0;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* ── Totales de la venta ────────────────────────────────────────────────── */
+.totales {
+    display: flex;
+    gap: 24px;
+    justify-content: flex-end;
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+}
+
+.total-final {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 16px;
+}
+
+/* Totales dentro del modal de detalle */
+.detail-totals {
+    margin-top: 16px;
+}
+
+/* ── Resumen de cliente y método en detalle ─────────────────────────────── */
+.detalle-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+}
+
+/* ── Mensaje de error ───────────────────────────────────────────────────── */
+.error-msg {
+    margin-top: 12px;
+}

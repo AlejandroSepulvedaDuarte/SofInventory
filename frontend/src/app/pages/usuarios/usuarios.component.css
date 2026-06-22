@@ -1,0 +1,60 @@
+.page {
+    padding: 32px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.page-header h1 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: var(--text-primary);
+    margin: 0 0 4px;
+}
+
+.page-header p {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrap input {
+    width: 100%;
+    padding-right: 44px;
+}
+
+.eye-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    color: var(--text-muted);
+}
+
+.eye-btn:hover {
+    color: var(--text-primary);
+}

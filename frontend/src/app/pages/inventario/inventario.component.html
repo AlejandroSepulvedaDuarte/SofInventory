@@ -1,0 +1,303 @@
+<!--
+  Pantalla de inventario.
+  Organizada en cuatro pestañas independientes controladas por el signal tab():
+  - Stock:      tabla consolidada de productos con su nivel de inventario actual.
+  - Alertas:    productos cuyo stock_actual está por debajo del stock_minimo.
+  - Almacenes:  CRUD de almacenes con modal reutilizable (crear / editar).
+  - Movimiento: formulario rápido para registrar entradas, salidas o ajustes manuales.
+
+  El badge de conteo en la pestaña Alertas se actualiza reactivamente con alertas().length.
+-->
+
+<app-layout>
+  <div class="page">
+
+    <!-- Encabezado: pestañas de navegación; active-tab resalta la seleccionada.
+         El badge de alertas solo aparece si hay productos críticos. -->
+    <div class="page-header">
+      <div>
+        <h1><i class="fas fa-boxes"></i> Inventario</h1>
+        <p class="page-subtitle">Gestión de stock, almacenes y movimientos</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-tab" (click)="tab.set('stock')" [class.active-tab]="tab() === 'stock'">
+          <i class="fas fa-chart-bar"></i> Stock
+        </button>
+        <button class="btn-tab" (click)="tab.set('alertas')" [class.active-tab]="tab() === 'alertas'">
+          <i class="fas fa-triangle-exclamation"></i> Alertas
+          <span class="badge-count" *ngIf="alertas().length > 0">{{ alertas().length }}</span>
+        </button>
+        <button class="btn-tab" (click)="tab.set('almacenes')" [class.active-tab]="tab() === 'almacenes'">
+          <i class="fas fa-warehouse"></i> Almacenes
+        </button>
+        <button class="btn-tab" (click)="tab.set('movimiento')" [class.active-tab]="tab() === 'movimiento'">
+          <i class="fas fa-arrows-rotate"></i> Movimiento
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Pestaña: Stock ─────────────────────────────────────────────────────
+         Miniestadísticas con fallbacks (?? ) por si el backend varía los nombres de campo.
+         La fila de stock usa low-stock e icon-red cuando stock_actual <= stock_minimo.
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div *ngIf="tab() === 'stock'">
+
+      <div class="stats-row" *ngIf="estadisticas()">
+        <div class="stat-mini stat-blue">
+          <span class="stat-icon"><i class="fas fa-box"></i></span>
+          <div class="stat-body">
+            <!-- Fallback entre dos posibles nombres de campo del backend -->
+            <span class="stat-val">{{ estadisticas().total_productos ?? estadisticas().productos ?? '—' }}</span>
+            <span class="stat-lbl">Total Productos</span>
+          </div>
+        </div>
+        <div class="stat-mini stat-green">
+          <span class="stat-icon"><i class="fas fa-circle-check"></i></span>
+          <div class="stat-body">
+            <span class="stat-val">{{ estadisticas().disponible ?? estadisticas().en_stock ?? '—' }}</span>
+            <span class="stat-lbl">En Stock</span>
+          </div>
+        </div>
+        <div class="stat-mini stat-red">
+          <span class="stat-icon"><i class="fas fa-circle-exclamation"></i></span>
+          <div class="stat-body">
+            <!-- Si el backend no devuelve bajo_stock, usa el conteo local de alertas() -->
+            <span class="stat-val">{{ estadisticas().bajo_stock ?? alertas().length }}</span>
+            <span class="stat-lbl">Stock Bajo</span>
+          </div>
+        </div>
+        <div class="stat-mini stat-purple">
+          <span class="stat-icon"><i class="fas fa-warehouse"></i></span>
+          <div class="stat-body">
+            <span class="stat-val">{{ estadisticas().almacenes ?? almacenes().length }}</span>
+            <span class="stat-lbl">Almacenes</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><i class="fas fa-tag"></i> SKU</th>
+              <th><i class="fas fa-box-open"></i> Producto</th>
+              <th><i class="fas fa-cubes"></i> Stock Actual</th>
+              <th><i class="fas fa-arrow-down-to-line"></i> Stock Mínimo</th>
+              <th><i class="fas fa-circle-half-stroke"></i> Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of stock()">
+              <td><code class="sku-code">{{ s.sku }}</code></td>
+              <td>{{ s.nombre }}</td>
+              <!-- Ícono y clase CSS cambian si el stock llegó o bajó del mínimo -->
+              <td>
+                <span class="stock-value" [class.low-stock]="s.stock_actual <= s.stock_minimo">
+                  <i class="fas fa-circle"
+                     [class.icon-green]="s.stock_actual > s.stock_minimo"
+                     [class.icon-red]="s.stock_actual <= s.stock_minimo"></i>
+                  {{ s.stock_actual }}
+                </span>
+              </td>
+              <td>{{ s.stock_minimo }}</td>
+              <td><span class="badge" [class]="'badge-' + s.estado">{{ s.estado }}</span></td>
+            </tr>
+            <tr *ngIf="stock().length === 0">
+              <td colspan="5" class="empty-row"><i class="fas fa-inbox"></i> Sin datos de stock</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Pestaña: Alertas ───────────────────────────────────────────────────
+         La barra de progreso refleja qué tan cerca está el stock_actual del mínimo
+         (100 % = justo en el mínimo; puede superar 100 % si hay stock suficiente,
+         pero en esta vista solo aparecen productos ya por debajo del umbral).
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div *ngIf="tab() === 'alertas'">
+      <div class="alerts-header" *ngIf="alertas().length > 0">
+        <span class="alerts-summary">
+          <i class="fas fa-siren-on"></i> {{ alertas().length }} producto(s) con stock bajo
+        </span>
+      </div>
+
+      <div class="alert-list">
+        <div class="alert-item" *ngFor="let a of alertas()">
+          <span class="alert-icon"><i class="fas fa-triangle-exclamation"></i></span>
+          <div class="alert-info">
+            <strong>{{ a.nombre }}</strong>
+            <span>
+              Stock actual: <b>{{ a.stock_actual }}</b>
+              &nbsp;<i class="fas fa-pipe"></i>&nbsp;
+              Mínimo requerido: <b>{{ a.stock_minimo }}</b>
+            </span>
+          </div>
+          <!-- Barra proporcional: ancho = (actual / mínimo) × 100 % -->
+          <div class="alert-bar-wrap">
+            <div class="alert-bar" [style.width.%]="(a.stock_actual / a.stock_minimo) * 100"></div>
+          </div>
+        </div>
+
+        <div class="empty-state" *ngIf="alertas().length === 0">
+          <i class="fas fa-circle-check empty-icon"></i>
+          <p>Todo en orden. No hay alertas de stock bajo.</p>
+        </div>
+      </div>
+    </div>
+    <!-- ── Pestaña: Almacenes ─────────────────────────────────────────────────
+         openAlmacenModal() sin argumento = crear; con almacén = editar.
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div *ngIf="tab() === 'almacenes'">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+        <button class="btn-primary" (click)="openAlmacenModal()">
+          <i class="fas fa-plus"></i> Nuevo Almacén
+        </button>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th><i class="fas fa-tag"></i> Nombre</th>
+              <th><i class="fas fa-barcode"></i> Código</th>
+              <th><i class="fas fa-location-dot"></i> Dirección</th>
+              <th><i class="fas fa-gear"></i> Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of almacenes()">
+              <td><strong><i class="fas fa-warehouse"></i> {{ a.nombre }}</strong></td>
+              <td><code class="sku-code">{{ a.codigo }}</code></td>
+              <td>
+                <span *ngIf="a.direccion"><i class="fas fa-location-dot"></i> {{ a.direccion }}</span>
+                <span *ngIf="!a.direccion">—</span>
+              </td>
+              <td>
+                <div class="action-btns">
+                  <button class="btn-icon" title="Editar" (click)="openAlmacenModal(a)">
+                    <i class="fas fa-pen"></i>
+                  </button>
+                  <button class="btn-icon btn-danger" title="Eliminar" (click)="eliminarAlmacen(a)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="almacenes().length === 0">
+              <td colspan="4" class="empty-row">
+                <i class="fas fa-warehouse"></i> No hay almacenes registrados
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- ── Pestaña: Movimiento ───────────────────────────────────────────────
+         movSuccess() muestra confirmación tras registrar; se limpia en el TS
+         automáticamente después de unos segundos.
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div *ngIf="tab() === 'movimiento'">
+      <div class="movimiento-form">
+        <h3><i class="fas fa-arrows-rotate"></i> Movimiento de Stock</h3>
+        <p class="form-subtitle">Registra entradas, salidas o ajustes de inventario</p>
+
+        <div class="form-grid">
+          <div class="field">
+            <label><i class="fas fa-box"></i> Producto *</label>
+            <select [(ngModel)]="movForm.producto_id">
+              <option value="">Seleccionar...</option>
+              <option *ngFor="let p of productos()" [value]="p.id">{{ p.nombre }} — {{ p.marca }} ({{ p.referencia }})</option>
+            </select>
+          </div>
+          <div class="field">
+            <label><i class="fas fa-arrows-rotate"></i> Tipo *</label>
+            <select [(ngModel)]="movForm.tipo">
+              <option value="entrada">Entrada</option>
+              <option value="salida">Salida</option>
+              <option value="ajuste">Ajuste</option>
+            </select>
+          </div>
+          <div class="field">
+            <label><i class="fas fa-hashtag"></i> Cantidad *</label>
+            <input type="number" [(ngModel)]="movForm.cantidad" min="1" placeholder="0" />
+          </div>
+          <div class="field">
+            <label><i class="fas fa-clipboard"></i> Motivo</label>
+            <input type="text" [(ngModel)]="movForm.motivo" placeholder="Motivo del movimiento" />
+          </div>
+        </div>
+
+        <div class="error-msg" *ngIf="movError()">
+          <i class="fas fa-circle-xmark"></i> {{ movError() }}
+        </div>
+
+        <div style="margin-top:16px">
+          <!-- Ícono cambia a spinner mientras movSaving() sea true -->
+          <button class="btn-primary" (click)="registrarMovimiento()" [disabled]="movSaving()">
+            <i class="fas"
+               [class.fa-spinner]="movSaving()"
+               [class.fa-spin]="movSaving()"
+               [class.fa-circle-check]="!movSaving()"></i>
+            {{ movSaving() ? 'Registrando...' : 'Registrar Movimiento' }}
+          </button>
+        </div>
+
+        <div class="success-msg" *ngIf="movSuccess()">
+          <i class="fas fa-circle-check"></i> {{ movSuccess() }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de almacén (crear / editar)
+         editingAlmacen() controla el título e ícono; null = modo creación. -->
+    <div class="modal-overlay" *ngIf="showAlmacenModal()" (click)="closeAlmacenModal()">
+      <div class="modal modal-sm" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>
+            <i class="fas"
+               [class.fa-pen]="editingAlmacen()"
+               [class.fa-warehouse]="!editingAlmacen()"></i>
+            {{ editingAlmacen() ? 'Editar Almacén' : 'Nuevo Almacén' }}
+          </h2>
+          <button class="close-btn" (click)="closeAlmacenModal()">
+            <i class="fas fa-xmark"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="error-msg" *ngIf="almacenError()">
+            <i class="fas fa-circle-xmark"></i> {{ almacenError() }}
+          </div>
+          <div class="field">
+            <label><i class="fas fa-tag"></i> Nombre *</label>
+            <input type="text" [(ngModel)]="almacenForm.nombre" placeholder="Nombre del almacén" />
+          </div>
+          <div class="field">
+            <label><i class="fas fa-barcode"></i> Código *</label>
+            <input type="text" [(ngModel)]="almacenForm.codigo" placeholder="Ej: ALM001" />
+          </div>
+          <div class="field">
+            <label><i class="fas fa-location-dot"></i> Dirección</label>
+            <input type="text" [(ngModel)]="almacenForm.direccion" placeholder="Dirección del almacén" />
+          </div>
+          <div class="field">
+            <label><i class="fas fa-file-lines"></i> Notas</label>
+            <input type="text" [(ngModel)]="almacenForm.notas" placeholder="Notas opcionales" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeAlmacenModal()">
+            <i class="fas fa-xmark"></i> Cancelar
+          </button>
+          <button class="btn-primary" (click)="saveAlmacen()" [disabled]="almacenSaving()">
+            <i class="fas"
+               [class.fa-spinner]="almacenSaving()"
+               [class.fa-spin]="almacenSaving()"
+               [class.fa-floppy-disk]="!almacenSaving()"></i>
+            {{ almacenSaving() ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

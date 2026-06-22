@@ -1,0 +1,75 @@
+.page {
+    padding: 32px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: var(--text-primary);
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-header h1 i {
+    color: var(--accent);
+}
+
+.page-header p {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detalle-section {
+    margin-top: 24px;
+}
+
+.detalle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.detalle-header h3 {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detalle-table-wrap {
+    overflow-x: auto;
+}
+
+.totales {
+    display: flex;
+    gap: 24px;
+    justify-content: flex-end;
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: var(--bg-input);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.total-final {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 16px;
+}

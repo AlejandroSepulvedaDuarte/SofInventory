@@ -1,0 +1,297 @@
+<!--
+  Pantalla de dashboard (Panel de Control).
+  Consume un único endpoint que devuelve métricas KPI, datos para gráficas y resúmenes
+  operativos (alertas de stock, mejor vendedor, ventas recientes, top productos).
+
+  La visibilidad de cada sección se controla con visible('id-seccion'), que evalúa
+  permisos del rol activo. Las gráficas se inicializan desde el TypeScript usando
+  referencias de template (#ventasChart, #pagosChart, etc.) tras cargar los datos.
+-->
+
+<app-layout>
+  <div class="page">
+
+    <!-- Encabezado: saludo con nombre del usuario, fecha actual y botón de recarga manual -->
+    <div class="page-header">
+      <div>
+        <h1><i class="fas fa-tachometer-alt"></i> Panel de Control</h1>
+        <p>
+          Resumen general del sistema - Hola,
+          <strong class="highlight">{{ auth.currentUser()?.nombre || auth.currentUser()?.username }}</strong>
+          - {{ today() }}
+        </p>
+      </div>
+      <div class="header-actions">
+        <!-- Se deshabilita mientras loading() sea true para evitar peticiones simultáneas -->
+        <button class="btn-secondary btn-sm" (click)="loadData()" [disabled]="loading()">
+          <i class="fas fa-sync-alt"></i>
+          {{ loading() ? 'Cargando...' : 'Actualizar' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Error global: visible si alguna petición de métricas falla -->
+    <div class="info-banner error" *ngIf="error()">
+      <i class="fas fa-exclamation-triangle"></i> {{ error() }}
+    </div>
+
+    <!-- Spinner de carga inicial; oculta todo el contenido hasta que data() tenga valor -->
+    <div class="loading-state" *ngIf="loading()">
+      <div class="spinner-lg"></div>
+      <p>Cargando datos del sistema...</p>
+    </div>
+
+    <!-- ── Tarjetas KPI ───────────────────────────────────────────────────────
+         Las primeras tres son visibles para todos los roles.
+         El resto usa visible() para mostrarse según permisos.
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div class="metrics-grid" *ngIf="!loading() && data()">
+
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fas fa-boxes"></i></div>
+        <div class="metric-info">
+          <h3>{{ data()?.metricas?.total_productos ?? 0 }}</h3>
+          <p>Productos Totales</p>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fas fa-cubes"></i></div>
+        <div class="metric-info">
+          <h3>{{ data()?.metricas?.productos_en_stock ?? 0 }}</h3>
+          <p>En Stock</p>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon"><i class="fas fa-shopping-cart"></i></div>
+        <div class="metric-info">
+          <h3>{{ data()?.metricas?.total_ventas ?? 0 }}</h3>
+          <p>Ventas Totales</p>
+        </div>
+      </div>
+
+      <div class="metric-card" *ngIf="visible('card-ventas-mes')">
+        <div class="metric-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="metric-info">
+          <h3>{{ formatPeso(data()?.metricas?.ventas_mes) }}</h3>
+          <p>Ventas Este Mes</p>
+        </div>
+      </div>
+
+      <div class="metric-card" *ngIf="visible('card-total-clientes')">
+        <div class="metric-icon"><i class="fas fa-users"></i></div>
+        <div class="metric-info">
+          <h3>{{ data()?.metricas?.total_clientes ?? 0 }}</h3>
+          <p>Clientes Activos</p>
+        </div>
+      </div>
+
+      <!-- El color del número cambia según el umbral de stock bajo definido en el TS -->
+      <div class="metric-card">
+        <div class="metric-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="metric-info">
+          <h3 [style.color]="getStockColor(data()?.metricas?.stock_bajo)">
+            {{ data()?.metricas?.stock_bajo ?? 0 }}
+          </h3>
+          <p>Stock Bajo</p>
+        </div>
+      </div>
+
+      <div class="metric-card" id="card-ventas-dia" *ngIf="visible('card-ventas-dia')">
+        <div class="metric-icon"><i class="fas fa-sun"></i></div>
+        <div class="metric-info">
+          <h3>{{ formatPeso(data()?.metricas?.ventas_dia) }}</h3>
+          <p>Ventas Hoy</p>
+        </div>
+      </div>
+
+      <div class="metric-card" id="card-compras-mes" *ngIf="visible('seccion-compras')">
+        <div class="metric-icon"><i class="fas fa-shopping-bag"></i></div>
+        <div class="metric-info">
+          <h3>{{ formatPeso(data()?.metricas?.compras_mes) }}</h3>
+          <p>Compras Este Mes</p>
+        </div>
+      </div>
+
+      <!-- El color del margen varía según sea positivo, neutro o negativo -->
+      <div class="metric-card" id="card-margen-mes" *ngIf="visible('seccion-margen')">
+        <div class="metric-icon"><i class="fas fa-chart-pie"></i></div>
+        <div class="metric-info">
+          <h3 [style.color]="getMargenColor(data()?.metricas?.margen_mes)">
+            {{ formatPeso(data()?.metricas?.margen_mes) }}
+          </h3>
+          <p>Margen del Mes</p>
+        </div>
+      </div>
+
+      <div class="metric-card" id="card-total-proveedores" *ngIf="visible('seccion-proveedores')">
+        <div class="metric-icon"><i class="fas fa-truck"></i></div>
+        <div class="metric-info">
+          <h3>{{ data()?.metricas?.total_proveedores ?? 0 }}</h3>
+          <p>Proveedores Activos</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Gráficas ───────────────────────────────────────────────────────────
+         Cada <canvas> es inicializado por el TS con Chart.js tras recibir los datos.
+         Top Vendedores solo aparece si el rol tiene acceso a esa sección.
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div class="charts-grid" *ngIf="!loading() && data()">
+
+      <div class="chart-card">
+        <div class="chart-header"><h3><i class="fas fa-chart-line"></i> Ventas Mensuales</h3></div>
+        <div class="chart-container"><canvas #ventasChart></canvas></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header"><h3><i class="fas fa-credit-card"></i> Métodos de Pago</h3></div>
+        <div class="chart-container"><canvas #pagosChart></canvas></div>
+      </div>
+
+      <div class="chart-card" *ngIf="visible('seccion-top-vendedores')">
+        <div class="chart-header"><h3><i class="fas fa-trophy"></i> Top Vendedores</h3></div>
+        <div class="chart-container"><canvas #vendedoresChart></canvas></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header"><h3><i class="fas fa-boxes"></i> Estado del Stock</h3></div>
+        <div class="chart-container"><canvas #stockChart></canvas></div>
+      </div>
+
+    </div>
+
+    <!-- ── Resumen operativo ──────────────────────────────────────────────────
+         Cuatro secciones independientes; cada una tiene su estado vacío con ng-template.
+    ──────────────────────────────────────────────────────────────────────── -->
+    <div class="dashboard-content" *ngIf="!loading() && data()">
+
+      <!-- Mejor vendedor del mes; oculto si el rol no tiene acceso o no hay ventas -->
+      <div class="dashboard-section" *ngIf="visible('seccion-mejor-vendedor')">
+        <div class="section-header">
+          <h3><i class="fas fa-crown"></i> Mejor Vendedor del Mes</h3>
+        </div>
+        <div class="section-body">
+          <div class="mejor-vendedor" *ngIf="data()?.mejor_vendedor_mes; else sinVendedor">
+            <div class="mejor-vendedor-card">
+              <div class="vendedor-avatar"><i class="fas fa-crown"></i></div>
+              <div class="vendedor-info">
+                <h4>{{ data()?.mejor_vendedor_mes?.nombre }}</h4>
+                <div class="vendedor-stats">
+                  <div class="stat">
+                    <span class="stat-value">{{ formatPeso(data()?.mejor_vendedor_mes?.total) }}</span>
+                    <span class="stat-label">Ventas del mes</span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-value">{{ data()?.mejor_vendedor_mes?.ventas }}</span>
+                    <span class="stat-label">Transacciones</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #sinVendedor>
+            <div class="no-data"><i class="fas fa-user"></i><p>Sin ventas este mes</p></div>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Productos con stock por debajo del mínimo; el botón navega directo al inventario -->
+      <div class="dashboard-section">
+        <div class="section-header">
+          <h3><i class="fas fa-exclamation-circle"></i> Alertas de Stock</h3>
+        </div>
+        <div class="section-body">
+          <div class="alertas-stock">
+            <ng-container *ngIf="data()?.alertas_stock?.length; else sinAlertas">
+              <div class="alerta-item" *ngFor="let alerta of data()?.alertas_stock">
+                <div class="alerta-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="alerta-info">
+                  <strong>{{ alerta.nombre }}</strong>
+                  <small>[{{ alerta.sku }}] Stock: <strong class="text-danger">{{ alerta.stock }}</strong> / Mín: {{ alerta.stock_minimo }}</small>
+                </div>
+                <button class="btn-icon" routerLink="/inventario"><i class="fas fa-eye"></i></button>
+              </div>
+            </ng-container>
+            <ng-template #sinAlertas>
+              <div class="no-alerts"><i class="fas fa-check-circle"></i><p>Sin alertas de stock</p></div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- ventasFiltradas() aplica filtro de rol sobre las ventas recientes del backend -->
+      <div class="dashboard-section" *ngIf="visible('seccion-ventas-recientes')">
+        <div class="section-header">
+          <h3><i class="fas fa-clock"></i> Ventas Recientes</h3>
+        </div>
+        <div class="section-body">
+          <div class="ventas-recientes">
+            <ng-container *ngIf="ventasFiltradas().length > 0; else sinVentas">
+              <div class="venta-item" *ngFor="let venta of ventasFiltradas()">
+                <div>
+                  <strong>{{ venta.numero_venta }}</strong><br>
+                  <small>{{ venta.cliente }} · {{ venta.fecha_creacion | date:'dd/MM/yy HH:mm' }}</small>
+                </div>
+                <strong class="venta-total">{{ formatPeso(venta.total) }}</strong>
+              </div>
+            </ng-container>
+            <ng-template #sinVentas>
+              <div class="no-data"><i class="fas fa-receipt"></i><p>Sin ventas recientes</p></div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ranking de productos por unidades vendidas e ingresos generados -->
+      <div class="dashboard-section">
+        <div class="section-header">
+          <h3><i class="fas fa-star"></i> Productos Más Vendidos</h3>
+        </div>
+        <div class="section-body">
+          <div class="productos-populares">
+            <ng-container *ngIf="data()?.top_productos?.length; else sinProductos">
+              <div class="producto-item" *ngFor="let producto of data()?.top_productos; let i = index">
+                <div class="producto-rank">{{ i + 1 }}</div>
+                <div class="producto-info">
+                  <strong>{{ producto.nombre }}</strong>
+                  <small>[{{ producto.sku }}]</small>
+                </div>
+                <div class="producto-stats">
+                  <strong>{{ producto.total_vendido }} und</strong>
+                  <small>{{ formatPeso(producto.total_ingresos) }}</small>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #sinProductos>
+              <div class="no-data"><i class="fas fa-box"></i><p>Sin datos de productos vendidos</p></div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Accesos directos a módulos frecuentes; Nueva Venta solo aparece si el rol lo permite -->
+    <div class="quick-actions" *ngIf="!loading()">
+      <h3><i class="fas fa-bolt"></i> Acciones Rápidas</h3>
+      <div class="actions-grid">
+        <button class="action-btn" routerLink="/ventas" *ngIf="visible('card-ventas-dia')">
+          <i class="fas fa-cash-register"></i><span>Nueva Venta</span>
+        </button>
+        <button class="action-btn" routerLink="/productos">
+          <i class="fas fa-boxes"></i><span>Gestionar Productos</span>
+        </button>
+        <button class="action-btn" routerLink="/clientes">
+          <i class="fas fa-users"></i><span>Gestionar Clientes</span>
+        </button>
+        <button class="action-btn" routerLink="/inventario">
+          <i class="fas fa-warehouse"></i><span>Ver Inventario</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</app-layout>
