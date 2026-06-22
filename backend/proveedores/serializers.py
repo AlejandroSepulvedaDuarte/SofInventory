@@ -10,6 +10,7 @@ class ProveedorSerializer(serializers.ModelSerializer):
         model = Proveedor
         fields = '__all__'
         extra_kwargs = {
+            'creado_por': {'read_only': True},
             'numero_documento': {
                 'error_messages': {
                     'unique': 'El número de documento ya se encuentra registrado.'

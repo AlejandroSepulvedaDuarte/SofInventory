@@ -160,18 +160,18 @@
           <thead>
             <tr>
               <th><i class="fas fa-tag"></i> Nombre</th>
-              <th><i class="fas fa-file-lines"></i> Descripción</th>
-              <th><i class="fas fa-location-dot"></i> Ubicación</th>
+              <th><i class="fas fa-barcode"></i> Código</th>
+              <th><i class="fas fa-location-dot"></i> Dirección</th>
               <th><i class="fas fa-gear"></i> Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let a of almacenes()">
               <td><strong><i class="fas fa-warehouse"></i> {{ a.nombre }}</strong></td>
-              <td>{{ a.descripcion || '—' }}</td>
+              <td><code class="sku-code">{{ a.codigo }}</code></td>
               <td>
-                <span *ngIf="a.ubicacion"><i class="fas fa-location-dot"></i> {{ a.ubicacion }}</span>
-                <span *ngIf="!a.ubicacion">—</span>
+                <span *ngIf="a.direccion"><i class="fas fa-location-dot"></i> {{ a.direccion }}</span>
+                <span *ngIf="!a.direccion">—</span>
               </td>
               <td>
                 <div class="action-btns">
@@ -207,7 +207,7 @@
             <label><i class="fas fa-box"></i> Producto *</label>
             <select [(ngModel)]="movForm.producto_id">
               <option value="">Seleccionar...</option>
-              <option *ngFor="let p of productos()" [value]="p.id">{{ p.nombre }}</option>
+              <option *ngFor="let p of productos()" [value]="p.id">{{ p.nombre }} — {{ p.marca }} ({{ p.referencia }})</option>
             </select>
           </div>
           <div class="field">
@@ -265,17 +265,24 @@
           </button>
         </div>
         <div class="modal-body">
+          <div class="error-msg" *ngIf="almacenError()">
+            <i class="fas fa-circle-xmark"></i> {{ almacenError() }}
+          </div>
           <div class="field">
             <label><i class="fas fa-tag"></i> Nombre *</label>
             <input type="text" [(ngModel)]="almacenForm.nombre" placeholder="Nombre del almacén" />
           </div>
           <div class="field">
-            <label><i class="fas fa-file-lines"></i> Descripción</label>
-            <input type="text" [(ngModel)]="almacenForm.descripcion" placeholder="Descripción opcional" />
+            <label><i class="fas fa-barcode"></i> Código *</label>
+            <input type="text" [(ngModel)]="almacenForm.codigo" placeholder="Ej: ALM001" />
           </div>
           <div class="field">
-            <label><i class="fas fa-location-dot"></i> Ubicación</label>
-            <input type="text" [(ngModel)]="almacenForm.ubicacion" placeholder="Ej: Bodega norte, Piso 2" />
+            <label><i class="fas fa-location-dot"></i> Dirección</label>
+            <input type="text" [(ngModel)]="almacenForm.direccion" placeholder="Dirección del almacén" />
+          </div>
+          <div class="field">
+            <label><i class="fas fa-file-lines"></i> Notas</label>
+            <input type="text" [(ngModel)]="almacenForm.notas" placeholder="Notas opcionales" />
           </div>
         </div>
         <div class="modal-footer">

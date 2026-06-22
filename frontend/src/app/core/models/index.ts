@@ -185,9 +185,7 @@ export interface Venta {
 export interface Almacen {
   id?: number;
   nombre: string;
-  descripcion?: string;
-  ubicacion?: string;
-  codigo?: string;
+  codigo: string;
   direccion?: string;
   responsable?: string;
   telefono?: string;

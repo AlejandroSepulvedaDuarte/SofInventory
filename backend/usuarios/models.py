@@ -60,7 +60,7 @@ class Usuario(models.Model):
         choices=ESTADO_CHOICES,
         default='activo'
     )
-    fecha_creacion = models.DateField()
+    fecha_creacion = models.DateField(auto_now_add=True)
     observaciones = models.TextField(blank=True, null=True)
     fecha_registro = models.DateTimeField(auto_now_add=True)
     cuenta_bloqueada = models.BooleanField(default=False)

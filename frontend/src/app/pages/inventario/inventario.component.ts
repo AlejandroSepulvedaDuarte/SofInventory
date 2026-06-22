@@ -41,6 +41,7 @@ export class InventarioComponent implements OnInit {
   /** null = modo creación; Almacen = modo edición. */
   editingAlmacen   = signal<Almacen | null>(null);
   almacenSaving    = signal(false);
+  almacenError     = signal('');
   almacenForm: Partial<Almacen> = {};
 
   // ── Estado del formulario de movimiento ──────────────────────────────────
@@ -83,7 +84,8 @@ export class InventarioComponent implements OnInit {
   /** Sin argumento abre en modo creación; con almacén clona sus datos para edición. */
   openAlmacenModal(a?: Almacen): void {
     this.editingAlmacen.set(a ?? null);
-    this.almacenForm = a ? { ...a } : { nombre: '', descripcion: '', ubicacion: '' };
+    this.almacenForm = a ? { ...a } : { nombre: '', codigo: '', direccion: '' };
+    this.almacenError.set('');
     this.showAlmacenModal.set(true);
   }
 
@@ -106,7 +108,15 @@ export class InventarioComponent implements OnInit {
         this.closeAlmacenModal();
         this.almacenSaving.set(false);
       },
-      error: () => this.almacenSaving.set(false),
+      error: (e) => {
+        const err = e.error;
+        if (typeof err === 'object') {
+          this.almacenError.set(Object.values(err).flat().join(' '));
+        } else {
+          this.almacenError.set(err ?? 'Error al guardar el almacén.');
+        }
+        this.almacenSaving.set(false);
+      },
     });
   }
 

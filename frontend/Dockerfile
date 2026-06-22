@@ -17,7 +17,7 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copiar los archivos compilados de Angular al directorio web de Nginx
-COPY --from=build /app/dist/erp-frontend /usr/share/nginx/html
+COPY --from=build /app/dist/erp-frontend/browser /usr/share/nginx/html
 
 # Generar configuración runtime para la URL de la API y arrancar NGINX
 COPY docker-entrypoint.sh /docker-entrypoint.sh
