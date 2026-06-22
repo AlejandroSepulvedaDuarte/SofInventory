@@ -5,7 +5,8 @@ FROM node:20-alpine AS frontend-build
 WORKDIR /frontend
 
 COPY frontend/package*.json ./
-RUN npm install
+ENV NODE_OPTIONS="--max-old-space-size=512"
+RUN npm ci --no-optional --no-audit --no-fund
 
 COPY frontend/ .
 RUN npm run build -- --configuration=production
@@ -13,7 +14,7 @@ RUN npm run build -- --configuration=production
 # =========================================
 # ETAPA 2: Construir Backend Django
 # =========================================
-FROM python:3.11-slim
+FROM python:3.12-slim
 WORKDIR /app
 
 # Dependencias del sistema para PostgreSQL
