@@ -219,64 +219,7 @@ El sistema utiliza archivos `.env` para la configuración de cada componente. La
 
 ### 4.1 Diagrama de Casos de Uso General
 
-```mermaid
-flowchart LR
-    %% Estilos de colores
-    classDef actorStyle fill:#2b3e50,stroke:#1a252f,stroke-width:2px,color:#fff,font-weight:bold
-    classDef authStyle fill:#e74c3c,stroke:#c0392b,stroke-width:1px,color:#fff
-    classDef adminStyle fill:#8e44ad,stroke:#7d3c98,stroke-width:1px,color:#fff
-    classDef catalogStyle fill:#2980b9,stroke:#1f618d,stroke-width:1px,color:#fff
-    classDef tradeStyle fill:#27ae60,stroke:#1e8449,stroke-width:1px,color:#fff
-    classDef invStyle fill:#d35400,stroke:#a04000,stroke-width:1px,color:#fff
-
-    %% Columna Izquierda: Actores (Vertical)
-    subgraph Actores["👥 ACTORES DEL SISTEMA"]
-        direction TB
-        Admin["👤 Administrador"]:::actorStyle
-        Sup["👤 Supervisor"]:::actorStyle
-        Bodega["👤 Operador Bodega"]:::actorStyle
-        Vendedor["👤 Vendedor"]:::actorStyle
-    end
-
-    %% Columna Derecha: Sistema y Módulos Apilados
-    subgraph Sistema["🏢 SISTEMA SOFINVENTORY"]
-        direction TB
-
-        subgraph ModAuth["🔐 Autenticación & Control"]
-            direction TB
-            CU1("CU-001: Iniciar Sesión"):::authStyle
-            CU2("CU-002: Gestionar Usuarios"):::adminStyle
-            CU9("CU-009: Consultar Dashboard"):::adminStyle
-        end
-
-        subgraph ModCat["📦 Catálogos Base"]
-            direction TB
-            CU3("CU-003: Registrar Productos"):::catalogStyle
-            CU4("CU-004: Gestionar Categorías"):::catalogStyle
-            CU10("CU-010: Gestionar Proveedores"):::catalogStyle
-            CU11("CU-011: Gestionar Clientes"):::catalogStyle
-        end
-
-        subgraph ModTrans["💰 Operaciones Comerciales"]
-            direction TB
-            CU5("CU-005: Registrar Compras"):::tradeStyle
-            CU6("CU-006: Registrar Ventas"):::tradeStyle
-        end
-
-        subgraph ModInv["🏗️ Control de Inventarios"]
-            direction TB
-            CU7("CU-007: Consultar Inventario"):::invStyle
-            CU8("CU-008: Administrar Almacenes"):::invStyle
-        end
-    end
-
-    %% Relaciones
-    Admin --> CU1 & CU2 & CU3 & CU4 & CU5 & CU6 & CU7 & CU8 & CU9 & CU10 & CU11
-    Sup --> CU1 & CU3 & CU4 & CU5 & CU6 & CU7 & CU8 & CU9 & CU10 & CU11
-    Bodega --> CU1 & CU7 & CU8
-    Vendedor --> CU1 & CU6 & CU7 & CU9 & CU11
-    
-```
+![Diagrama General de Casos de Uso - SofInventory](./docs/img/diagrama-casos-de-uso.png)
 
 ### 4.2 Descripción de Casos de Uso Principales
 
