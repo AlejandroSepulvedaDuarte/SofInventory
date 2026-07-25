@@ -1,26 +1,16 @@
 <div align="center">
 
-# MANUAL TÉCNICO Y DE ARQUITECTURA DE SOFTWARE
+# MANUAL TÉCNICO Y ARQUITECTURA DEL SOFTWARE
 
 ## Sistema de Información SofInventory
 
 ---
-
-**Autores:**
-Alejandro Sepúlveda Duarte
-Lucy Estefany Izquierdo Jaramillo
-
-**Programa de Formación:**
-Tecnología en Análisis y Desarrollo de Software (TADS)
-Centro de Comercio — Regional Antioquia
-Servicio Nacional de Aprendizaje (SENA)
-
-**Evidencia:**
-GA10-220501097-AA10-EV01 — Elabora documentos técnicos y de usuario del software
-
-**Versión:** 2.0
-**Fecha:** Julio 2026
-
+**Autores:** Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo <br>
+**Programa de Formación:** Tecnología en Análisis y Desarrollo de Software <br>
+**Cede:** Centro de Comercio Regional Antioquia–SENA <br>
+**Intructor:** José Ignacio Botero Osorio <br>
+**Fecha:** Julio 25 de 2026 <br>
+**Versión:** 1.0.07.26 
 </div>
 
 ---
@@ -222,6 +212,7 @@ El backend Django se organiza en **8 aplicaciones modulares**, cada una responsa
 
 El sistema utiliza archivos `.env` para la configuración de cada componente. Las variables están documentadas en la sección de despliegue. Los archivos `.env` **nunca se suben al repositorio** (excluidos por `.gitignore`).
 
+> 📄 **Documentación Complementaria:** Para profundizar en el análisis arquitectónico, los principios de diseño aplicados y la justificación del patrón seleccionado para **SofInventory**, consulte el documento anexo [Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf](./docs/Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf) o diríjase a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
 ---
 
 ## 4. Diagrama y Descripción de Casos de Uso
@@ -229,60 +220,62 @@ El sistema utiliza archivos `.env` para la configuración de cada componente. La
 ### 4.1 Diagrama de Casos de Uso General
 
 ```mermaid
-graph TB
-    subgraph "Actores del Sistema"
-        Admin["👤 Administrador"]
-        Vendedor["👤 Vendedor"]
-        Bodega["👤 Operador de Bodega"]
-        Sup["👤 Supervisor"]
+flowchart LR
+    %% Estilos de colores
+    classDef actorStyle fill:#2b3e50,stroke:#1a252f,stroke-width:2px,color:#fff,font-weight:bold
+    classDef authStyle fill:#e74c3c,stroke:#c0392b,stroke-width:1px,color:#fff
+    classDef adminStyle fill:#8e44ad,stroke:#7d3c98,stroke-width:1px,color:#fff
+    classDef catalogStyle fill:#2980b9,stroke:#1f618d,stroke-width:1px,color:#fff
+    classDef tradeStyle fill:#27ae60,stroke:#1e8449,stroke-width:1px,color:#fff
+    classDef invStyle fill:#d35400,stroke:#a04000,stroke-width:1px,color:#fff
+
+    %% Columna Izquierda: Actores (Vertical)
+    subgraph Actores["👥 ACTORES DEL SISTEMA"]
+        direction TB
+        Admin["👤 Administrador"]:::actorStyle
+        Sup["👤 Supervisor"]:::actorStyle
+        Bodega["👤 Operador Bodega"]:::actorStyle
+        Vendedor["👤 Vendedor"]:::actorStyle
     end
 
-    subgraph "Sistema SofInventory"
-        CU1["CU-001: Iniciar Sesión"]
-        CU2["CU-002: Gestionar Usuarios"]
-        CU3["CU-003: Registrar Productos"]
-        CU4["CU-004: Gestionar Categorías"]
-        CU5["CU-005: Registrar Compras"]
-        CU6["CU-006: Registrar Ventas"]
-        CU7["CU-007: Consultar Inventario"]
-        CU8["CU-008: Administrar Almacenes"]
-        CU9["CU-009: Consultar Dashboard"]
-        CU10["CU-010: Gestionar Proveedores"]
-        CU11["CU-011: Gestionar Clientes"]
+    %% Columna Derecha: Sistema y Módulos Apilados
+    subgraph Sistema["🏢 SISTEMA SOFINVENTORY"]
+        direction TB
+
+        subgraph ModAuth["🔐 Autenticación & Control"]
+            direction TB
+            CU1("CU-001: Iniciar Sesión"):::authStyle
+            CU2("CU-002: Gestionar Usuarios"):::adminStyle
+            CU9("CU-009: Consultar Dashboard"):::adminStyle
+        end
+
+        subgraph ModCat["📦 Catálogos Base"]
+            direction TB
+            CU3("CU-003: Registrar Productos"):::catalogStyle
+            CU4("CU-004: Gestionar Categorías"):::catalogStyle
+            CU10("CU-010: Gestionar Proveedores"):::catalogStyle
+            CU11("CU-011: Gestionar Clientes"):::catalogStyle
+        end
+
+        subgraph ModTrans["💰 Operaciones Comerciales"]
+            direction TB
+            CU5("CU-005: Registrar Compras"):::tradeStyle
+            CU6("CU-006: Registrar Ventas"):::tradeStyle
+        end
+
+        subgraph ModInv["🏗️ Control de Inventarios"]
+            direction TB
+            CU7("CU-007: Consultar Inventario"):::invStyle
+            CU8("CU-008: Administrar Almacenes"):::invStyle
+        end
     end
 
-    Admin --> CU1
-    Admin --> CU2
-    Admin --> CU3
-    Admin --> CU4
-    Admin --> CU5
-    Admin --> CU6
-    Admin --> CU7
-    Admin --> CU8
-    Admin --> CU9
-    Admin --> CU10
-    Admin --> CU11
-
-    Vendedor --> CU1
-    Vendedor --> CU6
-    Vendedor --> CU7
-    Vendedor --> CU9
-    Vendedor --> CU11
-
-    Bodega --> CU1
-    Bodega --> CU7
-    Bodega --> CU8
-
-    Sup --> CU1
-    Sup --> CU3
-    Sup --> CU4
-    Sup --> CU5
-    Sup --> CU6
-    Sup --> CU7
-    Sup --> CU8
-    Sup --> CU9
-    Sup --> CU10
-    Sup --> CU11
+    %% Relaciones
+    Admin --> CU1 & CU2 & CU3 & CU4 & CU5 & CU6 & CU7 & CU8 & CU9 & CU10 & CU11
+    Sup --> CU1 & CU3 & CU4 & CU5 & CU6 & CU7 & CU8 & CU9 & CU10 & CU11
+    Bodega --> CU1 & CU7 & CU8
+    Vendedor --> CU1 & CU6 & CU7 & CU9 & CU11
+    
 ```
 
 ### 4.2 Descripción de Casos de Uso Principales
@@ -373,6 +366,7 @@ graph TB
 | **Flujo Principal** | 1. El usuario accede al módulo de almacenes → 2. Crea o edita almacenes con: nombre, código, dirección, responsable, teléfono, capacidad, estado → 3. El sistema valida unicidad del código → 4. Se guarda el almacén → 5. Se actualiza la tabla `almacenes` |
 | **Postcondiciones** | El almacén queda disponible para recibir stock y registrar movimientos |
 
+> 📌 **Nota:** Para consultar los diagramas de casos de uso extendidos, plantillas por módulo y la documentación funcional detallada del sistema, puede acceder al anexo [Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf](./docs/Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf) o ir a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
 ---
 
 ## 5. Modelo Entidad-Relación (Base de Datos)
@@ -387,279 +381,9 @@ El modelo entidad-relación de SofInventory está diseñado bajo los principios 
 - **Índices optimizados:** Para consultas frecuentes y relaciones principales
 
 ### 5.2 Estructura del Modelo por Módulos
-
-```mermaid
-erDiagram
-    TYPES_DOCUMENTO ||--o{ USUARIOS : "tiene"
-    TYPES_DOCUMENTO {
-        int id PK
-        varchar(5) codigo UK
-        varchar(50) nombre
-    }
-
-    ROLES ||--o{ USUARIOS : "asignado a"
-    ROLES {
-        int id PK
-        varchar(50) nombre UK
-        text descripcion
-    }
-
-    USUARIOS ||--o{ SESIONES_API : "genera"
-    USUARIOS ||--o{ INTENTOS_FALLIDOS : "registra"
-    USUARIOS {
-        int id PK
-        int tipo_documento_id FK
-        varchar(20) numero_documento UK
-        varchar(150) nombre_completo
-        varchar(255) email UK
-        varchar(50) username UK
-        varchar(255) password
-        int rol_id FK
-        varchar(10) estado
-        date fecha_creacion
-        datetime fecha_registro
-        boolean cuenta_bloqueada
-        datetime fecha_bloqueo
-        text observaciones
-    }
-
-    SESIONES_API {
-        int id PK
-        int usuario_id FK
-        varchar(80) token UK
-        datetime creada_en
-        datetime expira_en
-        datetime ultima_actividad
-        boolean activa
-        varchar(255) user_agent
-    }
-
-    INTENTOS_FALLIDOS_LOGIN {
-        int id PK
-        int usuario_id FK
-        datetime fecha_intento
-        generic_ip ip_address
-        varchar(255) user_agent
-    }
-
-    CATEGORIAS ||--o{ PRODUCTOS : "agrupa"
-    CATEGORIAS {
-        int id PK
-        varchar(100) nombre UK
-        varchar(20) tipo_control
-        text descripcion
-        int creado_por_id FK
-        datetime fecha_creacion
-    }
-
-    PRODUCTOS ||--o{ STOCK_ALMACEN : "tiene stock en"
-    PRODUCTOS ||--o{ MOVIMIENTOS_INVENTARIO : "genera movimientos"
-    PRODUCTOS ||--o{ DETALLE_COMPRAS : "se compra"
-    PRODUCTOS ||--o{ DETALLE_VENTAS : "se vende"
-    PRODUCTOS {
-        int id PK
-        varchar(200) sku UK
-        varchar(150) nombre
-        varchar(100) marca
-        varchar(100) referencia
-        varchar(10) unidad_medida
-        int categoria_id FK
-        decimal(12,2) precio_compra
-        decimal(12,2) precio_venta
-        decimal(5,2) iva_porcentaje
-        int stock
-        int stock_minimo
-        text descripcion
-        text observaciones
-        jsonb especificaciones
-        varchar(15) estado
-        int creado_por_id FK
-        datetime fecha_creacion
-        datetime fecha_actualizacion
-        varchar(255) imagen
-    }
-
-    PROVEEDORES ||--o{ COMPRAS : "provee"
-    PROVEEDORES {
-        int id PK
-        int tipo_documento_id FK
-        varchar(20) numero_documento UK
-        varchar(150) razon_social
-        varchar(100) nombre_contacto
-        varchar(100) cargo_contacto
-        varchar(255) email UK
-        varchar(20) telefono
-        varchar(200) direccion
-        varchar(100) pais
-        varchar(100) departamento
-        varchar(100) ciudad
-        varchar(10) tipo_proveedor
-        varchar(10) estado
-        text observaciones
-        int creado_por_id FK
-        datetime fecha_registro
-    }
-
-    COMPRAS ||--o{ DETALLE_COMPRAS : "contiene"
-    COMPRAS {
-        int id PK
-        int proveedor_id FK
-        varchar(50) numero_factura UK
-        date fecha_compra
-        varchar(10) tipo_compra
-        decimal(12,2) subtotal
-        decimal(12,2) iva_total
-        decimal(12,2) total
-        varchar(15) estado
-        int registrado_por_id FK
-        datetime fecha_registro
-    }
-
-    DETALLE_COMPRAS {
-        int id PK
-        int compra_id FK
-        int producto_id FK
-        int cantidad
-        decimal(12,2) costo_unitario
-        decimal(5,2) iva_porcentaje
-        decimal(12,2) subtotal
-        decimal(12,2) total
-    }
-
-    CLIENTES ||--o{ VENTAS : "compra"
-    CLIENTES {
-        int id PK
-        varchar(10) tipo_cliente
-        varchar(15) categoria
-        int tipo_documento_id FK
-        varchar(20) numero_documento UK
-        varchar(100) nombres
-        varchar(100) apellidos
-        varchar(150) razon_social
-        varchar(150) nombre_comercial
-        varchar(255) email
-        varchar(20) telefono
-        varchar(20) telefono2
-        text direccion
-        varchar(100) ciudad
-        varchar(100) departamento
-        varchar(100) pais
-        varchar(20) codigo_postal
-        varchar(10) estado
-        text notas
-        int creado_por_id FK
-        datetime fecha_creacion
-        datetime fecha_actualizacion
-    }
-
-    VENTAS ||--o{ DETALLE_VENTAS : "contiene"
-    VENTAS {
-        int id PK
-        varchar(20) numero_venta UK
-        int cliente_id FK
-        int vendedor_id FK
-        decimal(14,2) subtotal
-        decimal(14,2) descuento
-        varchar(10) tipo_iva
-        decimal(5,2) iva_porcentaje
-        decimal(14,2) iva_monto
-        decimal(14,2) total
-        varchar(15) metodo_pago
-        decimal(14,2) efectivo_recibido
-        decimal(14,2) cambio
-        varchar(4) numero_tarjeta
-        varchar(50) aprobacion_tarjeta
-        varchar(100) comprobante_transferencia
-        varchar(100) otro_metodo
-        text observaciones
-        varchar(10) estado
-        datetime fecha_creacion
-        datetime fecha_anulacion
-        int anulado_por_id FK
-        text motivo_anulacion
-    }
-
-    DETALLE_VENTAS {
-        int id PK
-        int venta_id FK
-        int producto_id FK
-        decimal(12,2) precio_unitario
-        int cantidad
-        decimal(14,2) subtotal
-        varchar(150) nombre_producto
-        varchar(200) sku_producto
-    }
-
-    ALMACENES ||--o{ STOCK_ALMACEN : "almacena"
-    ALMACENES ||--o{ MOVIMIENTOS_INVENTARIO : "origen o destino"
-    ALMACENES ||--o{ TRASLADOS : "origen"
-    ALMACENES ||--o{ TRASLADOS : "destino"
-    ALMACENES {
-        int id PK
-        varchar(100) nombre UK
-        varchar(10) codigo UK
-        text direccion
-        varchar(100) responsable
-        varchar(20) telefono
-        int capacidad
-        varchar(15) estado
-        text notas
-        int creado_por_id FK
-        datetime fecha_creacion
-        datetime fecha_actualizacion
-    }
-
-    STOCK_ALMACEN {
-        int id PK
-        int producto_id FK
-        int almacen_id FK
-        int cantidad
-        datetime ultima_actualizacion
-    }
-
-    MOVIMIENTOS_INVENTARIO {
-        int id PK
-        varchar(25) tipo
-        int producto_id FK
-        int almacen_origen_id FK
-        int almacen_destino_id FK
-        int cantidad
-        decimal(12,2) costo_unitario
-        varchar(50) referencia_tipo
-        int referencia_id
-        text observacion
-        datetime fecha
-        int creado_por_id FK
-    }
-
-    TRASLADOS ||--o{ TRASLADOS_DETALLE : "contiene"
-    TRASLADOS {
-        int id PK
-        int almacen_origen_id FK
-        int almacen_destino_id FK
-        varchar(15) estado
-        text observacion
-        datetime fecha_solicitud
-        datetime fecha_completado
-        int creado_por_id FK
-    }
-
-    TRASLADOS_DETALLE {
-        int id PK
-        int traslado_id FK
-        int producto_id FK
-        int cantidad
-    }
-
-    CONFIGURACION_RANGOS_STOCK {
-        int id PK
-        int stock_bajo
-        int stock_medio
-        int stock_alto
-        int actualizado_por_id FK
-        datetime fecha_actualizacion
-    }
-```
+Figura 1.
+Diagrama MER
+![Modelo Entidad-Relación SofInventory](docs/img/MER.png)
 
 ### 5.3 Relaciones Principales del Modelo
 
@@ -681,6 +405,7 @@ erDiagram
 | Traslado → TrasladoDetalle | 1:N | Un traslado contiene múltiples productos |
 | Usuario → SesionAPI | 1:N | Un usuario genera múltiples sesiones |
 
+> 📊 **Especificación de Base de Datos:** Para revisar el diagrama completo generado desde la base de datos y la definición detallada de tablas, campos y restricciones, consulte el [Modelo Entidad-Relación en PDF](./docs/Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf) y el [Diccionario de Datos en Excel](https://drive.google.com/file/d/1UzqMEZIm0xpVfJMkq-4Cwno6ymZs9C7R/view?usp=sharing), ambos referenciados en la sección [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
 ---
 
 ## 6. Diccionario de Datos
@@ -1184,6 +909,10 @@ Resultado esperado: Se carga la pantalla de inicio de sesión de SofInventory.
 | **Usuario** | `admin` |
 | **Contraseña** | `admin123` |
 
+Figura 2.
+Pantalla de inicio de sesión 
+![Modelo Entidad-Relación SofInventory](docs/img/Login.png)
+
 Si las credenciales son correctas, el usuario será redirigido al Dashboard principal.
 
 #### Paso 6: Verificar módulos principales
@@ -1196,6 +925,9 @@ Si las credenciales son correctas, el usuario será redirigido al Dashboard prin
 | 4 | Acceder a Usuarios | Se lista los usuarios registrados |
 | 5 | Registrar una venta | Se descuenta stock y se genera el movimiento |
 
+Figura 3.
+Dashboard principal del sistema 
+![Modelo Entidad-Relación SofInventory](docs/img/Dashboard.png)
 ### 7.6 Comandos Útiles de Docker Compose
 
 | Comando | Descripción |
@@ -1226,15 +958,15 @@ Si las credenciales son correctas, el usuario será redirigido al Dashboard prin
 
 ### 7.8 Despliegue en Producción (Cloud)
 
-El sistema está desplegado en las siguientes plataformas:
+El sistema está desplegado en las siguiente plataforma:
 
 | Plataforma | URL | Descripción |
 |---|---|---|
-| **Railway** | `sofinventoryproduction-48fb.up.railway.app` | Despliegue completo (frontend + backend) |
 | **Render** | `sofinventory-app.onrender.com` | Despliegue completo con PostgreSQL administrado |
 
-Ambas plataformas utilizan el `Dockerfile` raíz (multi-stage) que compila el frontend Angular y lo sirve desde Django con Whitenoise.
+Esta Plataforma utiliza `Dockerfile` raíz (multi-stage) que compila el frontend Angular y lo sirve desde Django con Whitenoise.
 
+> 🚀 **Manual Completo de Despliegue:** Para consultar la guía ilustrada paso a paso de instalación, la configuración de variables de entorno, la inicialización del contenedor de PostgreSQL y los comandos de troubleshooting, consulte el documento anexo [Informe_Tecnico_Despliegue_SofInventory_v2.pdf](./docs/Informe_Tecnico_Despliegue_SofInventory_v2.pdf) o diríjase a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
 ---
 
 ## 8. Diagrama de Componentes
@@ -1428,16 +1160,18 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 | Node.js | https://nodejs.org/ |
 | Python | https://docs.python.org/3/ |
 
-### 10.2 Documentos Internos del Proyecto
+### 10.2 Documentos Internos y externos del Proyecto
 
-| Documento | Descripción |
-|---|---|
-| Modelo Entidad-Relación SofInventory PostgreSQL | Diseño del MER con normalización 3FN |
-| Desarrollo Arquitectura de Software (Patrón MVC) | Vista de componentes y despliegue |
-| Informe Técnico de Despliegue v2.0 | Procedimiento Docker Compose paso a paso |
-| Diagramas y Plantillas para Casos de Uso | CU-001 a CU-004 con flujos detallados |
-| Plan de Mantenimiento SofInventory (ISO 14724) | Plan de mantenimiento preventivo y correctivo |
-| Plan de Respaldo y Migración (ISO 27001) | Política de backups, restauración y migración |
+Para consultar la información complementaria y profundizar en el diseño, arquitectura y base de datos del proyecto **SofInventory**, se ponen a disposición los siguientes anexos:
+
+| Documento / Recurso | Descripción | Enlace de Acceso |
+| :--- | :--- | :--- |
+| **Modelo Entidad-Relación PostgreSQL** | Diagrama detallado de la base de datos generado desde PostgreSQL | [🖼️ Ver MER](./docs/Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf) |
+| **Arquitectura y Patrón de Diseño** | Documentación de la arquitectura de software y el patrón seleccionado | [📄 Ver Arquitectura y diseño](./docs/Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf) |
+| **Diccionario de Datos** | Especificación técnica de tablas, campos, tipos y restricciones | [📊 Ver Excel](https://drive.google.com/file/d/1UzqMEZIm0xpVfJMkq-4Cwno6ymZs9C7R/view?usp=sharing) |
+| **Manual de Despliegue** | Guía paso a paso para la instalación y despliegue del software | [📕 Ver Manual de despliegue](./docs/Informe_Tecnico_Despliegue_SofInventory_v2.pdf) |
+| **Casos de Uso Extendidos** | Diagramas y descripciones detalladas por módulo del sistema | [📄 Ver Diagrama y plantillas por casos de uso](./docs/Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf) |
+| **Repositorio GitHub** | Código fuente del proyecto y configuración de contenedores Docker | [💻 Ver Repositorio](https://github.com/AlejandroSepulvedaDuarte/SofInventory.git) |
 
 ### 10.3 Guías de Referencia
 
@@ -1451,10 +1185,8 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 ---
 
 <div align="center">
-
-**Documento elaborado como parte de la evidencia GA10-220501097-AA10-EV01**
-**Programa de Formación: Tecnología en Análisis y Desarrollo de Software (TADS)**
-**Centro de Comercio — Regional Antioquia**
-**Servicio Nacional de Aprendizaje (SENA)**
+Documento técnico elaborado para la evaluación de la competencia de desarrollo de software. 
+SENA — 2026
 
 </div>
+
