@@ -1,0 +1,48 @@
+site_name: SofInventory ERP
+site_description: Manuales técnico y de usuario del sistema SofInventory.
+site_author: Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo
+
+
+theme:
+  name: material
+  language: es
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  features:
+    - navigation.tabs          # Pestañas superiores
+    - navigation.top           # Botón para volver arriba
+    - search.suggest           # Sugerencias en búsqueda
+    - search.highlight         # Resaltar resultados de búsqueda
+    - content.code.copy        # Botón de copiar en bloques de código
+    - toc.integrate            # Integra la tabla de contenidos para limpiar espacio
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+extra_javascript:
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+
+nav:
+  - Manual de Usuario: MANUAL_USUARIO.md
+  - Manual Técnico: MANUAL_TECNICO.md
+

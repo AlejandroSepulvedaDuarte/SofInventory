@@ -1,16 +1,15 @@
-<div align="center">
 
-# MANUAL DE USUARIO
-## SofInventory — Sistema ERP de Gestión de Inventarios y Ventas
+<div style="text-align: center"  markdown="1">
 
+![SofInventory Logo](assets/logo.png){ width="300" }
+# Manual de Usuario 
+**Sistema de Información SofInventory ERP**
+`Versión 1.0` | `Fecha: 26 de julio de 2026` 
 
-**Versión del documento:** 1.0  
-**Fecha:** 26 de julio de 2026  
 </div>
-
 ---
 
-### 📋 Control Administrativo
+### 📋 Control administrativo
 
 | Campo | Información |
 |---|---|
@@ -24,7 +23,7 @@
 
 ---
 
-### Control de Versiones del Documento
+### Control de versiones del documento
 
 | Versión | Fecha | Autor(es) | Descripción del cambio |
 |---|---|---|---|
@@ -32,7 +31,7 @@
 
 ---
 
-### Convenciones del Documento
+### Convenciones del documento
 
 A lo largo del manual se usan los siguientes símbolos para facilitar la lectura:
 
@@ -45,34 +44,16 @@ A lo largo del manual se usan los siguientes símbolos para facilitar la lectura
 | **Negrita** | Nombres de botones, campos de formulario o elementos de la interfaz. |
 | `Texto en código` | Nombres técnicos internos (tablas, tipos de movimiento, endpoints). |
 
----
-
-## Tabla de Contenido
-
-1. [Introducción](#1-introducción)
-2. [Objetivos](#2-objetivos)
-3. [Alcance del Sistema](#3-alcance-del-sistema)
-4. [Normas y Buenas Prácticas de Uso](#4-normas-y-buenas-prácticas-de-uso)
-5. [Instrucciones de Acceso y Navegación General](#5-instrucciones-de-acceso-y-navegación-general)
-6. [Guía de Uso por Roles de Usuario](#6-guía-de-uso-por-roles-de-usuario)
-7. [Flujos de Trabajo Principales](#7-flujos-de-trabajo-principales)
-8. [Glosario de Términos](#8-glosario-de-términos)
-9. [Preguntas Frecuentes (FAQ)](#9-preguntas-frecuentes-faq)
-10. [Solución de Problemas Comunes](#10-solución-de-problemas-comunes)
-11. [Mesa de Ayuda y Soporte Técnico](#11-mesa-de-ayuda-y-soporte-técnico)
-12. [Referencias y Fuentes Consultadas](#12-referencias-y-fuentes-consultadas)
-
----
 
 ## 1. Introducción
 
-### 1.1 Propósito del Manual
+### 1.1 Propósito
 
 El presente Manual de Usuario describe de forma detallada, clara y paso a paso el proceso de uso del sistema **SofInventory**, un sistema ERP (Enterprise Resource Planning) diseñado para la gestión integral de inventarios, productos, compras, ventas, clientes, proveedores y usuarios de una empresa comercial.
 
 Este manual está dirigido a los **usuarios finales** del sistema: administradores, supervisores, vendedores y operadores de bodega, proporcionando las instrucciones necesarias para aprovechar al máximo todas las funcionalidades de la plataforma.
 
-### 1.2 Descripción del Sistema
+### 1.2 Descripción del sistema
 
 SofInventory es una aplicación web que permite:
 
@@ -97,11 +78,11 @@ SofInventory es una aplicación web que permite:
 
 ## 2. Objetivos
 
-### 2.1 Objetivo General
+### 2.1 Objetivo general
 
 Proporcionar a los usuarios finales del sistema SofInventory las instrucciones necesarias para el uso correcto, eficiente y seguro de todas las funcionalidades del sistema, según el rol que desempeñen en la organización.
 
-### 2.2 Objetivos Específicos
+### 2.2 Objetivos específicos
 
 - Instruir al usuario en el proceso de autenticación y navegación general del sistema.
 - Describir las funcionalidades disponibles para cada rol de usuario (Administrador, Supervisor, Vendedor y Operador de Bodega).
@@ -111,9 +92,9 @@ Proporcionar a los usuarios finales del sistema SofInventory las instrucciones n
 
 ---
 
-## 3. Alcance del Sistema
+## 3. Alcance del sistema
 
-### 3.1 Módulos Funcionales
+### 3.1 Módulos funcionales
 
 | # | Módulo | Funcionalidades | Accesible por |
 |---|---|---|---|
@@ -128,7 +109,7 @@ Proporcionar a los usuarios finales del sistema SofInventory las instrucciones n
 | 9 | **Inventario** | Consultar stock, alertas, almacenes, registrar movimientos | Todos los usuarios |
 | 10 | **Usuarios** | Crear, editar, buscar, activar/desactivar, desbloquear usuarios | Solo Administrador |
 
-### 3.2 Roles del Sistema
+### 3.2 Roles del sistema
 
 ```mermaid
 graph LR
@@ -155,7 +136,7 @@ graph LR
     end
 ```
 
-### 3.3 Matriz de Permisos por Rol
+### 3.3 Matriz de permisos por rol
 
 | Funcionalidad | Administrador | Supervisor | Vendedor | Bodega |
 |---|:---:|:---:|:---:|:---:|
@@ -174,9 +155,9 @@ graph LR
 
 ---
 
-## 4. Normas y Buenas Prácticas de Uso
+## 4. Normas y buenas prácticas de uso
 
-### 4.1 Seguridad de la Cuenta
+### 4.1 Seguridad de la cuenta
 
 1. **No comparta sus credenciales** de acceso con terceros.
 2. **Cambie su contraseña** periódicamente (cada 30 días recomendado).
@@ -184,7 +165,7 @@ graph LR
 4. **No deje la sesión abierta** sin supervisión.
 5. Si su cuenta es bloqueada por intentos fallidos, contacte al administrador.
 
-### 4.2 Uso del Sistema
+### 4.2 Uso del sistema
 
 1. **Use los navegadores soportados:** Google Chrome, Microsoft Edge o Mozilla Firefox (versiones actualizadas).
 2. **Mantenga conexión estable a internet** para el funcionamiento correcto del sistema.
@@ -192,7 +173,7 @@ graph LR
 4. **Verifique los datos** antes de confirmar operaciones críticas (ventas, compras).
 5. **No cierre el navegador** durante el proceso de registro de una venta o compra.
 
-### 4.3 Gestión de Contraseñas
+### 4.3 Gestión de contraseñas
 
 - La contraseña debe tener **mínimo 8 caracteres**.
 - Se recomienda combinar letras, números y caracteres especiales.
@@ -201,9 +182,9 @@ graph LR
 
 ---
 
-## 5. Instrucciones de Acceso y Navegación General
+## 5. Instrucciones de acceso y navegación general
 
-### 5.1 Requisitos Previos del Sistema
+### 5.1 Requisitos previos del sistema
 
 | Requisito | Especificación |
 |---|---|
@@ -213,15 +194,15 @@ graph LR
 | **URL de acceso (local)** | `http://localhost` (despliegue Docker) |
 | **URL de acceso (producción)** | `https://sofinventory-app.onrender.com` |
 
-### 5.2 Proceso de Inicio de Sesión
+### 5.2 Proceso de inicio de sesión
 
 #### Paso 1: Acceder al sistema
 
 Abra su navegador web e ingrese la URL de acceso al sistema SofInventory.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de pantalla de la página de inicio de sesión de SofInventory, mostrando el formulario con los campos de usuario y contraseña, el panel de branding izquierdo con el logo y la lista de beneficios.*
->![Pantalla_Inicio_Sesion](./docs/img/captura-pantalla-inicio-sesion.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de pantalla de la página de inicio de sesión de SofInventory, mostrando el formulario con los campos de usuario y contraseña, el panel de branding izquierdo con el logo y la lista de beneficios.*
+![Pantalla_Inicio_Sesion](./img/captura-pantalla-inicio-sesion.png)
 
 #### Paso 2: Ingresar credenciales
 
@@ -230,9 +211,9 @@ Abra su navegador web e ingrese la URL de acceso al sistema SofInventory.
 3. Puede hacer clic en el ícono del **ojo** (👁) para mostrar u ocultar la contraseña mientras la escribe.
 4. Haga clic en el botón **"Entrar al sistema"**.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del formulario de login con las credenciales ingresadas (usuario y contraseña con caracteres ocultos) y el botón "Entrar al sistema" visible.*
->![Credenciales_Ingresadas](./docs/img/captura-credenciales-ingresadas.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del formulario de login con las credenciales ingresadas (usuario y contraseña con caracteres ocultos) y el botón "Entrar al sistema" visible.*
+![Credenciales_Ingresadas](./img/captura-credenciales-ingresadas.png)
 
 #### Paso 3: Respuesta del sistema
 
@@ -240,13 +221,13 @@ Abra su navegador web e ingrese la URL de acceso al sistema SofInventory.
 - **Si las credenciales son incorrectas:** Aparecerá un mensaje de error en rojo: *"Credenciales incorrectas"*. El sistema mostrará los intentos restantes.
 - **Si la cuenta está bloqueada:** Aparecerá un mensaje: *"Cuenta bloqueada. Contacta con el administrador para desbloquearla."*
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del Dashboard principal que se muestra después del login exitoso, con las tarjetas KPI, gráficos y el menú lateral izquierdo.*
->![Dashboard_Principal](./docs/img/captura-dashboard-principal.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del Dashboard principal que se muestra después del login exitoso, con las tarjetas KPI, gráficos y el menú lateral izquierdo.*
+![Dashboard_Principal](./img/captura-dashboard-principal.png)
 
-### 5.3 Descripción de la Interfaz General
+### 5.3 Descripción de la interfaz general
 
-#### 5.3.1 Menú Lateral (Sidebar)
+#### 5.3.1 Menú lateral (Sidebar)
 
 El menú lateral izquierdo contiene los accesos directos a todos los módulos del sistema. Los módulos disponibles varían según el rol del usuario:
 
@@ -262,11 +243,11 @@ El menú lateral izquierdo contiene los accesos directos a todos los módulos de
 | 📦 | **Inventario** | Control de stock y almacenes | Todos |
 | 👤 | **Usuarios** | Gestión de usuarios del sistema | Solo Administrador |
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del menú lateral izquierdo desplegado, mostrando todos los módulos disponibles con sus íconos y nombres.*
->![Menu_Lateral](./docs/img/captura-menu-lateral.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del menú lateral izquierdo desplegado, mostrando todos los módulos disponibles con sus íconos y nombres.*
+![Menu_Lateral](./img/captura-menu-lateral.png)
 
-#### 5.3.2 Barra Superior (Header)
+#### 5.3.2 Barra superior (Header)
 
 La barra superior contiene:
 
@@ -274,11 +255,11 @@ La barra superior contiene:
 - **Botón de actualizar:** Permite recargar los datos del módulo actual.
 - **Información del usuario:** Muestra el nombre del usuario autenticado y su rol.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la barra superior de navegación mostrando el título de la página y el nombre del usuario autenticado.*
->![Barra_Superior](./docs/img/captura-barra-superior.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la barra superior de navegación mostrando el título de la página y el nombre del usuario autenticado.*
+![Barra_Superior](./img/captura-barra-superior.png)
 
-#### 5.3.3 Navegación entre Módulos
+#### 5.3.3 Navegación entre módulos
 
 Para acceder a cualquier módulo:
 
@@ -286,19 +267,19 @@ Para acceder a cualquier módulo:
 2. El sistema cargará la página correspondiente con la tabla de datos y las opciones disponibles.
 3. Puede volver al Dashboard en cualquier momento haciendo clic en **"Panel de Control"** en el menú.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura mostrando la transición entre módulos, con el menú lateral y el contenido del módulo seleccionado visible.*
->![Navegacion_Modulos](./docs/img/captura-navegacion-modulos.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura mostrando la transición entre módulos, con el menú lateral y el contenido del módulo seleccionado visible.*
+![Navegacion_Modulos](./img/captura-navegacion-modulos.png)
 
-### 5.4 Cierre de Sesión
+### 5.4 Cierre de sesión
 
 1. Haga clic en el ícono de **cerrar sesión** (🚪) en el menú lateral.
 2. El sistema cerrará su sesión y lo redirigirá a la pantalla de inicio de sesión.
 3. Si necesita acceder nuevamente, deberá ingresar sus credenciales.
 
-> ⚠️ **Importante:** Siempre cierre sesión al terminar de usar el sistema, especialmente en equipos compartidos, para proteger la información.
+⚠️ **Importante:** Siempre cierre sesión al terminar de usar el sistema, especialmente en equipos compartidos, para proteger la información.
 
-### 5.5 Mapa de Navegación del Sistema
+### 5.5 Mapa de navegación del sistema
 
 El siguiente mapa presenta, de forma general, cómo se organizan las pantallas del sistema a partir del inicio de sesión. El acceso a cada módulo depende del rol del usuario autenticado (ver matriz de permisos en la sección 3.3).
 
@@ -339,19 +320,17 @@ graph TD
     U --> U4["Desbloquear"]
 ```
 
-> **Cómo leer este mapa:** desde el Dashboard, el usuario accede a cualquier módulo habilitado para su rol a través del menú lateral. Dentro de cada módulo, las pestañas o botones internos (segundo nivel del mapa) permiten realizar las acciones específicas descritas en la sección 6 de este manual.
+**Cómo leer este mapa:** desde el Dashboard, el usuario accede a cualquier módulo habilitado para su rol a través del menú lateral. Dentro de cada módulo, las pestañas o botones internos (segundo nivel del mapa) permiten realizar las acciones específicas descritas en la sección 6 de este manual.
 
----
 
-## 6. Guía de Uso por Roles de Usuario
 
----
+## 6. Guía de uso por roles de usuario
 
 ### 6.1 Rol: Administrador
 
 El **Administrador** tiene acceso total al sistema. Puede gestionar usuarios, configurar el sistema, supervisar todas las operaciones y acceder a todos los módulos.
 
-#### 6.1.1 Panel de Control (Dashboard)
+#### 6.1.1 Panel de control (Dashboard)
 
 El Dashboard muestra una vista general del negocio con:
 
@@ -365,33 +344,33 @@ El Dashboard muestra una vista general del negocio con:
 | **Productos Más Vendidos** | Ranking de productos más vendidos |
 | **Acciones Rápidas** | Botones de acceso directo: Nueva Venta, Gestionar Productos, Gestionar Clientes, Ver Inventario |
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura completa del Dashboard del Administrador, mostrando todas las tarjetas KPI incluyendo las de compras, margen y proveedores que solo ve el admin.*
->![Dashboard_Administrador](./docs/img/captura-dashboard-administrador.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura completa del Dashboard del Administrador, mostrando todas las tarjetas KPI incluyendo las de compras, margen y proveedores que solo ve el admin.*
+![Dashboard_Administrador](./img/captura-dashboard-administrador.png)
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la sección de gráficos del Dashboard, mostrando las 4 gráficas: ventas mensuales, métodos de pago, top vendedores y estado del stock.*
->![Dashboard_Graficos](./docs/img/captura-dashboard-graficos.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la sección de gráficos del Dashboard, mostrando las 4 gráficas: ventas mensuales, métodos de pago, top vendedores y estado del stock.*
+![Dashboard_Graficos](./img/captura-dashboard-graficos.png)
 
-#### 6.1.2 Gestión de Usuarios
+#### 6.1.2 Gestión de usuarios
 
 Solo el Administrador puede acceder a este módulo (protegido por `adminGuard`).
 
-##### Listar Usuarios
+##### Listar usuarios
 
 1. Haga clic en **"Usuarios"** en el menú lateral.
 2. Se mostrará una tabla con todos los usuarios registrados: Usuario, Nombre Completo, Email, Rol, Estado y Fecha de Creación.
 3. Puede **buscar** un usuario específico escribiendo en el campo de búsqueda.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la página de Usuarios mostrando la tabla con la lista de usuarios registrados, el campo de búsqueda y el botón "+ Nuevo Usuario".*
->![Usuarios_Lista](./docs/img/captura-usuarios-lista.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la página de Usuarios mostrando la tabla con la lista de usuarios registrados, el campo de búsqueda y el botón "+ Nuevo Usuario".*
+![Usuarios_Lista](./img/captura-usuarios-lista.png)
 
-##### Crear un Nuevo Usuario
+##### Crear un nuevo usuario
 
 1. Haga clic en el botón **"+ Nuevo Usuario"**.
 2. Se abrirá un modal con el formulario de creación.
-3. Complete los campos obligatorios:
+3. Complete los campos obligatorios y luego haga clic en **"Guardar"** para crear el usuario.:
 
 | Campo | Descripción | Obligatorio |
 |---|---|---|
@@ -406,34 +385,33 @@ Solo el Administrador puede acceder a este módulo (protegido por `adminGuard`).
 | Fecha Creación | Fecha de ingreso al sistema | Sí |
 | Observaciones | Notas adicionales (opcional) | No |
 
-4. Haga clic en **"Guardar"** para crear el usuario.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de creación de usuario con todos los campos del formulario visibles y algunos datos de ejemplo ingresados.*
->![Usuarios_Crear](./docs/img/captura-usuarios-crear.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de creación de usuario con todos los campos del formulario visibles y algunos datos de ejemplo ingresados.*
+![Usuarios_Crear](./img/captura-usuarios-crear.png)
 
-##### Editar un Usuario
+##### Editar un usuario
 
 1. En la tabla de usuarios, haga clic en el ícono **✏️ (Editar)** de la fila del usuario a modificar.
 2. Se abrirá el modal con los datos actuales del usuario.
 3. Modifique los campos deseados. El campo **Contraseña** es opcional al editar; si lo deja vacío, la contraseña no se cambiará.
 4. Haga clic en **"Guardar"**.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de edición de usuario con los campos cargados con los datos existentes del usuario seleccionado.*
->![Usuarios_Editar](./docs/img/captura-usuarios-editar.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de edición de usuario con los campos cargados con los datos existentes del usuario seleccionado.*
+![Usuarios_Editar](./img/captura-usuarios-editar.png)
 
-##### Cambiar Estado de un Usuario
+##### Cambiar estado de un usuario
 
 1. En la tabla de usuarios, haga clic en el ícono **🔄 (Cambiar Estado)** de la fila del usuario.
 2. El sistema cambiará el estado del usuario de **activo** a **inactivo**, o viceversa.
 3. Un usuario inactivo no podrá iniciar sesión en el sistema.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la tabla de usuarios mostrando el botón de cambiar estado y el badge de estado del usuario.*
->![Usuarios_Cambiar_Estado](./docs/img/captura-usuarios-cambiar-estado.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la tabla de usuarios mostrando el botón de cambiar estado y el badge de estado del usuario.*
+![Usuarios_Cambiar_Estado](./img/captura-usuarios-cambiar-estado.png)
 
-##### Desbloquear un Usuario
+##### Desbloquear un usuario
 
 Si un usuario ha sido bloqueado por intentos fallidos de login (5 intentos):
 
@@ -441,35 +419,35 @@ Si un usuario ha sido bloqueado por intentos fallidos de login (5 intentos):
 2. Haga clic en el ícono **🔓 (Desbloquear)** que aparece junto a los demás botones de acción.
 3. El usuario podrá intentar iniciar sesión nuevamente.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la tabla de usuarios mostrando un usuario con el badge "Bloqueado" y el botón de desbloquear (candado abierto) visible.*
->![Usuarios_Desbloquear](./docs/img/captura-usuarios-desbloquear.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la tabla de usuarios mostrando un usuario con el badge "Bloqueado" y el botón de desbloquear (candado abierto) visible.*
+![Usuarios_Desbloquear](./img/captura-usuarios-desbloquear.png)
 
-##### Eliminar un Usuario
+##### Eliminar un usuario
 
 1. En la tabla de usuarios, haga clic en el ícono **🗑️ (Eliminar)** de la fila del usuario.
 2. Se mostrará una confirmación de eliminación.
 3. Confirme para eliminar permanentemente el usuario.
 
-> ⚠️ **Precaución:** Esta acción es irreversible. Asegúrese de seleccionar el usuario correcto antes de confirmar.
+⚠️ **Precaución:** Esta acción es irreversible. Asegúrese de seleccionar el usuario correcto antes de confirmar.
 
-#### 6.1.3 Gestión de Productos
+#### 6.1.3 Gestión de productos
 
-##### Listar Productos
+##### Listar productos
 
 1. Haga clic en **"Productos"** en el menú lateral.
 2. Se mostrará la tabla de productos con: SKU, Nombre, Marca, Categoría, Precio Venta, Stock y Estado.
 3. Use el **campo de búsqueda** para filtrar por nombre, SKU o marca.
 4. Use los **botones de filtro** para mostrar: Todos, Activos, Pendientes o Inactivos.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la página de Productos mostrando la tabla con productos, los filtros por estado (Todos/Activos/Pendientes/Inactivos) y el campo de búsqueda.*
->![Productos_Lista](./docs/img/captura-productos-lista.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la página de Productos mostrando la tabla con productos, los filtros por estado (Todos/Activos/Pendientes/Inactivos) y el campo de búsqueda.*
+![Productos_Lista](./img/captura-productos-lista.png)
 
-##### Crear un Nuevo Producto
+##### Crear un nuevo producto
 
 1. Haga clic en **"+ Nuevo Producto"**.
-2. Complete los campos del formulario:
+2. Complete los campos del formulario y luego haga clic en **"Guardar"**.
 
 | Campo | Descripción |
 |---|---|
@@ -484,13 +462,12 @@ Si un usuario ha sido bloqueado por intentos fallidos de login (5 intentos):
 | IVA (%) | Porcentaje de IVA (generalmente 19%) |
 | Stock Mínimo | Stock mínimo de seguridad |
 
-3. Haga clic en **"Guardar"**.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de creación de producto con todos los campos del formulario visibles.*
->![Productos_Crear](./docs/img/captura-productos-crear.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de creación de producto con todos los campos del formulario visibles.*
+![Productos_Crear](./img/captura-productos-crear.png)
 
-##### Cambiar Estado de un Producto
+##### Cambiar estado de un producto
 
 Los productos pueden tener tres estados:
 - **Pendiente:** Producto registrado pero no configurado para venta
@@ -500,7 +477,7 @@ Los productos pueden tener tres estados:
 1. Haga clic en el ícono **🔄 (Cambiar Estado)** del producto.
 2. El sistema rotará el estado del producto.
 
-#### 6.1.4 Gestión de Categorías
+#### 6.1.4 Gestión de categorías
 
 1. Haga clic en **"Categorías"** en el menú lateral.
 2. Se mostrará la lista de categorías existentes con su nombre, tipo de control y fecha de creación.
@@ -509,31 +486,31 @@ Los productos pueden tener tres estados:
    - **Tipo de Control:** General, Herramienta, Eléctrico, Líquido o Tornillería
    - **Descripción:** Descripción de la categoría (opcional)
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la página de Categorías mostrando la tabla de categorías y el botón de crear nueva categoría.*
->![Categorias_Lista](./docs/img/captura-categorias-lista.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la página de Categorías mostrando la tabla de categorías y el botón de crear nueva categoría.*
+![Categorias_Lista](./img/captura-categorias-lista.png)
 
-#### 6.1.5 Gestión de Proveedores
+#### 6.1.5 Gestión de proveedores
 
 1. Haga clic en **"Proveedores"** en el menú lateral.
 2. Se mostrará la tabla de proveedores con: Razón Social, Documento, Contacto, Email, Teléfono, Ciudad y Estado.
 3. Use el **campo de búsqueda** para filtrar por razón social, documento o email.
 4. Para crear un proveedor, haga clic en **"+ Nuevo Proveedor"** y complete los 14 campos del formulario.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la página de Proveedores mostrando la tabla con proveedores registrados y el campo de búsqueda.*
->![Proveedores_Lista](./docs/img/captura-proveedores-lista.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la página de Proveedores mostrando la tabla con proveedores registrados y el campo de búsqueda.*
+![Proveedores_Lista](./img/captura-proveedores-lista.png)
 
-#### 6.1.6 Gestión de Clientes
+#### 6.1.6 Gestión de clientes
 
 1. Haga clic en **"Clientes"** en el menú lateral.
 2. Se mostrará la tabla de clientes con: Nombre/Razón Social, Documento, Tipo, Categoría, Email, Teléfono, Ciudad y Estado.
 3. Los clientes pueden ser **Personas Naturales** o **Personas Jurídicas**, con campos diferentes según el tipo.
 4. Los clientes tienen 3 estados: Activo, Inactivo, Bloqueado (ciclo: activo → inactivo → bloqueado → activo).
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la página de Clientes mostrando la tabla con clientes registrados y los campos de búsqueda por nombre, documento, email, teléfono y ciudad.*
->![Clientes_Lista](./docs/img/captura-clientes-lista.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la página de Clientes mostrando la tabla con clientes registrados y los campos de búsqueda por nombre, documento, email, teléfono y ciudad.*
+![Clientes_Lista](./img/captura-clientes-lista.png)
 
 ---
 
@@ -541,7 +518,7 @@ Los productos pueden tener tres estados:
 
 El **Supervisor** tiene acceso a la gestión de productos, categorías, proveedores, clientes, ventas, compras e inventario. **No puede** gestionar usuarios.
 
-#### 6.2.1 Panel de Control del Supervisor
+#### 6.2.1 Panel de control del supervisor
 
 El Dashboard del Supervisor muestra las siguientes secciones:
 
@@ -563,11 +540,11 @@ El Dashboard del Supervisor muestra las siguientes secciones:
 | Margen del Mes | ❌ Oculto |
 | Proveedores Activos | ❌ Oculto |
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del Dashboard del Supervisor, mostrando las tarjetas KPI visibles para este rol (sin compras, margen ni proveedores).*
->![Dashboard_Supervisor](./docs/img/captura-dashboard-supervisor.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del Dashboard del Supervisor, mostrando las tarjetas KPI visibles para este rol (sin compras, margen ni proveedores).*
+![Dashboard_Supervisor](./img/captura-dashboard-supervisor.png)
 
-#### 6.2.2 Supervisión de Stock y Reportes
+#### 6.2.2 Supervisión de stock y reportes
 
 El Supervisor puede:
 
@@ -577,11 +554,11 @@ El Supervisor puede:
 4. **Registrar movimientos de inventario** (entradas, salidas, ajustes) en la pestaña "Movimiento".
 5. **Exportar inventario a CSV** para análisis externo.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la pestaña de Inventario → Stock, mostrando la tabla de productos con su stock actual, stock mínimo y estado.*
->![Inventario_Stock](./docs/img/captura-inventario-stock.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la pestaña de Inventario → Stock, mostrando la tabla de productos con su stock actual, stock mínimo y estado.*
+![Inventario_Stock](./img/captura-inventario-stock.png)
 
-#### 6.2.3 Auditoría de Catálogo y Movimientos
+#### 6.2.3 Auditoría de catálogo y movimientos
 
 El Supervisor puede:
 
@@ -598,7 +575,7 @@ El Supervisor puede:
 
 El **Vendedor** se enfoca en el módulo de **ventas**, la gestión de **clientes** y la consulta de **productos**.
 
-#### 6.3.1 Panel de Control del Vendedor
+#### 6.3.1 Panel de control del vendedor
 
 El Dashboard del Vendedor muestra las siguientes secciones:
 
@@ -621,13 +598,13 @@ El Dashboard del Vendedor muestra las siguientes secciones:
 | Proveedores Activos | ❌ Oculto |
 | Botón "Nueva Venta" | ❌ Oculto |
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del Dashboard del Vendedor, mostrando las tarjetas KPI y gráficos visibles para este rol (sin compras, margen, proveedores, top vendedores).*
->![Dashboard_Vendedor](./docs/img/captura-dashboard-vendedor.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del Dashboard del Vendedor, mostrando las tarjetas KPI y gráficos visibles para este rol (sin compras, margen, proveedores, top vendedores).*
+![Dashboard_Vendedor](./img/captura-dashboard-vendedor.png)
 
 #### 6.3.2 Módulo de Facturación/Ventas
 
-##### Registrar una Nueva Venta
+##### Registrar una nueva venta
 
 1. Haga clic en **"Ventas"** en el menú lateral.
 2. Haga clic en el botón **"+ Nueva Venta"**.
@@ -653,6 +630,7 @@ El Dashboard del Vendedor muestra las siguientes secciones:
 4. El sistema muestra el **stock disponible** del producto y calcula el **subtotal**.
 5. Puede agregar múltiples productos haciendo clic en "+ Agregar" nuevamente.
 6. Para eliminar una línea, haga clic en el ícono **🗑️ (basura)**.
+7. Haga clic en **"Registrar Venta"** para confirmar.
 
 **Totales (calculados automáticamente):**
 
@@ -663,34 +641,33 @@ El Dashboard del Vendedor muestra las siguientes secciones:
 | IVA Estimado | Cálculo automático del IVA (19% por defecto) |
 | **Total** | **Monto total a pagar** |
 
-4. Haga clic en **"Registrar Venta"** para confirmar.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de nueva venta con el formulario completo: datos generales (cliente, almacén, método de pago), tabla de productos con al menos un producto agregado, y los totales calculados (subtotal, IVA, total).*
->![Venta_Nueva](./docs/img/captura-venta-nueva.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de nueva venta con el formulario completo: datos generales (cliente, almacén, método de pago), tabla de productos con al menos un producto agregado, y los totales calculados (subtotal, IVA, total).*
+![Venta_Nueva](./img/captura-venta-nueva.png)
 
-##### Ver Detalle de una Venta
+##### Ver detalle de una venta
 
 1. En la tabla de ventas, haga clic en el ícono **👁 (Ver)** de la venta a consultar.
 2. Se abrirá un modal con el detalle completo: número de venta, cliente, método de pago, productos, cantidades, precios y totales.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de detalle de venta mostrando el número de venta, cliente, método de pago, tabla de productos con cantidades y precios, y los totales.*
->![Venta_Detalle](./docs/img/captura-venta-detalle.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de detalle de venta mostrando el número de venta, cliente, método de pago, tabla de productos con cantidades y precios, y los totales.*
+![Venta_Detalle](./img/captura-venta-detalle.png)
 
-##### Anular una Venta
+##### Anular una venta
 
 1. En la tabla de ventas, haga clic en el ícono **🚫 (Anular)** de la venta a anular.
 2. Confirme la anulación.
 3. El sistema restaurará automáticamente el stock descontado y registrará el movimiento de inventario correspondiente (DEVOLUCION_VENTA).
 
-> ⚠️ **Importante:** La anulación de ventas es irreversible. Asegúrese de que sea necesario antes de confirmar.
+⚠️ **Importante:** La anulación de ventas es irreversible. Asegúrese de que sea necesario antes de confirmar.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la tabla de ventas mostrando el botón de anular (🚫) en una venta activa y el badge de estado "completada".*
->![Venta_Anular](./docs/img/captura-venta-anular.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la tabla de ventas mostrando el botón de anular (🚫) en una venta activa y el badge de estado "completada".*
+![Venta_Anular](./img/captura-venta-anular.png)
 
-#### 6.3.3 Gestión de Clientes
+#### 6.3.3 Gestión de clientes
 
 El Vendedor puede crear y editar clientes:
 
@@ -703,11 +680,11 @@ El Vendedor puede crear y editar clientes:
 5. Seleccione la categoría: General, Minorista, Mayorista o Corporativo.
 6. Haga clic en **"Guardar"**.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de creación de cliente mostrando los campos para persona natural (nombres, apellidos) con los datos de contacto.*
->![Cliente_Crear](./docs/img/captura-cliente-crear.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de creación de cliente mostrando los campos para persona natural (nombres, apellidos) con los datos de contacto.*
+![Cliente_Crear](./img/captura-cliente-crear.png)
 
-#### 6.3.4 Consulta Rápida de Productos
+#### 6.3.4 Consulta rápida de productos
 
 El Vendedor puede **ver** la lista de productos (sin poder crear ni editar):
 
@@ -716,17 +693,17 @@ El Vendedor puede **ver** la lista de productos (sin poder crear ni editar):
 3. Filtre por estado: Todos, Activos, Pendientes o Inactivos.
 4. Consulte el precio de venta y el stock disponible de cada producto.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la página de Productos vista por el Vendedor, mostrando la tabla de productos con precios y stock (sin permisos para editar o crear nuevo producto).*
->![Productos_Vendedor](./docs/img/captura-productos-vendedor.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la página de Productos vista por el Vendedor, mostrando la tabla de productos con precios y stock (sin permisos para editar o crear nuevo producto).*
+![Productos_Vendedor](./img/captura-productos-vendedor.png)
 
 ---
 
-### 6.4 Rol: Operador de Bodega
+### 6.4 Rol: Operador de bodega
 
 El **Operador de Bodega** se enfoca en la recepción de compras, los movimientos de inventario y la gestión de almacenes.
 
-#### 6.4.1 Panel de Control del Operador de Bodega
+#### 6.4.1 Panel de control del operador de bodega
 
 El Dashboard del Operador de Bodega muestra las siguientes secciones:
 
@@ -748,11 +725,11 @@ El Dashboard del Operador de Bodega muestra las siguientes secciones:
 | Mejor Vendedor del Mes | ❌ Oculto |
 | Ventas Recientes | ❌ Oculto |
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del Dashboard del Operador de Bodega, mostrando las tarjetas KPI visibles para este rol (sin ventas del mes, clientes, ventas hoy, margen).*
->![Dashboard_Bodega](./docs/img/captura-dashboard-bodega.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del Dashboard del Operador de Bodega, mostrando las tarjetas KPI visibles para este rol (sin ventas del mes, clientes, ventas hoy, margen).*
+![Dashboard_Bodega](./img/captura-dashboard-bodega.png)
 
-#### 6.4.2 Recepción de Compras
+#### 6.4.2 Recepción de compras
 
 1. Haga clic en **"Compras"** en el menú lateral.
 2. Haga clic en **"+ Nueva Compra"**.
@@ -780,23 +757,23 @@ Al registrar una compra, el sistema automáticamente:
 - **Aumenta el stock** del producto en el almacén correspondiente.
 - **Registra un movimiento** de inventario de tipo `ENTRADA_COMPRA`.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de nueva compra con el formulario completo: datos del proveedor, factura, y tabla de productos con cantidades y costos.*
->![Compra_Nueva](./docs/img/captura-compra-nueva.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de nueva compra con el formulario completo: datos del proveedor, factura, y tabla de productos con cantidades y costos.*
+![Compra_Nueva](./img/captura-compra-nueva.png)
 
-#### 6.4.3 Gestión de Almacenes
+#### 6.4.3 Gestión de almacenes
 
-##### Listar Almacenes
+##### Listar almacenes
 
 1. Haga clic en **"Inventario"** en el menú lateral.
 2. Haga clic en la pestaña **"Almacenes"**.
 3. Se mostrará la tabla de almacenes con: Nombre, Código, Dirección y Acciones.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la pestaña "Almacenes" del módulo de Inventario, mostrando la tabla de almacenes registrados.*
->![Almacenes_Lista](./docs/img/captura-almacenes-lista.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la pestaña "Almacenes" del módulo de Inventario, mostrando la tabla de almacenes registrados.*
+![Almacenes_Lista](./img/captura-almacenes-lista.png)
 
-##### Crear un Nuevo Almacén
+##### Crear un nuevo almacén
 
 1. Haga clic en **"+ Nuevo Almacén"**.
 2. Complete los campos:
@@ -810,15 +787,15 @@ Al registrar una compra, el sistema automáticamente:
 
 3. Haga clic en **"Guardar"**.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de creación de almacén con los campos: nombre, código, dirección y notas.*
->![Almacen_Crear](./docs/img/captura-almacen-crear.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de creación de almacén con los campos: nombre, código, dirección y notas.*
+![Almacen_Crear](./img/captura-almacen-crear.png)
 
-#### 6.4.4 Movimientos de Inventario
+#### 6.4.4 Movimientos de inventario
 
 1. Haga clic en **"Inventario"** en el menú lateral.
 2. Haga clic en la pestaña **"Movimiento"**.
-3. Complete el formulario de movimiento:
+3. Complete el formulario de movimiento y luego haga clic en **"Registrar Movimiento"**.
 
 | Campo | Descripción |
 |---|---|
@@ -827,9 +804,8 @@ Al registrar una compra, el sistema automáticamente:
 | Cantidad | Cantidad de unidades |
 | Motivo | Descripción del motivo del movimiento |
 
-4. Haga clic en **"Registrar Movimiento"**.
 
-**Tipos de Movimiento:**
+**Tipos de movimiento:**
 
 | Tipo | Efecto en Stock | Uso |
 |---|---|---|
@@ -837,11 +813,11 @@ Al registrar una compra, el sistema automáticamente:
 | **Salida** | Disminuye el stock | Venta, traslado, merma |
 | **Ajuste** | Modifica el stock según la cantidad ingresada | Corrección de inventario |
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la pestaña "Movimiento" del módulo de Inventario con el formulario de movimiento de stock visible, mostrando los campos de producto, tipo, cantidad y motivo.*
->![Movimiento_Inventario](./docs/img/captura-movimiento-inventario.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la pestaña "Movimiento" del módulo de Inventario con el formulario de movimiento de stock visible, mostrando los campos de producto, tipo, cantidad y motivo.*
+![Movimiento_Inventario](./img/captura-movimiento-inventario.png)
 
-#### 6.4.5 Consulta de Almacenes y Stock
+#### 6.4.5 Consulta de almacenes y stock
 
 1. En la pestaña **"Stock"**, consulte el inventario completo con: SKU, Producto, Stock Actual, Stock Mínimo y Estado.
 2. Los estados de stock son:
@@ -851,15 +827,15 @@ Al registrar una compra, el sistema automáticamente:
    - **Alto:** Stock > 20
 3. Use las **estadísticas resumidas** en la parte superior para ver: Total Productos, En Stock, Stock Bajo y Almacenes.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura de la pestaña "Stock" del módulo de Inventario mostrando las estadísticas resumidas en la parte superior y la tabla de productos con su estado de stock.*
->![Inventario_Stock_Bodega](./docs/img/captura-inventario-stock-bodega.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura de la pestaña "Stock" del módulo de Inventario mostrando las estadísticas resumidas en la parte superior y la tabla de productos con su estado de stock.*
+![Inventario_Stock_Bodega](./img/captura-inventario-stock-bodega.png)
 
 ---
 
-## 7. Flujos de Trabajo Principales
+## 7. Flujos de trabajo principales
 
-### 7.1 Flujo: Registrar una Venta
+### 7.1 Flujo: Registrar una venta
 
 ```mermaid
 sequenceDiagram
@@ -899,13 +875,13 @@ sequenceDiagram
 10. Haga clic en **"Registrar Venta"**.
 11. El sistema descontará automáticamente el stock y registrará el movimiento de inventario.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del proceso completo de registro de venta, mostrando el modal con productos agregados, totales calculados y el botón "Registrar Venta" habilitado.*
->![Flujo_Venta_Pasos](./docs/img/captura-flujo-venta-pasos.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del proceso completo de registro de venta, mostrando el modal con productos agregados, totales calculados y el botón "Registrar Venta" habilitado.*
+![Flujo_Venta_Pasos](./img/captura-flujo-venta-pasos.png)
 
 ---
 
-### 7.2 Flujo: Cargar Inventario desde Bodega
+### 7.2 Flujo: Cargar inventario desde bodega
 
 ```mermaid
 sequenceDiagram
@@ -936,13 +912,13 @@ sequenceDiagram
 7. Haga clic en **"Registrar Movimiento"**.
 8. El sistema actualizará el stock del producto en la base de datos.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del formulario de movimiento de inventario con tipo "Entrada" seleccionado, producto elegido, cantidad ingresada y motivo escrito.*
->![Flujo_Movimiento_Entrada](./docs/img/captura-flujo-movimiento-entrada.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del formulario de movimiento de inventario con tipo "Entrada" seleccionado, producto elegido, cantidad ingresada y motivo escrito.*
+![Flujo_Movimiento_Entrada](./img/captura-flujo-movimiento-entrada.png)
 
 ---
 
-### 7.3 Flujo: Crear un Usuario
+### 7.3 Flujo: Crear un usuario
 
 ```mermaid
 sequenceDiagram
@@ -982,13 +958,13 @@ sequenceDiagram
 13. El sistema validará que el documento, email y username no existan previamente.
 14. Si la validación es exitosa, el usuario se creará con la contraseña hasheada.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de creación de usuario completamente diligenciado, con todos los campos obligatorios llenos, el rol seleccionado y el botón "Guardar" habilitado.*
->![Flujo_Crear_Usuario](./docs/img/captura-flujo-crear-usuario.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de creación de usuario completamente diligenciado, con todos los campos obligatorios llenos, el rol seleccionado y el botón "Guardar" habilitado.*
+![Flujo_Crear_Usuario](./img/captura-flujo-crear-usuario.png)
 
 ---
 
-### 7.4 Flujo: Registrar una Compra
+### 7.4 Flujo: Registrar una compra
 
 ```mermaid
 sequenceDiagram
@@ -1026,13 +1002,13 @@ sequenceDiagram
 10. Haga clic en **"Registrar Compra"**.
 11. El sistema aumentará automáticamente el stock y registrará el movimiento `ENTRADA_COMPRA`.
 
-> 📷 **[EVIDENCIA FOTOGRÁFICA]**
-> *Descripción: Captura del modal de nueva compra con el formulario completo: datos del proveedor, factura, y tabla de productos con al menos un producto, mostrando los totales calculados.*
->![Flujo_Compra_Pasos](./docs/img/captura-flujo-compra-pasos.png)
+📷 **[EVIDENCIA FOTOGRÁFICA]**
+*Descripción: Captura del modal de nueva compra con el formulario completo: datos del proveedor, factura, y tabla de productos con al menos un producto, mostrando los totales calculados.*
+![Flujo_Compra_Pasos](./img/captura-flujo-compra-pasos.png)
 
 ---
 
-### 7.5 Flujo: Gestionar Alertas de Stock
+### 7.5 Flujo: Gestionar alertas de stock
 
 ```mermaid
 graph TD
@@ -1054,12 +1030,12 @@ graph TD
 4. Revise el listado de productos cuyo stock actual es menor o igual al límite mínimo configurado.
 5. Identifique el producto a reponer y proceda a contactar al proveedor o generar una Nueva Compra para abastecer la bodega.
 
->📷 [EVIDENCIA FOTOGRÁFICA]
->*Descripción: Captura de la pestaña o sección de Alertas dentro del módulo de Inventario, donde se visualiza la lista de productos en estado crítico o con bajo stock y sus cantidades mínimas.*
->![alertas-stock-bajo.png](./docs/img/captura-alertas-stock-bajo.png)
+📷 [EVIDENCIA FOTOGRÁFICA]
+*Descripción: Captura de la pestaña o sección de Alertas dentro del módulo de Inventario, donde se visualiza la lista de productos en estado crítico o con bajo stock y sus cantidades mínimas.*
+![alertas-stock-bajo.png](./img/captura-alertas-stock-bajo.png)
 ---
 
-## 8. Glosario de Términos
+## 8. Glosario de términos
 
 | Término | Definición |
 |---|---|
@@ -1082,7 +1058,7 @@ graph TD
 
 ---
 
-## 9. Preguntas Frecuentes (FAQ)
+## 9. Preguntas frecuentes (FAQ)
 
 **1. ¿Qué debo hacer si no recuerdo mi contraseña de acceso?**
 > Contacte al usuario con perfil **Administrador** para que restablezca sus credenciales desde el módulo de administración de usuarios.
@@ -1110,7 +1086,7 @@ graph TD
 
 ---
 
-## 10. Solución de Problemas Comunes
+## 10. Solución de problemas comunes
 
 | Problema | Posible causa | Solución |
 |---|---|---|
@@ -1124,7 +1100,7 @@ graph TD
 
 ---
 
-## 11. Mesa de Ayuda y Soporte Técnico
+## 11. Mesa de ayuda y soporte técnico
 
 Si presenta inconsistencias en el sistema, errores de ejecución o requiere asistencia técnica adicional, puede comunicarse con el equipo de soporte a través de los siguientes canales:
 
@@ -1137,9 +1113,9 @@ Si presenta inconsistencias en el sistema, errores de ejecución o requiere asis
 
 ---
 
-## 12. Referencias y Fuentes Consultadas
+## 12. Referencias y fuentes consultadas
 
-### 12.1 Normas y Guías Oficiales de Documentación
+### 12.1 Normas y guías oficiales de documentación
 
 | Guía / Norma | Entidad / Fuente | Descripción |
 |---|---|---|
@@ -1149,15 +1125,8 @@ Si presenta inconsistencias en el sistema, errores de ejecución o requiere asis
 ---
 
 <div align="center">
-
----
-
-### 🛠️ **SofInventory ERP**
-*Sistema de Gestión de Inventarios y Ventas para Ferreterías*
-
-**© 2026 SofInventory.** Todos los derechos reservados.  
-Documento elaborado por el Equipo de Desarrollo de Software — SENA
-
----
-
+<h3>🛠️ SofInventory ERP</h3>
+<p>Sistema de Gestión de Inventarios y Ventas para Ferreterías</p>
+<p><strong>© 2026 SofInventory.</strong> Todos los derechos reservados.  
+Documento elaborado por el Equipo de Desarrollo de Software — SENA</p>
 </div>

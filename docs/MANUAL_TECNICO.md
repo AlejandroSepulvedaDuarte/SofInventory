@@ -1,28 +1,32 @@
-<div align="center">
 
-# MANUAL TÉCNICO Y ARQUITECTURA DEL SOFTWARE
 
-## Sistema de Información SofInventory
+<div style="text-align: center"  markdown="1">
 
----
-**Autores:** Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo <br>
-**Programa de Formación:** Tecnología en Análisis y Desarrollo de Software <br>
-**Cede:** Centro de Comercio Regional Antioquia–SENA <br>
-**Intructor:** José Ignacio Botero Osorio <br>
-**Fecha:** Julio 25 de 2026 <br>
-**Versión:** 1.0 
+![SofInventory Logo](assets/logo.png){ width="300" }
+# Manual Técnico y Arquitectura del Software
+**Sistema de Información SofInventory ERP**
+`Versión 1.0` | `Fecha: 26 de julio de 2026`
+
 </div>
 
 ---
 
-### Control de Versiones del Documento
+**Autores:** Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo <br>
+**Programa de Formación:** Tecnología en Análisis y Desarrollo de Software <br>
+**Cede:** Centro de Comercio Regional Antioquia–SENA <br>
+**Intructor:** José Ignacio Botero Osorio <br>
+**Fecha:** Julio 25 de 2026 
+
+---
+
+### Control de versiones del documento
 
 | Versión | Fecha | Autor(es) | Descripción del cambio |
 |---|---|---|---|
 | 1.0 | Julio 25 de 2026 | Alejandro Sepúlveda D. / Lucy Estefany Izquierdo | Versión inicial: introducción, arquitectura, diccionario de datos, despliegue con Docker, diagrama de componentes y conclusiones. |
 
 
-### Convenciones del Documento
+### Convenciones del documento
 
 | Símbolo | Significado |
 |---|---|
@@ -31,24 +35,6 @@
 | **Negrita** | Nombres de comandos, variables, botones o elementos clave. |
 | `Texto en código` | Nombres técnicos literales (comandos, variables de entorno, endpoints, nombres de tablas). |
 
----
-
-## Tabla de Contenido
-
-1. [Introducción](#1-introducción)
-2. [Prerrequisitos de Instalación del Sistema](#2-prerrequisitos-de-instalación-del-sistema)
-3. [Frameworks y Estándares de Desarrollo](#3-frameworks-y-estándares-de-desarrollo)
-4. [Diagrama y Descripción de Casos de Uso](#4-diagrama-y-descripción-de-casos-de-uso)
-5. [Modelo Entidad-Relación (Base de Datos)](#5-modelo-entidad-relación-base-de-datos)
-6. [Diccionario de Datos](#6-diccionario-de-datos)
-7. [Scripts de Instalación y Despliegue con Docker](#7-scripts-de-instalación-y-despliegue-con-docker)
-8. [Diagrama de Componentes](#8-diagrama-de-componentes)
-9. [Conclusiones](#9-conclusiones)
-10. [Glosario Técnico](#10-glosario-técnico)
-11. [Mesa de Ayuda y Soporte Técnico](#11-mesa-de-ayuda-y-soporte-técnico)
-12. [Referencias y Fuentes](#12-referencias-y-fuentes)
-
----
 
 ## 1. Introducción
 
@@ -70,7 +56,7 @@ Este manual cubre los siguientes aspectos del sistema:
 - Diagrama de componentes con orquestación Docker
 - Protocolo de pruebas de aceptación
 
-### 1.3 Descripción Técnica del Sistema
+### 1.3 Descripción técnica del sistema
 
 **SofInventory** es un sistema ERP (Enterprise Resource Planning) orientado a la gestión integral de inventarios y procesos comerciales para PYMES. El sistema permite administrar:
 
@@ -87,7 +73,7 @@ Este manual cubre los siguientes aspectos del sistema:
 
 La arquitectura es **desacoplada (decoupled)**: un backend Django REST Framework que expone una API, y un frontend Angular SPA que consume dicha API. Ambos están containerizados con Docker y orquestados mediante Docker Compose.
 
-### 1.4 Documentos de Referencia Integrados
+### 1.4 Documentos de referencia integrados
 
 Este manual ha sido elaborado consolidando la información de los siguientes documentos técnicos del proyecto:
 
@@ -100,9 +86,9 @@ Este manual ha sido elaborado consolidando la información de los siguientes doc
 
 ---
 
-## 2. Prerrequisitos de Instalación del Sistema
+## 2. Prerrequisitos de instalación del sistema
 
-### 2.1 Requisitos Mínimos de Hardware
+### 2.1 Requisitos mínimos de hardware
 
 | Componente | Mínimo | Recomendado |
 |---|---|---|
@@ -113,7 +99,7 @@ Este manual ha sido elaborado consolidando la información de los siguientes doc
 
 > **Nota importante:** Estos requisitos aplican al **equipo anfitrión (host)** donde se ejecutarán los contenedores Docker. Las dependencias de Python, Node.js y PostgreSQL se ejecutan **dentro** de los contenedores, por lo que no se requiere instalarlas en el sistema operativo del host.
 
-### 2.2 Requisitos de Software en el Equipo Host
+### 2.2 Requisitos de software en el equipo Host
 
 | Herramienta | Versión Requerida | Propósito | ¿Obligatorio? |
 |---|---|---|---|
@@ -123,7 +109,7 @@ Este manual ha sido elaborado consolidando la información de los siguientes doc
 
 > **No es necesario instalar** Python, Node.js, PostgreSQL, npm, entornos virtuales de Python, ni configurar bases de datos manualmente. Todo se ejecuta dentro de los contenedores Docker, lo que elimina problemas de compatibilidad entre versiones y garantiza un entorno idéntico en cualquier máquina.
 
-### 2.3 Herramientas Recomendadas (Opcional)
+### 2.3 Herramientas recomendadas (Opcional)
 
 | Herramienta | Propósito |
 |---|---|
@@ -132,7 +118,7 @@ Este manual ha sido elaborado consolidando la información de los siguientes doc
 | **pgAdmin 4 / DBeaver** | Administración de PostgreSQL (solo si se necesita inspeccionar la BD directamente) |
 | **Docker Desktop** | Panel visual de contenedores, logs y redes |
 
-### 2.4 Verificación de Prerrequisitos
+### 2.4 Verificación de prerrequisitos
 
 Antes de proceder con la instalación, verifique que Docker y Git estén correctamente instalados:
 
@@ -152,9 +138,9 @@ git --version
 
 ---
 
-## 3. Frameworks y Estándares de Desarrollo
+## 3. Frameworks y estándares de desarrollo
 
-### 3.1 Stack Tecnológico Completo
+### 3.1 Stack tecnológico completo
 
 ```mermaid
 block-beta
@@ -201,7 +187,7 @@ block-beta
 | **Servidor web (frontend)** | Nginx | Alpine | Servidor de archivos estáticos + proxy reverso |
 | **Control de versiones** | Git + GitHub | — | Repositorio remoto privado |
 
-### 3.2 Patrón de Arquitectura: MVC con API REST Desacoplada
+### 3.2 Patrón de arquitectura: MVC con API REST desacoplada
 
 El sistema implementa el patrón **Modelo-Vista-Controlador (MVC)** adaptado a una arquitectura **cliente-servidor desacoplada** mediante API REST:
 
@@ -213,7 +199,7 @@ El sistema implementa el patrón **Modelo-Vista-Controlador (MVC)** adaptado a u
 
 > **Justificación:** El patrón MVC, adaptado a esta arquitectura desacoplada, permite escalar el frontend y el backend por separado, y habilita que otros clientes (app móvil, sistema externo) reutilicen la misma API REST sin duplicar lógica de negocio.
 
-### 3.3 Aplicaciones (Apps) del Backend
+### 3.3 Aplicaciones (Apps) del backend
 
 El backend Django se organiza en **8 aplicaciones modulares**, cada una responsable de un dominio del negocio:
 
@@ -228,11 +214,11 @@ El backend Django se organiza en **8 aplicaciones modulares**, cada una responsa
 | 7 | `inventario` | Almacen, StockAlmacen, MovimientoInventario, Traslado, TrasladoDetalle, ConfiguracionRangosStock | `almacenes`, `stock_almacen`, `movimientos_inventario`, `traslados`, `traslados_detalle`, `configuracion_rangos_stock` | Control de inventario, almacenes y movimientos |
 | 8 | `dashboard` | — | — | Agrega datos de los módulos para indicadores |
 
-### 3.4 Variables de Entorno
+### 3.4 Variables de entorno
 
 El sistema utiliza archivos `.env` para la configuración de cada componente. Las variables están documentadas en la sección de despliegue. Los archivos `.env` **nunca se suben al repositorio** (excluidos por `.gitignore`).
 
-> 📄 **Documentación Complementaria:** Para profundizar en el análisis arquitectónico, los principios de diseño aplicados y la justificación del patrón seleccionado para **SofInventory**, consulte el documento anexo [Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf](./docs/Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf) o diríjase a la sección de [13.2 Documentos Internos y externos del Proyecto](#122-documentos-internos-y-externos-del-proyecto).
+> 📄 **Documentación Complementaria:** Para profundizar en el análisis arquitectónico, los principios de diseño aplicados y la justificación del patrón seleccionado para **SofInventory**, consulte el documento anexo [Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf](./Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf) o diríjase a la sección de [13.2 Documentos Internos y externos del Proyecto](#122-documentos-internos-y-externos-del-proyecto).
 
 ### 3.5 Principales Endpoints de la API REST
 
@@ -262,15 +248,15 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 
 ---
 
-## 4. Diagrama y Descripción de Casos de Uso
+## 4. Diagrama y descripción de casos de uso
 
-### 4.1 Diagrama de Casos de Uso General
+### 4.1 Diagrama de casos de uso general
 
-![Diagrama General de Casos de Uso - SofInventory](./docs/img/diagrama-casos-de-uso.png)
+![Diagrama general de casos de uso - SofInventory](./img/diagrama-casos-de-uso.png)
 
-### 4.2 Descripción de Casos de Uso Principales
+### 4.2 Descripción de casos de uso principales
 
-#### CU-001: Iniciar Sesión
+#### CU-001: Iniciar sesión
 
 | Campo | Descripción |
 |---|---|
@@ -283,7 +269,7 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **Flujo de Excepción** | Si las credenciales son incorrectas: se registra el intento fallido; tras 3 intentos fallidos consecutivos, la cuenta se bloquea automáticamente |
 | **Postcondiciones** | El usuario queda autenticado con un token activo; se inicia sesión en la tabla `sesiones_api` |
 
-#### CU-002: Gestionar Usuarios
+#### CU-002: Gestionar usuarios
 
 | Campo | Descripción |
 |---|---|
@@ -296,7 +282,7 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **Flujo de Excepción** | Si el número de documento o email ya existe: el sistema muestra error de duplicado |
 | **Postcondiciones** | La tabla `usuarios` se actualiza con la información del nuevo o modificado usuario |
 
-#### CU-003: Registrar Productos
+#### CU-003: Registrar productos
 
 | Campo | Descripción |
 |---|---|
@@ -309,7 +295,7 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **Flujo de Excepción** | Si el SKU ya existe: el sistema muestra error de duplicado |
 | **Postcondiciones** | El producto queda disponible para compras, ventas y movimiento de inventario |
 
-#### CU-004: Registrar Compras
+#### CU-004: Registrar compras
 
 | Campo | Descripción |
 |---|---|
@@ -321,7 +307,7 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **Flujo de Excepción** | Si la factura ya existe: el sistema muestra error de duplicado |
 | **Postcondiciones** | Las tablas `compras`, `detalle_compras`, `stock_almacen` y `movimientos_inventario` se actualizan |
 
-#### CU-005: Registrar Ventas
+#### CU-005: Registrar ventas
 
 | Campo | Descripción |
 |---|---|
@@ -334,7 +320,7 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **Flujo de Excepción** | Si el stock es insuficiente: el sistema muestra alerta y previene la venta |
 | **Postcondiciones** | Las tablas `ventas`, `detalle_ventas`, `stock_almacen` y `movimientos_inventario` se actualizan; se genera el comprobante de venta |
 
-#### CU-006: Consultar Inventario
+#### CU-006: Consultar inventario
 
 | Campo | Descripción |
 |---|---|
@@ -345,7 +331,7 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **Flujo Principal** | 1. El usuario accede al módulo de inventario → 2. Consulta el stock por almacén → 3. Visualiza movimientos de inventario (entradas, salidas, ajustes, traslados) → 4. Puede filtrar por producto, tipo de movimiento o rango de fechas → 5. El sistema muestra alertas de stock bajo según la configuración de rangos |
 | **Postcondiciones** | Se obtiene información actualizada del inventario sin modificaciones |
 
-#### CU-007: Gestionar Almacenes
+#### CU-007: Gestionar almacenes
 
 | Campo | Descripción |
 |---|---|
@@ -356,12 +342,12 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **Flujo Principal** | 1. El usuario accede al módulo de almacenes → 2. Crea o edita almacenes con: nombre, código, dirección, responsable, teléfono, capacidad, estado → 3. El sistema valida unicidad del código → 4. Se guarda el almacén → 5. Se actualiza la tabla `almacenes` |
 | **Postcondiciones** | El almacén queda disponible para recibir stock y registrar movimientos |
 
-> 📌 **Nota:** Para consultar los diagramas de casos de uso extendidos, plantillas por módulo y la documentación funcional detallada del sistema, puede acceder al anexo [Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf](./docs/Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf) o ir a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
+📌 **Nota:** Para consultar los diagramas de casos de uso extendidos, plantillas por módulo y la documentación funcional detallada del sistema, puede acceder al anexo [Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf](./Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf) o ir a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
 ---
 
 ## 5. Modelo Entidad-Relación (Base de Datos)
 
-### 5.1 Descripción General del Modelo
+### 5.1 Descripción general del modelo
 
 El modelo entidad-relación de SofInventory está diseñado bajo los principios de:
 
@@ -370,12 +356,12 @@ El modelo entidad-relación de SofInventory está diseñado bajo los principios 
 - **Restricciones de dominio:** Validaciones a nivel de base de datos
 - **Índices optimizados:** Para consultas frecuentes y relaciones principales
 
-### 5.2 Estructura del Modelo por Módulos
+### 5.2 Estructura del modelo por módulos
 Figura 1.
 Diagrama MER
-![Modelo Entidad-Relación SofInventory](docs/img/MER.png)
+![Modelo Entidad-Relación SofInventory](./img/MER.png)
 
-### 5.3 Relaciones Principales del Modelo
+### 5.3 Relaciones principales del modelo
 
 | Relación | Cardinalidad | Descripción |
 |---|---|---|
@@ -395,10 +381,10 @@ Diagrama MER
 | Traslado → TrasladoDetalle | 1:N | Un traslado contiene múltiples productos |
 | Usuario → SesionAPI | 1:N | Un usuario genera múltiples sesiones |
 
-> 📊 **Especificación de Base de Datos:** Para revisar el diagrama completo generado desde la base de datos y la definición detallada de tablas, campos y restricciones, consulte el [Modelo Entidad-Relación en PDF](./docs/Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf) y el [Diccionario de Datos en Excel](https://drive.google.com/file/d/1UzqMEZIm0xpVfJMkq-4Cwno6ymZs9C7R/view?usp=sharing), ambos referenciados en la sección [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
+📊 **Especificación de Base de Datos:** Para revisar el diagrama completo generado desde la base de datos y la definición detallada de tablas, campos y restricciones, consulte el [Modelo Entidad-Relación en PDF](./Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf) y el [Diccionario de Datos en Excel](https://drive.google.com/file/d/1UzqMEZIm0xpVfJMkq-4Cwno6ymZs9C7R/view?usp=sharing), ambos referenciados en la sección [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
 ---
 
-## 6. Diccionario de Datos
+## 6. Diccionario de datos
 
 ### 6.1 Tabla: `usuarios`
 
@@ -660,9 +646,9 @@ Diagrama MER
 
 ---
 
-## 7. Scripts de Instalación y Despliegue con Docker
+## 7. Scripts de instalación y despliegue con Docker
 
-### 7.1 Obtención del Código Fuente
+### 7.1 Obtención del código fuente
 
 ```bash
 # Clonar el repositorio del proyecto
@@ -675,7 +661,7 @@ cd SofInventory
 code .
 ```
 
-### 7.2 Estructura del Proyecto
+### 7.2 Estructura del proyecto
 
 ```
 SofInventory/
@@ -718,7 +704,7 @@ SofInventory/
 └── docs/                       # Documentación técnica del proyecto
 ```
 
-### 7.3 Configuración de Variables de Entorno
+### 7.3 Configuración de variables de entorno
 
 #### 7.3.1 Archivo `backend/.env`
 
@@ -757,9 +743,9 @@ INITIAL_ADMIN_TIPO_DOCUMENTO=CC
 INITIAL_ADMIN_NUMERO_DOCUMENTO=1000000000
 ```
 
-> **IMPORTANTE:** El valor de `DB_HOST` debe ser `db` (el nombre del servicio en `docker-compose.yml`), NO `localhost`. Los contenedores se comunican entre sí a través de la red Docker interna usando los nombres de servicio.
+**IMPORTANTE:** El valor de `DB_HOST` debe ser `db` (el nombre del servicio en `docker-compose.yml`), NO `localhost`. Los contenedores se comunican entre sí a través de la red Docker interna usando los nombres de servicio.
 
-> ⚠️ **ADVERTENCIA DE SEGURIDAD:** Los valores de `SECRET_KEY`, `DB_PASSWORD` e `INITIAL_ADMIN_PASSWORD` mostrados arriba corresponden únicamente al entorno de despliegue de prueba/ejemplo de este proyecto formativo. **Una vez ingrese al sistema con el usuario administrador inicial, debe cambiar inmediatamente la contraseña** desde el módulo de Usuarios, por motivos de seguridad. Para cualquier despliegue distinto al de prueba, genere una `SECRET_KEY` nueva y una `DB_PASSWORD` propia — nunca reutilice los valores de ejemplo de este manual.
+⚠️ **ADVERTENCIA DE SEGURIDAD:** Los valores de `SECRET_KEY`, `DB_PASSWORD` e `INITIAL_ADMIN_PASSWORD` mostrados arriba corresponden únicamente al entorno de despliegue de prueba/ejemplo de este proyecto formativo. Una vez ingrese al sistema con el usuario administrador inicial, debe cambiar inmediatamente la contraseña desde el módulo de Usuarios, por motivos de seguridad. Para cualquier despliegue distinto al de prueba, genere una `SECRET_KEY` nueva y una `DB_PASSWORD` propia — nunca reutilice los valores de ejemplo de este manual.
 
 **Descripción de las variables principales:**
 
@@ -776,7 +762,7 @@ INITIAL_ADMIN_NUMERO_DOCUMENTO=1000000000
 | `CORS_ALLOW_ALL_ORIGINS` | No | Permite solicitudes desde cualquier origen. Se recomienda restringir en un entorno de producción real. |
 | `INITIAL_ADMIN_USERNAME` / `PASSWORD` / `EMAIL` | Sí | Credenciales del usuario administrador que se crea automáticamente al iniciar el contenedor backend por primera vez. |
 
-#### 7.3.2 Variables del Frontend
+#### 7.3.2 Variables del frontend
 
 El frontend **NO requiere** un archivo `.env` manual para el despliegue con Docker. El script `docker-entrypoint.sh` del frontend genera automáticamente el archivo `env.js` en tiempo de ejecución utilizando la variable `BACKEND_URL` definida en `docker-compose.yml`.
 
@@ -791,7 +777,7 @@ docker info
 # Si muestra información del daemon, Docker está funcionando correctamente
 ```
 
-#### 7.4.2 Construir y Levantar los Servicios
+#### 7.4.2 Construir y levantar los servicios
 
 ```bash
 # Construir imágenes y levantar todos los servicios en segundo plano
@@ -808,7 +794,7 @@ Este comando realiza las siguientes acciones:
 6. **Crea el volumen persistente** `sofinventory_postgres_data` para la base de datos
 7. **Ejecuta los entrypoints** que aplican migraciones automáticas y cargan datos iniciales
 
-#### 7.4.3 Verificar el Estado de los Contenedores
+#### 7.4.3 Verificar el estado de los contenedores
 
 ```bash
 # Verificar estado de todos los servicios
@@ -824,7 +810,7 @@ sofinventory_backend    Up              0.0.0.0:8000->8000/tcp
 sofinventory_frontend   Up              0.0.0.0:80->80/tcp
 ```
 
-#### 7.4.4 Verificar los Logs
+#### 7.4.4 Verificar los logs
 
 ```bash
 # Ver logs de todos los servicios en tiempo real
@@ -839,7 +825,7 @@ docker compose logs db
 docker compose logs --tail 50 backend
 ```
 
-#### 7.4.5 Scripts de Migración de Django
+#### 7.4.5 Scripts de migración de Django
 
 Las migraciones se ejecutan automáticamente al iniciar el contenedor backend. Si necesita ejecutarlas manualmente:
 
@@ -873,7 +859,7 @@ print(f'Stocks: {StockAlmacen.objects.count()}')
 "
 ```
 
-### 7.5 Verificación de Funcionamiento (Protocolo de Aceptación)
+### 7.5 Verificación de funcionamiento (Protocolo de Aceptación)
 
 Una vez que los tres contenedores estén activos, ejecute el siguiente protocolo:
 
@@ -918,7 +904,7 @@ Resultado esperado: Se carga la pantalla de inicio de sesión de SofInventory.
 
 Figura 2.
 Pantalla de inicio de sesión 
-![Modelo Entidad-Relación SofInventory](docs/img/Login.png)
+![Modelo Entidad-Relación SofInventory](./img/Login.png)
 
 Si las credenciales son correctas, el usuario será redirigido al Dashboard principal.
 
@@ -934,8 +920,8 @@ Si las credenciales son correctas, el usuario será redirigido al Dashboard prin
 
 Figura 3.
 Dashboard principal del sistema 
-![Modelo Entidad-Relación SofInventory](docs/img/Dashboard.png)
-### 7.6 Comandos Útiles de Docker Compose
+![Modelo Entidad-Relación SofInventory](./img/Dashboard.png)
+### 7.6 Comandos útiles de Docker Compose
 
 | Comando | Descripción |
 |---|---|
@@ -949,7 +935,7 @@ Dashboard principal del sistema
 | `docker compose exec backend bash` | Acceder al terminal del contenedor backend |
 | `docker system prune` | Limpiar imágenes y contenedores no utilizados |
 
-### 7.7 Solución de Problemas Comunes
+### 7.7 Solución de problemas comunes
 
 | Problema | Causa Probable | Solución |
 |---|---|---|
@@ -969,7 +955,7 @@ Dashboard principal del sistema
 | No se crea el usuario administrador inicial | Las variables `INITIAL_ADMIN_*` no están definidas en `backend/.env`, o el usuario ya existía de un arranque previo | Verifique el archivo `.env`; el script de datos semilla (`seed_data`) no sobrescribe un usuario ya existente |
 | La cuenta de administrador queda bloqueada en pruebas | Se superaron los 5 intentos fallidos de inicio de sesión configurados en `IntentoFallidoLogin` | Desbloquee el usuario directamente en la base de datos o desde otro usuario con rol Administrador |
 
-### 7.8 Despliegue en Producción (Cloud)
+### 7.8 Despliegue en producción (Cloud)
 
 El sistema está desplegado en las siguiente plataforma:
 
@@ -979,12 +965,12 @@ El sistema está desplegado en las siguiente plataforma:
 
 Esta Plataforma utiliza `Dockerfile` raíz (multi-stage) que compila el frontend Angular y lo sirve desde Django con Whitenoise.
 
-> 🚀 **Manual Completo de Despliegue:** Para consultar la guía ilustrada paso a paso de instalación, la configuración de variables de entorno, la inicialización del contenedor de PostgreSQL y los comandos de troubleshooting, consulte el documento anexo [Informe_Tecnico_Despliegue_SofInventory_v2.pdf](./docs/Informe_Tecnico_Despliegue_SofInventory_v2.pdf) o diríjase a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
+🚀 **Manual Completo de Despliegue:** Para consultar la guía ilustrada paso a paso de instalación, la configuración de variables de entorno, la inicialización del contenedor de PostgreSQL y los comandos de troubleshooting, consulte el documento anexo [Informe_Tecnico_Despliegue_SofInventory_v2.pdf](./Informe_Tecnico_Despliegue_SofInventory_v2.pdf) o diríjase a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
 ---
 
-## 8. Diagrama de Componentes
+## 8. Diagrama de componentes
 
-### 8.1 Arquitectura General del Sistema
+### 8.1 Arquitectura general del sistema
 
 ```mermaid
 graph TB
@@ -1026,7 +1012,7 @@ graph TB
     DjangoApp --> StaticFiles
 ```
 
-### 8.2 Flujo de Comunicación entre Contenedores
+### 8.2 Flujo de comunicación entre contenedores
 
 ```mermaid
 sequenceDiagram
@@ -1054,7 +1040,7 @@ sequenceDiagram
     N-->>U: Respuesta JSON
 ```
 
-### 8.3 Vista de Componentes — Patrón MVC
+### 8.3 Vista de componentes — patrón MVC
 
 ```mermaid
 graph LR
@@ -1110,7 +1096,7 @@ graph LR
     C8 <--> M8
 ```
 
-### 8.4 Vista de Despliegue — Docker Compose
+### 8.4 Vista de despliegue — Docker Compose
 
 ```mermaid
 graph TB
@@ -1138,7 +1124,7 @@ graph TB
 
 La arquitectura modular de SofInventory, basada en 8 aplicaciones Django independientes y un frontend Angular desacoplado, facilita significativamente el mantenimiento del sistema. Cada módulo puede ser modificado, actualizado o extendido sin afectar a los demás, siempre que se respeten los contratos de la API REST. El uso de serializers proporciona una capa de transformación de datos que protege la API de cambios internos en los modelos.
 
-### 9.2 Aislamiento de Entorno mediante Docker
+### 9.2 Aislamiento de entorno mediante Docker
 
 La adopción de Docker como plataforma de despliegue elimina los problemas de compatibilidad entre versiones de Python, Node.js y PostgreSQL. El sistema se ejecuta de forma idéntica en Windows, macOS y Linux, ya que todas las dependencias están empaquetadas dentro de los contenedores. Los Dockerfiles multi-stage reducen el tamaño de las imágenes finales: las herramientas de compilación (Node.js, npm) se descartan después de la fase de build, y solo se conservan los archivos estáticos servidos por Nginx en el frontend, y las dependencias mínimas de Python en el backend.
 
@@ -1156,7 +1142,7 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 
 ---
 
-## 10. Glosario Técnico
+## 10. Glosario técnico
 
 | Término | Definición |
 |---|---|
@@ -1181,9 +1167,9 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 
 ---
 
-## 11. Mesa de Ayuda y Soporte Técnico
+## 11. Mesa de ayuda y soporte técnico
 
-### 11.1 Canales de Escalamiento
+### 11.1 Canales de escalamiento
 
 | Canal | Detalle |
 |---|---|
@@ -1192,7 +1178,7 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 | **Responsables del mantenimiento** | Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo |
 | **Horario de atención** | Lunes a Viernes de 8:00 a.m. a 6:00 p.m. |
 
-### 11.2 Tiempos de Respuesta según Severidad
+### 11.2 Tiempos de respuesta según severidad
 
 Estos tiempos corresponden a los definidos en el **Plan de Mantenimiento y Soporte del Software** (sección 12.2) y se reutilizan aquí como referencia rápida para el equipo técnico:
 
@@ -1203,13 +1189,13 @@ Estos tiempos corresponden a los definidos en el **Plan de Mantenimiento y Sopor
 | **Media** | Un defecto afecta una validación o regla de negocio puntual, sin bloquear la operación general | ≤ 24 horas | ≤ 1 semana |
 | **Baja** | Errores cosméticos, de texto o de estilo que no afectan la funcionalidad | ≤ 3 días | Próxima iteración |
 
-> **Antes de escalar un incidente:** revise primero la sección 7.7 (Solución de Problemas Comunes) de este manual; la mayoría de los errores de despliegue, autenticación y base de datos allí documentados tienen solución inmediata sin necesidad de abrir un nuevo issue.
+**Antes de escalar un incidente:** revise primero la sección 7.7 (Solución de Problemas Comunes) de este manual; la mayoría de los errores de despliegue, autenticación y base de datos allí documentados tienen solución inmediata sin necesidad de abrir un nuevo issue.
 
 ---
 
-## 12. Referencias y Fuentes
+## 12. Referencias y fuentes
 
-### 12.1 Documentación Oficial
+### 12.1 Documentación oficial
 
 | Tecnología | URL |
 |---|---|
@@ -1224,22 +1210,22 @@ Estos tiempos corresponden a los definidos en el **Plan de Mantenimiento y Sopor
 | Node.js | https://nodejs.org/ |
 | Python | https://docs.python.org/3/ |
 
-### 12.2 Documentos Internos y externos del Proyecto
+### 12.2 Documentos internos y externos del proyecto
 
 Para consultar la información complementaria y profundizar en el diseño, arquitectura y base de datos del proyecto **SofInventory**, se ponen a disposición los siguientes anexos:
 
 | Documento / Recurso | Descripción | Enlace de Acceso |
 | :--- | :--- | :--- |
-| **Modelo Entidad-Relación PostgreSQL** | Diagrama detallado de la base de datos generado desde PostgreSQL | [🖼️ Ver MER](./docs/Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf) |
-| **Arquitectura y Patrón de Diseño** | Documentación de la arquitectura de software y el patrón seleccionado | [📄 Ver Arquitectura y diseño](./docs/Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf) |
+| **Modelo Entidad-Relación PostgreSQL** | Diagrama detallado de la base de datos generado desde PostgreSQL | [🖼️ Ver MER](./Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf) |
+| **Arquitectura y Patrón de Diseño** | Documentación de la arquitectura de software y el patrón seleccionado | [📄 Ver Arquitectura y diseño](./Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf) |
 | **Diccionario de Datos** | Especificación técnica de tablas, campos, tipos y restricciones | [📊 Ver Excel](https://drive.google.com/file/d/1UzqMEZIm0xpVfJMkq-4Cwno6ymZs9C7R/view?usp=sharing) |
-| **Manual de Despliegue** | Guía paso a paso para la instalación y despliegue del software | [📕 Ver Manual de despliegue](./docs/Informe_Tecnico_Despliegue_SofInventory_v2.pdf) |
-| **Casos de Uso Extendidos** | Diagramas y descripciones detalladas por módulo del sistema | [📄 Ver Diagrama y plantillas por casos de uso](./docs/Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf) |
-| **Plan de Mantenimiento y Soporte del Software** | Plan de mantenimiento preventivo y correctivo con base en ISO/IEC 14764, incluyendo tiempos de respuesta por severidad | [📄 Ver Plan de Mantenimiento](./docs/Plan_de_Mantenimiento_y_Soporte_del_Software.pdf) |
-| **Plan de Migración y Respaldo de Datos** | Plan de copias de seguridad, restauración y gestión del riesgo con base en ISO/IEC 27001 | [📄 Ver Plan de Migración y Respaldo](./docs/Plan_Migracion_Respaldo_SofInventory.pdf) |
+| **Manual de Despliegue** | Guía paso a paso para la instalación y despliegue del software | [📕 Ver Manual de despliegue](./Informe_Tecnico_Despliegue_SofInventory_v2.pdf) |
+| **Casos de Uso Extendidos** | Diagramas y descripciones detalladas por módulo del sistema | [📄 Ver Diagrama y plantillas por casos de uso](./Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf) |
+| **Plan de Mantenimiento y Soporte del Software** | Plan de mantenimiento preventivo y correctivo con base en ISO/IEC 14764, incluyendo tiempos de respuesta por severidad | [📄 Ver Plan de Mantenimiento](./Plan_de_Mantenimiento_y_Soporte_del_Software.pdf)  |
+| **Plan de Migración y Respaldo de Datos** | Plan de copias de seguridad, restauración y gestión del riesgo con base en ISO/IEC 27001 | [Ver Plan de Migración y Respaldo](./Plan_Migracion_Respaldo_SofInventory.pdf) |
 | **Repositorio GitHub** | Código fuente del proyecto y configuración de contenedores Docker | [💻 Ver Repositorio](https://github.com/AlejandroSepulvedaDuarte/SofInventory.git) |
 
-### 12.3 Guías de Referencia
+### 12.3 Guías de referencia
 
 | Guía | Fuente |
 |---|---|
@@ -1251,16 +1237,9 @@ Para consultar la información complementaria y profundizar en el diseño, arqui
 ---
 
 <div align="center">
-
----
-
-### 🛠️ **SofInventory ERP**
-*Sistema de Gestión de Inventarios y Ventas para Ferreterías*
-
-**© 2026 SofInventory.** Todos los derechos reservados.  
-Documento elaborado por el Equipo de Desarrollo de Software — SENA
-
----
-
+<h3>🛠️ SofInventory ERP</h3>
+<p>Sistema de Gestión de Inventarios y Ventas para Ferreterías</p>
+<p><strong>© 2026 SofInventory.</strong> Todos los derechos reservados.  
+Documento elaborado por el Equipo de Desarrollo de Software — SENA</p>
 </div>
 
