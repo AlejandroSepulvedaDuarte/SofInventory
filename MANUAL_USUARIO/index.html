@@ -1,0 +1,3228 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Manuales técnico y de usuario del sistema SofInventory.">
+      
+      
+        <meta name="author" content="Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo">
+      
+      
+      
+      
+        <link rel="next" href="../MANUAL_TECNICO/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Manual de Usuario - SofInventory ERP</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#manual-de-usuario" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="SofInventory ERP" class="md-header__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SofInventory ERP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Manual de Usuario
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual de Usuario
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../MANUAL_TECNICO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual Técnico
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SofInventory ERP" class="md-nav__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SofInventory ERP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual de Usuario
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual de Usuario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#control-administrativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Control administrativo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#control-de-versiones-del-documento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control de versiones del documento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convenciones-del-documento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convenciones del documento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Introducción
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Introducción">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-proposito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Propósito
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-descripcion-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Descripción del sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-audiencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Audiencia
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-objetivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Objetivos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Objetivos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-objetivo-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Objetivo general
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-objetivos-especificos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Objetivos específicos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-alcance-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Alcance del sistema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Alcance del sistema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-modulos-funcionales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Módulos funcionales
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-roles-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Roles del sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-matriz-de-permisos-por-rol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Matriz de permisos por rol
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-normas-y-buenas-practicas-de-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Normas y buenas prácticas de uso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Normas y buenas prácticas de uso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-seguridad-de-la-cuenta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Seguridad de la cuenta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-uso-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Uso del sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-gestion-de-contrasenas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Gestión de contraseñas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-instrucciones-de-acceso-y-navegacion-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Instrucciones de acceso y navegación general
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Instrucciones de acceso y navegación general">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-requisitos-previos-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Requisitos previos del sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-proceso-de-inicio-de-sesion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Proceso de inicio de sesión
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2 Proceso de inicio de sesión">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-acceder-al-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Acceder al sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-ingresar-credenciales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Ingresar credenciales
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-respuesta-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Respuesta del sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-descripcion-de-la-interfaz-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Descripción de la interfaz general
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.3 Descripción de la interfaz general">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#531-menu-lateral-sidebar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.1 Menú lateral (Sidebar)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#532-barra-superior-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.2 Barra superior (Header)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#533-navegacion-entre-modulos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3.3 Navegación entre módulos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-cierre-de-sesion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Cierre de sesión
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-mapa-de-navegacion-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Mapa de navegación del sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-guia-de-uso-por-roles-de-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Guía de uso por roles de usuario
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Guía de uso por roles de usuario">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-rol-administrador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Rol: Administrador
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.1 Rol: Administrador">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#611-panel-de-control-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.1 Panel de control (Dashboard)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#612-gestion-de-usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.2 Gestión de usuarios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.1.2 Gestión de usuarios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Listar usuarios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crear-un-nuevo-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crear un nuevo usuario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#editar-un-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Editar un usuario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cambiar-estado-de-un-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cambiar estado de un usuario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#desbloquear-un-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desbloquear un usuario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#eliminar-un-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Eliminar un usuario
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#613-gestion-de-productos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.3 Gestión de productos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.1.3 Gestión de productos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-productos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Listar productos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crear-un-nuevo-producto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crear un nuevo producto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cambiar-estado-de-un-producto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cambiar estado de un producto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#614-gestion-de-categorias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.4 Gestión de categorías
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#615-gestion-de-proveedores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.5 Gestión de proveedores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#616-gestion-de-clientes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1.6 Gestión de clientes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-rol-supervisor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Rol: Supervisor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.2 Rol: Supervisor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#621-panel-de-control-del-supervisor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.1 Panel de control del supervisor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#622-supervision-de-stock-y-reportes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.2 Supervisión de stock y reportes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#623-auditoria-de-catalogo-y-movimientos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2.3 Auditoría de catálogo y movimientos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-rol-vendedor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Rol: Vendedor
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3 Rol: Vendedor">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#631-panel-de-control-del-vendedor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.1 Panel de control del vendedor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#632-modulo-de-facturacionventas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.2 Módulo de Facturación/Ventas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.3.2 Módulo de Facturación/Ventas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registrar-una-nueva-venta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Registrar una nueva venta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ver-detalle-de-una-venta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ver detalle de una venta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anular-una-venta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anular una venta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#633-gestion-de-clientes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.3 Gestión de clientes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#634-consulta-rapida-de-productos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3.4 Consulta rápida de productos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-rol-operador-de-bodega" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Rol: Operador de bodega
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.4 Rol: Operador de bodega">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#641-panel-de-control-del-operador-de-bodega" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.1 Panel de control del operador de bodega
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#642-recepcion-de-compras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.2 Recepción de compras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#643-gestion-de-almacenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.3 Gestión de almacenes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6.4.3 Gestión de almacenes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listar-almacenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Listar almacenes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crear-un-nuevo-almacen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Crear un nuevo almacén
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#644-movimientos-de-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.4 Movimientos de inventario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#645-consulta-de-almacenes-y-stock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4.5 Consulta de almacenes y stock
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-flujos-de-trabajo-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Flujos de trabajo principales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Flujos de trabajo principales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-flujo-registrar-una-venta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Flujo: Registrar una venta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-flujo-cargar-inventario-desde-bodega" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Flujo: Cargar inventario desde bodega
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-flujo-crear-un-usuario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Flujo: Crear un usuario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-flujo-registrar-una-compra" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Flujo: Registrar una compra
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-flujo-gestionar-alertas-de-stock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Flujo: Gestionar alertas de stock
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-glosario-de-terminos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Glosario de términos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-preguntas-frecuentes-faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Preguntas frecuentes (FAQ)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-solucion-de-problemas-comunes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Solución de problemas comunes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-mesa-de-ayuda-y-soporte-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Mesa de ayuda y soporte técnico
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-referencias-y-fuentes-consultadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Referencias y fuentes consultadas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Referencias y fuentes consultadas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-normas-y-guias-oficiales-de-documentacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 Normas y guías oficiales de documentación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MANUAL_TECNICO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div style="text-align: center">
+<p><img alt="SofInventory Logo" src="../assets/logo.png" width="300" /></p>
+<h1 id="manual-de-usuario">Manual de Usuario</h1>
+<p><strong>Sistema de Información SofInventory ERP</strong>
+<code>Versión 1.0</code> | <code>Fecha: 26 de julio de 2026</code> </p>
+</div>
+<hr />
+<h3 id="control-administrativo">📋 Control administrativo</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Información</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Proyecto</strong></td>
+<td>SofInventory — Sistema ERP de Gestión de Inventarios y Ventas</td>
+</tr>
+<tr>
+<td><strong>Autores / Aprendices</strong></td>
+<td>Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo</td>
+</tr>
+<tr>
+<td><strong>Instructor Evaluador</strong></td>
+<td>José Ignacio Botero Osorio</td>
+</tr>
+<tr>
+<td><strong>Centro de Formación</strong></td>
+<td>Centro de Comercio — Regional Antioquia (SENA)</td>
+</tr>
+<tr>
+<td><strong>Programa de Formación</strong></td>
+<td>Tecnología en Análisis y Desarrollo de Software (TADS)</td>
+</tr>
+<tr>
+<td><strong>Ficha</strong></td>
+<td>3118526</td>
+</tr>
+<tr>
+<td><strong>Estado del Documento</strong></td>
+<td>Aprobado para Producción</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="control-de-versiones-del-documento">Control de versiones del documento</h3>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th>Fecha</th>
+<th>Autor(es)</th>
+<th>Descripción del cambio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Julio 2026</td>
+<td>Alejandro Sepúlveda D. / Lucy Estefany Izquierdo</td>
+<td>Versión inicial del manual: introducción, objetivos, alcance, roles y flujos de trabajo.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="convenciones-del-documento">Convenciones del documento</h3>
+<p>A lo largo del manual se usan los siguientes símbolos para facilitar la lectura:</p>
+<table>
+<thead>
+<tr>
+<th>Símbolo</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong></td>
+<td>Indica el espacio reservado para una captura de pantalla real del sistema, con su descripción.</td>
+</tr>
+<tr>
+<td>⚠️</td>
+<td>Advertencia importante: acción irreversible o que requiere especial atención.</td>
+</tr>
+<tr>
+<td>✅</td>
+<td>Función o sección visible / disponible para el rol indicado.</td>
+</tr>
+<tr>
+<td>❌</td>
+<td>Función o sección oculta / no disponible para el rol indicado.</td>
+</tr>
+<tr>
+<td><strong>Negrita</strong></td>
+<td>Nombres de botones, campos de formulario o elementos de la interfaz.</td>
+</tr>
+<tr>
+<td><code>Texto en código</code></td>
+<td>Nombres técnicos internos (tablas, tipos de movimiento, endpoints).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-introduccion">1. Introducción</h2>
+<h3 id="11-proposito">1.1 Propósito</h3>
+<p>El presente Manual de Usuario describe de forma detallada, clara y paso a paso el proceso de uso del sistema <strong>SofInventory</strong>, un sistema ERP (Enterprise Resource Planning) diseñado para la gestión integral de inventarios, productos, compras, ventas, clientes, proveedores y usuarios de una empresa comercial.</p>
+<p>Este manual está dirigido a los <strong>usuarios finales</strong> del sistema: administradores, supervisores, vendedores y operadores de bodega, proporcionando las instrucciones necesarias para aprovechar al máximo todas las funcionalidades de la plataforma.</p>
+<h3 id="12-descripcion-del-sistema">1.2 Descripción del sistema</h3>
+<p>SofInventory es una aplicación web que permite:</p>
+<ul>
+<li><strong>Gestionar productos y categorías</strong> con precios, stock e imágenes</li>
+<li><strong>Controlar el inventario</strong> en tiempo real por almacén</li>
+<li><strong>Registrar ventas</strong> con múltiples métodos de pago y cálculo automático de IVA</li>
+<li><strong>Registrar compras</strong> a proveedores con actualización automática de stock</li>
+<li><strong>Administrar usuarios</strong> con roles y permisos diferenciados</li>
+<li><strong>Visualizar indicadores</strong> del negocio en un dashboard interactivo</li>
+<li><strong>Gestionar clientes y proveedores</strong> con información completa de contacto</li>
+</ul>
+<h3 id="13-audiencia">1.3 Audiencia</h3>
+<table>
+<thead>
+<tr>
+<th>Rol</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Usuario administrador</strong></td>
+<td>Gestiona usuarios, configuración general y tiene acceso total al sistema</td>
+</tr>
+<tr>
+<td><strong>Usuario supervisor</strong></td>
+<td>Supervisa operaciones, gestiona productos, proveedores y reportes</td>
+</tr>
+<tr>
+<td><strong>Usuario vendedor</strong></td>
+<td>Realiza ventas, gestiona clientes y consulta productos</td>
+</tr>
+<tr>
+<td><strong>Operador de bodega</strong></td>
+<td>Administra almacenes, recibe compras y registra movimientos de inventario</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-objetivos">2. Objetivos</h2>
+<h3 id="21-objetivo-general">2.1 Objetivo general</h3>
+<p>Proporcionar a los usuarios finales del sistema SofInventory las instrucciones necesarias para el uso correcto, eficiente y seguro de todas las funcionalidades del sistema, según el rol que desempeñen en la organización.</p>
+<h3 id="22-objetivos-especificos">2.2 Objetivos específicos</h3>
+<ul>
+<li>Instruir al usuario en el proceso de autenticación y navegación general del sistema.</li>
+<li>Describir las funcionalidades disponibles para cada rol de usuario (Administrador, Supervisor, Vendedor y Operador de Bodega).</li>
+<li>Explicar los flujos de trabajo principales: registro de ventas, carga de inventario, creación de usuarios y registro de compras.</li>
+<li>Establecer las normas y buenas prácticas para el uso seguro del sistema.</li>
+<li>Proporcionar referencias a las guías del DNP y estándares de documentación.</li>
+</ul>
+<hr />
+<h2 id="3-alcance-del-sistema">3. Alcance del sistema</h2>
+<h3 id="31-modulos-funcionales">3.1 Módulos funcionales</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Módulo</th>
+<th>Funcionalidades</th>
+<th>Accesible por</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Inicio de Sesión</strong></td>
+<td>Autenticación, recuperación de sesión, bloqueo de cuenta</td>
+<td>Todos los usuarios</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Dashboard</strong></td>
+<td>Indicadores KPI, gráficos, alertas de stock, ventas recientes</td>
+<td>Todos los usuarios</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Productos</strong></td>
+<td>Crear, editar, buscar, filtrar por estado, gestionar categorías</td>
+<td>Administrador, Supervisor, Bodega</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Categorías</strong></td>
+<td>Crear, eliminar categorías de productos</td>
+<td>Administrador, Supervisor</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Proveedores</strong></td>
+<td>Crear, editar, buscar, activar/desactivar proveedores</td>
+<td>Administrador, Supervisor</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Clientes</strong></td>
+<td>Crear, editar, buscar, activar/desactivar clientes</td>
+<td>Administrador, Supervisor, Vendedor</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Compras</strong></td>
+<td>Registrar compras, ver detalle, anular compras</td>
+<td>Administrador, Supervisor, Bodega</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Ventas</strong></td>
+<td>Registrar ventas, ver detalle, anular ventas</td>
+<td>Administrador, Supervisor, Vendedor</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>Inventario</strong></td>
+<td>Consultar stock, alertas, almacenes, registrar movimientos</td>
+<td>Todos los usuarios</td>
+</tr>
+<tr>
+<td>10</td>
+<td><strong>Usuarios</strong></td>
+<td>Crear, editar, buscar, activar/desactivar, desbloquear usuarios</td>
+<td>Solo Administrador</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-roles-del-sistema">3.2 Roles del sistema</h3>
+<pre class="mermaid"><code>graph LR
+    subgraph "Rol: Administrador"
+        A1["Gestión de usuarios"]
+        A2["Gestión completa"]
+        A3["Configuración general"]
+    end
+    subgraph "Rol: Supervisor"
+        S1["Gestión de productos"]
+        S2["Gestión de proveedores"]
+        S3["Supervisión de ventas"]
+        S4["Supervisión de compras"]
+    end
+    subgraph "Rol: Vendedor"
+        V1["Registro de ventas"]
+        V2["Gestión de clientes"]
+        V3["Consulta de productos"]
+    end
+    subgraph "Rol: Operador de Bodega"
+        B1["Recepción de compras"]
+        B2["Movimientos de inventario"]
+        B3["Gestión de almacenes"]
+    end</code></pre>
+<h3 id="33-matriz-de-permisos-por-rol">3.3 Matriz de permisos por rol</h3>
+<table>
+<thead>
+<tr>
+<th>Funcionalidad</th>
+<th style="text-align: center;">Administrador</th>
+<th style="text-align: center;">Supervisor</th>
+<th style="text-align: center;">Vendedor</th>
+<th style="text-align: center;">Bodega</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dashboard</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Crear/Editar Productos</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>Configurar Productos</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Gestionar Categorías</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>Crear/Editar Proveedores</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>Crear/Editar Clientes</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>Registrar Ventas</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>Registrar Compras</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Gestionar Almacenes</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Movimientos de Inventario</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Gestionar Usuarios</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+<tr>
+<td>Desbloquear Usuarios</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+<td style="text-align: center;">❌</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-normas-y-buenas-practicas-de-uso">4. Normas y buenas prácticas de uso</h2>
+<h3 id="41-seguridad-de-la-cuenta">4.1 Seguridad de la cuenta</h3>
+<ol>
+<li><strong>No comparta sus credenciales</strong> de acceso con terceros.</li>
+<li><strong>Cambie su contraseña</strong> periódicamente (cada 30 días recomendado).</li>
+<li><strong>Cierre sesión</strong> al terminar de usar el sistema, especialmente en equipos compartidos.</li>
+<li><strong>No deje la sesión abierta</strong> sin supervisión.</li>
+<li>Si su cuenta es bloqueada por intentos fallidos, contacte al administrador.</li>
+</ol>
+<h3 id="42-uso-del-sistema">4.2 Uso del sistema</h3>
+<ol>
+<li><strong>Use los navegadores soportados:</strong> Google Chrome, Microsoft Edge o Mozilla Firefox (versiones actualizadas).</li>
+<li><strong>Mantenga conexión estable a internet</strong> para el funcionamiento correcto del sistema.</li>
+<li><strong>Registre información completa y veraz</strong> en todos los formularios.</li>
+<li><strong>Verifique los datos</strong> antes de confirmar operaciones críticas (ventas, compras).</li>
+<li><strong>No cierre el navegador</strong> durante el proceso de registro de una venta o compra.</li>
+</ol>
+<h3 id="43-gestion-de-contrasenas">4.3 Gestión de contraseñas</h3>
+<ul>
+<li>La contraseña debe tener <strong>mínimo 8 caracteres</strong>.</li>
+<li>Se recomienda combinar letras, números y caracteres especiales.</li>
+<li>El sistema bloquea la cuenta después de <strong>5 intentos fallidos</strong> de inicio de sesión.</li>
+<li>Las contraseñas se almacenan cifradas (hash PBKDF2-SHA256); nadie, ni siquiera el administrador, puede ver la contraseña en texto plano.</li>
+</ul>
+<hr />
+<h2 id="5-instrucciones-de-acceso-y-navegacion-general">5. Instrucciones de acceso y navegación general</h2>
+<h3 id="51-requisitos-previos-del-sistema">5.1 Requisitos previos del sistema</h3>
+<table>
+<thead>
+<tr>
+<th>Requisito</th>
+<th>Especificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Navegador web</strong></td>
+<td>Google Chrome (recomendado), Microsoft Edge o Mozilla Firefox (última versión)</td>
+</tr>
+<tr>
+<td><strong>Conexión a internet</strong></td>
+<td>Estable (mínimo 1 Mbps)</td>
+</tr>
+<tr>
+<td><strong>Resolución de pantalla</strong></td>
+<td>Mínimo 1024×768 (recomendado 1920×1080)</td>
+</tr>
+<tr>
+<td><strong>URL de acceso (local)</strong></td>
+<td><code>http://localhost</code> (despliegue Docker)</td>
+</tr>
+<tr>
+<td><strong>URL de acceso (producción)</strong></td>
+<td><code>https://sofinventory-app.onrender.com</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-proceso-de-inicio-de-sesion">5.2 Proceso de inicio de sesión</h3>
+<h4 id="paso-1-acceder-al-sistema">Paso 1: Acceder al sistema</h4>
+<p>Abra su navegador web e ingrese la URL de acceso al sistema SofInventory.</p>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de pantalla de la página de inicio de sesión de SofInventory, mostrando el formulario con los campos de usuario y contraseña, el panel de branding izquierdo con el logo y la lista de beneficios.</em>
+<img alt="Pantalla_Inicio_Sesion" src="../img/captura-pantalla-inicio-sesion.png" /></p>
+<h4 id="paso-2-ingresar-credenciales">Paso 2: Ingresar credenciales</h4>
+<ol>
+<li>En el campo <strong>Usuario</strong>, ingrese su nombre de usuario asignado por el administrador.</li>
+<li>En el campo <strong>Contraseña</strong>, ingrese su contraseña.</li>
+<li>Puede hacer clic en el ícono del <strong>ojo</strong> (👁) para mostrar u ocultar la contraseña mientras la escribe.</li>
+<li>Haga clic en el botón <strong>"Entrar al sistema"</strong>.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del formulario de login con las credenciales ingresadas (usuario y contraseña con caracteres ocultos) y el botón "Entrar al sistema" visible.</em>
+<img alt="Credenciales_Ingresadas" src="../img/captura-credenciales-ingresadas.png" /></p>
+<h4 id="paso-3-respuesta-del-sistema">Paso 3: Respuesta del sistema</h4>
+<ul>
+<li><strong>Si las credenciales son correctas:</strong> El sistema lo redirigirá automáticamente al <strong>Panel de Control (Dashboard)</strong>.</li>
+<li><strong>Si las credenciales son incorrectas:</strong> Aparecerá un mensaje de error en rojo: <em>"Credenciales incorrectas"</em>. El sistema mostrará los intentos restantes.</li>
+<li><strong>Si la cuenta está bloqueada:</strong> Aparecerá un mensaje: <em>"Cuenta bloqueada. Contacta con el administrador para desbloquearla."</em></li>
+</ul>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del Dashboard principal que se muestra después del login exitoso, con las tarjetas KPI, gráficos y el menú lateral izquierdo.</em>
+<img alt="Dashboard_Principal" src="../img/captura-dashboard-principal.png" /></p>
+<h3 id="53-descripcion-de-la-interfaz-general">5.3 Descripción de la interfaz general</h3>
+<h4 id="531-menu-lateral-sidebar">5.3.1 Menú lateral (Sidebar)</h4>
+<p>El menú lateral izquierdo contiene los accesos directos a todos los módulos del sistema. Los módulos disponibles varían según el rol del usuario:</p>
+<table>
+<thead>
+<tr>
+<th>Ícono</th>
+<th>Módulo</th>
+<th>Descripción</th>
+<th>Roles con Acceso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>📊</td>
+<td><strong>Panel de Control</strong></td>
+<td>Dashboard con indicadores y gráficos</td>
+<td>Todos</td>
+</tr>
+<tr>
+<td>📦</td>
+<td><strong>Productos</strong></td>
+<td>Catálogo de productos</td>
+<td>Administrador, Supervisor, Bodega</td>
+</tr>
+<tr>
+<td>🏷️</td>
+<td><strong>Categorías</strong></td>
+<td>Gestión de categorías de productos</td>
+<td>Administrador, Supervisor</td>
+</tr>
+<tr>
+<td>🚛</td>
+<td><strong>Proveedores</strong></td>
+<td>Gestión de proveedores</td>
+<td>Administrador, Supervisor</td>
+</tr>
+<tr>
+<td>👥</td>
+<td><strong>Clientes</strong></td>
+<td>Gestión de clientes</td>
+<td>Administrador, Supervisor, Vendedor</td>
+</tr>
+<tr>
+<td>🛒</td>
+<td><strong>Compras</strong></td>
+<td>Registro de compras</td>
+<td>Administrador, Supervisor, Bodega</td>
+</tr>
+<tr>
+<td>💰</td>
+<td><strong>Ventas</strong></td>
+<td>Punto de venta</td>
+<td>Administrador, Supervisor, Vendedor</td>
+</tr>
+<tr>
+<td>📦</td>
+<td><strong>Inventario</strong></td>
+<td>Control de stock y almacenes</td>
+<td>Todos</td>
+</tr>
+<tr>
+<td>👤</td>
+<td><strong>Usuarios</strong></td>
+<td>Gestión de usuarios del sistema</td>
+<td>Solo Administrador</td>
+</tr>
+</tbody>
+</table>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del menú lateral izquierdo desplegado, mostrando todos los módulos disponibles con sus íconos y nombres.</em>
+<img alt="Menu_Lateral" src="../img/captura-menu-lateral.png" /></p>
+<h4 id="532-barra-superior-header">5.3.2 Barra superior (Header)</h4>
+<p>La barra superior contiene:</p>
+<ul>
+<li><strong>Título de la página actual:</strong> Indica en qué módulo se encuentra.</li>
+<li><strong>Botón de actualizar:</strong> Permite recargar los datos del módulo actual.</li>
+<li><strong>Información del usuario:</strong> Muestra el nombre del usuario autenticado y su rol.</li>
+</ul>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la barra superior de navegación mostrando el título de la página y el nombre del usuario autenticado.</em>
+<img alt="Barra_Superior" src="../img/captura-barra-superior.png" /></p>
+<h4 id="533-navegacion-entre-modulos">5.3.3 Navegación entre módulos</h4>
+<p>Para acceder a cualquier módulo:</p>
+<ol>
+<li>Haga clic en el nombre del módulo en el <strong>menú lateral izquierdo</strong>.</li>
+<li>El sistema cargará la página correspondiente con la tabla de datos y las opciones disponibles.</li>
+<li>Puede volver al Dashboard en cualquier momento haciendo clic en <strong>"Panel de Control"</strong> en el menú.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura mostrando la transición entre módulos, con el menú lateral y el contenido del módulo seleccionado visible.</em>
+<img alt="Navegacion_Modulos" src="../img/captura-navegacion-modulos.png" /></p>
+<h3 id="54-cierre-de-sesion">5.4 Cierre de sesión</h3>
+<ol>
+<li>Haga clic en el ícono de <strong>cerrar sesión</strong> (🚪) en el menú lateral.</li>
+<li>El sistema cerrará su sesión y lo redirigirá a la pantalla de inicio de sesión.</li>
+<li>Si necesita acceder nuevamente, deberá ingresar sus credenciales.</li>
+</ol>
+<p>⚠️ <strong>Importante:</strong> Siempre cierre sesión al terminar de usar el sistema, especialmente en equipos compartidos, para proteger la información.</p>
+<h3 id="55-mapa-de-navegacion-del-sistema">5.5 Mapa de navegación del sistema</h3>
+<p>El siguiente mapa presenta, de forma general, cómo se organizan las pantallas del sistema a partir del inicio de sesión. El acceso a cada módulo depende del rol del usuario autenticado (ver matriz de permisos en la sección 3.3).</p>
+<pre class="mermaid"><code>graph TD
+    L["🔐 Inicio de Sesión"] --&gt; D["📊 Dashboard / Panel de Control"]
+
+    D --&gt; P["📦 Productos"]
+    D --&gt; C["🏷️ Categorías"]
+    D --&gt; PR["🚛 Proveedores"]
+    D --&gt; CL["👥 Clientes"]
+    D --&gt; CO["🛒 Compras"]
+    D --&gt; V["💰 Ventas"]
+    D --&gt; I["📦 Inventario"]
+    D --&gt; U["👤 Usuarios"]
+    D --&gt; LO["🚪 Cerrar Sesión"]
+
+    P --&gt; P1["Listar / Buscar / Filtrar"]
+    P --&gt; P2["Crear / Editar"]
+    P --&gt; P3["Cambiar Estado"]
+
+    CO --&gt; CO1["Nueva Compra"]
+    CO --&gt; CO2["Ver Detalle"]
+    CO --&gt; CO3["Anular Compra"]
+
+    V --&gt; V1["Nueva Venta"]
+    V --&gt; V2["Ver Detalle"]
+    V --&gt; V3["Anular Venta"]
+
+    I --&gt; I1["Stock"]
+    I --&gt; I2["Movimiento"]
+    I --&gt; I3["Almacenes"]
+    I --&gt; I4["Alertas"]
+
+    U --&gt; U1["Listar Usuarios"]
+    U --&gt; U2["Crear / Editar"]
+    U --&gt; U3["Cambiar Estado"]
+    U --&gt; U4["Desbloquear"]</code></pre>
+<p><strong>Cómo leer este mapa:</strong> desde el Dashboard, el usuario accede a cualquier módulo habilitado para su rol a través del menú lateral. Dentro de cada módulo, las pestañas o botones internos (segundo nivel del mapa) permiten realizar las acciones específicas descritas en la sección 6 de este manual.</p>
+<h2 id="6-guia-de-uso-por-roles-de-usuario">6. Guía de uso por roles de usuario</h2>
+<h3 id="61-rol-administrador">6.1 Rol: Administrador</h3>
+<p>El <strong>Administrador</strong> tiene acceso total al sistema. Puede gestionar usuarios, configurar el sistema, supervisar todas las operaciones y acceder a todos los módulos.</p>
+<h4 id="611-panel-de-control-dashboard">6.1.1 Panel de control (Dashboard)</h4>
+<p>El Dashboard muestra una vista general del negocio con:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tarjetas KPI</strong></td>
+<td>Total productos, en stock, ventas totales, ventas del mes, clientes activos, stock bajo, ventas hoy, compras del mes, margen del mes, proveedores activos</td>
+</tr>
+<tr>
+<td><strong>Gráficos</strong></td>
+<td>Ventas mensuales (línea), Métodos de pago (dona), Top vendedores (barras), Estado del stock (dona)</td>
+</tr>
+<tr>
+<td><strong>Mejor Vendedor del Mes</strong></td>
+<td>Nombre, total de ventas y número de transacciones</td>
+</tr>
+<tr>
+<td><strong>Alertas de Stock</strong></td>
+<td>Lista de productos con stock por debajo del mínimo</td>
+</tr>
+<tr>
+<td><strong>Ventas Recientes</strong></td>
+<td>Últimas ventas registradas con número, cliente, fecha y total</td>
+</tr>
+<tr>
+<td><strong>Productos Más Vendidos</strong></td>
+<td>Ranking de productos más vendidos</td>
+</tr>
+<tr>
+<td><strong>Acciones Rápidas</strong></td>
+<td>Botones de acceso directo: Nueva Venta, Gestionar Productos, Gestionar Clientes, Ver Inventario</td>
+</tr>
+</tbody>
+</table>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura completa del Dashboard del Administrador, mostrando todas las tarjetas KPI incluyendo las de compras, margen y proveedores que solo ve el admin.</em>
+<img alt="Dashboard_Administrador" src="../img/captura-dashboard-administrador.png" /></p>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la sección de gráficos del Dashboard, mostrando las 4 gráficas: ventas mensuales, métodos de pago, top vendedores y estado del stock.</em>
+<img alt="Dashboard_Graficos" src="../img/captura-dashboard-graficos.png" /></p>
+<h4 id="612-gestion-de-usuarios">6.1.2 Gestión de usuarios</h4>
+<p>Solo el Administrador puede acceder a este módulo (protegido por <code>adminGuard</code>).</p>
+<h5 id="listar-usuarios">Listar usuarios</h5>
+<ol>
+<li>Haga clic en <strong>"Usuarios"</strong> en el menú lateral.</li>
+<li>Se mostrará una tabla con todos los usuarios registrados: Usuario, Nombre Completo, Email, Rol, Estado y Fecha de Creación.</li>
+<li>Puede <strong>buscar</strong> un usuario específico escribiendo en el campo de búsqueda.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la página de Usuarios mostrando la tabla con la lista de usuarios registrados, el campo de búsqueda y el botón "+ Nuevo Usuario".</em>
+<img alt="Usuarios_Lista" src="../img/captura-usuarios-lista.png" /></p>
+<h5 id="crear-un-nuevo-usuario">Crear un nuevo usuario</h5>
+<ol>
+<li>Haga clic en el botón <strong>"+ Nuevo Usuario"</strong>.</li>
+<li>Se abrirá un modal con el formulario de creación.</li>
+<li>Complete los campos obligatorios y luego haga clic en <strong>"Guardar"</strong> para crear el usuario.:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+<th>Obligatorio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tipo Documento</td>
+<td>Seleccione: CC - Cédula de Ciudadanía, CE - Cédula de Extranjería, NIT</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Número Documento</td>
+<td>Número de documento (solo números, máx. 10 dígitos)</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Nombre Completo</td>
+<td>Nombre completo del usuario</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Correo electrónico único</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Username</td>
+<td>Nombre de usuario para login (único)</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Contraseña</td>
+<td>Contraseña del usuario (mín. 8 caracteres)</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Confirmar Contraseña</td>
+<td>Repetir la contraseña</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Rol</td>
+<td>Seleccione: Administrador, Supervisor, Vendedor</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Fecha Creación</td>
+<td>Fecha de ingreso al sistema</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Observaciones</td>
+<td>Notas adicionales (opcional)</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de creación de usuario con todos los campos del formulario visibles y algunos datos de ejemplo ingresados.</em>
+<img alt="Usuarios_Crear" src="../img/captura-usuarios-crear.png" /></p>
+<h5 id="editar-un-usuario">Editar un usuario</h5>
+<ol>
+<li>En la tabla de usuarios, haga clic en el ícono <strong>✏️ (Editar)</strong> de la fila del usuario a modificar.</li>
+<li>Se abrirá el modal con los datos actuales del usuario.</li>
+<li>Modifique los campos deseados. El campo <strong>Contraseña</strong> es opcional al editar; si lo deja vacío, la contraseña no se cambiará.</li>
+<li>Haga clic en <strong>"Guardar"</strong>.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de edición de usuario con los campos cargados con los datos existentes del usuario seleccionado.</em>
+<img alt="Usuarios_Editar" src="../img/captura-usuarios-editar.png" /></p>
+<h5 id="cambiar-estado-de-un-usuario">Cambiar estado de un usuario</h5>
+<ol>
+<li>En la tabla de usuarios, haga clic en el ícono <strong>🔄 (Cambiar Estado)</strong> de la fila del usuario.</li>
+<li>El sistema cambiará el estado del usuario de <strong>activo</strong> a <strong>inactivo</strong>, o viceversa.</li>
+<li>Un usuario inactivo no podrá iniciar sesión en el sistema.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la tabla de usuarios mostrando el botón de cambiar estado y el badge de estado del usuario.</em>
+<img alt="Usuarios_Cambiar_Estado" src="../img/captura-usuarios-cambiar-estado.png" /></p>
+<h5 id="desbloquear-un-usuario">Desbloquear un usuario</h5>
+<p>Si un usuario ha sido bloqueado por intentos fallidos de login (5 intentos):</p>
+<ol>
+<li>En la tabla de usuarios, identifique el usuario con estado <strong>"Bloqueado"</strong> (badge rojo).</li>
+<li>Haga clic en el ícono <strong>🔓 (Desbloquear)</strong> que aparece junto a los demás botones de acción.</li>
+<li>El usuario podrá intentar iniciar sesión nuevamente.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la tabla de usuarios mostrando un usuario con el badge "Bloqueado" y el botón de desbloquear (candado abierto) visible.</em>
+<img alt="Usuarios_Desbloquear" src="../img/captura-usuarios-desbloquear.png" /></p>
+<h5 id="eliminar-un-usuario">Eliminar un usuario</h5>
+<ol>
+<li>En la tabla de usuarios, haga clic en el ícono <strong>🗑️ (Eliminar)</strong> de la fila del usuario.</li>
+<li>Se mostrará una confirmación de eliminación.</li>
+<li>Confirme para eliminar permanentemente el usuario.</li>
+</ol>
+<p>⚠️ <strong>Precaución:</strong> Esta acción es irreversible. Asegúrese de seleccionar el usuario correcto antes de confirmar.</p>
+<h4 id="613-gestion-de-productos">6.1.3 Gestión de productos</h4>
+<h5 id="listar-productos">Listar productos</h5>
+<ol>
+<li>Haga clic en <strong>"Productos"</strong> en el menú lateral.</li>
+<li>Se mostrará la tabla de productos con: SKU, Nombre, Marca, Categoría, Precio Venta, Stock y Estado.</li>
+<li>Use el <strong>campo de búsqueda</strong> para filtrar por nombre, SKU o marca.</li>
+<li>Use los <strong>botones de filtro</strong> para mostrar: Todos, Activos, Pendientes o Inactivos.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la página de Productos mostrando la tabla con productos, los filtros por estado (Todos/Activos/Pendientes/Inactivos) y el campo de búsqueda.</em>
+<img alt="Productos_Lista" src="../img/captura-productos-lista.png" /></p>
+<h5 id="crear-un-nuevo-producto">Crear un nuevo producto</h5>
+<ol>
+<li>Haga clic en <strong>"+ Nuevo Producto"</strong>.</li>
+<li>Complete los campos del formulario y luego haga clic en <strong>"Guardar"</strong>.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SKU</td>
+<td>Código único del producto (se genera automáticamente o se ingresa manualmente)</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Nombre comercial del producto</td>
+</tr>
+<tr>
+<td>Marca</td>
+<td>Marca del producto</td>
+</tr>
+<tr>
+<td>Referencia</td>
+<td>Referencia interna del fabricante</td>
+</tr>
+<tr>
+<td>Unidad de Medida</td>
+<td>Unidad, Caja, Metro, Litro, Galón, Rollo, Bulto, Kilo</td>
+</tr>
+<tr>
+<td>Categoría</td>
+<td>Seleccione la categoría del producto</td>
+</tr>
+<tr>
+<td>Precio Compra</td>
+<td>Precio de compra unitario</td>
+</tr>
+<tr>
+<td>Precio Venta</td>
+<td>Precio de venta unitario</td>
+</tr>
+<tr>
+<td>IVA (%)</td>
+<td>Porcentaje de IVA (generalmente 19%)</td>
+</tr>
+<tr>
+<td>Stock Mínimo</td>
+<td>Stock mínimo de seguridad</td>
+</tr>
+</tbody>
+</table>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de creación de producto con todos los campos del formulario visibles.</em>
+<img alt="Productos_Crear" src="../img/captura-productos-crear.png" /></p>
+<h5 id="cambiar-estado-de-un-producto">Cambiar estado de un producto</h5>
+<p>Los productos pueden tener tres estados:
+- <strong>Pendiente:</strong> Producto registrado pero no configurado para venta
+- <strong>Activo:</strong> Producto disponible para ventas y compras
+- <strong>Inactivo:</strong> Producto deshabilitado</p>
+<ol>
+<li>Haga clic en el ícono <strong>🔄 (Cambiar Estado)</strong> del producto.</li>
+<li>El sistema rotará el estado del producto.</li>
+</ol>
+<h4 id="614-gestion-de-categorias">6.1.4 Gestión de categorías</h4>
+<ol>
+<li>Haga clic en <strong>"Categorías"</strong> en el menú lateral.</li>
+<li>Se mostrará la lista de categorías existentes con su nombre, tipo de control y fecha de creación.</li>
+<li>Para crear una categoría, haga clic en <strong>"+ Nueva Categoría"</strong> y complete:</li>
+<li><strong>Nombre:</strong> Nombre de la categoría</li>
+<li><strong>Tipo de Control:</strong> General, Herramienta, Eléctrico, Líquido o Tornillería</li>
+<li><strong>Descripción:</strong> Descripción de la categoría (opcional)</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la página de Categorías mostrando la tabla de categorías y el botón de crear nueva categoría.</em>
+<img alt="Categorias_Lista" src="../img/captura-categorias-lista.png" /></p>
+<h4 id="615-gestion-de-proveedores">6.1.5 Gestión de proveedores</h4>
+<ol>
+<li>Haga clic en <strong>"Proveedores"</strong> en el menú lateral.</li>
+<li>Se mostrará la tabla de proveedores con: Razón Social, Documento, Contacto, Email, Teléfono, Ciudad y Estado.</li>
+<li>Use el <strong>campo de búsqueda</strong> para filtrar por razón social, documento o email.</li>
+<li>Para crear un proveedor, haga clic en <strong>"+ Nuevo Proveedor"</strong> y complete los 14 campos del formulario.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la página de Proveedores mostrando la tabla con proveedores registrados y el campo de búsqueda.</em>
+<img alt="Proveedores_Lista" src="../img/captura-proveedores-lista.png" /></p>
+<h4 id="616-gestion-de-clientes">6.1.6 Gestión de clientes</h4>
+<ol>
+<li>Haga clic en <strong>"Clientes"</strong> en el menú lateral.</li>
+<li>Se mostrará la tabla de clientes con: Nombre/Razón Social, Documento, Tipo, Categoría, Email, Teléfono, Ciudad y Estado.</li>
+<li>Los clientes pueden ser <strong>Personas Naturales</strong> o <strong>Personas Jurídicas</strong>, con campos diferentes según el tipo.</li>
+<li>Los clientes tienen 3 estados: Activo, Inactivo, Bloqueado (ciclo: activo → inactivo → bloqueado → activo).</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la página de Clientes mostrando la tabla con clientes registrados y los campos de búsqueda por nombre, documento, email, teléfono y ciudad.</em>
+<img alt="Clientes_Lista" src="../img/captura-clientes-lista.png" /></p>
+<hr />
+<h3 id="62-rol-supervisor">6.2 Rol: Supervisor</h3>
+<p>El <strong>Supervisor</strong> tiene acceso a la gestión de productos, categorías, proveedores, clientes, ventas, compras e inventario. <strong>No puede</strong> gestionar usuarios.</p>
+<h4 id="621-panel-de-control-del-supervisor">6.2.1 Panel de control del supervisor</h4>
+<p>El Dashboard del Supervisor muestra las siguientes secciones:</p>
+<table>
+<thead>
+<tr>
+<th>Sección</th>
+<th>Visible</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Productos</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>En Stock</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ventas Totales</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ventas del Mes</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Clientes Activos</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Stock Bajo</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ventas Hoy</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Gráfico de Ventas Mensuales</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Gráfico de Métodos de Pago</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Gráfico de Estado del Stock</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Top Vendedores</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Mejor Vendedor del Mes</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Compras del Mes</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Margen del Mes</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Proveedores Activos</td>
+<td>❌ Oculto</td>
+</tr>
+</tbody>
+</table>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del Dashboard del Supervisor, mostrando las tarjetas KPI visibles para este rol (sin compras, margen ni proveedores).</em>
+<img alt="Dashboard_Supervisor" src="../img/captura-dashboard-supervisor.png" /></p>
+<h4 id="622-supervision-de-stock-y-reportes">6.2.2 Supervisión de stock y reportes</h4>
+<p>El Supervisor puede:</p>
+<ol>
+<li><strong>Consultar el inventario completo</strong> en la pestaña "Stock" del módulo de Inventario.</li>
+<li><strong>Revisar alertas de stock bajo</strong> en la pestaña "Alertas".</li>
+<li><strong>Crear y editar almacenes</strong> en la pestaña "Almacenes".</li>
+<li><strong>Registrar movimientos de inventario</strong> (entradas, salidas, ajustes) en la pestaña "Movimiento".</li>
+<li><strong>Exportar inventario a CSV</strong> para análisis externo.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la pestaña de Inventario → Stock, mostrando la tabla de productos con su stock actual, stock mínimo y estado.</em>
+<img alt="Inventario_Stock" src="../img/captura-inventario-stock.png" /></p>
+<h4 id="623-auditoria-de-catalogo-y-movimientos">6.2.3 Auditoría de catálogo y movimientos</h4>
+<p>El Supervisor puede:</p>
+<ul>
+<li><strong>Ver y editar productos</strong> existentes.</li>
+<li><strong>Crear categorías</strong> de productos.</li>
+<li><strong>Gestionar proveedores</strong> (crear, editar, activar/desactivar).</li>
+<li><strong>Gestionar clientes</strong> (crear, editar).</li>
+<li><strong>Registrar y anular compras</strong> y ventas.</li>
+<li><strong>Registrar movimientos rápidos</strong> de inventario.</li>
+</ul>
+<hr />
+<h3 id="63-rol-vendedor">6.3 Rol: Vendedor</h3>
+<p>El <strong>Vendedor</strong> se enfoca en el módulo de <strong>ventas</strong>, la gestión de <strong>clientes</strong> y la consulta de <strong>productos</strong>.</p>
+<h4 id="631-panel-de-control-del-vendedor">6.3.1 Panel de control del vendedor</h4>
+<p>El Dashboard del Vendedor muestra las siguientes secciones:</p>
+<table>
+<thead>
+<tr>
+<th>Sección</th>
+<th>Visible</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Productos</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>En Stock</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ventas Totales</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ventas del Mes</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Clientes Activos</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Stock Bajo</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ventas Hoy</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Gráfico de Ventas Mensuales</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Gráfico de Métodos de Pago</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Gráfico de Estado del Stock</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Top Vendedores</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Mejor Vendedor del Mes</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Compras del Mes</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Margen del Mes</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Proveedores Activos</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Botón "Nueva Venta"</td>
+<td>❌ Oculto</td>
+</tr>
+</tbody>
+</table>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del Dashboard del Vendedor, mostrando las tarjetas KPI y gráficos visibles para este rol (sin compras, margen, proveedores, top vendedores).</em>
+<img alt="Dashboard_Vendedor" src="../img/captura-dashboard-vendedor.png" /></p>
+<h4 id="632-modulo-de-facturacionventas">6.3.2 Módulo de Facturación/Ventas</h4>
+<h5 id="registrar-una-nueva-venta">Registrar una nueva venta</h5>
+<ol>
+<li>Haga clic en <strong>"Ventas"</strong> en el menú lateral.</li>
+<li>Haga clic en el botón <strong>"+ Nueva Venta"</strong>.</li>
+<li>Se abrirá el modal de registro de venta con las siguientes secciones:</li>
+</ol>
+<p><strong>Datos Generales:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cliente</td>
+<td>Seleccione un cliente o deje "Cliente General" si no identifica al cliente</td>
+</tr>
+<tr>
+<td>Almacén</td>
+<td>Seleccione el almacén de origen del stock</td>
+</tr>
+<tr>
+<td>Método de Pago</td>
+<td>Efectivo, Tarjeta Débito, Tarjeta Crédito, Transferencia, Nequi, DaviPlata, Otro</td>
+</tr>
+<tr>
+<td>Descuento</td>
+<td>Descuento adicional en pesos (opcional)</td>
+</tr>
+<tr>
+<td>Efectivo Recibido</td>
+<td>(Solo si pago en efectivo) Dinero entregado por el cliente</td>
+</tr>
+<tr>
+<td>Cambio</td>
+<td>(Calculado automáticamente) Cambio a devolver</td>
+</tr>
+<tr>
+<td>Observaciones</td>
+<td>Notas adicionales de la venta (opcional)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Detalle de Productos:</strong></p>
+<ol>
+<li>Haga clic en <strong>"+ Agregar"</strong> para agregar una línea de producto.</li>
+<li>Seleccione el <strong>producto</strong> del desplegable.</li>
+<li>Ingrese el <strong>precio unitario</strong> y la <strong>cantidad</strong>.</li>
+<li>El sistema muestra el <strong>stock disponible</strong> del producto y calcula el <strong>subtotal</strong>.</li>
+<li>Puede agregar múltiples productos haciendo clic en "+ Agregar" nuevamente.</li>
+<li>Para eliminar una línea, haga clic en el ícono <strong>🗑️ (basura)</strong>.</li>
+<li>Haga clic en <strong>"Registrar Venta"</strong> para confirmar.</li>
+</ol>
+<p><strong>Totales (calculados automáticamente):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Subtotal</td>
+<td>Suma de (precio × cantidad) de todos los productos</td>
+</tr>
+<tr>
+<td>Descuento</td>
+<td>Descuento aplicado</td>
+</tr>
+<tr>
+<td>IVA Estimado</td>
+<td>Cálculo automático del IVA (19% por defecto)</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>Monto total a pagar</strong></td>
+</tr>
+</tbody>
+</table>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de nueva venta con el formulario completo: datos generales (cliente, almacén, método de pago), tabla de productos con al menos un producto agregado, y los totales calculados (subtotal, IVA, total).</em>
+<img alt="Venta_Nueva" src="../img/captura-venta-nueva.png" /></p>
+<h5 id="ver-detalle-de-una-venta">Ver detalle de una venta</h5>
+<ol>
+<li>En la tabla de ventas, haga clic en el ícono <strong>👁 (Ver)</strong> de la venta a consultar.</li>
+<li>Se abrirá un modal con el detalle completo: número de venta, cliente, método de pago, productos, cantidades, precios y totales.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de detalle de venta mostrando el número de venta, cliente, método de pago, tabla de productos con cantidades y precios, y los totales.</em>
+<img alt="Venta_Detalle" src="../img/captura-venta-detalle.png" /></p>
+<h5 id="anular-una-venta">Anular una venta</h5>
+<ol>
+<li>En la tabla de ventas, haga clic en el ícono <strong>🚫 (Anular)</strong> de la venta a anular.</li>
+<li>Confirme la anulación.</li>
+<li>El sistema restaurará automáticamente el stock descontado y registrará el movimiento de inventario correspondiente (DEVOLUCION_VENTA).</li>
+</ol>
+<p>⚠️ <strong>Importante:</strong> La anulación de ventas es irreversible. Asegúrese de que sea necesario antes de confirmar.</p>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la tabla de ventas mostrando el botón de anular (🚫) en una venta activa y el badge de estado "completada".</em>
+<img alt="Venta_Anular" src="../img/captura-venta-anular.png" /></p>
+<h4 id="633-gestion-de-clientes">6.3.3 Gestión de clientes</h4>
+<p>El Vendedor puede crear y editar clientes:</p>
+<ol>
+<li>Haga clic en <strong>"Clientes"</strong> en el menú lateral.</li>
+<li>Haga clic en <strong>"+ Nuevo Cliente"</strong>.</li>
+<li>Seleccione el tipo de cliente:</li>
+<li><strong>Persona Natural:</strong> Ingrese nombres, apellidos, tipo y número de documento.</li>
+<li><strong>Persona Jurídica:</strong> Ingrese razón social, nombre comercial, tipo y número de documento.</li>
+<li>Complete los campos de contacto: email, teléfono(s), dirección, ciudad, departamento, país.</li>
+<li>Seleccione la categoría: General, Minorista, Mayorista o Corporativo.</li>
+<li>Haga clic en <strong>"Guardar"</strong>.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de creación de cliente mostrando los campos para persona natural (nombres, apellidos) con los datos de contacto.</em>
+<img alt="Cliente_Crear" src="../img/captura-cliente-crear.png" /></p>
+<h4 id="634-consulta-rapida-de-productos">6.3.4 Consulta rápida de productos</h4>
+<p>El Vendedor puede <strong>ver</strong> la lista de productos (sin poder crear ni editar):</p>
+<ol>
+<li>Haga clic en <strong>"Productos"</strong> en el menú lateral.</li>
+<li>Use el campo de búsqueda para encontrar un producto por nombre, SKU o marca.</li>
+<li>Filtre por estado: Todos, Activos, Pendientes o Inactivos.</li>
+<li>Consulte el precio de venta y el stock disponible de cada producto.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la página de Productos vista por el Vendedor, mostrando la tabla de productos con precios y stock (sin permisos para editar o crear nuevo producto).</em>
+<img alt="Productos_Vendedor" src="../img/captura-productos-vendedor.png" /></p>
+<hr />
+<h3 id="64-rol-operador-de-bodega">6.4 Rol: Operador de bodega</h3>
+<p>El <strong>Operador de Bodega</strong> se enfoca en la recepción de compras, los movimientos de inventario y la gestión de almacenes.</p>
+<h4 id="641-panel-de-control-del-operador-de-bodega">6.4.1 Panel de control del operador de bodega</h4>
+<p>El Dashboard del Operador de Bodega muestra las siguientes secciones:</p>
+<table>
+<thead>
+<tr>
+<th>Sección</th>
+<th>Visible</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Productos</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>En Stock</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ventas Totales</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ventas del Mes</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Clientes Activos</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Stock Bajo</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Ventas Hoy</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Compras del Mes</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Margen del Mes</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Gráfico de Ventas Mensuales</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Gráfico de Métodos de Pago</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Gráfico de Estado del Stock</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Top Vendedores</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Mejor Vendedor del Mes</td>
+<td>❌ Oculto</td>
+</tr>
+<tr>
+<td>Ventas Recientes</td>
+<td>❌ Oculto</td>
+</tr>
+</tbody>
+</table>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del Dashboard del Operador de Bodega, mostrando las tarjetas KPI visibles para este rol (sin ventas del mes, clientes, ventas hoy, margen).</em>
+<img alt="Dashboard_Bodega" src="../img/captura-dashboard-bodega.png" /></p>
+<h4 id="642-recepcion-de-compras">6.4.2 Recepción de compras</h4>
+<ol>
+<li>Haga clic en <strong>"Compras"</strong> en el menú lateral.</li>
+<li>Haga clic en <strong>"+ Nueva Compra"</strong>.</li>
+<li>Complete los datos de la compra:</li>
+</ol>
+<p><strong>Datos Generales:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Proveedor</td>
+<td>Seleccione el proveedor</td>
+</tr>
+<tr>
+<td>Número de Factura</td>
+<td>Número de factura del proveedor</td>
+</tr>
+<tr>
+<td>Fecha de Compra</td>
+<td>Fecha de la compra</td>
+</tr>
+<tr>
+<td>Tipo de Compra</td>
+<td>Contado o Crédito</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Detalle de Productos:</strong></p>
+<ol>
+<li>Agregue líneas de producto haciendo clic en <strong>"+ Agregar"</strong>.</li>
+<li>Seleccione el producto, ingrese la cantidad y el costo unitario.</li>
+<li>El sistema calcula automáticamente subtotal, IVA y total.</li>
+<li>Haga clic en <strong>"Registrar Compra"</strong>.</li>
+</ol>
+<p><strong>Efecto en el Inventario:</strong></p>
+<p>Al registrar una compra, el sistema automáticamente:
+- <strong>Aumenta el stock</strong> del producto en el almacén correspondiente.
+- <strong>Registra un movimiento</strong> de inventario de tipo <code>ENTRADA_COMPRA</code>.</p>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de nueva compra con el formulario completo: datos del proveedor, factura, y tabla de productos con cantidades y costos.</em>
+<img alt="Compra_Nueva" src="../img/captura-compra-nueva.png" /></p>
+<h4 id="643-gestion-de-almacenes">6.4.3 Gestión de almacenes</h4>
+<h5 id="listar-almacenes">Listar almacenes</h5>
+<ol>
+<li>Haga clic en <strong>"Inventario"</strong> en el menú lateral.</li>
+<li>Haga clic en la pestaña <strong>"Almacenes"</strong>.</li>
+<li>Se mostrará la tabla de almacenes con: Nombre, Código, Dirección y Acciones.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la pestaña "Almacenes" del módulo de Inventario, mostrando la tabla de almacenes registrados.</em>
+<img alt="Almacenes_Lista" src="../img/captura-almacenes-lista.png" /></p>
+<h5 id="crear-un-nuevo-almacen">Crear un nuevo almacén</h5>
+<ol>
+<li>Haga clic en <strong>"+ Nuevo Almacén"</strong>.</li>
+<li>Complete los campos:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+<th>Obligatorio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nombre</td>
+<td>Nombre del almacén</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Código</td>
+<td>Código único del almacén (ej: ALM001)</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td>Dirección</td>
+<td>Dirección física del almacén</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Notas</td>
+<td>Observaciones adicionales</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Haga clic en <strong>"Guardar"</strong>.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de creación de almacén con los campos: nombre, código, dirección y notas.</em>
+<img alt="Almacen_Crear" src="../img/captura-almacen-crear.png" /></p>
+<h4 id="644-movimientos-de-inventario">6.4.4 Movimientos de inventario</h4>
+<ol>
+<li>Haga clic en <strong>"Inventario"</strong> en el menú lateral.</li>
+<li>Haga clic en la pestaña <strong>"Movimiento"</strong>.</li>
+<li>Complete el formulario de movimiento y luego haga clic en <strong>"Registrar Movimiento"</strong>.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Producto</td>
+<td>Seleccione el producto</td>
+</tr>
+<tr>
+<td>Tipo</td>
+<td>Entrada, Salida o Ajuste</td>
+</tr>
+<tr>
+<td>Cantidad</td>
+<td>Cantidad de unidades</td>
+</tr>
+<tr>
+<td>Motivo</td>
+<td>Descripción del motivo del movimiento</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tipos de movimiento:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Efecto en Stock</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entrada</strong></td>
+<td>Aumenta el stock</td>
+<td>Recepción de mercancía, devoluciones</td>
+</tr>
+<tr>
+<td><strong>Salida</strong></td>
+<td>Disminuye el stock</td>
+<td>Venta, traslado, merma</td>
+</tr>
+<tr>
+<td><strong>Ajuste</strong></td>
+<td>Modifica el stock según la cantidad ingresada</td>
+<td>Corrección de inventario</td>
+</tr>
+</tbody>
+</table>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la pestaña "Movimiento" del módulo de Inventario con el formulario de movimiento de stock visible, mostrando los campos de producto, tipo, cantidad y motivo.</em>
+<img alt="Movimiento_Inventario" src="../img/captura-movimiento-inventario.png" /></p>
+<h4 id="645-consulta-de-almacenes-y-stock">6.4.5 Consulta de almacenes y stock</h4>
+<ol>
+<li>En la pestaña <strong>"Stock"</strong>, consulte el inventario completo con: SKU, Producto, Stock Actual, Stock Mínimo y Estado.</li>
+<li>Los estados de stock son:</li>
+<li><strong>Agotado:</strong> Stock = 0</li>
+<li><strong>Bajo:</strong> Stock ≤ Stock Mínimo</li>
+<li><strong>Medio:</strong> Stock &gt; Stock Mínimo y ≤ 20</li>
+<li><strong>Alto:</strong> Stock &gt; 20</li>
+<li>Use las <strong>estadísticas resumidas</strong> en la parte superior para ver: Total Productos, En Stock, Stock Bajo y Almacenes.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura de la pestaña "Stock" del módulo de Inventario mostrando las estadísticas resumidas en la parte superior y la tabla de productos con su estado de stock.</em>
+<img alt="Inventario_Stock_Bodega" src="../img/captura-inventario-stock-bodega.png" /></p>
+<hr />
+<h2 id="7-flujos-de-trabajo-principales">7. Flujos de trabajo principales</h2>
+<h3 id="71-flujo-registrar-una-venta">7.1 Flujo: Registrar una venta</h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant V as 👤 Vendedor
+    participant S as 🖥️ SofInventory
+    participant DB as 🐘 PostgreSQL
+
+    V-&gt;&gt;S: Hace clic en "Nueva Venta"
+    S-&gt;&gt;S: Abre modal de venta
+    V-&gt;&gt;S: Selecciona cliente (o "General")
+    V-&gt;&gt;S: Selecciona almacén
+    V-&gt;&gt;S: Selecciona método de pago
+    V-&gt;&gt;S: Agrega productos (producto, precio, cantidad)
+    S-&gt;&gt;S: Calcula subtotal, IVA y total
+    V-&gt;&gt;S: Hace clic en "Registrar Venta"
+    S-&gt;&gt;DB: Valida stock suficiente
+    S-&gt;&gt;DB: Crea registro en tabla ventas
+    S-&gt;&gt;DB: Crea registros en tabla detalle_ventas
+    S-&gt;&gt;DB: Actualiza stock en stock_almacen
+    S-&gt;&gt;DB: Registra movimiento SALIDA_VENTA
+    DB--&gt;&gt;S: Operación exitosa
+    S--&gt;&gt;V: Venta registrada exitosamente
+    S-&gt;&gt;S: Cierra modal y actualiza tabla</code></pre>
+<p><strong>Pasos detallados:</strong></p>
+<ol>
+<li>Acceda al módulo <strong>"Ventas"</strong> desde el menú lateral.</li>
+<li>Haga clic en <strong>"+ Nueva Venta"</strong>.</li>
+<li>Seleccione el <strong>cliente</strong> (o deje "Cliente General" si no aplica).</li>
+<li>Seleccione el <strong>almacén</strong> de donde saldrá la mercancía.</li>
+<li>Seleccione el <strong>método de pago</strong> (Efectivo, Débito, Crédito, Transferencia, Nequi, DaviPlata).</li>
+<li>Haga clic en <strong>"+ Agregar"</strong> para agregar productos.</li>
+<li>Para cada producto: seleccione el producto, verifique el precio, ingrese la cantidad.</li>
+<li>Si es pago en efectivo, ingrese el <strong>efectivo recibido</strong> y el sistema calculará el <strong>cambio</strong>.</li>
+<li>Revise los <strong>totales</strong> (Subtotal, Descuento, IVA, Total).</li>
+<li>Haga clic en <strong>"Registrar Venta"</strong>.</li>
+<li>El sistema descontará automáticamente el stock y registrará el movimiento de inventario.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del proceso completo de registro de venta, mostrando el modal con productos agregados, totales calculados y el botón "Registrar Venta" habilitado.</em>
+<img alt="Flujo_Venta_Pasos" src="../img/captura-flujo-venta-pasos.png" /></p>
+<hr />
+<h3 id="72-flujo-cargar-inventario-desde-bodega">7.2 Flujo: Cargar inventario desde bodega</h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant B as 👤 Operador de Bodega
+    participant S as 🖥️ SofInventory
+    participant DB as 🐘 PostgreSQL
+
+    B-&gt;&gt;S: Accede a "Inventario" → "Movimiento"
+    S-&gt;&gt;S: Muestra formulario de movimiento
+    B-&gt;&gt;S: Selecciona producto
+    B-&gt;&gt;S: Selecciona tipo "Entrada"
+    B-&gt;&gt;S: Ingresa cantidad y motivo
+    B-&gt;&gt;S: Hace clic en "Registrar Movimiento"
+    S-&gt;&gt;DB: Actualiza stock en stock_almacen
+    S-&gt;&gt;DB: Registra movimiento ENTRADA_COMPRA
+    DB--&gt;&gt;S: Operación exitosa
+    S--&gt;&gt;B: Movimiento registrado exitosamente</code></pre>
+<p><strong>Pasos detallados:</strong></p>
+<ol>
+<li>Acceda al módulo <strong>"Inventario"</strong> desde el menú lateral.</li>
+<li>Haga clic en la pestaña <strong>"Movimiento"</strong>.</li>
+<li>Seleccione el <strong>producto</strong> del desplegable.</li>
+<li>Seleccione el tipo de movimiento: <strong>Entrada</strong>.</li>
+<li>Ingrese la <strong>cantidad</strong> de unidades a ingresar.</li>
+<li>Ingrese el <strong>motivo</strong> del movimiento (ej: "Recepción de compra #123").</li>
+<li>Haga clic en <strong>"Registrar Movimiento"</strong>.</li>
+<li>El sistema actualizará el stock del producto en la base de datos.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del formulario de movimiento de inventario con tipo "Entrada" seleccionado, producto elegido, cantidad ingresada y motivo escrito.</em>
+<img alt="Flujo_Movimiento_Entrada" src="../img/captura-flujo-movimiento-entrada.png" /></p>
+<hr />
+<h3 id="73-flujo-crear-un-usuario">7.3 Flujo: Crear un usuario</h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant A as 👤 Administrador
+    participant S as 🖥️ SofInventory
+    participant DB as 🐘 PostgreSQL
+
+    A-&gt;&gt;S: Accede a "Usuarios"
+    S-&gt;&gt;S: Muestra tabla de usuarios
+    A-&gt;&gt;S: Hace clic en "+ Nuevo Usuario"
+    S-&gt;&gt;S: Abre modal de creación
+    A-&gt;&gt;S: Completa todos los campos obligatorios
+    A-&gt;&gt;S: Selecciona el rol
+    A-&gt;&gt;S: Hace clic en "Guardar"
+    S-&gt;&gt;S: Valida unicidad (documento, email, username)
+    S-&gt;&gt;DB: Crea registro en tabla usuarios
+    S-&gt;&gt;DB: Hashea contraseña (PBKDF2-SHA256)
+    DB--&gt;&gt;S: Operación exitosa
+    S--&gt;&gt;A: Usuario creado exitosamente
+    S-&gt;&gt;S: Cierra modal y actualiza tabla</code></pre>
+<p><strong>Pasos detallados:</strong></p>
+<ol>
+<li>Acceda al módulo <strong>"Usuarios"</strong> desde el menú lateral.</li>
+<li>Haga clic en <strong>"+ Nuevo Usuario"</strong>.</li>
+<li>Seleccione el <strong>Tipo de Documento</strong> (CC, CE o NIT).</li>
+<li>Ingrese el <strong>Número de Documento</strong> (solo números, máx. 10 dígitos).</li>
+<li>Ingrese el <strong>Nombre Completo</strong> del usuario.</li>
+<li>Ingrese el <strong>Email</strong> (debe ser único en el sistema).</li>
+<li>Ingrese el <strong>Username</strong> (debe ser único en el sistema).</li>
+<li>Ingrese y confirme la <strong>Contraseña</strong> (mín. 8 caracteres).</li>
+<li>Seleccione el <strong>Rol</strong> (Administrador, Supervisor o Vendedor).</li>
+<li>Seleccione la <strong>Fecha de Creación</strong>.</li>
+<li>Ingrese <strong>Observaciones</strong> si es necesario.</li>
+<li>Haga clic en <strong>"Guardar"</strong>.</li>
+<li>El sistema validará que el documento, email y username no existan previamente.</li>
+<li>Si la validación es exitosa, el usuario se creará con la contraseña hasheada.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de creación de usuario completamente diligenciado, con todos los campos obligatorios llenos, el rol seleccionado y el botón "Guardar" habilitado.</em>
+<img alt="Flujo_Crear_Usuario" src="../img/captura-flujo-crear-usuario.png" /></p>
+<hr />
+<h3 id="74-flujo-registrar-una-compra">7.4 Flujo: Registrar una compra</h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant B as 👤 Operador de Bodega
+    participant S as 🖥️ SofInventory
+    participant DB as 🐘 PostgreSQL
+
+    B-&gt;&gt;S: Accede a "Compras"
+    B-&gt;&gt;S: Hace clic en "+ Nueva Compra"
+    S-&gt;&gt;S: Abre modal de compra
+    B-&gt;&gt;S: Selecciona proveedor
+    B-&gt;&gt;S: Ingresa # factura y fecha
+    B-&gt;&gt;S: Agrega productos (producto, cantidad, costo)
+    S-&gt;&gt;S: Calcula subtotal, IVA y total
+    B-&gt;&gt;S: Hace clic en "Registrar Compra"
+    S-&gt;&gt;DB: Crea registro en tabla compras
+    S-&gt;&gt;DB: Crea registros en tabla detalle_compras
+    S-&gt;&gt;DB: Actualiza stock en stock_almacen
+    S-&gt;&gt;DB: Registra movimiento ENTRADA_COMPRA
+    DB--&gt;&gt;S: Operación exitosa
+    S--&gt;&gt;B: Compra registrada exitosamente</code></pre>
+<p><strong>Pasos detallados:</strong></p>
+<ol>
+<li>Acceda al módulo <strong>"Compras"</strong> desde el menú lateral.</li>
+<li>Haga clic en <strong>"+ Nueva Compra"</strong>.</li>
+<li>Seleccione el <strong>Proveedor</strong>.</li>
+<li>Ingrese el <strong>Número de Factura</strong> del proveedor.</li>
+<li>Ingrese la <strong>Fecha de Compra</strong>.</li>
+<li>Seleccione el <strong>Tipo de Compra</strong> (Contado o Crédito).</li>
+<li>Haga clic en <strong>"+ Agregar"</strong> para agregar productos.</li>
+<li>Para cada producto: seleccione el producto, ingrese la cantidad y el costo unitario.</li>
+<li>Revise los <strong>totales</strong> (Subtotal, IVA, Total).</li>
+<li>Haga clic en <strong>"Registrar Compra"</strong>.</li>
+<li>El sistema aumentará automáticamente el stock y registrará el movimiento <code>ENTRADA_COMPRA</code>.</li>
+</ol>
+<p>📷 <strong>[EVIDENCIA FOTOGRÁFICA]</strong>
+<em>Descripción: Captura del modal de nueva compra con el formulario completo: datos del proveedor, factura, y tabla de productos con al menos un producto, mostrando los totales calculados.</em>
+<img alt="Flujo_Compra_Pasos" src="../img/captura-flujo-compra-pasos.png" /></p>
+<hr />
+<h3 id="75-flujo-gestionar-alertas-de-stock">7.5 Flujo: Gestionar alertas de stock</h3>
+<p><pre class="mermaid"><code>graph TD
+    A["📊 Dashboard muestra 'Stock Bajo'"] --&gt; B["👤 Usuario hace clic en 'Ver Inventario'"]
+    B --&gt; C["📋 Se abre módulo Inventario"]
+    C --&gt; D{"📋 ¿Qué desea hacer?"}
+    D --&gt;|"Pestaña Alertas"| E["⚠️ Ver lista de productos con stock bajo"]
+    D --&gt;|"Pestaña Movimiento"| F["🔄 Registrar entrada de stock"]
+    D --&gt;|"Pestaña Almacenes"| G["🏢 Gestionar almacenes"]
+    E --&gt; H["📞 Contactar proveedor para reposición"]
+    F --&gt; I["✅ Stock actualizado"]
+    G --&gt; J["📝 Configurar almacén"]</code></pre>
+<strong>Pasos detallados para consultar y gestionar alertas:</strong></p>
+<ol>
+<li>Observe en el Dashboard o menú principal el contador/notificación de "Stock Bajo" o "Alertas".</li>
+<li>Diríjase al módulo "Inventario" desde el menú lateral.</li>
+<li>Haga clic en la pestaña "Alertas" (o filtro de productos con stock mínimo).</li>
+<li>Revise el listado de productos cuyo stock actual es menor o igual al límite mínimo configurado.</li>
+<li>Identifique el producto a reponer y proceda a contactar al proveedor o generar una Nueva Compra para abastecer la bodega.</li>
+</ol>
+<p>📷 [EVIDENCIA FOTOGRÁFICA]
+<em>Descripción: Captura de la pestaña o sección de Alertas dentro del módulo de Inventario, donde se visualiza la lista de productos en estado crítico o con bajo stock y sus cantidades mínimas.</em>
+<img alt="alertas-stock-bajo.png" src="../img/captura-alertas-stock-bajo.png" /></p>
+<hr />
+<h2 id="8-glosario-de-terminos">8. Glosario de términos</h2>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SKU</strong></td>
+<td>Código único asignado a un producto para su seguimiento y control en inventario.</td>
+</tr>
+<tr>
+<td><strong>Stock Mínimo</strong></td>
+<td>Cantidad mínima permisible de un producto antes de requerir reabastecimiento.</td>
+</tr>
+<tr>
+<td><strong>Rol de Usuario</strong></td>
+<td>Nivel de acceso y permisos asignados a un perfil (Administrador, Supervisor, Vendedor, Bodega).</td>
+</tr>
+<tr>
+<td><strong>Modal</strong></td>
+<td>Ventana emergente en la interfaz que permite capturar datos sin salir de la vista actual.</td>
+</tr>
+<tr>
+<td><strong>Dashboard</strong></td>
+<td>Panel de control principal que resume los indicadores más importantes del negocio.</td>
+</tr>
+<tr>
+<td><strong>KPI</strong></td>
+<td>Indicador clave de desempeño (Key Performance Indicator); métrica numérica que resume el estado de un proceso del negocio.</td>
+</tr>
+<tr>
+<td><strong>IVA</strong></td>
+<td>Impuesto al Valor Agregado; se calcula automáticamente sobre el valor de productos en ventas y compras.</td>
+</tr>
+<tr>
+<td><strong>Movimiento de Inventario</strong></td>
+<td>Registro de una entrada, salida o ajuste de stock, con su cantidad, motivo y fecha.</td>
+</tr>
+<tr>
+<td><strong>ENTRADA_COMPRA</strong></td>
+<td>Tipo de movimiento que registra el aumento de stock generado por una compra a proveedor.</td>
+</tr>
+<tr>
+<td><strong>SALIDA_VENTA</strong></td>
+<td>Tipo de movimiento que registra la disminución de stock generada por una venta.</td>
+</tr>
+<tr>
+<td><strong>DEVOLUCION_VENTA</strong></td>
+<td>Tipo de movimiento que restaura el stock cuando una venta es anulada.</td>
+</tr>
+<tr>
+<td><strong>Almacén</strong></td>
+<td>Ubicación física donde se almacena el inventario de productos.</td>
+</tr>
+<tr>
+<td><strong>Cliente General</strong></td>
+<td>Cliente genérico utilizado en una venta cuando no se identifica a un cliente específico.</td>
+</tr>
+<tr>
+<td><strong>Persona Natural / Jurídica</strong></td>
+<td>Clasificación del cliente o proveedor según sea un individuo (natural) o una empresa (jurídica).</td>
+</tr>
+<tr>
+<td><strong>Contraseña Cifrada (Hash)</strong></td>
+<td>Representación irreversible de una contraseña, almacenada de forma segura; ni siquiera el administrador puede leerla en texto plano.</td>
+</tr>
+<tr>
+<td><strong>Cuenta Bloqueada</strong></td>
+<td>Estado de un usuario que superó el número máximo de intentos fallidos de inicio de sesión (5) y requiere ser desbloqueado por un Administrador.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="9-preguntas-frecuentes-faq">9. Preguntas frecuentes (FAQ)</h2>
+<p><strong>1. ¿Qué debo hacer si no recuerdo mi contraseña de acceso?</strong></p>
+<blockquote>
+<p>Contacte al usuario con perfil <strong>Administrador</strong> para que restablezca sus credenciales desde el módulo de administración de usuarios.</p>
+</blockquote>
+<p><strong>2. ¿Puedo registrar una venta si el stock está en cero?</strong></p>
+<blockquote>
+<p>No. El sistema valida automáticamente las existencias disponibles para evitar descuadres en el inventario físico.</p>
+</blockquote>
+<p><strong>3. ¿Qué pasa si anulo una venta por error?</strong></p>
+<blockquote>
+<p>El sistema restaura automáticamente el stock descontado mediante un movimiento <code>DEVOLUCION_VENTA</code>. Sin embargo, la anulación en sí misma es irreversible, por lo que deberá registrar una nueva venta si el cliente aún desea completar la compra.</p>
+</blockquote>
+<p><strong>4. ¿Por qué no veo el módulo de Usuarios en mi menú lateral?</strong></p>
+<blockquote>
+<p>El módulo de Usuarios solo es visible para el rol <strong>Administrador</strong>. Si su cuenta requiere este acceso, contacte al administrador del sistema.</p>
+</blockquote>
+<p><strong>5. ¿Qué significa que mi cuenta esté "Bloqueada"?</strong></p>
+<blockquote>
+<p>Significa que se superaron los 5 intentos fallidos de inicio de sesión permitidos. Un Administrador debe desbloquear la cuenta desde el módulo de Usuarios.</p>
+</blockquote>
+<p><strong>6. ¿Puedo editar una compra o venta ya registrada?</strong></p>
+<blockquote>
+<p>No se pueden editar directamente. Si el registro es incorrecto, debe anularse (si el estado lo permite) y registrarse nuevamente con los datos correctos.</p>
+</blockquote>
+<p><strong>7. ¿Qué diferencia hay entre "Inactivo" y "Bloqueado" en un cliente?</strong></p>
+<blockquote>
+<p>"Inactivo" es un estado administrativo reversible que puede activar cualquier usuario autorizado. "Bloqueado" indica una restricción adicional sobre ese cliente y sigue el ciclo: activo → inactivo → bloqueado → activo.</p>
+</blockquote>
+<p><strong>8. ¿El sistema funciona sin conexión a internet?</strong></p>
+<blockquote>
+<p>No. SofInventory es una aplicación web y requiere conexión a internet estable para funcionar correctamente, tanto en el entorno local como en producción.</p>
+</blockquote>
+<hr />
+<h2 id="10-solucion-de-problemas-comunes">10. Solución de problemas comunes</h2>
+<table>
+<thead>
+<tr>
+<th>Problema</th>
+<th>Posible causa</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No puedo iniciar sesión aunque la contraseña es correcta</td>
+<td>La cuenta está bloqueada por intentos fallidos previos</td>
+<td>Solicite a un Administrador que desbloquee la cuenta desde el módulo de Usuarios</td>
+</tr>
+<tr>
+<td>El botón "Registrar Venta" no responde</td>
+<td>Falta seleccionar un campo obligatorio (almacén, método de pago o al menos un producto)</td>
+<td>Revise que todos los campos obligatorios del modal estén completos</td>
+</tr>
+<tr>
+<td>No aparece un producto al buscarlo en Ventas</td>
+<td>El producto está en estado "Inactivo" o "Pendiente"</td>
+<td>Verifique el estado del producto en el módulo Productos; solo los productos "Activos" están disponibles para la venta</td>
+</tr>
+<tr>
+<td>La página no carga o se queda en blanco</td>
+<td>Pérdida de conexión a internet o el servidor está iniciando (arranque en frío)</td>
+<td>Verifique su conexión; si accede a la URL de producción tras un periodo de inactividad, espere unos segundos a que el servicio inicie</td>
+</tr>
+<tr>
+<td>El modal no se cierra después de guardar</td>
+<td>Error de validación no visible o campo con formato incorrecto</td>
+<td>Revise que no haya mensajes de error en rojo dentro del formulario antes de reintentar</td>
+</tr>
+<tr>
+<td>Los totales de una venta o compra no cuadran</td>
+<td>Se modificó la cantidad o el precio después de calcular el subtotal</td>
+<td>Vuelva a verificar cada línea de producto; los totales se recalculan automáticamente al cambiar cantidad o precio</td>
+</tr>
+<tr>
+<td>No veo los mismos módulos que un compañero</td>
+<td>Cada rol tiene un conjunto distinto de módulos habilitados</td>
+<td>Consulte la matriz de permisos de la sección 3.3 para confirmar qué le corresponde a su rol</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11-mesa-de-ayuda-y-soporte-tecnico">11. Mesa de ayuda y soporte técnico</h2>
+<p>Si presenta inconsistencias en el sistema, errores de ejecución o requiere asistencia técnica adicional, puede comunicarse con el equipo de soporte a través de los siguientes canales:</p>
+<ul>
+<li><strong>Canal de Soporte:</strong> Mesa de Ayuda SofInventory</li>
+<li><strong>Correo Electrónico:</strong> alejosepulveda981@gmail.com</li>
+<li><strong>Línea de Atención:</strong> 3197751596</li>
+<li><strong>Horario de Atención:</strong> Lunes a Viernes de 8:00 a.m. a 6:00 p.m.</li>
+</ul>
+<blockquote>
+<p><strong>Antes de contactar a soporte:</strong> revise la sección 9 (Preguntas Frecuentes) y la sección 10 (Solución de Problemas Comunes) de este manual; la mayoría de los inconvenientes reportados tienen solución inmediata sin necesidad de escalar el caso.</p>
+</blockquote>
+<hr />
+<h2 id="12-referencias-y-fuentes-consultadas">12. Referencias y fuentes consultadas</h2>
+<h3 id="121-normas-y-guias-oficiales-de-documentacion">12.1 Normas y guías oficiales de documentación</h3>
+<table>
+<thead>
+<tr>
+<th>Guía / Norma</th>
+<th>Entidad / Fuente</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Guía para la Elaboración de Manuales de Usuario de Sistemas de Información</strong></td>
+<td>DNP (Departamento Nacional de Planeación) — <a href="https://bit.ly/31aMsek">Ver Documento</a></td>
+<td>Lineamientos de estructura, claridad y presentación para la elaboración de documentos dirigidos a usuarios finales.</td>
+</tr>
+<tr>
+<td><strong>Elaborar el Manual del Usuario</strong></td>
+<td>SENA — Ecosistema de Recursos Educativos Digitales (2022) — <a href="https://www.youtube.com/watch?v=L6KrmflE4jU">Ver Video</a></td>
+<td>Orientaciones y buenas prácticas metodológicas para la redacción y estructuración de manuales de usuario en proyectos de software.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<div align="center">
+<h3>🛠️ SofInventory ERP</h3>
+<p>Sistema de Gestión de Inventarios y Ventas para Ferreterías</p>
+<p><strong>© 2026 SofInventory.</strong> Todos los derechos reservados.  
+Documento elaborado por el Equipo de Desarrollo de Software — SENA</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

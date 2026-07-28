@@ -1,0 +1,1352 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Manuales técnico y de usuario del sistema SofInventory.">
+      
+      
+        <meta name="author" content="Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>🧪 Casos de Prueba — Módulo Usuarios - SofInventory ERP</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#casos-de-prueba-modulo-usuarios" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../.." title="SofInventory ERP" class="md-header__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SofInventory ERP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🧪 Casos de Prueba — Módulo Usuarios
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MANUAL_USUARIO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual de Usuario
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MANUAL_TECNICO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual Técnico
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="SofInventory ERP" class="md-nav__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SofInventory ERP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MANUAL_USUARIO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual de Usuario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MANUAL_TECNICO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="casos-de-prueba-modulo-usuarios">🧪 Casos de Prueba — Módulo Usuarios</h1>
+<blockquote>
+<p><strong>Versión:</strong> 1.0.1 <br>
+<strong>Módulo:</strong> Gestión de Usuarios <br>
+<strong>Prefijo de código:</strong> TC-USR <br>
+<strong>Total de casos:</strong> 8 <br>
+<strong>Fecha:</strong> 16 de mayo de 2026 <br>
+<strong>Autor:</strong> Lucy Estefany Izquierdo Jaramillo</p>
+</blockquote>
+<hr />
+<h2 id="plantilla-de-caso-de-prueba">📋 Plantilla de Caso de Prueba</h2>
+<p>Cada caso de prueba sigue esta estructura estándar:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificador</td>
+<td>Código único del caso (TC-USR-XXX)</td>
+</tr>
+<tr>
+<td>Descripción</td>
+<td>Qué se está probando</td>
+</tr>
+<tr>
+<td>Precondiciones</td>
+<td>Estado previo requerido del sistema</td>
+</tr>
+<tr>
+<td>Datos de entrada</td>
+<td>Valores utilizados en la prueba</td>
+</tr>
+<tr>
+<td>Pasos a seguir</td>
+<td>Secuencia de acciones a ejecutar</td>
+</tr>
+<tr>
+<td>Resultado esperado</td>
+<td>Comportamiento correcto del sistema</td>
+</tr>
+<tr>
+<td>Resultado obtenido</td>
+<td>Comportamiento real observado</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>✅ Pasó / ❌ Falló / ⚠️ Bloqueado</td>
+</tr>
+<tr>
+<td>Evidencias</td>
+<td>Referencias a capturas de pantalla o archivos</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="descripcion-de-la-funcionalidad">📝 Descripción de la Funcionalidad</h2>
+<p>El módulo de Usuarios permite al administrador registrar nuevas cuentas en el sistema. El formulario de creación solicita: tipo de documento, número de documento, nombre completo, email, username, contraseña, rol y fecha de creación. Al completar el registro, el sistema almacena el usuario en la tabla <code>usuarios</code> de PostgreSQL con la contraseña hasheada mediante PBKDF2-SHA256, habilitando su acceso al módulo de Login.</p>
+<p><strong>Endpoint principal:</strong> <code>POST /api/usuarios/crear/</code>
+<strong>Acceso requerido:</strong> Token Bearer con rol <code>Administrador</code></p>
+<hr />
+<h2 id="ambiente-de-pruebas">🖥️ Ambiente de Pruebas</h2>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend</td>
+<td>Django 4.x + Django REST Framework</td>
+</tr>
+<tr>
+<td>Base de datos</td>
+<td>PostgreSQL 18+</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>Angular 19</td>
+</tr>
+<tr>
+<td>Herramienta API</td>
+<td>Postman v12</td>
+</tr>
+<tr>
+<td>Herramienta BD</td>
+<td>pgAdmin 4</td>
+</tr>
+<tr>
+<td>Ambiente</td>
+<td>Local (desarrollo)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="casos-de-prueba">🧪 Casos de Prueba</h2>
+<hr />
+<h3 id="tc-usr-001-creacion-exitosa-de-usuario-administrador">TC-USR-001: Creación exitosa de usuario administrador</h3>
+<p><strong>Descripción</strong>
+Verificar que un administrador puede crear un nuevo usuario con rol Administrador ingresando todos los datos requeridos correctamente.</p>
+<p><strong>📌 Información General</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificador</td>
+<td>TC-USR-001</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Creación exitosa de usuario administrador</td>
+</tr>
+<tr>
+<td>Tipo de prueba</td>
+<td>Funcional</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Módulo</td>
+<td>Gestión de Usuarios</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>✅ Pasó</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>
+El tester está autenticado como administrador con un token Bearer válido.
+El servidor Django y la base de datos PostgreSQL están en línea.</p>
+<p><strong>Datos de entrada</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tipo_documento&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;numero_documento&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;nombre_completo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Carlos Pérez&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;carlos1p@gmail.com&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;carlos&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;carlos123&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;rol&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;fecha_creacion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-16&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;estado&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;activo&quot;</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p><strong>Pasos a seguir</strong>
+1. Iniciar sesión como administrador.
+2. Navegar a Configuración &gt; Usuarios.
+3. Clic en "Nuevo Usuario".
+4. Completar el formulario con los datos indicados.
+5. Clic en "Guardar".
+6. En pgAdmin verificar:
+   <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="n">rol_id</span><span class="p">,</span><span class="w"> </span><span class="n">estado</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;carlos&#39;</span><span class="p">;</span>
+</code></pre></div></p>
+<p><strong>Resultado esperado</strong>
+- HTTP 201 Created con mensaje <code>"Usuario creado exitosamente"</code>.
+- El usuario aparece en el listado del sistema.
+- El registro existe en la tabla <code>usuarios</code> con los datos correctos.</p>
+<p><strong>Resultado obtenido</strong>
+El sistema mostró el mensaje de éxito y el usuario quedó registrado en la tabla <code>usuarios</code> de PostgreSQL con los datos correctos.</p>
+<p><strong>Evidencias</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td><a href="../evidencias/frontend/TC-USR-001-frontend.png"><img alt="Captura Frontend TC-USR-001" src="../evidencias/frontend/TC-USR-001-frontend.png" /></a></td>
+</tr>
+<tr>
+<td>Postman</td>
+<td><a href="../evidencias/postman/TC-USR-001-postman.png"><img alt="Captura Postman TC-USR-001" src="../evidencias/postman/TC-USR-001-postman.png" /></a></td>
+</tr>
+<tr>
+<td>Database</td>
+<td><a href="../evidencias/database/TC-USR-001-db.png"><img alt="Captura Database TC-USR-001" src="../evidencias/database/TC-USR-001-db.png" /></a></td>
+</tr>
+</tbody>
+</table>
+<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
+<p><strong>Resultado final:</strong> ✅ Exitoso</p>
+<p><strong>Observación:</strong> El usuario fue creado correctamente y el registro persiste en PostgreSQL con todos los campos esperados.</p>
+<hr />
+<h3 id="tc-usr-002-creacion-exitosa-de-usuario-supervisor">TC-USR-002: Creación exitosa de usuario supervisor</h3>
+<p><strong>Descripción</strong>
+Verificar que se puede crear un usuario con rol Supervisor y que sus permisos quedan correctamente restringidos en el sistema.</p>
+<p><strong>📌 Información General</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificador</td>
+<td>TC-USR-002</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Creación exitosa de usuario supervisor</td>
+</tr>
+<tr>
+<td>Tipo de prueba</td>
+<td>Funcional / Control de acceso</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Módulo</td>
+<td>Gestión de Usuarios</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>✅ Pasó</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>
+El tester está autenticado como administrador con un token Bearer válido.</p>
+<p><strong>Datos de entrada</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tipo_documento&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;numero_documento&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;9876543210&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;nombre_completo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Laura Gómez&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;laura1g@gmail.com&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lauraG&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;laura123&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;rol&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;fecha_creacion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-14&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;estado&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;activo&quot;</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<p><strong>Pasos a seguir</strong>
+1. Iniciar sesión como administrador.
+2. Navegar a Configuración &gt; Usuarios &gt; Nuevo Usuario.
+3. Completar los datos con rol "Supervisor".
+4. Guardar.
+5. Cerrar sesión e iniciar sesión con <code>lauraG</code> / <code>laura123</code>.
+6. Verificar que el módulo de administración de usuarios no es accesible.
+7. En pgAdmin verificar:
+   <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">nombre</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">rol</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">estado</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="n">u</span>
+<span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">roles</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">rol_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;lauraG&#39;</span><span class="p">;</span>
+</code></pre></div></p>
+<p><strong>Resultado esperado</strong>
+- HTTP 201. Usuario creado con rol Supervisor.
+- Al iniciar sesión, la respuesta de <code>/api/auth/me/</code> refleja <code>"rol": "Supervisor"</code>.
+- El menú de administración no es visible.</p>
+<p><strong>Resultado obtenido</strong>
+El usuario fue creado exitosamente. Al autenticarse, el menú de administración no estaba visible y el campo <code>rol</code> confirmó el rol Supervisor.</p>
+<p><strong>Evidencias</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td><a href="../evidencias/frontend/TC-USR-002-frontend.png"><img alt="Captura Frontend TC-USR-002" src="../evidencias/frontend/TC-USR-002-frontend.png" /></a></td>
+</tr>
+<tr>
+<td>Database</td>
+<td><a href="../evidencias/database/TC-USR-002-db.png"><img alt="Captura Database TC-USR-002" src="../evidencias/database/TC-USR-002-db.png" /></a></td>
+</tr>
+</tbody>
+</table>
+<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
+<p><strong>Resultado final:</strong> ✅ Exitoso</p>
+<p><strong>Observación:</strong> El rol Supervisor fue asignado correctamente y las restricciones de acceso funcionan como se espera.</p>
+<hr />
+<h3 id="tc-usr-003-rechazo-por-username-duplicado">TC-USR-003: Rechazo por username duplicado</h3>
+<p><strong>Descripción</strong>
+Verificar que el sistema no permite registrar dos usuarios con el mismo username, ya que el campo tiene restricción <code>UNIQUE</code> en la tabla <code>usuarios</code> de PostgreSQL.</p>
+<p><strong>📌 Información General</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificador</td>
+<td>TC-USR-003</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Rechazo por username duplicado</td>
+</tr>
+<tr>
+<td>Tipo de prueba</td>
+<td>Validación / Integridad de datos</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Módulo</td>
+<td>Gestión de Usuarios</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>✅ Pasó</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>
+Existe un usuario con <code>username = 'carlos'</code> (creado en TC-USR-001).</p>
+<p><strong>Datos de entrada</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;carlos&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CarlosG@gmail.com&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<em>(demás campos con valores válidos)</em></p>
+<p><strong>Pasos a seguir</strong>
+1. Abrir formulario de Nuevo Usuario.
+2. Ingresar el mismo username <code>carlos</code> ya registrado.
+3. Clic en "Guardar".
+4. Verificar la respuesta en Postman y el frontend.</p>
+<p><strong>Resultado esperado</strong>
+- HTTP 400 Bad Request con mensaje indicando que el username ya está en uso.
+- No se crea el registro duplicado en la tabla <code>usuarios</code>.</p>
+<p><strong>Resultado obtenido</strong>
+El servidor Django respondió con HTTP 400 y el error <code>{"username": ["Ya existe usuario con este username."]}</code>. El frontend mostró el mensaje de validación.</p>
+<p><strong>Evidencias</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td><a href="../evidencias/frontend/TC-USR-003-frontend.png"><img alt="Captura Frontend TC-USR-003" src="../evidencias/frontend/TC-USR-003-frontend.png" /></a></td>
+</tr>
+<tr>
+<td>Postman</td>
+<td><a href="../evidencias/postman/TC-USR-003-postman.png"><img alt="Captura Postman TC-USR-003" src="../evidencias/postman/TC-USR-003-postman.png" /></a></td>
+</tr>
+</tbody>
+</table>
+<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
+<p><strong>Resultado final:</strong> ✅ Exitoso</p>
+<p><strong>Observación:</strong> La restricción UNIQUE del campo <code>username</code> en PostgreSQL y la validación de DRF funcionan correctamente.</p>
+<hr />
+<h3 id="tc-usr-004-rechazo-por-contrasena-debil">TC-USR-004: Rechazo por contraseña débil</h3>
+<p><strong>Descripción</strong>
+Verificar que el sistema rechaza contraseñas que no cumplen la política de seguridad (mínimo 8 caracteres, al menos una mayúscula, un número y un carácter especial).</p>
+<p><strong>📌 Información General</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificador</td>
+<td>TC-USR-004</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Rechazo por contraseña débil</td>
+</tr>
+<tr>
+<td>Tipo de prueba</td>
+<td>Validación / Seguridad</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Módulo</td>
+<td>Gestión de Usuarios</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>❌ Falló</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>
+El tester está autenticado como administrador.</p>
+<p><strong>Datos de entrada</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;test.seguridad&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;123&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<em>(demás campos con valores válidos)</em></p>
+<p><strong>Pasos a seguir</strong>
+1. Abrir formulario de Nuevo Usuario.
+2. Ingresar contraseñas débiles (<code>123</code>, <code>12345</code>, contraseña sin mayúsculas ni caracteres especiales).
+3. Intentar guardar desde el formulario.
+4. Desde Postman: enviar el mismo body para verificar la validación del backend.</p>
+<p><strong>Resultado esperado</strong>
+- Frontend: indicador de contraseña débil visible, formulario bloqueado sin permitir el envío.
+- Postman: HTTP 400 Bad Request con detalle del error de validación de contraseña.
+- En ningún caso el usuario debe quedar registrado en la base de datos.</p>
+<p><strong>Resultado obtenido</strong>
+El sistema permitió crear el usuario con contraseñas débiles (<code>123</code>, <code>12345</code>) tanto desde el formulario Angular como desde Postman. No hubo ninguna validación en el backend — el <code>UsuarioSerializer</code> no aplica políticas de contraseña. El frontend tampoco bloqueó el envío.</p>
+<p><strong>Severidad:</strong> 🔴 Alta — Usuarios con contraseñas débiles representan un riesgo de seguridad directo en producción.
+<strong>Defecto registrado:</strong> BUG-USR-002</p>
+<p><strong>Evidencias</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td><a href="../evidencias/frontend/TC-USR-004-frontend.png"><img alt="Captura Frontend TC-USR-004" src="../evidencias/frontend/TC-USR-004-frontend.png" /></a></td>
+</tr>
+<tr>
+<td>Postman</td>
+<td><a href="../evidencias/postman/TC-USR-004-postman.png"><img alt="Captura Postman TC-USR-004" src="../evidencias/postman/TC-USR-004-postman.png" /></a></td>
+</tr>
+</tbody>
+</table>
+<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
+<p><strong>Resultado final:</strong> ❌ Fallido</p>
+<p><strong>Observación:</strong> La política de contraseñas no está implementada ni en el frontend ni en el backend. Se debe agregar validación en el <code>UsuarioSerializer</code> con los validadores de contraseña de Django (<code>AUTH_PASSWORD_VALIDATORS</code>) y en el formulario Angular con <code>Validators.pattern</code>. Ver BUG-USR-002 en DEFECTOS.md.</p>
+<hr />
+<h3 id="tc-usr-005-rechazo-por-numero-de-documento-con-formato-invalido">TC-USR-005: Rechazo por número de documento con formato inválido</h3>
+<p><strong>Descripción</strong>
+Verificar que el sistema rechaza la creación de un usuario cuando el campo <code>numero_documento</code> contiene caracteres no numéricos.</p>
+<p><strong>📌 Información General</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificador</td>
+<td>TC-USR-005</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Documento con formato inválido</td>
+</tr>
+<tr>
+<td>Tipo de prueba</td>
+<td>Validación / Integridad de datos</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Módulo</td>
+<td>Gestión de Usuarios</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>❌ Falló</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>
+El tester está autenticado como administrador.</p>
+<p><strong>Datos de entrada</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;numero_documento&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ABCDE!!!&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<em>(demás campos con valores válidos)</em></p>
+<p><strong>Pasos a seguir</strong>
+1. Abrir formulario de Nuevo Usuario.
+2. Ingresar <code>ABCDE!!!</code> en el campo número de documento.
+3. Completar el resto de campos con datos válidos.
+4. Clic en "Guardar".
+5. Verificar en pgAdmin:
+   <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">numero_documento</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</code></pre></div></p>
+<p><strong>Resultado esperado</strong>
+- HTTP 400 Bad Request.
+- Mensaje: <code>"El número de documento solo debe contener dígitos"</code>.
+- El registro no se crea en la base de datos.</p>
+<p><strong>Resultado obtenido</strong>
+⚠️ El sistema creó el registro con el valor <code>ABCDE!!!</code> en la columna <code>numero_documento</code> sin mostrar ningún error. No existe validación de formato en el <code>UsuarioSerializer</code> ni en el formulario Angular.</p>
+<p><strong>Severidad:</strong> 🔴 Alta — Compromete la integridad de los datos en PostgreSQL.
+<strong>Defecto registrado:</strong> BUG-USR-001</p>
+<p><strong>Evidencias</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Postman</td>
+<td><a href="../evidencias/postman/TC-USR-005-postman.png"><img alt="Captura Postman TC-USR-005" src="../evidencias/postman/TC-USR-005-postman.png" /></a></td>
+</tr>
+<tr>
+<td>Database</td>
+<td><a href="../evidencias/database/TC-USR-005-db.png"><img alt="Captura Database TC-USR-005" src="../evidencias/database/TC-USR-005-db.png" /></a></td>
+</tr>
+</tbody>
+</table>
+<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
+<p><strong>Resultado final:</strong> ❌ Fallido</p>
+<p><strong>Observación:</strong> Se debe agregar un <code>RegexValidator</code> en el <code>UsuarioSerializer</code> y validación equivalente en Angular. Ver BUG-USR-001 en DEFECTOS.md.</p>
+<hr />
+<h3 id="tc-usr-006-rechazo-por-campos-obligatorios-vacios">TC-USR-006: Rechazo por campos obligatorios vacíos</h3>
+<p><strong>Descripción</strong>
+Verificar que el sistema no permite crear un usuario si se omiten los campos obligatorios del formulario.</p>
+<p><strong>📌 Información General</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificador</td>
+<td>TC-USR-006</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Rechazo por campos obligatorios vacíos</td>
+</tr>
+<tr>
+<td>Tipo de prueba</td>
+<td>Validación / Funcional</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Módulo</td>
+<td>Gestión de Usuarios</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>✅ Pasó</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>
+El tester está autenticado como administrador.</p>
+<p><strong>Datos de entrada</strong>
+- Frontend: formulario completamente en blanco.
+- Postman: body <code>{}</code></p>
+<p><strong>Pasos a seguir</strong>
+1. Abrir formulario de Nuevo Usuario.
+2. No llenar ningún campo.
+3. Clic en "Guardar".
+4. Desde Postman: <code>POST /api/usuarios/crear/</code> con body <code>{}</code> y token de administrador.</p>
+<p><strong>Resultado esperado</strong>
+- Frontend: mensajes de validación visibles en todos los campos requeridos (<code>username</code>, <code>password</code>, <code>email</code>, <code>nombre_completo</code>, <code>tipo_documento</code>, <code>numero_documento</code>, <code>rol</code>, <code>fecha_creacion</code>).
+- Postman: HTTP 400 con lista de errores por campo faltante (DRF los enumera automáticamente).</p>
+<p><strong>Resultado obtenido</strong>
+Los mensajes de validación aparecieron en el frontend para todos los campos requeridos. Postman respondió HTTP 400 con el detalle de cada campo obligatorio faltante.</p>
+<p><strong>Evidencias</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td><a href="../evidencias/frontend/TC-USR-006-frontend.png"><img alt="Captura Frontend TC-USR-006" src="../evidencias/frontend/TC-USR-006-frontend.png" /></a></td>
+</tr>
+<tr>
+<td>Postman</td>
+<td><a href="../evidencias/postman/TC-USR-006-postman.png"><img alt="Captura Postman TC-USR-006" src="../evidencias/postman/TC-USR-006-postman.png" /></a></td>
+</tr>
+</tbody>
+</table>
+<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
+<p><strong>Resultado final:</strong> ✅ Exitoso</p>
+<p><strong>Observación:</strong> Las validaciones de campos obligatorios funcionan correctamente tanto en el frontend Angular como en el <code>UsuarioSerializer</code> de DRF.</p>
+<hr />
+<h3 id="tc-usr-007-verificacion-de-contrasena-hasheada-en-base-de-datos">TC-USR-007: Verificación de contraseña hasheada en base de datos</h3>
+<p><strong>Descripción</strong>
+Verificar que la contraseña del usuario es almacenada en PostgreSQL utilizando el algoritmo PBKDF2-SHA256 de Django y nunca en texto plano.</p>
+<p><strong>📌 Información General</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificador</td>
+<td>TC-USR-007</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Contraseña hasheada en base de datos</td>
+</tr>
+<tr>
+<td>Tipo de prueba</td>
+<td>Seguridad / Integridad de datos</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Módulo</td>
+<td>Gestión de Usuarios</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>✅ Pasó</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>
+El usuario <code>carlos</code> fue creado en TC-USR-001 con contraseña <code>carlos123</code>.
+Acceso a pgAdmin 4 con conexión a la base de datos de SofInventory.</p>
+<p><strong>Datos de entrada</strong>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">password</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;carlos&#39;</span><span class="p">;</span>
+</code></pre></div></p>
+<p><strong>Pasos a seguir</strong>
+1. Abrir pgAdmin 4 y conectarse a la base de datos de SofInventory.
+2. Abrir el Query Tool.
+3. Ejecutar la consulta SQL indicada.
+4. Observar el valor de la columna <code>password</code>.</p>
+<p><strong>Resultado esperado</strong>
+- El campo <code>password</code> muestra un hash con el formato Django: <code>pbkdf2_sha256$&lt;iteraciones&gt;$&lt;salt&gt;$&lt;hash_base64&gt;</code>.
+- La cadena <code>carlos123</code> <strong>no debe aparecer</strong> en ninguna columna.</p>
+<p><strong>Resultado obtenido</strong>
+El campo <code>password</code> contenía el hash completo en formato PBKDF2-SHA256. La contraseña en texto plano no era visible en ninguna columna.</p>
+<p><strong>Evidencias</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Database</td>
+<td><a href="../evidencias/database/TC-USR-007-db.png"><img alt="Captura Database TC-USR-007" src="../evidencias/database/TC-USR-007-db.png" /></a></td>
+</tr>
+</tbody>
+</table>
+<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
+<p><strong>Resultado final:</strong> ✅ Exitoso</p>
+<p><strong>Observación:</strong> Django aplica automáticamente PBKDF2-SHA256 al campo password. Ningún dato sensible queda expuesto en la base de datos.</p>
+<hr />
+<h3 id="tc-usr-008-usuario-creado-puede-iniciar-sesion">TC-USR-008: Usuario creado puede iniciar sesión</h3>
+<p><strong>Descripción</strong>
+Verificar que un usuario recién creado puede autenticarse exitosamente en el módulo de Login usando su username y contraseña. (Caso de integración: Usuarios → Login)</p>
+<p><strong>📌 Información General</strong></p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificador</td>
+<td>TC-USR-008</td>
+</tr>
+<tr>
+<td>Nombre</td>
+<td>Usuario creado puede iniciar sesión</td>
+</tr>
+<tr>
+<td>Tipo de prueba</td>
+<td>Integración</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Módulo</td>
+<td>Usuarios → Login</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>✅ Pasó</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Precondiciones</strong>
+Usuario <code>lauraG</code> fue creado en TC-USR-002 con contraseña <code>laura123</code> y estado activo.</p>
+<p><strong>Datos de entrada</strong>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lauraG&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;laura123&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>Pasos a seguir</strong>
+1. Cerrar toda sesión activa.
+2. En Postman: <code>POST /api/auth/login/</code> con el body indicado.
+3. Verificar que la respuesta incluye <code>access_token</code>, <code>expires_at</code> y el objeto <code>usuario</code>.
+4. En el frontend, navegar a la pantalla de Login e ingresar las credenciales.
+5. Verificar redirección al dashboard con el menú de supervisor.</p>
+<p><strong>Resultado esperado</strong>
+- HTTP 200.
+- Respuesta contiene <code>access_token</code>, <code>expires_at</code> y <code>"rol": "Supervisor"</code>.
+- El frontend redirige correctamente al dashboard.
+- La sesión queda registrada en <code>sesiones_api</code> con <code>activa = true</code>.</p>
+<p><strong>Resultado obtenido</strong>
+El usuario accedió correctamente. Se generó un token Bearer válido almacenado en la tabla <code>sesiones_api</code>. La redirección al dashboard fue exitosa con el menú de supervisor.</p>
+<p><strong>Evidencias</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td><a href="../evidencias/frontend/TC-USR-008-frontend.png"><img alt="Captura Frontend TC-USR-008" src="../evidencias/frontend/TC-USR-008-frontend.png" /></a></td>
+</tr>
+<tr>
+<td>Postman</td>
+<td><a href="../evidencias/postman/TC-USR-008-postman.png"><img alt="Captura Postman TC-USR-008" src="../evidencias/postman/TC-USR-008-postman.png" /></a></td>
+</tr>
+</tbody>
+</table>
+<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
+<p><strong>Resultado final:</strong> ✅ Exitoso</p>
+<p><strong>Observación:</strong> La integración entre el módulo de Usuarios y el módulo de Login funciona correctamente. El usuario creado puede autenticarse de inmediato.</p>
+<hr />
+<h2 id="resumen-de-resultados">📊 Resumen de Resultados</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Descripción</th>
+<th>Severidad (si falló)</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TC-USR-001</td>
+<td>Crear usuario administrador</td>
+<td>—</td>
+<td>✅ Pasó</td>
+</tr>
+<tr>
+<td>TC-USR-002</td>
+<td>Crear usuario supervisor</td>
+<td>—</td>
+<td>✅ Pasó</td>
+</tr>
+<tr>
+<td>TC-USR-003</td>
+<td>Username duplicado rechazado</td>
+<td>—</td>
+<td>✅ Pasó</td>
+</tr>
+<tr>
+<td>TC-USR-004</td>
+<td>Contraseña débil rechazada</td>
+<td>🔴 Alta</td>
+<td>❌ Falló</td>
+</tr>
+<tr>
+<td>TC-USR-005</td>
+<td>Número de documento inválido</td>
+<td>🔴 Alta</td>
+<td>❌ Falló</td>
+</tr>
+<tr>
+<td>TC-USR-006</td>
+<td>Campos obligatorios vacíos rechazados</td>
+<td>—</td>
+<td>✅ Pasó</td>
+</tr>
+<tr>
+<td>TC-USR-007</td>
+<td>Contraseña almacenada como hash PBKDF2</td>
+<td>—</td>
+<td>✅ Pasó</td>
+</tr>
+<tr>
+<td>TC-USR-008</td>
+<td>Usuario creado puede hacer login</td>
+<td>—</td>
+<td>✅ Pasó</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td></td>
+<td></td>
+<td><strong>6/8 (75.0%)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="analisis-de-resultados">🔍 Análisis de Resultados</h2>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Resultado</th>
+<th>Evaluación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validaciones de formulario (frontend)</td>
+<td>Campos requeridos validados; política de contraseña ausente</td>
+<td>❌ Deficiencia</td>
+</tr>
+<tr>
+<td>Unicidad de username en PostgreSQL</td>
+<td>Restricción UNIQUE aplicada correctamente</td>
+<td>✅ Correcto</td>
+</tr>
+<tr>
+<td>Persistencia de datos en BD</td>
+<td>Datos guardados correctamente en tabla <code>usuarios</code></td>
+<td>✅ Correcto</td>
+</tr>
+<tr>
+<td>Seguridad de contraseñas (hashing)</td>
+<td>PBKDF2-SHA256 aplicado en todos los casos</td>
+<td>✅ Correcto</td>
+</tr>
+<tr>
+<td>Política de contraseñas (frontend y backend)</td>
+<td>Sin validación — contraseñas débiles como <code>123</code> aceptadas</td>
+<td>❌ Deficiencia crítica</td>
+</tr>
+<tr>
+<td>Validación de número de documento</td>
+<td>Sin validación de formato — datos inválidos aceptados</td>
+<td>❌ Deficiencia crítica</td>
+</tr>
+<tr>
+<td>Roles y permisos</td>
+<td>Restricciones de acceso por rol funcionan correctamente</td>
+<td>✅ Correcto</td>
+</tr>
+<tr>
+<td>Integración con Login</td>
+<td>Usuario creado accede correctamente con su username</td>
+<td>✅ Correcto</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hallazgos principales:</strong>
+- <strong>BUG-USR-001:</strong> Ausencia de validación de formato en <code>numero_documento</code> — permite ingreso de caracteres inválidos en PostgreSQL, comprometiendo la integridad de los datos y los reportes que dependan de ese campo.
+- <strong>BUG-USR-002:</strong> Ausencia de política de contraseñas en frontend y backend — el sistema acepta contraseñas débiles como <code>123</code>, exponiendo las cuentas a ataques de fuerza bruta.</p>
+<hr />
+<h2 id="recomendaciones">💡 Recomendaciones</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Prioridad</th>
+<th>Categoría</th>
+<th>Recomendación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>🔴 Crítico</td>
+<td>Seguridad</td>
+<td>Agregar un <code>RegexValidator</code> en el campo <code>numero_documento</code> del <code>UsuarioSerializer</code> para aceptar solo dígitos (<code>^\d+$</code>). Complementar con validación equivalente en el formulario Angular.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>🔴 Crítico</td>
+<td>Seguridad</td>
+<td>Activar <code>AUTH_PASSWORD_VALIDATORS</code> en <code>settings.py</code> de Django y conectarlos al <code>UsuarioSerializer</code>. Agregar <code>Validators.pattern</code> en Angular para exigir mínimo 8 caracteres, una mayúscula, un número y un carácter especial.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>🟠 Importante</td>
+<td>Validación</td>
+<td>Agregar restricción de longitud mínima y máxima al campo <code>numero_documento</code> según el tipo de documento (ej. CC: 7-10 dígitos).</td>
+</tr>
+<tr>
+<td>4</td>
+<td>🟡 Mejora</td>
+<td>Auditoría</td>
+<td>Registrar la creación de usuarios incluyendo el administrador que realizó la acción, IP de origen y fecha/hora.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>🔵 Buenas prácticas</td>
+<td>UX</td>
+<td>Implementar confirmación de contraseña en el formulario Angular para evitar errores tipográficos al crear el usuario.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>© 2026 SofInventory — Área de Calidad de Software | Versión 1.0.1</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

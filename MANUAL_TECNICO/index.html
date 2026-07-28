@@ -1,0 +1,5102 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Manuales técnico y de usuario del sistema SofInventory.">
+      
+      
+        <meta name="author" content="Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo">
+      
+      
+      
+        <link rel="prev" href="../MANUAL_USUARIO/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Manual Técnico - SofInventory ERP</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#manual-tecnico-y-arquitectura-del-software" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="SofInventory ERP" class="md-header__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SofInventory ERP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Manual Técnico
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../MANUAL_USUARIO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual de Usuario
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual Técnico
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SofInventory ERP" class="md-nav__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SofInventory ERP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MANUAL_USUARIO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual de Usuario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Técnico
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#control-de-versiones-del-documento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control de versiones del documento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convenciones-del-documento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convenciones del documento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Introducción
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Introducción">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-proposito" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Propósito
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-alcance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Alcance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-descripcion-tecnica-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Descripción técnica del sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-documentos-de-referencia-integrados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Documentos de referencia integrados
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-prerrequisitos-de-instalacion-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Prerrequisitos de instalación del sistema
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Prerrequisitos de instalación del sistema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-requisitos-minimos-de-hardware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Requisitos mínimos de hardware
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-requisitos-de-software-en-el-equipo-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Requisitos de software en el equipo Host
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-herramientas-recomendadas-opcional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Herramientas recomendadas (Opcional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-verificacion-de-prerrequisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Verificación de prerrequisitos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-frameworks-y-estandares-de-desarrollo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Frameworks y estándares de desarrollo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Frameworks y estándares de desarrollo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-stack-tecnologico-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Stack tecnológico completo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-patron-de-arquitectura-mvc-con-api-rest-desacoplada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Patrón de arquitectura: MVC con API REST desacoplada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-aplicaciones-apps-del-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Aplicaciones (Apps) del backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-variables-de-entorno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Variables de entorno
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-principales-endpoints-de-la-api-rest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 Principales Endpoints de la API REST
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-diagrama-y-descripcion-de-casos-de-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Diagrama y descripción de casos de uso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Diagrama y descripción de casos de uso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-diagrama-de-casos-de-uso-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Diagrama de casos de uso general
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-descripcion-de-casos-de-uso-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Descripción de casos de uso principales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.2 Descripción de casos de uso principales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cu-001-iniciar-sesion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CU-001: Iniciar sesión
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cu-002-gestionar-usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CU-002: Gestionar usuarios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cu-003-registrar-productos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CU-003: Registrar productos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cu-004-registrar-compras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CU-004: Registrar compras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cu-005-registrar-ventas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CU-005: Registrar ventas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cu-006-consultar-inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CU-006: Consultar inventario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cu-007-gestionar-almacenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CU-007: Gestionar almacenes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nota-para-consultar-los-diagramas-de-casos-de-uso-extendidos-plantillas-por-modulo-y-la-documentacion-funcional-detallada-del-sistema-puede-acceder-al-anexo-diagramas_plantillas_casos_de_uso_del_proyectopdf-o-ir-a-la-seccion-de-102-documentos-internos-y-externos-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📌 Nota: Para consultar los diagramas de casos de uso extendidos, plantillas por módulo y la documentación funcional detallada del sistema, puede acceder al anexo Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf o ir a la sección de 10.2 Documentos Internos y externos del Proyecto.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-modelo-entidad-relacion-base-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Modelo Entidad-Relación (Base de Datos)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Modelo Entidad-Relación (Base de Datos)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-descripcion-general-del-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Descripción general del modelo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-estructura-del-modelo-por-modulos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Estructura del modelo por módulos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-relaciones-principales-del-modelo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Relaciones principales del modelo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#especificacion-de-base-de-datos-para-revisar-el-diagrama-completo-generado-desde-la-base-de-datos-y-la-definicion-detallada-de-tablas-campos-y-restricciones-consulte-el-modelo-entidad-relacion-en-pdf-y-el-diccionario-de-datos-en-excel-ambos-referenciados-en-la-seccion-102-documentos-internos-y-externos-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📊 Especificación de Base de Datos: Para revisar el diagrama completo generado desde la base de datos y la definición detallada de tablas, campos y restricciones, consulte el Modelo Entidad-Relación en PDF y el Diccionario de Datos en Excel, ambos referenciados en la sección 10.2 Documentos Internos y externos del Proyecto.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-diccionario-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Diccionario de datos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Diccionario de datos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-tabla-usuarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Tabla: usuarios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-tabla-tipos_documento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Tabla: tipos_documento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-tabla-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Tabla: roles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-tabla-productos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Tabla: productos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-tabla-categorias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 Tabla: categorias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#66-tabla-proveedores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.6 Tabla: proveedores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#67-tabla-clientes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.7 Tabla: clientes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#68-tabla-compras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.8 Tabla: compras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#69-tabla-detalle_compras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.9 Tabla: detalle_compras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#610-tabla-ventas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.10 Tabla: ventas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#611-tabla-detalle_ventas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.11 Tabla: detalle_ventas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#612-tabla-almacenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.12 Tabla: almacenes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#613-tabla-stock_almacen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.13 Tabla: stock_almacen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#614-tabla-movimientos_inventario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.14 Tabla: movimientos_inventario
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#615-tabla-traslados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.15 Tabla: traslados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#616-tabla-traslados_detalle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.16 Tabla: traslados_detalle
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-scripts-de-instalacion-y-despliegue-con-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Scripts de instalación y despliegue con Docker
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Scripts de instalación y despliegue con Docker">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-obtencion-del-codigo-fuente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Obtención del código fuente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-estructura-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Estructura del proyecto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-configuracion-de-variables-de-entorno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Configuración de variables de entorno
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.3 Configuración de variables de entorno">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#731-archivo-backendenv" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3.1 Archivo backend/.env
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#732-variables-del-frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3.2 Variables del frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-despliegue-con-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Despliegue con Docker Compose
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.4 Despliegue con Docker Compose">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#741-verificar-que-docker-desktop-esta-en-ejecucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.1 Verificar que Docker Desktop está en ejecución
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#742-construir-y-levantar-los-servicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.2 Construir y levantar los servicios
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#743-verificar-el-estado-de-los-contenedores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.3 Verificar el estado de los contenedores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#744-verificar-los-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.4 Verificar los logs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#745-scripts-de-migracion-de-django" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4.5 Scripts de migración de Django
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-verificacion-de-funcionamiento-protocolo-de-aceptacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Verificación de funcionamiento (Protocolo de Aceptación)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.5 Verificación de funcionamiento (Protocolo de Aceptación)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paso-1-verificar-los-tres-contenedores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 1: Verificar los tres contenedores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-2-verificar-la-base-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 2: Verificar la base de datos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-3-verificar-el-backend-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 3: Verificar el backend (API)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-4-verificar-el-frontend-interfaz-web" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 4: Verificar el frontend (interfaz web)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-5-iniciar-sesion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 5: Iniciar sesión
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paso-6-verificar-modulos-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paso 6: Verificar módulos principales
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#76-comandos-utiles-de-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 Comandos útiles de Docker Compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#77-solucion-de-problemas-comunes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.7 Solución de problemas comunes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#78-despliegue-en-produccion-cloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.8 Despliegue en producción (Cloud)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manual-completo-de-despliegue-para-consultar-la-guia-ilustrada-paso-a-paso-de-instalacion-la-configuracion-de-variables-de-entorno-la-inicializacion-del-contenedor-de-postgresql-y-los-comandos-de-troubleshooting-consulte-el-documento-anexo-informe_tecnico_despliegue_sofinventory_v2pdf-o-dirijase-a-la-seccion-de-102-documentos-internos-y-externos-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🚀 Manual Completo de Despliegue: Para consultar la guía ilustrada paso a paso de instalación, la configuración de variables de entorno, la inicialización del contenedor de PostgreSQL y los comandos de troubleshooting, consulte el documento anexo Informe_Tecnico_Despliegue_SofInventory_v2.pdf o diríjase a la sección de 10.2 Documentos Internos y externos del Proyecto.
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-diagrama-de-componentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Diagrama de componentes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Diagrama de componentes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-arquitectura-general-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Arquitectura general del sistema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-flujo-de-comunicacion-entre-contenedores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Flujo de comunicación entre contenedores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-vista-de-componentes-patron-mvc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Vista de componentes — patrón MVC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-vista-de-despliegue-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 Vista de despliegue — Docker Compose
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-conclusiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Conclusiones
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Conclusiones">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-mantenibilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Mantenibilidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-aislamiento-de-entorno-mediante-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Aislamiento de entorno mediante Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-escalabilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Escalabilidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-seguridad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 Seguridad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#95-portabilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.5 Portabilidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-glosario-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Glosario técnico
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-mesa-de-ayuda-y-soporte-tecnico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Mesa de ayuda y soporte técnico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Mesa de ayuda y soporte técnico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-canales-de-escalamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Canales de escalamiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-tiempos-de-respuesta-segun-severidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Tiempos de respuesta según severidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-referencias-y-fuentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Referencias y fuentes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Referencias y fuentes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-documentacion-oficial" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 Documentación oficial
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122-documentos-internos-y-externos-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 Documentos internos y externos del proyecto
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123-guias-de-referencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 Guías de referencia
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div style="text-align: center">
+<p><img alt="SofInventory Logo" src="../assets/logo.png" width="300" /></p>
+<h1 id="manual-tecnico-y-arquitectura-del-software">Manual Técnico y Arquitectura del Software</h1>
+<p><strong>Sistema de Información SofInventory ERP</strong>
+<code>Versión 1.0</code> | <code>Fecha: 26 de julio de 2026</code></p>
+</div>
+<hr />
+<p><strong>Autores:</strong> Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo <br>
+<strong>Programa de Formación:</strong> Tecnología en Análisis y Desarrollo de Software <br>
+<strong>Cede:</strong> Centro de Comercio Regional Antioquia–SENA <br>
+<strong>Intructor:</strong> José Ignacio Botero Osorio <br>
+<strong>Fecha:</strong> Julio 25 de 2026 </p>
+<hr />
+<h3 id="control-de-versiones-del-documento">Control de versiones del documento</h3>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th>Fecha</th>
+<th>Autor(es)</th>
+<th>Descripción del cambio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Julio 25 de 2026</td>
+<td>Alejandro Sepúlveda D. / Lucy Estefany Izquierdo</td>
+<td>Versión inicial: introducción, arquitectura, diccionario de datos, despliegue con Docker, diagrama de componentes y conclusiones.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="convenciones-del-documento">Convenciones del documento</h3>
+<table>
+<thead>
+<tr>
+<th>Símbolo</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>⚠️</td>
+<td>Advertencia importante: acción irreversible, riesgo de seguridad o que requiere especial atención.</td>
+</tr>
+<tr>
+<td>📄 / 📊 / 🖼️ / 💻</td>
+<td>Enlace a un documento, hoja de cálculo, imagen o repositorio de código, respectivamente.</td>
+</tr>
+<tr>
+<td><strong>Negrita</strong></td>
+<td>Nombres de comandos, variables, botones o elementos clave.</td>
+</tr>
+<tr>
+<td><code>Texto en código</code></td>
+<td>Nombres técnicos literales (comandos, variables de entorno, endpoints, nombres de tablas).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-introduccion">1. Introducción</h2>
+<h3 id="11-proposito">1.1 Propósito</h3>
+<p>El presente Manual Técnico documenta de forma exhaustiva la arquitectura, configuración, estructura de datos, procedimientos de instalación y despliegue del sistema <strong>SofInventory</strong>. Su propósito es servir como referencia técnica para desarrolladores, arquitectos de software, analistas, administradores de bases de datos y personal de soporte que requiera comprender, implementar, mantener o escalar la solución.</p>
+<h3 id="12-alcance">1.2 Alcance</h3>
+<p>Este manual cubre los siguientes aspectos del sistema:</p>
+<ul>
+<li>Arquitectura técnica completa (backend, frontend, base de datos, contenedores Docker)</li>
+<li>Prerrequisitos de hardware y software para el despliegue</li>
+<li>Stack tecnológico y estándares de codificación aplicados</li>
+<li>Diagramas de casos de uso con descripción detallada de actores y flujos</li>
+<li>Modelo entidad-relación de la base de datos PostgreSQL</li>
+<li>Diccionario de datos completo con tipos, longitudes y restricciones</li>
+<li>Scripts reales de instalación y despliegue mediante Docker Compose</li>
+<li>Diagrama de componentes con orquestación Docker</li>
+<li>Protocolo de pruebas de aceptación</li>
+</ul>
+<h3 id="13-descripcion-tecnica-del-sistema">1.3 Descripción técnica del sistema</h3>
+<p><strong>SofInventory</strong> es un sistema ERP (Enterprise Resource Planning) orientado a la gestión integral de inventarios y procesos comerciales para PYMES. El sistema permite administrar:</p>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Funcionalidad Principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Usuarios y Roles</strong></td>
+<td>Autenticación, autorización, control de accesos por rol</td>
+</tr>
+<tr>
+<td><strong>Productos y Categorías</strong></td>
+<td>Catálogo de productos con precios, stock, imágenes</td>
+</tr>
+<tr>
+<td><strong>Proveedores</strong></td>
+<td>Gestión de proveedores con datos de contacto y ubicación</td>
+</tr>
+<tr>
+<td><strong>Clientes</strong></td>
+<td>Clientes naturales y jurídicos con categorización comercial</td>
+</tr>
+<tr>
+<td><strong>Compras</strong></td>
+<td>Registro de compras con detalle y actualización automática de inventario</td>
+</tr>
+<tr>
+<td><strong>Ventas</strong></td>
+<td>Punto de venta con múltiples métodos de pago y cálculo de IVA</td>
+</tr>
+<tr>
+<td><strong>Inventario y Almacenes</strong></td>
+<td>Control de stock por almacén, movimientos, traslados y ajustes</td>
+</tr>
+<tr>
+<td><strong>Dashboard</strong></td>
+<td>Panel de indicadores con gráficos y métricas en tiempo real</td>
+</tr>
+</tbody>
+</table>
+<p>La arquitectura es <strong>desacoplada (decoupled)</strong>: un backend Django REST Framework que expone una API, y un frontend Angular SPA que consume dicha API. Ambos están containerizados con Docker y orquestados mediante Docker Compose.</p>
+<h3 id="14-documentos-de-referencia-integrados">1.4 Documentos de referencia integrados</h3>
+<p>Este manual ha sido elaborado consolidando la información de los siguientes documentos técnicos del proyecto:</p>
+<table>
+<thead>
+<tr>
+<th>Documento</th>
+<th>Contenido Integrado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modelo Entidad-Relación SofInventory PostgreSQL</td>
+<td>Estructura de la base de datos, normalización 3FN, relaciones</td>
+</tr>
+<tr>
+<td>Desarrollo Arquitectura de Software (Patrón MVC)</td>
+<td>Vista de componentes, vista de despliegue, justificación de herramientas</td>
+</tr>
+<tr>
+<td>Informe Técnico de Despliegue v2.0</td>
+<td>Fases de despliegue Docker, variables de entorno, protocolo de pruebas</td>
+</tr>
+<tr>
+<td>Diagramas y Plantillas para Casos de Uso</td>
+<td>CU-001 a CU-004 con flujos principales, alternativos y de excepción</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-prerrequisitos-de-instalacion-del-sistema">2. Prerrequisitos de instalación del sistema</h2>
+<h3 id="21-requisitos-minimos-de-hardware">2.1 Requisitos mínimos de hardware</h3>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Mínimo</th>
+<th>Recomendado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CPU</strong></td>
+<td>2 núcleos</td>
+<td>4 núcleos o superior</td>
+</tr>
+<tr>
+<td><strong>RAM</strong></td>
+<td>4 GB</td>
+<td>8 GB o superior</td>
+</tr>
+<tr>
+<td><strong>Disco</strong></td>
+<td>20 GB libres</td>
+<td>50 GB (SSD recomendado)</td>
+</tr>
+<tr>
+<td><strong>Red</strong></td>
+<td>Conexión a internet para clonación del repositorio</td>
+<td>Conexión estable y de baja latencia</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Nota importante:</strong> Estos requisitos aplican al <strong>equipo anfitrión (host)</strong> donde se ejecutarán los contenedores Docker. Las dependencias de Python, Node.js y PostgreSQL se ejecutan <strong>dentro</strong> de los contenedores, por lo que no se requiere instalarlas en el sistema operativo del host.</p>
+</blockquote>
+<h3 id="22-requisitos-de-software-en-el-equipo-host">2.2 Requisitos de software en el equipo Host</h3>
+<table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Versión Requerida</th>
+<th>Propósito</th>
+<th>¿Obligatorio?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Docker Desktop</strong></td>
+<td>Última versión estable (incluye Docker Engine + Docker Compose)</td>
+<td>Construcción y ejecución de contenedores</td>
+<td><strong>Sí</strong></td>
+</tr>
+<tr>
+<td><strong>Git</strong></td>
+<td>Última versión estable</td>
+<td>Obtención del código fuente del repositorio</td>
+<td><strong>Sí</strong></td>
+</tr>
+<tr>
+<td><strong>Navegador web</strong></td>
+<td>Chrome, Edge o Firefox (actualizado)</td>
+<td>Acceso a la interfaz de usuario</td>
+<td><strong>Sí</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>No es necesario instalar</strong> Python, Node.js, PostgreSQL, npm, entornos virtuales de Python, ni configurar bases de datos manualmente. Todo se ejecuta dentro de los contenedores Docker, lo que elimina problemas de compatibilidad entre versiones y garantiza un entorno idéntico en cualquier máquina.</p>
+</blockquote>
+<h3 id="23-herramientas-recomendadas-opcional">2.3 Herramientas recomendadas (Opcional)</h3>
+<table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Visual Studio Code</strong></td>
+<td>Editor de código fuente</td>
+</tr>
+<tr>
+<td><strong>Postman / Insomnia</strong></td>
+<td>Pruebas de API REST</td>
+</tr>
+<tr>
+<td><strong>pgAdmin 4 / DBeaver</strong></td>
+<td>Administración de PostgreSQL (solo si se necesita inspeccionar la BD directamente)</td>
+</tr>
+<tr>
+<td><strong>Docker Desktop</strong></td>
+<td>Panel visual de contenedores, logs y redes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="24-verificacion-de-prerrequisitos">2.4 Verificación de prerrequisitos</h3>
+<p>Antes de proceder con la instalación, verifique que Docker y Git estén correctamente instalados:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Verificar Docker Engine</span>
+docker<span class="w"> </span>--version
+<span class="c1"># Resultado esperado: Docker version 24.x.x o superior</span>
+
+<span class="c1"># Verificar Docker Compose</span>
+docker<span class="w"> </span>compose<span class="w"> </span>version
+<span class="c1"># Resultado esperado: Docker Compose version v2.x.x o superior</span>
+
+<span class="c1"># Verificar Git</span>
+git<span class="w"> </span>--version
+<span class="c1"># Resultado esperado: git version 2.x.x</span>
+</code></pre></div>
+<hr />
+<h2 id="3-frameworks-y-estandares-de-desarrollo">3. Frameworks y estándares de desarrollo</h2>
+<h3 id="31-stack-tecnologico-completo">3.1 Stack tecnológico completo</h3>
+<pre class="mermaid"><code>block-beta
+    columns 3
+    block:FRONTEND:1
+        columns 1
+        F1["Angular 19+ (SPA)"]
+        F2["TypeScript"]
+        F3["HTML / CSS"]
+        F4["Font Awesome 7"]
+        F5["Chart.js 4"]
+    end
+    block:BACKEND:1
+        columns 1
+        B1["Django 6.0"]
+        B2["Django REST Framework"]
+        B3["Python 3.12"]
+        B4["Gunicorn"]
+        B5["Whitenoise"]
+    end
+    block:DATABASE:1
+        columns 1
+        D1["PostgreSQL 15"]
+        D2["psycopg2"]
+        D3["dj-database-url"]
+        D4["Pillow (imágenes)"]
+    end
+    INFRA["Docker / Docker Compose / Nginx / Git"]</code></pre>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Tecnología</th>
+<th>Versión</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>Angular</td>
+<td>19+</td>
+<td>Interfaz de usuario SPA (Single Page Application)</td>
+</tr>
+<tr>
+<td><strong>Frontend — Lenguaje</strong></td>
+<td>TypeScript</td>
+<td>5.6</td>
+<td>Lenguaje tipado basado en JavaScript</td>
+</tr>
+<tr>
+<td><strong>Frontend — Íconos</strong></td>
+<td>Font Awesome</td>
+<td>7.2</td>
+<td>Librería de íconos vectoriales</td>
+</tr>
+<tr>
+<td><strong>Frontend — Gráficos</strong></td>
+<td>Chart.js</td>
+<td>4.5</td>
+<td>Librería de visualización de datos</td>
+</tr>
+<tr>
+<td><strong>Backend — Framework</strong></td>
+<td>Django</td>
+<td>6.0</td>
+<td>Framework web Python de alto nivel</td>
+</tr>
+<tr>
+<td><strong>Backend — API</strong></td>
+<td>Django REST Framework</td>
+<td>3.17</td>
+<td>Toolkit para construir APIs RESTful</td>
+</tr>
+<tr>
+<td><strong>Backend — Servidor</strong></td>
+<td>Gunicorn</td>
+<td>23.0</td>
+<td>Servidor WSGI para producción</td>
+</tr>
+<tr>
+<td><strong>Backend — Estáticos</strong></td>
+<td>Whitenoise</td>
+<td>6.12</td>
+<td>Servir archivos estáticos en producción</td>
+</tr>
+<tr>
+<td><strong>Base de datos</strong></td>
+<td>PostgreSQL</td>
+<td>15</td>
+<td>Sistema de gestión de BD relacional</td>
+</tr>
+<tr>
+<td><strong>Contenedorización</strong></td>
+<td>Docker</td>
+<td>24+</td>
+<td>Empaquetado y ejecución de servicios</td>
+</tr>
+<tr>
+<td><strong>Orquestación</strong></td>
+<td>Docker Compose</td>
+<td>v2</td>
+<td>Definición y levantamiento multi-contenedor</td>
+</tr>
+<tr>
+<td><strong>Servidor web (frontend)</strong></td>
+<td>Nginx</td>
+<td>Alpine</td>
+<td>Servidor de archivos estáticos + proxy reverso</td>
+</tr>
+<tr>
+<td><strong>Control de versiones</strong></td>
+<td>Git + GitHub</td>
+<td>—</td>
+<td>Repositorio remoto privado</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-patron-de-arquitectura-mvc-con-api-rest-desacoplada">3.2 Patrón de arquitectura: MVC con API REST desacoplada</h3>
+<p>El sistema implementa el patrón <strong>Modelo-Vista-Controlador (MVC)</strong> adaptado a una arquitectura <strong>cliente-servidor desacoplada</strong> mediante API REST:</p>
+<table>
+<thead>
+<tr>
+<th>Capa MVC</th>
+<th>Implementación en SofInventory</th>
+<th>Ubicación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Modelo</strong></td>
+<td>Modelos de Django (usuarios, productos, inventario, proveedores, clientes, compras, ventas) que gestionan datos, reglas de negocio e interacción con PostgreSQL</td>
+<td><code>backend/*/models.py</code></td>
+</tr>
+<tr>
+<td><strong>Vista</strong></td>
+<td>Aplicación Angular (SPA) que renderiza la interfaz gráfica (formularios, tablas, dashboards) en el navegador del usuario</td>
+<td><code>frontend/src/app/pages/</code></td>
+</tr>
+<tr>
+<td><strong>Controlador</strong></td>
+<td>Vistas de Django REST Framework (<code>views.py</code> de cada app) que reciben peticiones HTTP de Angular, aplican permisos por rol y devuelven respuestas JSON</td>
+<td><code>backend/*/views.py</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Justificación:</strong> El patrón MVC, adaptado a esta arquitectura desacoplada, permite escalar el frontend y el backend por separado, y habilita que otros clientes (app móvil, sistema externo) reutilicen la misma API REST sin duplicar lógica de negocio.</p>
+</blockquote>
+<h3 id="33-aplicaciones-apps-del-backend">3.3 Aplicaciones (Apps) del backend</h3>
+<p>El backend Django se organiza en <strong>8 aplicaciones modulares</strong>, cada una responsable de un dominio del negocio:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>App Django</th>
+<th>Modelo(s)</th>
+<th>Tabla(s) PostgreSQL</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>usuarios</code></td>
+<td>TipoDocumento, Rol, Usuario, SesionAPI, IntentoFallidoLogin</td>
+<td><code>tipos_documento</code>, <code>roles</code>, <code>usuarios</code>, <code>sesiones_api</code>, <code>intentos_fallidos_login</code></td>
+<td>Gestión de usuarios, roles, autenticación y sesiones</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>productos</code></td>
+<td>Categoria, Producto</td>
+<td><code>categorias</code>, <code>productos</code></td>
+<td>Catálogo de productos y categorías</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>proveedores</code></td>
+<td>Proveedor</td>
+<td><code>proveedores</code></td>
+<td>Gestión de proveedores</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>clientes</code></td>
+<td>Cliente</td>
+<td><code>clientes</code></td>
+<td>Clientes naturales y jurídicos</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>compras</code></td>
+<td>Compra, DetalleCompra</td>
+<td><code>compras</code>, <code>detalle_compras</code></td>
+<td>Registro de compras y detalle</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>ventas</code></td>
+<td>Venta, DetalleVenta</td>
+<td><code>ventas</code>, <code>detalle_ventas</code></td>
+<td>Punto de venta y detalle</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>inventario</code></td>
+<td>Almacen, StockAlmacen, MovimientoInventario, Traslado, TrasladoDetalle, ConfiguracionRangosStock</td>
+<td><code>almacenes</code>, <code>stock_almacen</code>, <code>movimientos_inventario</code>, <code>traslados</code>, <code>traslados_detalle</code>, <code>configuracion_rangos_stock</code></td>
+<td>Control de inventario, almacenes y movimientos</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>dashboard</code></td>
+<td>—</td>
+<td>—</td>
+<td>Agrega datos de los módulos para indicadores</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34-variables-de-entorno">3.4 Variables de entorno</h3>
+<p>El sistema utiliza archivos <code>.env</code> para la configuración de cada componente. Las variables están documentadas en la sección de despliegue. Los archivos <code>.env</code> <strong>nunca se suben al repositorio</strong> (excluidos por <code>.gitignore</code>).</p>
+<blockquote>
+<p>📄 <strong>Documentación Complementaria:</strong> Para profundizar en el análisis arquitectónico, los principios de diseño aplicados y la justificación del patrón seleccionado para <strong>SofInventory</strong>, consulte el documento anexo <a href="../Arquitectura_Software_Patr%C3%B3n_Dise%C3%B1o_Seleccionado.pdf">Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf</a> o diríjase a la sección de <a href="#122-documentos-internos-y-externos-del-proyecto">13.2 Documentos Internos y externos del Proyecto</a>.</p>
+</blockquote>
+<h3 id="35-principales-endpoints-de-la-api-rest">3.5 Principales Endpoints de la API REST</h3>
+<p>A modo de referencia rápida, los siguientes son los endpoints principales expuestos por el backend. Todos, salvo el de autenticación, requieren un token de sesión válido en la cabecera de la solicitud.</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Endpoint</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/auth/login/</code></td>
+<td>Autentica un usuario y devuelve el token de sesión</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/auth/logout/</code></td>
+<td>Invalida el token de sesión activo</td>
+</tr>
+<tr>
+<td><code>GET / POST</code></td>
+<td><code>/api/usuarios/</code></td>
+<td>Lista o crea usuarios del sistema</td>
+</tr>
+<tr>
+<td><code>GET / PUT / DELETE</code></td>
+<td><code>/api/usuarios/{id}/</code></td>
+<td>Consulta, actualiza o desactiva un usuario específico</td>
+</tr>
+<tr>
+<td><code>GET / POST</code></td>
+<td><code>/api/productos/</code></td>
+<td>Lista o crea productos del catálogo</td>
+</tr>
+<tr>
+<td><code>GET / PUT / DELETE</code></td>
+<td><code>/api/productos/{id}/</code></td>
+<td>Consulta, actualiza o cambia el estado de un producto</td>
+</tr>
+<tr>
+<td><code>GET / POST</code></td>
+<td><code>/api/categorias/</code></td>
+<td>Lista o crea categorías de producto</td>
+</tr>
+<tr>
+<td><code>GET / POST</code></td>
+<td><code>/api/proveedores/</code></td>
+<td>Lista o crea proveedores</td>
+</tr>
+<tr>
+<td><code>GET / POST</code></td>
+<td><code>/api/clientes/</code></td>
+<td>Lista o crea clientes</td>
+</tr>
+<tr>
+<td><code>GET / POST</code></td>
+<td><code>/api/compras/</code></td>
+<td>Lista o registra compras a proveedores</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/compras/{id}/anular/</code></td>
+<td>Anula una compra registrada</td>
+</tr>
+<tr>
+<td><code>GET / POST</code></td>
+<td><code>/api/ventas/</code></td>
+<td>Lista o registra ventas</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/ventas/{id}/anular/</code></td>
+<td>Anula una venta y restaura el stock afectado</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/inventario/almacenes/</code></td>
+<td>Lista los almacenes registrados</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/inventario/stock/</code></td>
+<td>Consulta el stock actual por producto y almacén</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/inventario/movimientos/</code></td>
+<td>Consulta el historial de movimientos de inventario</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/dashboard/resumen/</code></td>
+<td>Devuelve los indicadores agregados del panel principal</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Nota.</strong> Esta tabla resume los endpoints de mayor uso con fines de orientación técnica; no reemplaza una colección de pruebas (Postman/Insomnia) ni la documentación autogenerada de la API, que se recomienda mantener como complemento para el equipo de desarrollo.</p>
+</blockquote>
+<hr />
+<h2 id="4-diagrama-y-descripcion-de-casos-de-uso">4. Diagrama y descripción de casos de uso</h2>
+<h3 id="41-diagrama-de-casos-de-uso-general">4.1 Diagrama de casos de uso general</h3>
+<p><img alt="Diagrama general de casos de uso - SofInventory" src="../img/diagrama-casos-de-uso.png" /></p>
+<h3 id="42-descripcion-de-casos-de-uso-principales">4.2 Descripción de casos de uso principales</h3>
+<h4 id="cu-001-iniciar-sesion">CU-001: Iniciar sesión</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nombre</strong></td>
+<td>Iniciar Sesión</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>CU-001</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Todos los usuarios del sistema</td>
+</tr>
+<tr>
+<td><strong>Precondiciones</strong></td>
+<td>El usuario tiene credenciales válidas registradas en la base de datos</td>
+</tr>
+<tr>
+<td><strong>Flujo Principal</strong></td>
+<td>1. El usuario ingresa al sistema desde el navegador → 2. Se muestra el formulario de autenticación → 3. El usuario ingresa username y contraseña → 4. El backend valida las credenciales (hash PBKDF2-SHA256) → 5. Se genera un token de acceso → 6. El usuario es redirigido al Dashboard principal</td>
+</tr>
+<tr>
+<td><strong>Flujo Alternativo</strong></td>
+<td>Si la cuenta está bloqueada: el sistema muestra un mensaje de bloqueo y no permite el intento</td>
+</tr>
+<tr>
+<td><strong>Flujo de Excepción</strong></td>
+<td>Si las credenciales son incorrectas: se registra el intento fallido; tras 3 intentos fallidos consecutivos, la cuenta se bloquea automáticamente</td>
+</tr>
+<tr>
+<td><strong>Postcondiciones</strong></td>
+<td>El usuario queda autenticado con un token activo; se inicia sesión en la tabla <code>sesiones_api</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="cu-002-gestionar-usuarios">CU-002: Gestionar usuarios</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nombre</strong></td>
+<td>Gestionar Usuarios</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>CU-002</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Administrador</td>
+</tr>
+<tr>
+<td><strong>Precondiciones</strong></td>
+<td>El administrador está autenticado con token activo</td>
+</tr>
+<tr>
+<td><strong>Flujo Principal</strong></td>
+<td>1. El administrador accede al módulo de usuarios → 2. Visualiza la lista de usuarios registrados → 3. Puede crear, editar, activar/desactivar usuarios → 4. Al crear: selección de tipo documento, número de documento, nombre completo, email, username, contraseña, rol y estado → 5. El sistema valida unicidad de documento, email y username → 6. Se guarda el usuario con contraseña hasheada (PBKDF2) → 7. Se actualiza la tabla <code>usuarios</code></td>
+</tr>
+<tr>
+<td><strong>Flujo Alternativo</strong></td>
+<td>Edición: se carga el formulario con los datos existentes del usuario</td>
+</tr>
+<tr>
+<td><strong>Flujo de Excepción</strong></td>
+<td>Si el número de documento o email ya existe: el sistema muestra error de duplicado</td>
+</tr>
+<tr>
+<td><strong>Postcondiciones</strong></td>
+<td>La tabla <code>usuarios</code> se actualiza con la información del nuevo o modificado usuario</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cu-003-registrar-productos">CU-003: Registrar productos</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nombre</strong></td>
+<td>Registrar Productos</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>CU-003</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Administrador, Supervisor</td>
+</tr>
+<tr>
+<td><strong>Precondiciones</strong></td>
+<td>El usuario tiene permisos; existen categorías registradas</td>
+</tr>
+<tr>
+<td><strong>Flujo Principal</strong></td>
+<td>1. El usuario accede al módulo de productos → 2. Crea un nuevo producto con: SKU, nombre, marca, referencia, unidad de medida, categoría, precio compra, precio venta, IVA, stock mínimo → 3. El sistema valida unicidad del SKU → 4. Se guarda el producto → 5. Se actualiza la tabla <code>productos</code></td>
+</tr>
+<tr>
+<td><strong>Flujo Alternativo</strong></td>
+<td>Subir imagen del producto (upload a <code>media/productos/</code>)</td>
+</tr>
+<tr>
+<td><strong>Flujo de Excepción</strong></td>
+<td>Si el SKU ya existe: el sistema muestra error de duplicado</td>
+</tr>
+<tr>
+<td><strong>Postcondiciones</strong></td>
+<td>El producto queda disponible para compras, ventas y movimiento de inventario</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cu-004-registrar-compras">CU-004: Registrar compras</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nombre</strong></td>
+<td>Registrar Compras</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>CU-004</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Administrador, Supervisor, Operador de Bodega</td>
+</tr>
+<tr>
+<td><strong>Precondiciones</strong></td>
+<td>El usuario está autenticado; existen proveedores y productos registrados</td>
+</tr>
+<tr>
+<td><strong>Flujo Principal</strong></td>
+<td>1. El usuario selecciona el proveedor → 2. Ingresa número de factura y fecha de compra → 3. Agrega productos al detalle de la compra (producto, cantidad, costo unitario, IVA) → 4. El sistema calcula subtotal, IVA y total → 5. Se guarda la compra y su detalle → 6. Se actualiza el stock del producto en el almacén correspondiente → 7. Se registra el movimiento de inventario (tipo: ENTRADA_COMPRA)</td>
+</tr>
+<tr>
+<td><strong>Flujo de Excepción</strong></td>
+<td>Si la factura ya existe: el sistema muestra error de duplicado</td>
+</tr>
+<tr>
+<td><strong>Postcondiciones</strong></td>
+<td>Las tablas <code>compras</code>, <code>detalle_compras</code>, <code>stock_almacen</code> y <code>movimientos_inventario</code> se actualizan</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cu-005-registrar-ventas">CU-005: Registrar ventas</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nombre</strong></td>
+<td>Registrar Ventas (Punto de Venta)</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>CU-005</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Administrador, Supervisor, Vendedor</td>
+</tr>
+<tr>
+<td><strong>Precondiciones</strong></td>
+<td>El usuario está autenticado; existen productos con stock &gt; 0</td>
+</tr>
+<tr>
+<td><strong>Flujo Principal</strong></td>
+<td>1. El vendedor selecciona los productos a vender → 2. El sistema valida stock disponible → 3. Se calcula subtotal, descuento, IVA y total → 4. Se selecciona método de pago (efectivo, débito, crédito, transferencia, Nequi, DaviPlata) → 5. Se registra la venta y su detalle → 6. Se descuenta las cantidades del stock → 7. Se genera el movimiento de inventario (tipo: SALIDA_VENTA) → 8. Se genera el número de venta automático (VTA-XXXXX)</td>
+</tr>
+<tr>
+<td><strong>Flujo Alternativo</strong></td>
+<td>Si el cliente es "General" (sin identificación): el campo <code>cliente</code> queda en null</td>
+</tr>
+<tr>
+<td><strong>Flujo de Excepción</strong></td>
+<td>Si el stock es insuficiente: el sistema muestra alerta y previene la venta</td>
+</tr>
+<tr>
+<td><strong>Postcondiciones</strong></td>
+<td>Las tablas <code>ventas</code>, <code>detalle_ventas</code>, <code>stock_almacen</code> y <code>movimientos_inventario</code> se actualizan; se genera el comprobante de venta</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cu-006-consultar-inventario">CU-006: Consultar inventario</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nombre</strong></td>
+<td>Consultar Inventario</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>CU-006</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Todos los usuarios autenticados</td>
+</tr>
+<tr>
+<td><strong>Precondiciones</strong></td>
+<td>El usuario está autenticado</td>
+</tr>
+<tr>
+<td><strong>Flujo Principal</strong></td>
+<td>1. El usuario accede al módulo de inventario → 2. Consulta el stock por almacén → 3. Visualiza movimientos de inventario (entradas, salidas, ajustes, traslados) → 4. Puede filtrar por producto, tipo de movimiento o rango de fechas → 5. El sistema muestra alertas de stock bajo según la configuración de rangos</td>
+</tr>
+<tr>
+<td><strong>Postcondiciones</strong></td>
+<td>Se obtiene información actualizada del inventario sin modificaciones</td>
+</tr>
+</tbody>
+</table>
+<h4 id="cu-007-gestionar-almacenes">CU-007: Gestionar almacenes</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nombre</strong></td>
+<td>Gestionar Almacenes</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>CU-007</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Administrador, Supervisor</td>
+</tr>
+<tr>
+<td><strong>Precondiciones</strong></td>
+<td>El usuario tiene permisos</td>
+</tr>
+<tr>
+<td><strong>Flujo Principal</strong></td>
+<td>1. El usuario accede al módulo de almacenes → 2. Crea o edita almacenes con: nombre, código, dirección, responsable, teléfono, capacidad, estado → 3. El sistema valida unicidad del código → 4. Se guarda el almacén → 5. Se actualiza la tabla <code>almacenes</code></td>
+</tr>
+<tr>
+<td><strong>Postcondiciones</strong></td>
+<td>El almacén queda disponible para recibir stock y registrar movimientos</td>
+</tr>
+</tbody>
+</table>
+<h2 id="nota-para-consultar-los-diagramas-de-casos-de-uso-extendidos-plantillas-por-modulo-y-la-documentacion-funcional-detallada-del-sistema-puede-acceder-al-anexo-diagramas_plantillas_casos_de_uso_del_proyectopdf-o-ir-a-la-seccion-de-102-documentos-internos-y-externos-del-proyecto">📌 <strong>Nota:</strong> Para consultar los diagramas de casos de uso extendidos, plantillas por módulo y la documentación funcional detallada del sistema, puede acceder al anexo <a href="../Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf">Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf</a> o ir a la sección de <a href="#102-documentos-internos-y-externos-del-proyecto">10.2 Documentos Internos y externos del Proyecto</a>.</h2>
+<h2 id="5-modelo-entidad-relacion-base-de-datos">5. Modelo Entidad-Relación (Base de Datos)</h2>
+<h3 id="51-descripcion-general-del-modelo">5.1 Descripción general del modelo</h3>
+<p>El modelo entidad-relación de SofInventory está diseñado bajo los principios de:</p>
+<ul>
+<li><strong>Normalización en Tercera Forma Normal (3FN):</strong> Eliminación de redundancias y dependencias transitivas</li>
+<li><strong>Integridad referencial:</strong> Claves foráneas con acciones <code>ON DELETE PROTECT</code> o <code>CASCADE</code> según el caso</li>
+<li><strong>Restricciones de dominio:</strong> Validaciones a nivel de base de datos</li>
+<li><strong>Índices optimizados:</strong> Para consultas frecuentes y relaciones principales</li>
+</ul>
+<h3 id="52-estructura-del-modelo-por-modulos">5.2 Estructura del modelo por módulos</h3>
+<p>Figura 1.
+Diagrama MER
+<img alt="Modelo Entidad-Relación SofInventory" src="../img/MER.png" /></p>
+<h3 id="53-relaciones-principales-del-modelo">5.3 Relaciones principales del modelo</h3>
+<table>
+<thead>
+<tr>
+<th>Relación</th>
+<th>Cardinalidad</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TipoDocumento → Usuarios</td>
+<td>1:N</td>
+<td>Un tipo de documento puede tener múltiples usuarios</td>
+</tr>
+<tr>
+<td>Rol → Usuarios</td>
+<td>1:N</td>
+<td>Un rol puede asignarse a múltiples usuarios</td>
+</tr>
+<tr>
+<td>Categoría → Productos</td>
+<td>1:N</td>
+<td>Una categoría agrupa múltiples productos</td>
+</tr>
+<tr>
+<td>Producto → StockAlmacen</td>
+<td>1:N</td>
+<td>Un producto tiene stock en múltiples almacenes</td>
+</tr>
+<tr>
+<td>Almacén → StockAlmacen</td>
+<td>1:N</td>
+<td>Un almacén contiene stock de múltiples productos</td>
+</tr>
+<tr>
+<td>Producto → MovimientoInventario</td>
+<td>1:N</td>
+<td>Un producto genera múltiples movimientos</td>
+</tr>
+<tr>
+<td>Almacén → MovimientoInventario</td>
+<td>1:N</td>
+<td>Un almacén es origen o destino de múltiples movimientos</td>
+</tr>
+<tr>
+<td>Proveedor → Compras</td>
+<td>1:N</td>
+<td>Un proveedor realiza múltiples compras</td>
+</tr>
+<tr>
+<td>Compra → DetalleCompra</td>
+<td>1:N</td>
+<td>Una compra contiene múltiples detalles</td>
+</tr>
+<tr>
+<td>Producto → DetalleCompra</td>
+<td>1:N</td>
+<td>Un producto aparece en múltiples detalles de compra</td>
+</tr>
+<tr>
+<td>Cliente → Ventas</td>
+<td>1:N</td>
+<td>Un cliente realiza múltiples compras</td>
+</tr>
+<tr>
+<td>Venta → DetalleVenta</td>
+<td>1:N</td>
+<td>Una venta contiene múltiples detalles</td>
+</tr>
+<tr>
+<td>Producto → DetalleVenta</td>
+<td>1:N</td>
+<td>Un producto se vende en múltiples ventas</td>
+</tr>
+<tr>
+<td>Traslado → TrasladoDetalle</td>
+<td>1:N</td>
+<td>Un traslado contiene múltiples productos</td>
+</tr>
+<tr>
+<td>Usuario → SesionAPI</td>
+<td>1:N</td>
+<td>Un usuario genera múltiples sesiones</td>
+</tr>
+</tbody>
+</table>
+<h2 id="especificacion-de-base-de-datos-para-revisar-el-diagrama-completo-generado-desde-la-base-de-datos-y-la-definicion-detallada-de-tablas-campos-y-restricciones-consulte-el-modelo-entidad-relacion-en-pdf-y-el-diccionario-de-datos-en-excel-ambos-referenciados-en-la-seccion-102-documentos-internos-y-externos-del-proyecto">📊 <strong>Especificación de Base de Datos:</strong> Para revisar el diagrama completo generado desde la base de datos y la definición detallada de tablas, campos y restricciones, consulte el <a href="../Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf">Modelo Entidad-Relación en PDF</a> y el <a href="https://drive.google.com/file/d/1UzqMEZIm0xpVfJMkq-4Cwno6ymZs9C7R/view?usp=sharing">Diccionario de Datos en Excel</a>, ambos referenciados en la sección <a href="#102-documentos-internos-y-externos-del-proyecto">10.2 Documentos Internos y externos del Proyecto</a>.</h2>
+<h2 id="6-diccionario-de-datos">6. Diccionario de datos</h2>
+<h3 id="61-tabla-usuarios">6.1 Tabla: <code>usuarios</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del usuario (autogenerado)</td>
+</tr>
+<tr>
+<td>tipo_documento_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>tipos_documento.id</code></td>
+<td>Sí</td>
+<td>Tipo de documento de identidad del usuario</td>
+</tr>
+<tr>
+<td>numero_documento</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Número de documento de identidad (CC, CE, NIT)</td>
+</tr>
+<tr>
+<td>nombre_completo</td>
+<td>Varchar</td>
+<td style="text-align: right;">150</td>
+<td>—</td>
+<td>Sí</td>
+<td>Nombre completo del usuario</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Varchar</td>
+<td style="text-align: right;">255</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Correo electrónico único</td>
+</tr>
+<tr>
+<td>username</td>
+<td>Varchar</td>
+<td style="text-align: right;">50</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Nombre de usuario para autenticación</td>
+</tr>
+<tr>
+<td>password</td>
+<td>Varchar</td>
+<td style="text-align: right;">255</td>
+<td>—</td>
+<td>Sí</td>
+<td>Contraseña cifrada con PBKDF2-SHA256</td>
+</tr>
+<tr>
+<td>rol_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>roles.id</code></td>
+<td>Sí</td>
+<td>Rol asignado (Administrador, Vendedor)</td>
+</tr>
+<tr>
+<td>estado</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>—</td>
+<td>Sí</td>
+<td>Estado: <code>activo</code> o <code>inactivo</code> (default: <code>activo</code>)</td>
+</tr>
+<tr>
+<td>fecha_creacion</td>
+<td>Date</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de creación (auto_now_add)</td>
+</tr>
+<tr>
+<td>observaciones</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Observaciones adicionales del usuario</td>
+</tr>
+<tr>
+<td>fecha_registro</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha y hora de registro (auto_now_add)</td>
+</tr>
+<tr>
+<td>cuenta_bloqueada</td>
+<td>Boolean</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Indica si la cuenta está bloqueada (default: false)</td>
+</tr>
+<tr>
+<td>fecha_bloqueo</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Fecha y hora del último bloqueo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62-tabla-tipos_documento">6.2 Tabla: <code>tipos_documento</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del tipo de documento</td>
+</tr>
+<tr>
+<td>codigo</td>
+<td>Varchar</td>
+<td style="text-align: right;">5</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Código del tipo (CC, CE, NIT)</td>
+</tr>
+<tr>
+<td>nombre</td>
+<td>Varchar</td>
+<td style="text-align: right;">50</td>
+<td>—</td>
+<td>Sí</td>
+<td>Nombre completo del tipo de documento</td>
+</tr>
+</tbody>
+</table>
+<h3 id="63-tabla-roles">6.3 Tabla: <code>roles</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del rol</td>
+</tr>
+<tr>
+<td>nombre</td>
+<td>Varchar</td>
+<td style="text-align: right;">50</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Nombre del rol (Administrador, Vendedor)</td>
+</tr>
+<tr>
+<td>descripcion</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Descripción detallada del rol</td>
+</tr>
+</tbody>
+</table>
+<h3 id="64-tabla-productos">6.4 Tabla: <code>productos</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del producto</td>
+</tr>
+<tr>
+<td>sku</td>
+<td>Varchar</td>
+<td style="text-align: right;">200</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Código SKU único del producto</td>
+</tr>
+<tr>
+<td>nombre</td>
+<td>Varchar</td>
+<td style="text-align: right;">150</td>
+<td>—</td>
+<td>Sí</td>
+<td>Nombre comercial del producto</td>
+</tr>
+<tr>
+<td>marca</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>Sí</td>
+<td>Marca del producto</td>
+</tr>
+<tr>
+<td>referencia</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>Sí</td>
+<td>Referencia interna del fabricante</td>
+</tr>
+<tr>
+<td>unidad_medida</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>—</td>
+<td>Sí</td>
+<td>Unidad: Unidad, Caja, Metro, Litro, Galón, Rollo, Bulto, Kilo</td>
+</tr>
+<tr>
+<td>categoria_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>categorias.id</code></td>
+<td>Sí</td>
+<td>Categoría del producto</td>
+</tr>
+<tr>
+<td>precio_compra</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>No</td>
+<td>Precio de compra unitario (default: 0)</td>
+</tr>
+<tr>
+<td>precio_venta</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>No</td>
+<td>Precio de venta unitario (default: 0)</td>
+</tr>
+<tr>
+<td>iva_porcentaje</td>
+<td>Decimal</td>
+<td style="text-align: right;">5,2</td>
+<td>—</td>
+<td>No</td>
+<td>Porcentaje de IVA (default: 0)</td>
+</tr>
+<tr>
+<td>stock</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Stock actual del producto (default: 0)</td>
+</tr>
+<tr>
+<td>stock_minimo</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Stock mínimo de seguridad (default: 0)</td>
+</tr>
+<tr>
+<td>descripcion</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Descripción detallada del producto</td>
+</tr>
+<tr>
+<td>observaciones</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Notas internas</td>
+</tr>
+<tr>
+<td>especificaciones</td>
+<td>JSONField</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Especificaciones técnicas en formato JSON</td>
+</tr>
+<tr>
+<td>estado</td>
+<td>Varchar</td>
+<td style="text-align: right;">15</td>
+<td>—</td>
+<td>Sí</td>
+<td>Estado: <code>pendiente</code>, <code>activo</code>, <code>inactivo</code></td>
+</tr>
+<tr>
+<td>creado_por_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>Sí</td>
+<td>Usuario que creó el registro</td>
+</tr>
+<tr>
+<td>fecha_creacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de creación (auto_now_add)</td>
+</tr>
+<tr>
+<td>fecha_actualizacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Última actualización (auto_now)</td>
+</tr>
+<tr>
+<td>imagen</td>
+<td>ImageField</td>
+<td style="text-align: right;">255</td>
+<td>—</td>
+<td>No</td>
+<td>Ruta de imagen del producto (<code>productos/</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="65-tabla-categorias">6.5 Tabla: <code>categorias</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único de la categoría</td>
+</tr>
+<tr>
+<td>nombre</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Nombre de la categoría</td>
+</tr>
+<tr>
+<td>tipo_control</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>—</td>
+<td>Sí</td>
+<td>Tipo: GENERAL, HERRAMIENTA, ELECTRICO, LIQUIDO, TORNILLERIA</td>
+</tr>
+<tr>
+<td>descripcion</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Descripción de la categoría</td>
+</tr>
+<tr>
+<td>creado_por_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>Sí</td>
+<td>Usuario que creó la categoría</td>
+</tr>
+<tr>
+<td>fecha_creacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de creación (auto_now_add)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="66-tabla-proveedores">6.6 Tabla: <code>proveedores</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del proveedor</td>
+</tr>
+<tr>
+<td>tipo_documento_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>tipos_documento.id</code></td>
+<td>Sí</td>
+<td>Tipo de documento del proveedor</td>
+</tr>
+<tr>
+<td>numero_documento</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Número de documento (CC o NIT)</td>
+</tr>
+<tr>
+<td>razon_social</td>
+<td>Varchar</td>
+<td style="text-align: right;">150</td>
+<td>UK (CI)</td>
+<td>Sí</td>
+<td>Razón social o nombre del proveedor</td>
+</tr>
+<tr>
+<td>nombre_contacto</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>Sí</td>
+<td>Nombre de la persona de contacto</td>
+</tr>
+<tr>
+<td>cargo_contacto</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>No</td>
+<td>Cargo del contacto</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Varchar</td>
+<td style="text-align: right;">255</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Correo electrónico del proveedor</td>
+</tr>
+<tr>
+<td>telefono</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>—</td>
+<td>Sí</td>
+<td>Teléfono de contacto</td>
+</tr>
+<tr>
+<td>direccion</td>
+<td>Varchar</td>
+<td style="text-align: right;">200</td>
+<td>—</td>
+<td>Sí</td>
+<td>Dirección física</td>
+</tr>
+<tr>
+<td>pais</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>Sí</td>
+<td>País de origen</td>
+</tr>
+<tr>
+<td>departamento</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>Sí</td>
+<td>Departamento/Estado</td>
+</tr>
+<tr>
+<td>ciudad</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>Sí</td>
+<td>Ciudad</td>
+</tr>
+<tr>
+<td>tipo_proveedor</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>—</td>
+<td>Sí</td>
+<td>Tipo: Bienes, Servicios, Mixto</td>
+</tr>
+<tr>
+<td>estado</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>—</td>
+<td>Sí</td>
+<td>Estado: Activo, Inactivo</td>
+</tr>
+<tr>
+<td>observaciones</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Notas adicionales</td>
+</tr>
+<tr>
+<td>creado_por_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>Sí</td>
+<td>Usuario que registró el proveedor</td>
+</tr>
+<tr>
+<td>fecha_registro</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de registro (auto_now_add)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="67-tabla-clientes">6.7 Tabla: <code>clientes</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del cliente</td>
+</tr>
+<tr>
+<td>tipo_cliente</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>—</td>
+<td>Sí</td>
+<td>Tipo: natural, juridica</td>
+</tr>
+<tr>
+<td>categoria</td>
+<td>Varchar</td>
+<td style="text-align: right;">15</td>
+<td>—</td>
+<td>Sí</td>
+<td>Categoría: general, minorista, mayorista, corporativo</td>
+</tr>
+<tr>
+<td>tipo_documento_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>tipos_documento.id</code></td>
+<td>Sí</td>
+<td>Tipo de documento</td>
+</tr>
+<tr>
+<td>numero_documento</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Número de documento</td>
+</tr>
+<tr>
+<td>nombres</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>No</td>
+<td>Nombres (persona natural)</td>
+</tr>
+<tr>
+<td>apellidos</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>No</td>
+<td>Apellidos (persona natural)</td>
+</tr>
+<tr>
+<td>razon_social</td>
+<td>Varchar</td>
+<td style="text-align: right;">150</td>
+<td>—</td>
+<td>No</td>
+<td>Razón social (persona jurídica)</td>
+</tr>
+<tr>
+<td>nombre_comercial</td>
+<td>Varchar</td>
+<td style="text-align: right;">150</td>
+<td>—</td>
+<td>No</td>
+<td>Nombre comercial (persona jurídica)</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Varchar</td>
+<td style="text-align: right;">255</td>
+<td>—</td>
+<td>No</td>
+<td>Correo electrónico</td>
+</tr>
+<tr>
+<td>telefono</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>—</td>
+<td>No</td>
+<td>Teléfono principal</td>
+</tr>
+<tr>
+<td>telefono2</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>—</td>
+<td>No</td>
+<td>Teléfono secundario</td>
+</tr>
+<tr>
+<td>direccion</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Dirección física</td>
+</tr>
+<tr>
+<td>ciudad</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>No</td>
+<td>Ciudad</td>
+</tr>
+<tr>
+<td>departamento</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>No</td>
+<td>Departamento/Estado</td>
+</tr>
+<tr>
+<td>pais</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>No</td>
+<td>País (default: Colombia)</td>
+</tr>
+<tr>
+<td>codigo_postal</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>—</td>
+<td>No</td>
+<td>Código postal</td>
+</tr>
+<tr>
+<td>estado</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>—</td>
+<td>Sí</td>
+<td>Estado: activo, inactivo, bloqueado</td>
+</tr>
+<tr>
+<td>notas</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Notas adicionales</td>
+</tr>
+<tr>
+<td>creado_por_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>Sí</td>
+<td>Usuario que registró el cliente</td>
+</tr>
+<tr>
+<td>fecha_creacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de creación (auto_now_add)</td>
+</tr>
+<tr>
+<td>fecha_actualizacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Última actualización (auto_now)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="68-tabla-compras">6.8 Tabla: <code>compras</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único de la compra</td>
+</tr>
+<tr>
+<td>proveedor_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>proveedores.id</code></td>
+<td>Sí</td>
+<td>Proveedor de la compra</td>
+</tr>
+<tr>
+<td>numero_factura</td>
+<td>Varchar</td>
+<td style="text-align: right;">50</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Número de factura del proveedor</td>
+</tr>
+<tr>
+<td>fecha_compra</td>
+<td>Date</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de la compra</td>
+</tr>
+<tr>
+<td>tipo_compra</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>—</td>
+<td>Sí</td>
+<td>Tipo: Contado, Credito</td>
+</tr>
+<tr>
+<td>subtotal</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>No</td>
+<td>Subtotal de la compra (default: 0)</td>
+</tr>
+<tr>
+<td>iva_total</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>No</td>
+<td>Total de IVA (default: 0)</td>
+</tr>
+<tr>
+<td>total</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>No</td>
+<td>Total de la compra (default: 0)</td>
+</tr>
+<tr>
+<td>estado</td>
+<td>Varchar</td>
+<td style="text-align: right;">15</td>
+<td>—</td>
+<td>Sí</td>
+<td>Estado: pendiente, completada, anulada</td>
+</tr>
+<tr>
+<td>registrado_por_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>Sí</td>
+<td>Usuario que registró la compra</td>
+</tr>
+<tr>
+<td>fecha_registro</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de registro (auto_now_add)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="69-tabla-detalle_compras">6.9 Tabla: <code>detalle_compras</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del detalle</td>
+</tr>
+<tr>
+<td>compra_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>compras.id</code></td>
+<td>Sí</td>
+<td>Compra a la que pertenece</td>
+</tr>
+<tr>
+<td>producto_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>productos.id</code></td>
+<td>Sí</td>
+<td>Producto comprado</td>
+</tr>
+<tr>
+<td>cantidad</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Cantidad adquirida</td>
+</tr>
+<tr>
+<td>costo_unitario</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>Sí</td>
+<td>Costo por unidad</td>
+</tr>
+<tr>
+<td>iva_porcentaje</td>
+<td>Decimal</td>
+<td style="text-align: right;">5,2</td>
+<td>—</td>
+<td>No</td>
+<td>Porcentaje de IVA (default: 0)</td>
+</tr>
+<tr>
+<td>subtotal</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>Sí</td>
+<td>Subtotal (cantidad × costo_unitario)</td>
+</tr>
+<tr>
+<td>total</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>Sí</td>
+<td>Total con IVA</td>
+</tr>
+</tbody>
+</table>
+<h3 id="610-tabla-ventas">6.10 Tabla: <code>ventas</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único de la venta</td>
+</tr>
+<tr>
+<td>numero_venta</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Número de venta (auto: VTA-XXXXX)</td>
+</tr>
+<tr>
+<td>cliente_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>clientes.id</code></td>
+<td>No</td>
+<td>Cliente (null = Cliente General)</td>
+</tr>
+<tr>
+<td>vendedor_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>Sí</td>
+<td>Vendedor que realizó la venta</td>
+</tr>
+<tr>
+<td>subtotal</td>
+<td>Decimal</td>
+<td style="text-align: right;">14,2</td>
+<td>—</td>
+<td>No</td>
+<td>Subtotal (default: 0)</td>
+</tr>
+<tr>
+<td>descuento</td>
+<td>Decimal</td>
+<td style="text-align: right;">14,2</td>
+<td>—</td>
+<td>No</td>
+<td>Descuento aplicado (default: 0)</td>
+</tr>
+<tr>
+<td>tipo_iva</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>—</td>
+<td>No</td>
+<td>Tipo: automatico, manual (default: automatico)</td>
+</tr>
+<tr>
+<td>iva_porcentaje</td>
+<td>Decimal</td>
+<td style="text-align: right;">5,2</td>
+<td>—</td>
+<td>No</td>
+<td>Porcentaje IVA (default: 19)</td>
+</tr>
+<tr>
+<td>iva_monto</td>
+<td>Decimal</td>
+<td style="text-align: right;">14,2</td>
+<td>—</td>
+<td>No</td>
+<td>Monto del IVA (default: 0)</td>
+</tr>
+<tr>
+<td>total</td>
+<td>Decimal</td>
+<td style="text-align: right;">14,2</td>
+<td>—</td>
+<td>No</td>
+<td>Total de la venta (default: 0)</td>
+</tr>
+<tr>
+<td>metodo_pago</td>
+<td>Varchar</td>
+<td style="text-align: right;">15</td>
+<td>—</td>
+<td>Sí</td>
+<td>Efectivo, debito, credito, transferencia, nequi, daviplata, otro</td>
+</tr>
+<tr>
+<td>efectivo_recibido</td>
+<td>Decimal</td>
+<td style="text-align: right;">14,2</td>
+<td>—</td>
+<td>No</td>
+<td>Efectivo recibido del cliente</td>
+</tr>
+<tr>
+<td>cambio</td>
+<td>Decimal</td>
+<td style="text-align: right;">14,2</td>
+<td>—</td>
+<td>No</td>
+<td>Cambio devuelto</td>
+</tr>
+<tr>
+<td>numero_tarjeta</td>
+<td>Varchar</td>
+<td style="text-align: right;">4</td>
+<td>—</td>
+<td>No</td>
+<td>Últimos 4 dígitos de tarjeta</td>
+</tr>
+<tr>
+<td>aprobacion_tarjeta</td>
+<td>Varchar</td>
+<td style="text-align: right;">50</td>
+<td>—</td>
+<td>No</td>
+<td>Código de aprobación de tarjeta</td>
+</tr>
+<tr>
+<td>comprobante_transferencia</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>No</td>
+<td>Número de comprobante de transferencia</td>
+</tr>
+<tr>
+<td>otro_metodo</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>No</td>
+<td>Descripción de otro método de pago</td>
+</tr>
+<tr>
+<td>observaciones</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Observaciones de la venta</td>
+</tr>
+<tr>
+<td>estado</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>—</td>
+<td>Sí</td>
+<td>Estado: completada, anulada</td>
+</tr>
+<tr>
+<td>fecha_creacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de creación (auto_now_add)</td>
+</tr>
+<tr>
+<td>fecha_anulacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Fecha de anulación</td>
+</tr>
+<tr>
+<td>anulado_por_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>No</td>
+<td>Usuario que anuló la venta</td>
+</tr>
+<tr>
+<td>motivo_anulacion</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Motivo de la anulación</td>
+</tr>
+</tbody>
+</table>
+<h3 id="611-tabla-detalle_ventas">6.11 Tabla: <code>detalle_ventas</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del detalle</td>
+</tr>
+<tr>
+<td>venta_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>ventas.id</code></td>
+<td>Sí</td>
+<td>Venta a la que pertenece</td>
+</tr>
+<tr>
+<td>producto_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>productos.id</code></td>
+<td>Sí</td>
+<td>Producto vendido</td>
+</tr>
+<tr>
+<td>precio_unitario</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>Sí</td>
+<td>Precio de venta por unidad</td>
+</tr>
+<tr>
+<td>cantidad</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Cantidad vendida</td>
+</tr>
+<tr>
+<td>subtotal</td>
+<td>Decimal</td>
+<td style="text-align: right;">14,2</td>
+<td>—</td>
+<td>Sí</td>
+<td>Subtotal (precio × cantidad)</td>
+</tr>
+<tr>
+<td>nombre_producto</td>
+<td>Varchar</td>
+<td style="text-align: right;">150</td>
+<td>—</td>
+<td>Sí</td>
+<td>Nombre del producto al momento de la venta</td>
+</tr>
+<tr>
+<td>sku_producto</td>
+<td>Varchar</td>
+<td style="text-align: right;">200</td>
+<td>—</td>
+<td>Sí</td>
+<td>SKU del producto al momento de la venta</td>
+</tr>
+</tbody>
+</table>
+<h3 id="612-tabla-almacenes">6.12 Tabla: <code>almacenes</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del almacén</td>
+</tr>
+<tr>
+<td>nombre</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Nombre del almacén</td>
+</tr>
+<tr>
+<td>codigo</td>
+<td>Varchar</td>
+<td style="text-align: right;">10</td>
+<td>UK</td>
+<td>Sí</td>
+<td>Código único del almacén</td>
+</tr>
+<tr>
+<td>direccion</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Dirección física</td>
+</tr>
+<tr>
+<td>responsable</td>
+<td>Varchar</td>
+<td style="text-align: right;">100</td>
+<td>—</td>
+<td>No</td>
+<td>Nombre del responsable</td>
+</tr>
+<tr>
+<td>telefono</td>
+<td>Varchar</td>
+<td style="text-align: right;">20</td>
+<td>—</td>
+<td>No</td>
+<td>Teléfono de contacto</td>
+</tr>
+<tr>
+<td>capacidad</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Capacidad máxima en unidades</td>
+</tr>
+<tr>
+<td>estado</td>
+<td>Varchar</td>
+<td style="text-align: right;">15</td>
+<td>—</td>
+<td>Sí</td>
+<td>Estado: activo, inactivo, mantenimiento</td>
+</tr>
+<tr>
+<td>notas</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Notas adicionales</td>
+</tr>
+<tr>
+<td>creado_por_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>Sí</td>
+<td>Usuario que creó el almacén</td>
+</tr>
+<tr>
+<td>fecha_creacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de creación (auto_now_add)</td>
+</tr>
+<tr>
+<td>fecha_actualizacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Última actualización (auto_now)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="613-tabla-stock_almacen">6.13 Tabla: <code>stock_almacen</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del registro</td>
+</tr>
+<tr>
+<td>producto_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>productos.id</code></td>
+<td>Sí</td>
+<td>Producto del stock</td>
+</tr>
+<tr>
+<td>almacen_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>almacenes.id</code></td>
+<td>Sí</td>
+<td>Almacén del stock</td>
+</tr>
+<tr>
+<td>cantidad</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Cantidad en stock (default: 0)</td>
+</tr>
+<tr>
+<td>ultima_actualizacion</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Última actualización (auto_now)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Restricción:</strong> <code>UNIQUE (producto_id, almacen_id)</code> — Un producto solo puede tener un registro de stock por almacén.</p>
+</blockquote>
+<h3 id="614-tabla-movimientos_inventario">6.14 Tabla: <code>movimientos_inventario</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del movimiento</td>
+</tr>
+<tr>
+<td>tipo</td>
+<td>Varchar</td>
+<td style="text-align: right;">25</td>
+<td>—</td>
+<td>Sí</td>
+<td>Tipo: ENTRADA_COMPRA, SALIDA_VENTA, TRASLADO_ENTRADA, TRASLADO_SALIDA, AJUSTE_POSITIVO, AJUSTE_NEGATIVO, DEVOLUCION_COMPRA, DEVOLUCION_VENTA</td>
+</tr>
+<tr>
+<td>producto_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>productos.id</code></td>
+<td>Sí</td>
+<td>Producto involucrado</td>
+</tr>
+<tr>
+<td>almacen_origen_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>almacenes.id</code></td>
+<td>No</td>
+<td>Almacén origen (nullable)</td>
+</tr>
+<tr>
+<td>almacen_destino_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>almacenes.id</code></td>
+<td>No</td>
+<td>Almacén destino (nullable)</td>
+</tr>
+<tr>
+<td>cantidad</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Cantidad del movimiento</td>
+</tr>
+<tr>
+<td>costo_unitario</td>
+<td>Decimal</td>
+<td style="text-align: right;">12,2</td>
+<td>—</td>
+<td>No</td>
+<td>Costo unitario al momento del movimiento (default: 0)</td>
+</tr>
+<tr>
+<td>referencia_tipo</td>
+<td>Varchar</td>
+<td style="text-align: right;">50</td>
+<td>—</td>
+<td>No</td>
+<td>Tipo de referencia (Compra, Venta, Traslado)</td>
+</tr>
+<tr>
+<td>referencia_id</td>
+<td>PositiveInteger</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>ID del registro referenciado</td>
+</tr>
+<tr>
+<td>observacion</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Observación del movimiento</td>
+</tr>
+<tr>
+<td>fecha</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha del movimiento (auto_now_add)</td>
+</tr>
+<tr>
+<td>creado_por_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>Sí</td>
+<td>Usuario que registró el movimiento</td>
+</tr>
+</tbody>
+</table>
+<h3 id="615-tabla-traslados">6.15 Tabla: <code>traslados</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del traslado</td>
+</tr>
+<tr>
+<td>almacen_origen_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>almacenes.id</code></td>
+<td>Sí</td>
+<td>Almacén de origen</td>
+</tr>
+<tr>
+<td>almacen_destino_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>almacenes.id</code></td>
+<td>Sí</td>
+<td>Almacén de destino</td>
+</tr>
+<tr>
+<td>estado</td>
+<td>Varchar</td>
+<td style="text-align: right;">15</td>
+<td>—</td>
+<td>Sí</td>
+<td>Estado: PENDIENTE, EN_TRANSITO, COMPLETADO, ANULADO</td>
+</tr>
+<tr>
+<td>observacion</td>
+<td>Text</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Observación del traslado</td>
+</tr>
+<tr>
+<td>fecha_solicitud</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Fecha de solicitud (auto_now_add)</td>
+</tr>
+<tr>
+<td>fecha_completado</td>
+<td>Datetime</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>No</td>
+<td>Fecha de completado</td>
+</tr>
+<tr>
+<td>creado_por_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>usuarios.id</code></td>
+<td>Sí</td>
+<td>Usuario que creó el traslado</td>
+</tr>
+</tbody>
+</table>
+<h3 id="616-tabla-traslados_detalle">6.16 Tabla: <code>traslados_detalle</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo de Dato</th>
+<th style="text-align: right;">Longitud</th>
+<th>Llave</th>
+<th>Requerido</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>Integer (SERIAL)</td>
+<td style="text-align: right;">—</td>
+<td>PK</td>
+<td>Sí</td>
+<td>Identificador único del detalle</td>
+</tr>
+<tr>
+<td>traslado_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>traslados.id</code></td>
+<td>Sí</td>
+<td>Traslado al que pertenece</td>
+</tr>
+<tr>
+<td>producto_id</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>FK → <code>productos.id</code></td>
+<td>Sí</td>
+<td>Producto trasladado</td>
+</tr>
+<tr>
+<td>cantidad</td>
+<td>Integer</td>
+<td style="text-align: right;">—</td>
+<td>—</td>
+<td>Sí</td>
+<td>Cantidad a trasladar</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-scripts-de-instalacion-y-despliegue-con-docker">7. Scripts de instalación y despliegue con Docker</h2>
+<h3 id="71-obtencion-del-codigo-fuente">7.1 Obtención del código fuente</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Clonar el repositorio del proyecto</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/AlejandroSepulvedaDuarte/SofInventory.git
+
+<span class="c1"># Ingresar al directorio del proyecto</span>
+<span class="nb">cd</span><span class="w"> </span>SofInventory
+
+<span class="c1"># Abrir en Visual Studio Code (opcional)</span>
+code<span class="w"> </span>.
+</code></pre></div>
+<h3 id="72-estructura-del-proyecto">7.2 Estructura del proyecto</h3>
+<div class="highlight"><pre><span></span><code>SofInventory/
+├── docker-compose.yml          # Orquestación de los 3 servicios
+├── Dockerfile                  # Build multi-stage (frontend + backend)
+├── .dockerignore               # Archivos excluidos del contexto Docker
+├── .gitattributes              # Configuración de line endings (LF)
+│
+├── backend/
+│   ├── Dockerfile              # Dockerfile del backend (microservicio)
+│   ├── docker-entrypoint.sh    # Migraciones + collectstatic
+│   ├── start.sh                # Script de inicio (Railway/Render)
+│   ├── .env                    # Variables de entorno (NO se sube a Git)
+│   ├── .env.example            # Plantilla de variables de entorno
+│   ├── requirements.txt        # Dependencias Python
+│   ├── manage.py               # CLI de Django
+│   ├── config/                 # Configuración Django (settings, urls, wsgi)
+│   ├── usuarios/               # App: Usuarios, Roles, Sesiones, Auth
+│   ├── productos/              # App: Productos, Categorías
+│   ├── proveedores/            # App: Proveedores
+│   ├── clientes/               # App: Clientes
+│   ├── compras/                # App: Compras, Detalle Compras
+│   ├── ventas/                 # App: Ventas, Detalle Ventas
+│   ├── inventario/             # App: Almacenes, Stock, Movimientos, Traslados
+│   └── dashboard/              # App: Dashboard, Reportes
+│
+├── frontend/
+│   ├── Dockerfile              # Build multi-stage Angular + Nginx
+│   ├── docker-entrypoint.sh    # Inyección de BACKEND_URL en runtime
+│   ├── nginx.conf              # Configuración Nginx (proxy reverso)
+│   ├── .env.example            # Plantilla de variables del frontend
+│   ├── package.json            # Dependencias Angular
+│   ├── angular.json            # Configuración de build Angular
+│   └── src/
+│       └── app/
+│           ├── core/           # Guards, Interceptors, Models, Services
+│           ├── pages/          # Componentes por módulo
+│           └── shared/         # Componentes compartidos
+│
+└── docs/                       # Documentación técnica del proyecto
+</code></pre></div>
+<h3 id="73-configuracion-de-variables-de-entorno">7.3 Configuración de variables de entorno</h3>
+<h4 id="731-archivo-backendenv">7.3.1 Archivo <code>backend/.env</code></h4>
+<p>Cree el archivo <code>.env</code> dentro de la carpeta <code>backend/</code> con el siguiente contenido:</p>
+<div class="highlight"><pre><span></span><code># ========================================
+# VARIABLES DE ENTorno - Backend SofInventory
+# ========================================
+
+# Clave secreta de Django (cambiar en producción)
+SECRET_KEY=django-insecure-qnqdjpswh7=yoa*njm+j6b*cn-e(^@@l2a0*t-g1rz5^k57hnd
+
+# Configuración de la base de datos PostgreSQL
+DB_NAME=db_sofinventory
+DB_USER=postgres
+DB_PASSWORD=alejo123
+DB_HOST=db
+DB_PORT=5432
+
+# Modo de depuración (0 = producción, 1 = desarrollo)
+DEBUG=0
+
+# Hosts permitidos por Django
+ALLOWED_HOSTS=*
+
+# Orígenes permitidos para CORS
+CORS_ALLOW_ALL_ORIGINS=True
+
+# Credenciales del usuario administrador inicial
+INITIAL_ADMIN_USERNAME=admin
+INITIAL_ADMIN_PASSWORD=admin123
+INITIAL_ADMIN_EMAIL=admin@sofinventory.com
+INITIAL_ADMIN_NOMBRE_COMPLETO=Administrador Principal
+INITIAL_ADMIN_TIPO_DOCUMENTO=CC
+INITIAL_ADMIN_NUMERO_DOCUMENTO=1000000000
+</code></pre></div>
+<p><strong>IMPORTANTE:</strong> El valor de <code>DB_HOST</code> debe ser <code>db</code> (el nombre del servicio en <code>docker-compose.yml</code>), NO <code>localhost</code>. Los contenedores se comunican entre sí a través de la red Docker interna usando los nombres de servicio.</p>
+<p>⚠️ <strong>ADVERTENCIA DE SEGURIDAD:</strong> Los valores de <code>SECRET_KEY</code>, <code>DB_PASSWORD</code> e <code>INITIAL_ADMIN_PASSWORD</code> mostrados arriba corresponden únicamente al entorno de despliegue de prueba/ejemplo de este proyecto formativo. Una vez ingrese al sistema con el usuario administrador inicial, debe cambiar inmediatamente la contraseña desde el módulo de Usuarios, por motivos de seguridad. Para cualquier despliegue distinto al de prueba, genere una <code>SECRET_KEY</code> nueva y una <code>DB_PASSWORD</code> propia — nunca reutilice los valores de ejemplo de este manual.</p>
+<p><strong>Descripción de las variables principales:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Obligatoria</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SECRET_KEY</code></td>
+<td>Sí</td>
+<td>Clave criptográfica interna de Django (firma de sesiones y tokens). Debe ser única por entorno y nunca compartirse públicamente.</td>
+</tr>
+<tr>
+<td><code>DB_NAME</code></td>
+<td>Sí</td>
+<td>Nombre de la base de datos PostgreSQL utilizada por el backend.</td>
+</tr>
+<tr>
+<td><code>DB_USER</code></td>
+<td>Sí</td>
+<td>Usuario de conexión a PostgreSQL.</td>
+</tr>
+<tr>
+<td><code>DB_PASSWORD</code></td>
+<td>Sí</td>
+<td>Contraseña de conexión a PostgreSQL. Debe reemplazarse por una contraseña propia en cualquier entorno distinto al de prueba.</td>
+</tr>
+<tr>
+<td><code>DB_HOST</code></td>
+<td>Sí</td>
+<td>Nombre del servicio de base de datos dentro de la red de Docker Compose (<code>db</code>).</td>
+</tr>
+<tr>
+<td><code>DB_PORT</code></td>
+<td>Sí</td>
+<td>Puerto de PostgreSQL (por defecto <code>5432</code>).</td>
+</tr>
+<tr>
+<td><code>DEBUG</code></td>
+<td>Sí</td>
+<td>Modo de depuración de Django. Debe permanecer en <code>0</code> fuera del entorno de desarrollo.</td>
+</tr>
+<tr>
+<td><code>ALLOWED_HOSTS</code></td>
+<td>Sí</td>
+<td>Dominios u hosts autorizados a servir el backend.</td>
+</tr>
+<tr>
+<td><code>CORS_ALLOW_ALL_ORIGINS</code></td>
+<td>No</td>
+<td>Permite solicitudes desde cualquier origen. Se recomienda restringir en un entorno de producción real.</td>
+</tr>
+<tr>
+<td><code>INITIAL_ADMIN_USERNAME</code> / <code>PASSWORD</code> / <code>EMAIL</code></td>
+<td>Sí</td>
+<td>Credenciales del usuario administrador que se crea automáticamente al iniciar el contenedor backend por primera vez.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="732-variables-del-frontend">7.3.2 Variables del frontend</h4>
+<p>El frontend <strong>NO requiere</strong> un archivo <code>.env</code> manual para el despliegue con Docker. El script <code>docker-entrypoint.sh</code> del frontend genera automáticamente el archivo <code>env.js</code> en tiempo de ejecución utilizando la variable <code>BACKEND_URL</code> definida en <code>docker-compose.yml</code>.</p>
+<h3 id="74-despliegue-con-docker-compose">7.4 Despliegue con Docker Compose</h3>
+<h4 id="741-verificar-que-docker-desktop-esta-en-ejecucion">7.4.1 Verificar que Docker Desktop está en ejecución</h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Verificar que el motor Docker está activo</span>
+docker<span class="w"> </span>info
+
+<span class="c1"># Si muestra información del daemon, Docker está funcionando correctamente</span>
+</code></pre></div>
+<h4 id="742-construir-y-levantar-los-servicios">7.4.2 Construir y levantar los servicios</h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Construir imágenes y levantar todos los servicios en segundo plano</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d
+</code></pre></div>
+<p>Este comando realiza las siguientes acciones:</p>
+<ol>
+<li><strong>Construye la imagen del frontend:</strong> Ejecuta el build multi-stage (compilación Angular con Node.js 20 + configuración Nginx)</li>
+<li><strong>Construye la imagen del backend:</strong> Instala dependencias Python 3.12, copia el código Django, ejecuta <code>collectstatic</code></li>
+<li><strong>Descarga la imagen de PostgreSQL 15 Alpine</strong> desde Docker Hub</li>
+<li><strong>Crea los contenedores</strong> y los conecta a una red Docker interna</li>
+<li><strong>Expone los puertos:</strong> 80 (frontend), 8000 (backend), 5432 (base de datos)</li>
+<li><strong>Crea el volumen persistente</strong> <code>sofinventory_postgres_data</code> para la base de datos</li>
+<li><strong>Ejecuta los entrypoints</strong> que aplican migraciones automáticas y cargan datos iniciales</li>
+</ol>
+<h4 id="743-verificar-el-estado-de-los-contenedores">7.4.3 Verificar el estado de los contenedores</h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Verificar estado de todos los servicios</span>
+docker<span class="w"> </span>compose<span class="w"> </span>ps
+</code></pre></div>
+<p>Resultado esperado:</p>
+<div class="highlight"><pre><span></span><code>NAME                    STATUS          PORTS
+sofinventory_db         Up (healthy)    0.0.0.0:5432-&gt;5432/tcp
+sofinventory_backend    Up              0.0.0.0:8000-&gt;8000/tcp
+sofinventory_frontend   Up              0.0.0.0:80-&gt;80/tcp
+</code></pre></div>
+<h4 id="744-verificar-los-logs">7.4.4 Verificar los logs</h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Ver logs de todos los servicios en tiempo real</span>
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>-f
+
+<span class="c1"># Ver logs de un servicio específico</span>
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>backend
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>frontend
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>db
+
+<span class="c1"># Ver las últimas 50 líneas de logs del backend</span>
+docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>--tail<span class="w"> </span><span class="m">50</span><span class="w"> </span>backend
+</code></pre></div>
+<h4 id="745-scripts-de-migracion-de-django">7.4.5 Scripts de migración de Django</h4>
+<p>Las migraciones se ejecutan automáticamente al iniciar el contenedor backend. Si necesita ejecutarlas manualmente:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Ejecutar migraciones de Django</span>
+docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>backend<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>migrate<span class="w"> </span>--noinput
+
+<span class="c1"># Crear superusuario (si no se creó automáticamente)</span>
+docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>backend<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>createsuperuser
+
+<span class="c1"># Cargar datos iniciales (roles, tipos de documento, admin)</span>
+docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>backend<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>seed_data
+
+<span class="c1"># Recolectar archivos estáticos</span>
+docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>backend<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>collectstatic<span class="w"> </span>--noinput
+
+<span class="c1"># Acceder al shell de Django para inspección</span>
+docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>backend<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>shell
+
+<span class="c1"># Verificar el conteo de registros en todas las tablas</span>
+docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>backend<span class="w"> </span>python<span class="w"> </span>manage.py<span class="w"> </span>shell<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">from usuarios.models import Usuario, Rol</span>
+<span class="s2">from productos.models import Producto, Categoria</span>
+<span class="s2">from inventario.models import Almacen, StockAlmacen</span>
+<span class="s2">print(f&#39;Usuarios: {Usuario.objects.count()}&#39;)</span>
+<span class="s2">print(f&#39;Roles: {Rol.objects.count()}&#39;)</span>
+<span class="s2">print(f&#39;Productos: {Producto.objects.count()}&#39;)</span>
+<span class="s2">print(f&#39;Categorías: {Categoria.objects.count()}&#39;)</span>
+<span class="s2">print(f&#39;Almacenes: {Almacen.objects.count()}&#39;)</span>
+<span class="s2">print(f&#39;Stocks: {StockAlmacen.objects.count()}&#39;)</span>
+<span class="s2">&quot;</span>
+</code></pre></div>
+<h3 id="75-verificacion-de-funcionamiento-protocolo-de-aceptacion">7.5 Verificación de funcionamiento (Protocolo de Aceptación)</h3>
+<p>Una vez que los tres contenedores estén activos, ejecute el siguiente protocolo:</p>
+<h4 id="paso-1-verificar-los-tres-contenedores">Paso 1: Verificar los tres contenedores</h4>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>ps
+<span class="c1"># Los tres servicios deben mostrar estado &quot;Up&quot;</span>
+</code></pre></div>
+<h4 id="paso-2-verificar-la-base-de-datos">Paso 2: Verificar la base de datos</h4>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>logs<span class="w"> </span>db
+<span class="c1"># Mensaje esperado: &quot;database system is ready to accept connections&quot;</span>
+</code></pre></div>
+<h4 id="paso-3-verificar-el-backend-api">Paso 3: Verificar el backend (API)</h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Verificar que la API responde</span>
+curl<span class="w"> </span>http://localhost:8000/api/
+<span class="c1"># Debe retornar respuesta JSON (no error de conexión)</span>
+</code></pre></div>
+<h4 id="paso-4-verificar-el-frontend-interfaz-web">Paso 4: Verificar el frontend (interfaz web)</h4>
+<p>Abra el navegador e ingrese a:</p>
+<div class="highlight"><pre><span></span><code>http://localhost
+</code></pre></div>
+<p>Resultado esperado: Se carga la pantalla de inicio de sesión de SofInventory.</p>
+<h4 id="paso-5-iniciar-sesion">Paso 5: Iniciar sesión</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Usuario</strong></td>
+<td><code>admin</code></td>
+</tr>
+<tr>
+<td><strong>Contraseña</strong></td>
+<td><code>admin123</code></td>
+</tr>
+</tbody>
+</table>
+<p>Figura 2.
+Pantalla de inicio de sesión 
+<img alt="Modelo Entidad-Relación SofInventory" src="../img/Login.png" /></p>
+<p>Si las credenciales son correctas, el usuario será redirigido al Dashboard principal.</p>
+<h4 id="paso-6-verificar-modulos-principales">Paso 6: Verificar módulos principales</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Acción</th>
+<th>Resultado Esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Visualizar Dashboard</td>
+<td>Se muestra el panel de indicadores con gráficos</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Acceder a Productos</td>
+<td>Se lista el catálogo de productos</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Acceder a Inventario</td>
+<td>Se muestra el stock por almacén</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Acceder a Usuarios</td>
+<td>Se lista los usuarios registrados</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Registrar una venta</td>
+<td>Se descuenta stock y se genera el movimiento</td>
+</tr>
+</tbody>
+</table>
+<p>Figura 3.
+Dashboard principal del sistema 
+<img alt="Modelo Entidad-Relación SofInventory" src="../img/Dashboard.png" /></p>
+<h3 id="76-comandos-utiles-de-docker-compose">7.6 Comandos útiles de Docker Compose</h3>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker compose up -d</code></td>
+<td>Levantar servicios en segundo plano</td>
+</tr>
+<tr>
+<td><code>docker compose up --build -d</code></td>
+<td>Reconstruir imágenes y levantar</td>
+</tr>
+<tr>
+<td><code>docker compose down</code></td>
+<td>Detener y eliminar contenedores</td>
+</tr>
+<tr>
+<td><code>docker compose down -v</code></td>
+<td>Detener, eliminar contenedores Y volúmenes (borra la BD)</td>
+</tr>
+<tr>
+<td><code>docker compose ps</code></td>
+<td>Ver estado de contenedores</td>
+</tr>
+<tr>
+<td><code>docker compose logs -f</code></td>
+<td>Ver logs en tiempo real</td>
+</tr>
+<tr>
+<td><code>docker compose restart backend</code></td>
+<td>Reiniciar solo el backend</td>
+</tr>
+<tr>
+<td><code>docker compose exec backend bash</code></td>
+<td>Acceder al terminal del contenedor backend</td>
+</tr>
+<tr>
+<td><code>docker system prune</code></td>
+<td>Limpiar imágenes y contenedores no utilizados</td>
+</tr>
+</tbody>
+</table>
+<h3 id="77-solucion-de-problemas-comunes">7.7 Solución de problemas comunes</h3>
+<table>
+<thead>
+<tr>
+<th>Problema</th>
+<th>Causa Probable</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker</code> no se reconoce</td>
+<td>Docker Desktop no está instalado o no se reinició la terminal</td>
+<td>Verifique la instalación y abra una nueva terminal</td>
+</tr>
+<tr>
+<td>Contenedores no arrancan</td>
+<td>Motor Docker no está en ejecución</td>
+<td>Abra Docker Desktop y espere a que indique "Engine running"</td>
+</tr>
+<tr>
+<td>Puerto 80/8000/5432 en uso</td>
+<td>Otro proceso ocupa el puerto</td>
+<td>Detenga el proceso o modifique el mapeo en <code>docker-compose.yml</code></td>
+</tr>
+<tr>
+<td>Backend se reinicia en bucle</td>
+<td>Falta variable en <code>.env</code> o BD no está lista</td>
+<td>Revise <code>docker compose logs backend</code></td>
+</tr>
+<tr>
+<td>Error al construir imagen (build)</td>
+<td>Conexión inestable o espacio insuficiente</td>
+<td>Verifique internet, ejecute <code>docker system prune</code> y reintente</td>
+</tr>
+<tr>
+<td>Cambios no se reflejan</td>
+<td>Imágenes construidas antes de modificar código</td>
+<td>Ejecute <code>docker compose up --build</code> para reconstruir</td>
+</tr>
+<tr>
+<td>Página no carga en localhost</td>
+<td>Contenedor frontend falló</td>
+<td>Revise <code>docker compose logs frontend</code></td>
+</tr>
+<tr>
+<td>Error de conexión a BD</td>
+<td><code>DB_HOST</code> configurado como <code>localhost</code> en vez de <code>db</code></td>
+<td>Verifique que <code>DB_HOST=db</code> en <code>backend/.env</code></td>
+</tr>
+<tr>
+<td>OOM (exit code 137)</td>
+<td>Memoria insuficiente para build de Node.js</td>
+<td>Verifique que <code>NODE_OPTIONS=--max-old-space-size=512</code> está en el Dockerfile</td>
+</tr>
+<tr>
+<td>Error 401 (No autorizado) en la API</td>
+<td>Token de sesión ausente, expirado o mal enviado en la cabecera</td>
+<td>Verifique que el frontend envíe el token en la cabecera <code>Authorization</code>; solicite un nuevo inicio de sesión</td>
+</tr>
+<tr>
+<td>Error 403 (Prohibido) en la API</td>
+<td>El usuario autenticado no tiene el rol/permiso requerido para esa acción</td>
+<td>Verifique la matriz de permisos por rol; use un usuario con el rol adecuado</td>
+</tr>
+<tr>
+<td>Error 500 en un endpoint específico</td>
+<td>Excepción no controlada en el backend (dato inválido, relación rota, etc.)</td>
+<td>Revise <code>docker compose logs backend</code> para el stack trace exacto; valide los datos enviados en la solicitud</td>
+</tr>
+<tr>
+<td>Las migraciones no se aplican al iniciar</td>
+<td>El contenedor backend no esperó a que la base de datos estuviera lista, o hay un conflicto de migraciones</td>
+<td>Revise <code>docker compose logs backend</code>; si hay conflicto, ejecute <code>docker compose exec backend python manage.py showmigrations</code> para identificar la migración pendiente o en conflicto</td>
+</tr>
+<tr>
+<td>No se crea el usuario administrador inicial</td>
+<td>Las variables <code>INITIAL_ADMIN_*</code> no están definidas en <code>backend/.env</code>, o el usuario ya existía de un arranque previo</td>
+<td>Verifique el archivo <code>.env</code>; el script de datos semilla (<code>seed_data</code>) no sobrescribe un usuario ya existente</td>
+</tr>
+<tr>
+<td>La cuenta de administrador queda bloqueada en pruebas</td>
+<td>Se superaron los 5 intentos fallidos de inicio de sesión configurados en <code>IntentoFallidoLogin</code></td>
+<td>Desbloquee el usuario directamente en la base de datos o desde otro usuario con rol Administrador</td>
+</tr>
+</tbody>
+</table>
+<h3 id="78-despliegue-en-produccion-cloud">7.8 Despliegue en producción (Cloud)</h3>
+<p>El sistema está desplegado en las siguiente plataforma:</p>
+<table>
+<thead>
+<tr>
+<th>Plataforma</th>
+<th>URL</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Render</strong></td>
+<td><code>sofinventory-app.onrender.com</code></td>
+<td>Despliegue completo con PostgreSQL administrado</td>
+</tr>
+</tbody>
+</table>
+<p>Esta Plataforma utiliza <code>Dockerfile</code> raíz (multi-stage) que compila el frontend Angular y lo sirve desde Django con Whitenoise.</p>
+<h2 id="manual-completo-de-despliegue-para-consultar-la-guia-ilustrada-paso-a-paso-de-instalacion-la-configuracion-de-variables-de-entorno-la-inicializacion-del-contenedor-de-postgresql-y-los-comandos-de-troubleshooting-consulte-el-documento-anexo-informe_tecnico_despliegue_sofinventory_v2pdf-o-dirijase-a-la-seccion-de-102-documentos-internos-y-externos-del-proyecto">🚀 <strong>Manual Completo de Despliegue:</strong> Para consultar la guía ilustrada paso a paso de instalación, la configuración de variables de entorno, la inicialización del contenedor de PostgreSQL y los comandos de troubleshooting, consulte el documento anexo <a href="../Informe_Tecnico_Despliegue_SofInventory_v2.pdf">Informe_Tecnico_Despliegue_SofInventory_v2.pdf</a> o diríjase a la sección de <a href="#102-documentos-internos-y-externos-del-proyecto">10.2 Documentos Internos y externos del Proyecto</a>.</h2>
+<h2 id="8-diagrama-de-componentes">8. Diagrama de componentes</h2>
+<h3 id="81-arquitectura-general-del-sistema">8.1 Arquitectura general del sistema</h3>
+<pre class="mermaid"><code>graph TB
+    subgraph "🖥️ Equipo del Usuario"
+        Browser["🌐 Navegador Web&lt;br/&gt;(Chrome / Edge / Firefox)"]
+    end
+
+    subgraph "🐳 Docker - Red Interna"
+        subgraph "Contenedor Frontend"
+            Nginx["⚡ Nginx&lt;br/&gt;Puerto: 80"]
+            AngularApp["📦 Angular 19 SPA&lt;br/&gt;(archivos estáticos)"]
+            EntryFE["🔧 docker-entrypoint.sh&lt;br/&gt;(inyecta BACKEND_URL)"]
+        end
+
+        subgraph "Contenedor Backend"
+            Gunicorn["⚙️ Gunicorn&lt;br/&gt;Puerto: 8000"]
+            DjangoApp["🐍 Django 6.0&lt;br/&gt;+ Django REST Framework"]
+            EntryBE["🔧 docker-entrypoint.sh&lt;br/&gt;(migrate + seed_data)"]
+        end
+
+        subgraph "Contenedor Database"
+            PostgreSQL["🐘 PostgreSQL 15&lt;br/&gt;Puerto: 5432"]
+            Volume["💾 Volume: postgres_data"]
+        end
+    end
+
+    subgraph "📁 Almacenamiento"
+        MediaFiles["📂 media/productos/&lt;br/&gt;(imágenes)"]
+        StaticFiles["📂 staticfiles/&lt;br/&gt;(CSS, JS, font)"]
+    end
+
+    Browser --&gt;|"HTTP :80"| Nginx
+    Nginx --&gt; AngularApp
+    Nginx --&gt;|"Proxy /api/ → backend:8000"| Gunicorn
+    Gunicorn --&gt; DjangoApp
+    DjangoApp --&gt; PostgreSQL
+    PostgreSQL --&gt; Volume
+    DjangoApp --&gt; MediaFiles
+    DjangoApp --&gt; StaticFiles</code></pre>
+<h3 id="82-flujo-de-comunicacion-entre-contenedores">8.2 Flujo de comunicación entre contenedores</h3>
+<pre class="mermaid"><code>sequenceDiagram
+    participant U as 🌐 Usuario
+    participant N as ⚡ Nginx (Frontend)
+    participant D as 🐍 Django (Backend)
+    participant P as 🐘 PostgreSQL
+
+    U-&gt;&gt;N: GET http://localhost/
+    N-&gt;&gt;N: Servir Angular SPA (index.html + JS)
+    U-&gt;&gt;N: POST /api/auth/login/
+    N-&gt;&gt;D: Proxy reverso → backend:8000/api/auth/login/
+    D-&gt;&gt;P: SELECT * FROM usuarios WHERE username = ?
+    P--&gt;&gt;D: Resultado del usuario
+    D-&gt;&gt;D: Verificar hash PBKDF2-SHA256
+    D--&gt;&gt;N: { token: "abc123...", user: {...} }
+    N--&gt;&gt;U: Respuesta JSON + token
+
+    U-&gt;&gt;N: GET /api/productos/ (con Bearer token)
+    N-&gt;&gt;D: Proxy → backend:8000/api/productos/
+    D-&gt;&gt;D: Verificar token (APITokenAuthentication)
+    D-&gt;&gt;P: SELECT * FROM productos
+    P--&gt;&gt;D: Lista de productos
+    D--&gt;&gt;N: [{id: 1, sku: "P001", ...}, ...]
+    N--&gt;&gt;U: Respuesta JSON</code></pre>
+<h3 id="83-vista-de-componentes-patron-mvc">8.3 Vista de componentes — patrón MVC</h3>
+<pre class="mermaid"><code>graph LR
+    subgraph "VISTA (Frontend Angular)"
+        V1["Dashboard"]
+        V2["Productos"]
+        V3["Ventas"]
+        V4["Inventario"]
+        V5["Usuarios"]
+        V6["Proveedores"]
+        V7["Clientes"]
+        V8["Compras"]
+    end
+
+    subgraph "CONTROLADOR (Backend Django REST)"
+        C1["views.py — dashboard"]
+        C2["views.py — productos"]
+        C3["views.py — ventas"]
+        C4["views.py — inventario"]
+        C5["views.py — usuarios"]
+        C6["views.py — proveedores"]
+        C7["views.py — clientes"]
+        C8["views.py — compras"]
+    end
+
+    subgraph "MODELO (PostgreSQL)"
+        M1["tablas dashboard"]
+        M2["productos, categorías"]
+        M3["ventas, detalle_ventas"]
+        M4["almacenes, stock, movimientos"]
+        M5["usuarios, roles, sesiones"]
+        M6["proveedores"]
+        M7["clientes"]
+        M8["compras, detalle_compras"]
+    end
+
+    V1 &lt;--&gt;|API REST JSON| C1
+    V2 &lt;--&gt;|API REST JSON| C2
+    V3 &lt;--&gt;|API REST JSON| C3
+    V4 &lt;--&gt;|API REST JSON| C4
+    V5 &lt;--&gt;|API REST JSON| C5
+    V6 &lt;--&gt;|API REST JSON| C6
+    V7 &lt;--&gt;|API REST JSON| C7
+    V8 &lt;--&gt;|API REST JSON| C8
+
+    C1 &lt;--&gt; M1
+    C2 &lt;--&gt; M2
+    C3 &lt;--&gt; M3
+    C4 &lt;--&gt; M4
+    C5 &lt;--&gt; M5
+    C6 &lt;--&gt; M6
+    C7 &lt;--&gt; M7
+    C8 &lt;--&gt; M8</code></pre>
+<h3 id="84-vista-de-despliegue-docker-compose">8.4 Vista de despliegue — Docker Compose</h3>
+<pre class="mermaid"><code>graph TB
+    subgraph "🖥️ HOST (Equipo del Desarrollador)"
+        subgraph "🐳 Docker Engine"
+            subgraph "Red: sofinventory_default"
+                FE["📦 sofinventory_frontend&lt;br/&gt;nginx:alpine&lt;br/&gt;Puerto: 80"]
+                BE["📦 sofinventory_backend&lt;br/&gt;python:3.12-slim&lt;br/&gt;Puerto: 8000"]
+                DB["📦 sofinventory_db&lt;br/&gt;postgres:15-alpine&lt;br/&gt;Puerto: 5432"]
+            end
+            VOL["💾 Volumen: postgres_data"]
+        end
+    end
+
+    FE --&gt;|"proxy_pass /api/"| BE
+    BE --&gt;|"psycopg2 (DATABASE_URL)"| DB
+    DB --&gt;|"data persistente"| VOL</code></pre>
+<hr />
+<h2 id="9-conclusiones">9. Conclusiones</h2>
+<h3 id="91-mantenibilidad">9.1 Mantenibilidad</h3>
+<p>La arquitectura modular de SofInventory, basada en 8 aplicaciones Django independientes y un frontend Angular desacoplado, facilita significativamente el mantenimiento del sistema. Cada módulo puede ser modificado, actualizado o extendido sin afectar a los demás, siempre que se respeten los contratos de la API REST. El uso de serializers proporciona una capa de transformación de datos que protege la API de cambios internos en los modelos.</p>
+<h3 id="92-aislamiento-de-entorno-mediante-docker">9.2 Aislamiento de entorno mediante Docker</h3>
+<p>La adopción de Docker como plataforma de despliegue elimina los problemas de compatibilidad entre versiones de Python, Node.js y PostgreSQL. El sistema se ejecuta de forma idéntica en Windows, macOS y Linux, ya que todas las dependencias están empaquetadas dentro de los contenedores. Los Dockerfiles multi-stage reducen el tamaño de las imágenes finales: las herramientas de compilación (Node.js, npm) se descartan después de la fase de build, y solo se conservan los archivos estáticos servidos por Nginx en el frontend, y las dependencias mínimas de Python en el backend.</p>
+<h3 id="93-escalabilidad">9.3 Escalabilidad</h3>
+<p>La separación entre frontend, backend y base de datos permite escalar cada componente de forma independiente. En un escenario de alta demanda, se podrían ejecutar múltiples instancias del backend (Gunicorn workers) detrás de un balanceador de carga, mientras que la base de datos podría migrarse a un servicio administrado en la nube (Amazon RDS, Google Cloud SQL) con replicación y respaldo automático. El frontend, al ser un conjunto de archivos estáticos servidos por Nginx, puede escalarse mediante CDN sin modificaciones al código.</p>
+<h3 id="94-seguridad">9.4 Seguridad</h3>
+<p>El sistema implementa múltiples capas de seguridad: autenticación por tokens con expiración, hash de contraseñas con PBKDF2-SHA256, control de acceso basado en roles (RBAC), validación de entradas a nivel de serializer y ORM, protección CSRF, y exclusión de archivos sensibles (.env, venv) del repositorio mediante .gitignore. En producción, las contraseñas nunca se almacenan en texto plano, y los secretos se gestionan a través de variables de entorno inyectadas por Docker Compose.</p>
+<h3 id="95-portabilidad">9.5 Portabilidad</h3>
+<p>Gracias a la contenedorización con Docker, el sistema puede desplegarse en cualquier entorno (desarrollo, staging, producción) con un solo comando: <code>docker compose up --build -d</code>. Las plataformas cloud como Railway y Render permiten el despliegue continuo directamente desde el repositorio Git, eliminando la necesidad de configuración manual del servidor.</p>
+<hr />
+<h2 id="10-glosario-tecnico">10. Glosario técnico</h2>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API REST</strong></td>
+<td>Interfaz de programación que expone los recursos del sistema mediante peticiones HTTP (GET, POST, PUT, DELETE) en formato JSON.</td>
+</tr>
+<tr>
+<td><strong>ORM (Object-Relational Mapping)</strong></td>
+<td>Capa de Django que traduce clases y objetos Python en tablas y filas de PostgreSQL, sin necesidad de escribir SQL directo.</td>
+</tr>
+<tr>
+<td><strong>Serializer</strong></td>
+<td>Componente de Django REST Framework que convierte instancias de modelos en JSON (y viceversa), validando los datos de entrada.</td>
+</tr>
+<tr>
+<td><strong>Token de Sesión</strong></td>
+<td>Cadena generada tras un login exitoso que identifica al usuario en cada solicitud posterior a la API.</td>
+</tr>
+<tr>
+<td><strong>RBAC (Role-Based Access Control)</strong></td>
+<td>Modelo de control de acceso en el que los permisos se asignan a roles (Administrador, Supervisor, Vendedor, Bodega) y no directamente a usuarios individuales.</td>
+</tr>
+<tr>
+<td><strong>Hash PBKDF2-SHA256</strong></td>
+<td>Algoritmo utilizado por Django para almacenar contraseñas de forma irreversible, de modo que ni siquiera el equipo técnico puede leerlas en texto plano.</td>
+</tr>
+<tr>
+<td><strong>CORS (Cross-Origin Resource Sharing)</strong></td>
+<td>Mecanismo que controla qué orígenes (dominios) pueden consultar la API del backend desde el navegador.</td>
+</tr>
+<tr>
+<td><strong>Contenedor</strong></td>
+<td>Instancia en ejecución de una imagen Docker que aísla un proceso (backend, frontend o base de datos) junto con todas sus dependencias.</td>
+</tr>
+<tr>
+<td><strong>Imagen Docker</strong></td>
+<td>Plantilla inmutable a partir de la cual se crean los contenedores, construida mediante un <code>Dockerfile</code>.</td>
+</tr>
+<tr>
+<td><strong>Volumen (Docker)</strong></td>
+<td>Mecanismo de almacenamiento persistente que conserva los datos de un contenedor (por ejemplo, la base de datos) aunque este se elimine o reconstruya.</td>
+</tr>
+<tr>
+<td><strong>Multietapa (Multi-stage build)</strong></td>
+<td>Técnica de construcción de imágenes Docker en varias etapas, copiando solo los archivos finales de una etapa a la siguiente para reducir el tamaño de la imagen.</td>
+</tr>
+<tr>
+<td><strong>Migración (Django)</strong></td>
+<td>Archivo generado automáticamente que describe cambios en la estructura de la base de datos y permite aplicarlos de forma controlada.</td>
+</tr>
+<tr>
+<td><strong>Seed Data (Datos Semilla)</strong></td>
+<td>Conjunto de datos iniciales que se cargan automáticamente al primer arranque del sistema (roles, tipos de documento, usuario administrador).</td>
+</tr>
+<tr>
+<td><strong>WSGI</strong></td>
+<td>Interfaz estándar de Python que permite a un servidor web (Gunicorn) comunicarse con la aplicación Django.</td>
+</tr>
+<tr>
+<td><strong>Gunicorn</strong></td>
+<td>Servidor de aplicaciones WSGI utilizado para ejecutar Django en producción dentro del contenedor backend.</td>
+</tr>
+<tr>
+<td><strong>Nginx</strong></td>
+<td>Servidor web utilizado en el contenedor frontend para servir los archivos compilados de Angular y actuar como proxy hacia el backend.</td>
+</tr>
+<tr>
+<td><strong>SPA (Single Page Application)</strong></td>
+<td>Aplicación web que carga una sola página HTML y actualiza su contenido dinámicamente sin recargar el navegador; así opera el frontend Angular.</td>
+</tr>
+<tr>
+<td><strong>RTO / RPO</strong></td>
+<td>Tiempo objetivo de recuperación y punto objetivo de recuperación; métricas que definen cuánto tiempo y cuántos datos se pueden perder ante un incidente (ver Plan de Migración y Respaldo).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11-mesa-de-ayuda-y-soporte-tecnico">11. Mesa de ayuda y soporte técnico</h2>
+<h3 id="111-canales-de-escalamiento">11.1 Canales de escalamiento</h3>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Repositorio (issues técnicos)</strong></td>
+<td>https://github.com/AlejandroSepulvedaDuarte/SofInventory.git — registrar el error o solicitud de cambio con pasos para reproducirlo</td>
+</tr>
+<tr>
+<td><strong>Correo Electrónico Técnico</strong></td>
+<td>alejosepulveda981@gmail.com</td>
+</tr>
+<tr>
+<td><strong>Responsables del mantenimiento</strong></td>
+<td>Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo</td>
+</tr>
+<tr>
+<td><strong>Horario de atención</strong></td>
+<td>Lunes a Viernes de 8:00 a.m. a 6:00 p.m.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="112-tiempos-de-respuesta-segun-severidad">11.2 Tiempos de respuesta según severidad</h3>
+<p>Estos tiempos corresponden a los definidos en el <strong>Plan de Mantenimiento y Soporte del Software</strong> (sección 12.2) y se reutilizan aquí como referencia rápida para el equipo técnico:</p>
+<table>
+<thead>
+<tr>
+<th>Severidad</th>
+<th>Criterio</th>
+<th>Tiempo de respuesta</th>
+<th>Tiempo de resolución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Crítica</strong></td>
+<td>El sistema no responde o un módulo esencial (ventas, inventario, autenticación) deja de funcionar por completo</td>
+<td>≤ 4 horas</td>
+<td>≤ 24 horas</td>
+</tr>
+<tr>
+<td><strong>Alta</strong></td>
+<td>Una funcionalidad importante falla parcialmente (por ejemplo, un error 500 real en el flujo de login)</td>
+<td>≤ 8 horas</td>
+<td>≤ 72 horas</td>
+</tr>
+<tr>
+<td><strong>Media</strong></td>
+<td>Un defecto afecta una validación o regla de negocio puntual, sin bloquear la operación general</td>
+<td>≤ 24 horas</td>
+<td>≤ 1 semana</td>
+</tr>
+<tr>
+<td><strong>Baja</strong></td>
+<td>Errores cosméticos, de texto o de estilo que no afectan la funcionalidad</td>
+<td>≤ 3 días</td>
+<td>Próxima iteración</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Antes de escalar un incidente:</strong> revise primero la sección 7.7 (Solución de Problemas Comunes) de este manual; la mayoría de los errores de despliegue, autenticación y base de datos allí documentados tienen solución inmediata sin necesidad de abrir un nuevo issue.</p>
+<hr />
+<h2 id="12-referencias-y-fuentes">12. Referencias y fuentes</h2>
+<h3 id="121-documentacion-oficial">12.1 Documentación oficial</h3>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Django 6.0</td>
+<td>https://docs.djangoproject.com/</td>
+</tr>
+<tr>
+<td>Django REST Framework</td>
+<td>https://www.django-rest-framework.org/</td>
+</tr>
+<tr>
+<td>Angular 19</td>
+<td>https://angular.dev/</td>
+</tr>
+<tr>
+<td>PostgreSQL 15</td>
+<td>https://www.postgresql.org/docs/15/</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>https://docs.docker.com/</td>
+</tr>
+<tr>
+<td>Docker Compose</td>
+<td>https://docs.docker.com/compose/</td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td>https://nginx.org/en/docs/</td>
+</tr>
+<tr>
+<td>Gunicorn</td>
+<td>https://docs.gunicorn.org/</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>https://nodejs.org/</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>https://docs.python.org/3/</td>
+</tr>
+</tbody>
+</table>
+<h3 id="122-documentos-internos-y-externos-del-proyecto">12.2 Documentos internos y externos del proyecto</h3>
+<p>Para consultar la información complementaria y profundizar en el diseño, arquitectura y base de datos del proyecto <strong>SofInventory</strong>, se ponen a disposición los siguientes anexos:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Documento / Recurso</th>
+<th style="text-align: left;">Descripción</th>
+<th style="text-align: left;">Enlace de Acceso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Modelo Entidad-Relación PostgreSQL</strong></td>
+<td style="text-align: left;">Diagrama detallado de la base de datos generado desde PostgreSQL</td>
+<td style="text-align: left;"><a href="../Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf">🖼️ Ver MER</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Arquitectura y Patrón de Diseño</strong></td>
+<td style="text-align: left;">Documentación de la arquitectura de software y el patrón seleccionado</td>
+<td style="text-align: left;"><a href="../Arquitectura_Software_Patr%C3%B3n_Dise%C3%B1o_Seleccionado.pdf">📄 Ver Arquitectura y diseño</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Diccionario de Datos</strong></td>
+<td style="text-align: left;">Especificación técnica de tablas, campos, tipos y restricciones</td>
+<td style="text-align: left;"><a href="https://drive.google.com/file/d/1UzqMEZIm0xpVfJMkq-4Cwno6ymZs9C7R/view?usp=sharing">📊 Ver Excel</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Manual de Despliegue</strong></td>
+<td style="text-align: left;">Guía paso a paso para la instalación y despliegue del software</td>
+<td style="text-align: left;"><a href="../Informe_Tecnico_Despliegue_SofInventory_v2.pdf">📕 Ver Manual de despliegue</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Casos de Uso Extendidos</strong></td>
+<td style="text-align: left;">Diagramas y descripciones detalladas por módulo del sistema</td>
+<td style="text-align: left;"><a href="../Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf">📄 Ver Diagrama y plantillas por casos de uso</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Plan de Mantenimiento y Soporte del Software</strong></td>
+<td style="text-align: left;">Plan de mantenimiento preventivo y correctivo con base en ISO/IEC 14764, incluyendo tiempos de respuesta por severidad</td>
+<td style="text-align: left;"><a href="../Plan_de_Mantenimiento_y_Soporte_del_Software.pdf">📄 Ver Plan de Mantenimiento</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Plan de Migración y Respaldo de Datos</strong></td>
+<td style="text-align: left;">Plan de copias de seguridad, restauración y gestión del riesgo con base en ISO/IEC 27001</td>
+<td style="text-align: left;"><a href="../Plan_Migracion_Respaldo_SofInventory.pdf">Ver Plan de Migración y Respaldo</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Repositorio GitHub</strong></td>
+<td style="text-align: left;">Código fuente del proyecto y configuración de contenedores Docker</td>
+<td style="text-align: left;"><a href="https://github.com/AlejandroSepulvedaDuarte/SofInventory.git">💻 Ver Repositorio</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="123-guias-de-referencia">12.3 Guías de referencia</h3>
+<table>
+<thead>
+<tr>
+<th>Guía</th>
+<th>Fuente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Guía para la Elaboración del Manual Técnico y de Operación del Sistema</td>
+<td>DNP (Departamento Nacional de Planeación), 2020</td>
+</tr>
+<tr>
+<td>Marco de Referencia de Arquitectura</td>
+<td>MinTIC — Directriz LI.SIS</td>
+</tr>
+<tr>
+<td>ISO/IEC 27001:2022 — Seguridad de la Información</td>
+<td>International Organization for Standardization</td>
+</tr>
+<tr>
+<td>ISO/IEC/IEEE 42010:2022 — Software, systems and enterprise: Architecture description</td>
+<td>International Organization for Standardization</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<div align="center">
+<h3>🛠️ SofInventory ERP</h3>
+<p>Sistema de Gestión de Inventarios y Ventas para Ferreterías</p>
+<p><strong>© 2026 SofInventory.</strong> Todos los derechos reservados.  
+Documento elaborado por el Equipo de Desarrollo de Software — SENA</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

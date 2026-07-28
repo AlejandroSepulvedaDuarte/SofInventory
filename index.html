@@ -1,0 +1,714 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Manuales técnico y de usuario del sistema SofInventory.">
+      
+      
+        <meta name="author" content="Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>SofInventory ERP</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sofinventory-documentacion-de-pruebas-de-software" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="." title="SofInventory ERP" class="md-header__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SofInventory ERP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              📋 SofInventory — Documentación de Pruebas de Software
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="MANUAL_USUARIO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual de Usuario
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="MANUAL_TECNICO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual Técnico
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="SofInventory ERP" class="md-nav__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SofInventory ERP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="MANUAL_USUARIO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual de Usuario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="MANUAL_TECNICO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="sofinventory-documentacion-de-pruebas-de-software">📋 SofInventory — Documentación de Pruebas de Software</h1>
+<blockquote>
+<p><strong>Versión:</strong> 1.0.0 <br>
+<strong>Fecha de elaboración:</strong> 15 de mayo de 2026 <br>
+<strong>Última actualización:</strong> 16 de mayo de 2026 <br>
+<strong>Estado del documento:</strong> ✅ Aprobado para revisión <br>
+<strong>Equipo QA:</strong> Alejandro Sepúlveda Duarte &amp; Lucy Estefany Izquierdo Jaramillo</p>
+</blockquote>
+<hr />
+<h2 id="indice-general">🧭 Índice General</h2>
+<div class="highlight"><pre><span></span><code>docs/
+└── test-cases/
+    ├── GLOSARIO.md                        ← Glosario técnico y ambiente de pruebas
+    ├── DEFECTOS.md                        ← Registro consolidado de defectos
+    ├── 01-modulo-usuarios/
+    │   ├── README.md                      ← Descripción del módulo
+    │   ├── casos-usuarios.md              ← Casos de prueba (TC-USR-001 al TC-USR-008)
+    │   └── evidencias/
+    │       ├── frontend/
+    │       ├── postman/
+    │       └── database/
+    │
+    └── 02-modulo-login/
+        ├── README.md                      ← Descripción del módulo
+        ├── casos-login.md                 ← Casos de prueba (TC-LOGIN-001 al TC-LOGIN-010)
+        └── evidencias/
+            ├── frontend/
+            ├── postman/
+            └── database/
+</code></pre></div>
+<hr />
+<h2 id="1-descripcion-del-sistema">1. 📌 Descripción del Sistema</h2>
+<p><strong>SofInventory</strong> es un sistema de gestión de inventario orientado a pequeñas y medianas empresas (PYMES). Permite administrar productos, controlar el stock, gestionar usuarios con roles diferenciados y mantener un registro de movimientos de entrada y salida de mercancía.</p>
+<p>El sistema está construido sobre una arquitectura cliente-servidor:</p>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Tecnología</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td>Angular 19</td>
+</tr>
+<tr>
+<td>Backend / API</td>
+<td>Django 6.0.4 + Django REST Framework 3.17.1</td>
+</tr>
+<tr>
+<td>Base de datos</td>
+<td>PostgreSQL 18+</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>Token Bearer propio (tabla <code>sesiones_api</code>), expiración 12 horas</td>
+</tr>
+<tr>
+<td>Documentación API</td>
+<td>Postman Collections</td>
+</tr>
+<tr>
+<td>Gestor de BD (QA)</td>
+<td>pgAdmin 4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-objetivos-del-plan-de-pruebas">2. 🎯 Objetivos del Plan de Pruebas</h2>
+<h3 id="objetivo-general">Objetivo General</h3>
+<p>Verificar y validar el correcto funcionamiento de los módulos de <strong>Login</strong> y <strong>Usuarios</strong> del sistema SofInventory, garantizando que cumplan con los requisitos funcionales, de seguridad y usabilidad establecidos.</p>
+<h3 id="objetivos-especificos">Objetivos Específicos</h3>
+<ul>
+<li>Validar que el módulo de autenticación permita el acceso únicamente a usuarios registrados con credenciales correctas (username + contraseña).</li>
+<li>Verificar que las contraseñas sean almacenadas con hash seguro (PBKDF2-SHA256) y nunca en texto plano.</li>
+<li>Comprobar que el sistema gestione correctamente los roles y permisos de usuarios (Administrador / Supervisor).</li>
+<li>Verificar la integridad de los datos almacenados en PostgreSQL mediante consultas directas en pgAdmin.</li>
+<li>Detectar posibles fallos de seguridad como inyección de caracteres especiales o acceso no autorizado.</li>
+<li>Evaluar la experiencia de usuario (UX) en los flujos de login y administración de usuarios.</li>
+</ul>
+<hr />
+<h2 id="3-alcance-de-las-pruebas">3. 🔭 Alcance de las Pruebas</h2>
+<h3 id="en-alcance">✅ En Alcance</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Funcionalidades Cubiertas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login</td>
+<td>Autenticación con username y contraseña, manejo de sesiones y tokens Bearer, cierre de sesión, bloqueo de usuario inactivo</td>
+</tr>
+<tr>
+<td>Usuarios</td>
+<td>Creación de usuarios, validación de campos, asignación de roles, verificación de hash de contraseña, efecto sobre el módulo de login</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fuera-de-alcance-esta-version">❌ Fuera de Alcance (esta versión)</h3>
+<ul>
+<li>Módulo de Inventario / Productos</li>
+<li>Módulo de Reportes / Dashboard</li>
+<li>Módulo de Proveedores</li>
+<li>Módulo de Compras / Ventas</li>
+<li>Módulo de Clientes</li>
+<li>Integraciones externas</li>
+</ul>
+<hr />
+<h2 id="4-herramientas-tecnologicas">4. 🛠️ Herramientas Tecnológicas</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Herramienta</th>
+<th>Versión</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Angular</strong></td>
+<td>19.x</td>
+<td>Pruebas de interfaz de usuario (Frontend)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Postman</strong></td>
+<td>12.x</td>
+<td>Pruebas de API REST (endpoints Django REST Framework)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>pgAdmin 4</strong></td>
+<td>Latest</td>
+<td>Verificación de integridad en base de datos PostgreSQL</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Chrome DevTools</strong></td>
+<td>Latest</td>
+<td>Inspección de red, localStorage y headers HTTP</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Google Chrome</strong></td>
+<td>124.x</td>
+<td>Navegador para pruebas de interfaz</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-resumen-ejecutivo-de-resultados">5. 📊 Resumen Ejecutivo de Resultados</h2>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Total TC</th>
+<th>✅ Pasaron</th>
+<th>❌ Fallaron</th>
+<th>⚠️ Bloqueados</th>
+<th style="text-align: right;">% Éxito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01 - Usuarios</td>
+<td>8</td>
+<td>6</td>
+<td>2</td>
+<td>0</td>
+<td style="text-align: right;">75.0%</td>
+</tr>
+<tr>
+<td>02 - Login</td>
+<td>10</td>
+<td>9</td>
+<td>1</td>
+<td>0</td>
+<td style="text-align: right;">90.0%</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>18</strong></td>
+<td><strong>15</strong></td>
+<td><strong>3</strong></td>
+<td><strong>0</strong></td>
+<td style="text-align: right;"><strong>83.3%</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-estado-final-del-sistema">6. ⭐ Estado Final del Sistema</h2>
+<table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th>Calificación</th>
+<th>Observación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Funcionalidad</td>
+<td>⭐⭐⭐⭐☆ (4/5)</td>
+<td>Flujos principales operativos; fallos menores en validaciones de entrada</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>⭐⭐⭐☆☆ (3/5)</td>
+<td>Contraseñas hasheadas con PBKDF2; token Bearer con expiración. Sin bloqueo automático por intentos fallidos</td>
+</tr>
+<tr>
+<td>Usabilidad</td>
+<td>⭐⭐⭐⭐☆ (4/5)</td>
+<td>Interfaz intuitiva; mensajes de error mejorables en frontend ante token expirado</td>
+</tr>
+<tr>
+<td>Integridad de Datos</td>
+<td>⭐⭐⭐⭐☆ (4/5)</td>
+<td>Datos persistidos correctamente en PostgreSQL; unicidad garantizada por modelo Django</td>
+</tr>
+</tbody>
+</table>
+<h3 id="decision-final-del-proceso-evaluativo">🏁 Decisión Final del Proceso Evaluativo</h3>
+<blockquote>
+<p><strong>CONDICIONALMENTE APROBADO</strong> para ambiente de pruebas de aceptación (UAT).
+Se recomienda corregir los <strong>3 defectos encontrados</strong> (1 en Login, 2 en Usuarios) antes del despliegue en producción. El sistema demuestra una base funcional sólida con áreas de mejora en seguridad de entradas y manejo de sesiones en el frontend.</p>
+</blockquote>
+<hr />
+<h2 id="7-navegacion-rapida">7. 🔗 Navegación Rápida</h2>
+<table>
+<thead>
+<tr>
+<th>Documento</th>
+<th>Enlace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>📁 Módulo Usuarios — README</td>
+<td><a href="test-cases/01-modulo-usuarios/">Abrir</a></td>
+</tr>
+<tr>
+<td>🧪 Casos de Prueba — Usuarios</td>
+<td><a href="test-cases/01-modulo-usuarios/casos-usuarios/">Abrir</a></td>
+</tr>
+<tr>
+<td>📁 Módulo Login — README</td>
+<td><a href="test-cases/02-modulo-login/">Abrir</a></td>
+</tr>
+<tr>
+<td>🧪 Casos de Prueba — Login</td>
+<td><a href="test-cases/02-modulo-login/casos-login/">Abrir</a></td>
+</tr>
+<tr>
+<td>🐛 Registro de Defectos</td>
+<td><a href="test-cases/DEFECTOS/">Abrir</a></td>
+</tr>
+<tr>
+<td>📖 Glosario y Ambiente</td>
+<td><a href="test-cases/GLOSARIO/">Abrir</a></td>
+</tr>
+<tr>
+<td>---</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-control-de-versiones-del-documento">8. 📅 Control de Versiones del Documento</h2>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th>Fecha</th>
+<th>Autor</th>
+<th>Cambios</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.0</td>
+<td>15/05/2026</td>
+<td>Alejandro Sepúlveda Duarte</td>
+<td>Creación inicial del plan de pruebas</td>
+</tr>
+<tr>
+<td>1.0.1</td>
+<td>16/05/2026</td>
+<td>Licy Estefany Izquierdo Jaramillo</td>
+<td>Creación inicial del test-cases de usuarios</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>© 2026 SofInventory — Área de Calidad de Software. Documento confidencial de uso interno.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "toc.integrate"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
