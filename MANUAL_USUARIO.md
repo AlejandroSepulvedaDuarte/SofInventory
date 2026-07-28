@@ -24,24 +24,6 @@
 
 ---
 
-### 🤝 Acta de Entrega al Cliente
-
-> ℹ️ *El presente manual constituye el material oficial de acompañamiento y capacitación para la puesta en marcha del sistema SofInventory. Este apartado debe ser firmado e independizado al momento del despliegue en las instalaciones del cliente.*
-
-| Datos del Establecimiento / Cliente | Información |
-|---|---|
-| **Cliente / Nombre Comercial** | *[Nombre de la Ferretería / Empresa]* |
-| **NIT / Cédula** | |
-| **Persona de Contacto** | |
-| **Cargo del Contacto** | |
-| **Correo Electrónico** | |
-| **Teléfono de Contacto** | |
-| **Fecha de Despliegue / Entrega** | DD / MM / AAAA |
-| **Versión del Sistema Instalada** | v1.0.0 |
-| **Firma de Recibido a Conformidad** | ____________________________________ |
-
----
-
 ### Control de Versiones del Documento
 
 | Versión | Fecha | Autor(es) | Descripción del cambio |

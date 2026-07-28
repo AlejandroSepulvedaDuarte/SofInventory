@@ -1188,7 +1188,7 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 | Canal | Detalle |
 |---|---|
 | **Repositorio (issues técnicos)** | https://github.com/AlejandroSepulvedaDuarte/SofInventory.git — registrar el error o solicitud de cambio con pasos para reproducirlo |
-| **Correo Electrónico Técnico** | soporte@sofinventory.local |
+| **Correo Electrónico Técnico** | alejosepulveda981@gmail.com |
 | **Responsables del mantenimiento** | Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo |
 | **Horario de atención** | Lunes a Viernes de 8:00 a.m. a 6:00 p.m. |
 
