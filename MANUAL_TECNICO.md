@@ -10,8 +10,26 @@
 **Cede:** Centro de Comercio Regional Antioquia–SENA <br>
 **Intructor:** José Ignacio Botero Osorio <br>
 **Fecha:** Julio 25 de 2026 <br>
-**Versión:** 1.0.07.26 
+**Versión:** 1.0 
 </div>
+
+---
+
+### Control de Versiones del Documento
+
+| Versión | Fecha | Autor(es) | Descripción del cambio |
+|---|---|---|---|
+| 1.0 | Julio 25 de 2026 | Alejandro Sepúlveda D. / Lucy Estefany Izquierdo | Versión inicial: introducción, arquitectura, diccionario de datos, despliegue con Docker, diagrama de componentes y conclusiones. |
+
+
+### Convenciones del Documento
+
+| Símbolo | Significado |
+|---|---|
+| ⚠️ | Advertencia importante: acción irreversible, riesgo de seguridad o que requiere especial atención. |
+| 📄 / 📊 / 🖼️ / 💻 | Enlace a un documento, hoja de cálculo, imagen o repositorio de código, respectivamente. |
+| **Negrita** | Nombres de comandos, variables, botones o elementos clave. |
+| `Texto en código` | Nombres técnicos literales (comandos, variables de entorno, endpoints, nombres de tablas). |
 
 ---
 
@@ -26,7 +44,9 @@
 7. [Scripts de Instalación y Despliegue con Docker](#7-scripts-de-instalación-y-despliegue-con-docker)
 8. [Diagrama de Componentes](#8-diagrama-de-componentes)
 9. [Conclusiones](#9-conclusiones)
-10. [Referencias y Fuentes](#10-referencias-y-fuentes)
+10. [Glosario Técnico](#10-glosario-técnico)
+11. [Mesa de Ayuda y Soporte Técnico](#11-mesa-de-ayuda-y-soporte-técnico)
+12. [Referencias y Fuentes](#12-referencias-y-fuentes)
 
 ---
 
@@ -212,7 +232,34 @@ El backend Django se organiza en **8 aplicaciones modulares**, cada una responsa
 
 El sistema utiliza archivos `.env` para la configuración de cada componente. Las variables están documentadas en la sección de despliegue. Los archivos `.env` **nunca se suben al repositorio** (excluidos por `.gitignore`).
 
-> 📄 **Documentación Complementaria:** Para profundizar en el análisis arquitectónico, los principios de diseño aplicados y la justificación del patrón seleccionado para **SofInventory**, consulte el documento anexo [Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf](./docs/Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf) o diríjase a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
+> 📄 **Documentación Complementaria:** Para profundizar en el análisis arquitectónico, los principios de diseño aplicados y la justificación del patrón seleccionado para **SofInventory**, consulte el documento anexo [Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf](./docs/Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf) o diríjase a la sección de [13.2 Documentos Internos y externos del Proyecto](#122-documentos-internos-y-externos-del-proyecto).
+
+### 3.5 Principales Endpoints de la API REST
+
+A modo de referencia rápida, los siguientes son los endpoints principales expuestos por el backend. Todos, salvo el de autenticación, requieren un token de sesión válido en la cabecera de la solicitud.
+
+| Método | Endpoint | Descripción |
+|---|---|---|
+| `POST` | `/api/auth/login/` | Autentica un usuario y devuelve el token de sesión |
+| `POST` | `/api/auth/logout/` | Invalida el token de sesión activo |
+| `GET / POST` | `/api/usuarios/` | Lista o crea usuarios del sistema |
+| `GET / PUT / DELETE` | `/api/usuarios/{id}/` | Consulta, actualiza o desactiva un usuario específico |
+| `GET / POST` | `/api/productos/` | Lista o crea productos del catálogo |
+| `GET / PUT / DELETE` | `/api/productos/{id}/` | Consulta, actualiza o cambia el estado de un producto |
+| `GET / POST` | `/api/categorias/` | Lista o crea categorías de producto |
+| `GET / POST` | `/api/proveedores/` | Lista o crea proveedores |
+| `GET / POST` | `/api/clientes/` | Lista o crea clientes |
+| `GET / POST` | `/api/compras/` | Lista o registra compras a proveedores |
+| `POST` | `/api/compras/{id}/anular/` | Anula una compra registrada |
+| `GET / POST` | `/api/ventas/` | Lista o registra ventas |
+| `POST` | `/api/ventas/{id}/anular/` | Anula una venta y restaura el stock afectado |
+| `GET` | `/api/inventario/almacenes/` | Lista los almacenes registrados |
+| `GET` | `/api/inventario/stock/` | Consulta el stock actual por producto y almacén |
+| `GET` | `/api/inventario/movimientos/` | Consulta el historial de movimientos de inventario |
+| `GET` | `/api/dashboard/resumen/` | Devuelve los indicadores agregados del panel principal |
+
+> **Nota.** Esta tabla resume los endpoints de mayor uso con fines de orientación técnica; no reemplaza una colección de pruebas (Postman/Insomnia) ni la documentación autogenerada de la API, que se recomienda mantener como complemento para el equipo de desarrollo.
+
 ---
 
 ## 4. Diagrama y Descripción de Casos de Uso
@@ -712,6 +759,23 @@ INITIAL_ADMIN_NUMERO_DOCUMENTO=1000000000
 
 > **IMPORTANTE:** El valor de `DB_HOST` debe ser `db` (el nombre del servicio en `docker-compose.yml`), NO `localhost`. Los contenedores se comunican entre sí a través de la red Docker interna usando los nombres de servicio.
 
+> ⚠️ **ADVERTENCIA DE SEGURIDAD:** Los valores de `SECRET_KEY`, `DB_PASSWORD` e `INITIAL_ADMIN_PASSWORD` mostrados arriba corresponden únicamente al entorno de despliegue de prueba/ejemplo de este proyecto formativo. **Una vez ingrese al sistema con el usuario administrador inicial, debe cambiar inmediatamente la contraseña** desde el módulo de Usuarios, por motivos de seguridad. Para cualquier despliegue distinto al de prueba, genere una `SECRET_KEY` nueva y una `DB_PASSWORD` propia — nunca reutilice los valores de ejemplo de este manual.
+
+**Descripción de las variables principales:**
+
+| Variable | Obligatoria | Descripción |
+|---|---|---|
+| `SECRET_KEY` | Sí | Clave criptográfica interna de Django (firma de sesiones y tokens). Debe ser única por entorno y nunca compartirse públicamente. |
+| `DB_NAME` | Sí | Nombre de la base de datos PostgreSQL utilizada por el backend. |
+| `DB_USER` | Sí | Usuario de conexión a PostgreSQL. |
+| `DB_PASSWORD` | Sí | Contraseña de conexión a PostgreSQL. Debe reemplazarse por una contraseña propia en cualquier entorno distinto al de prueba. |
+| `DB_HOST` | Sí | Nombre del servicio de base de datos dentro de la red de Docker Compose (`db`). |
+| `DB_PORT` | Sí | Puerto de PostgreSQL (por defecto `5432`). |
+| `DEBUG` | Sí | Modo de depuración de Django. Debe permanecer en `0` fuera del entorno de desarrollo. |
+| `ALLOWED_HOSTS` | Sí | Dominios u hosts autorizados a servir el backend. |
+| `CORS_ALLOW_ALL_ORIGINS` | No | Permite solicitudes desde cualquier origen. Se recomienda restringir en un entorno de producción real. |
+| `INITIAL_ADMIN_USERNAME` / `PASSWORD` / `EMAIL` | Sí | Credenciales del usuario administrador que se crea automáticamente al iniciar el contenedor backend por primera vez. |
+
 #### 7.3.2 Variables del Frontend
 
 El frontend **NO requiere** un archivo `.env` manual para el despliegue con Docker. El script `docker-entrypoint.sh` del frontend genera automáticamente el archivo `env.js` en tiempo de ejecución utilizando la variable `BACKEND_URL` definida en `docker-compose.yml`.
@@ -898,6 +962,12 @@ Dashboard principal del sistema
 | Página no carga en localhost | Contenedor frontend falló | Revise `docker compose logs frontend` |
 | Error de conexión a BD | `DB_HOST` configurado como `localhost` en vez de `db` | Verifique que `DB_HOST=db` en `backend/.env` |
 | OOM (exit code 137) | Memoria insuficiente para build de Node.js | Verifique que `NODE_OPTIONS=--max-old-space-size=512` está en el Dockerfile |
+| Error 401 (No autorizado) en la API | Token de sesión ausente, expirado o mal enviado en la cabecera | Verifique que el frontend envíe el token en la cabecera `Authorization`; solicite un nuevo inicio de sesión |
+| Error 403 (Prohibido) en la API | El usuario autenticado no tiene el rol/permiso requerido para esa acción | Verifique la matriz de permisos por rol; use un usuario con el rol adecuado |
+| Error 500 en un endpoint específico | Excepción no controlada en el backend (dato inválido, relación rota, etc.) | Revise `docker compose logs backend` para el stack trace exacto; valide los datos enviados en la solicitud |
+| Las migraciones no se aplican al iniciar | El contenedor backend no esperó a que la base de datos estuviera lista, o hay un conflicto de migraciones | Revise `docker compose logs backend`; si hay conflicto, ejecute `docker compose exec backend python manage.py showmigrations` para identificar la migración pendiente o en conflicto |
+| No se crea el usuario administrador inicial | Las variables `INITIAL_ADMIN_*` no están definidas en `backend/.env`, o el usuario ya existía de un arranque previo | Verifique el archivo `.env`; el script de datos semilla (`seed_data`) no sobrescribe un usuario ya existente |
+| La cuenta de administrador queda bloqueada en pruebas | Se superaron los 5 intentos fallidos de inicio de sesión configurados en `IntentoFallidoLogin` | Desbloquee el usuario directamente en la base de datos o desde otro usuario con rol Administrador |
 
 ### 7.8 Despliegue en Producción (Cloud)
 
@@ -1086,9 +1156,60 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 
 ---
 
-## 10. Referencias y Fuentes
+## 10. Glosario Técnico
 
-### 10.1 Documentación Oficial
+| Término | Definición |
+|---|---|
+| **API REST** | Interfaz de programación que expone los recursos del sistema mediante peticiones HTTP (GET, POST, PUT, DELETE) en formato JSON. |
+| **ORM (Object-Relational Mapping)** | Capa de Django que traduce clases y objetos Python en tablas y filas de PostgreSQL, sin necesidad de escribir SQL directo. |
+| **Serializer** | Componente de Django REST Framework que convierte instancias de modelos en JSON (y viceversa), validando los datos de entrada. |
+| **Token de Sesión** | Cadena generada tras un login exitoso que identifica al usuario en cada solicitud posterior a la API. |
+| **RBAC (Role-Based Access Control)** | Modelo de control de acceso en el que los permisos se asignan a roles (Administrador, Supervisor, Vendedor, Bodega) y no directamente a usuarios individuales. |
+| **Hash PBKDF2-SHA256** | Algoritmo utilizado por Django para almacenar contraseñas de forma irreversible, de modo que ni siquiera el equipo técnico puede leerlas en texto plano. |
+| **CORS (Cross-Origin Resource Sharing)** | Mecanismo que controla qué orígenes (dominios) pueden consultar la API del backend desde el navegador. |
+| **Contenedor** | Instancia en ejecución de una imagen Docker que aísla un proceso (backend, frontend o base de datos) junto con todas sus dependencias. |
+| **Imagen Docker** | Plantilla inmutable a partir de la cual se crean los contenedores, construida mediante un `Dockerfile`. |
+| **Volumen (Docker)** | Mecanismo de almacenamiento persistente que conserva los datos de un contenedor (por ejemplo, la base de datos) aunque este se elimine o reconstruya. |
+| **Multietapa (Multi-stage build)** | Técnica de construcción de imágenes Docker en varias etapas, copiando solo los archivos finales de una etapa a la siguiente para reducir el tamaño de la imagen. |
+| **Migración (Django)** | Archivo generado automáticamente que describe cambios en la estructura de la base de datos y permite aplicarlos de forma controlada. |
+| **Seed Data (Datos Semilla)** | Conjunto de datos iniciales que se cargan automáticamente al primer arranque del sistema (roles, tipos de documento, usuario administrador). |
+| **WSGI** | Interfaz estándar de Python que permite a un servidor web (Gunicorn) comunicarse con la aplicación Django. |
+| **Gunicorn** | Servidor de aplicaciones WSGI utilizado para ejecutar Django en producción dentro del contenedor backend. |
+| **Nginx** | Servidor web utilizado en el contenedor frontend para servir los archivos compilados de Angular y actuar como proxy hacia el backend. |
+| **SPA (Single Page Application)** | Aplicación web que carga una sola página HTML y actualiza su contenido dinámicamente sin recargar el navegador; así opera el frontend Angular. |
+| **RTO / RPO** | Tiempo objetivo de recuperación y punto objetivo de recuperación; métricas que definen cuánto tiempo y cuántos datos se pueden perder ante un incidente (ver Plan de Migración y Respaldo). |
+
+---
+
+## 11. Mesa de Ayuda y Soporte Técnico
+
+### 11.1 Canales de Escalamiento
+
+| Canal | Detalle |
+|---|---|
+| **Repositorio (issues técnicos)** | https://github.com/AlejandroSepulvedaDuarte/SofInventory.git — registrar el error o solicitud de cambio con pasos para reproducirlo |
+| **Correo Electrónico Técnico** | soporte@sofinventory.local |
+| **Responsables del mantenimiento** | Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo |
+| **Horario de atención** | Lunes a Viernes de 8:00 a.m. a 6:00 p.m. |
+
+### 11.2 Tiempos de Respuesta según Severidad
+
+Estos tiempos corresponden a los definidos en el **Plan de Mantenimiento y Soporte del Software** (sección 12.2) y se reutilizan aquí como referencia rápida para el equipo técnico:
+
+| Severidad | Criterio | Tiempo de respuesta | Tiempo de resolución |
+|---|---|---|---|
+| **Crítica** | El sistema no responde o un módulo esencial (ventas, inventario, autenticación) deja de funcionar por completo | ≤ 4 horas | ≤ 24 horas |
+| **Alta** | Una funcionalidad importante falla parcialmente (por ejemplo, un error 500 real en el flujo de login) | ≤ 8 horas | ≤ 72 horas |
+| **Media** | Un defecto afecta una validación o regla de negocio puntual, sin bloquear la operación general | ≤ 24 horas | ≤ 1 semana |
+| **Baja** | Errores cosméticos, de texto o de estilo que no afectan la funcionalidad | ≤ 3 días | Próxima iteración |
+
+> **Antes de escalar un incidente:** revise primero la sección 7.7 (Solución de Problemas Comunes) de este manual; la mayoría de los errores de despliegue, autenticación y base de datos allí documentados tienen solución inmediata sin necesidad de abrir un nuevo issue.
+
+---
+
+## 12. Referencias y Fuentes
+
+### 12.1 Documentación Oficial
 
 | Tecnología | URL |
 |---|---|
@@ -1103,7 +1224,7 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 | Node.js | https://nodejs.org/ |
 | Python | https://docs.python.org/3/ |
 
-### 10.2 Documentos Internos y externos del Proyecto
+### 12.2 Documentos Internos y externos del Proyecto
 
 Para consultar la información complementaria y profundizar en el diseño, arquitectura y base de datos del proyecto **SofInventory**, se ponen a disposición los siguientes anexos:
 
@@ -1114,22 +1235,32 @@ Para consultar la información complementaria y profundizar en el diseño, arqui
 | **Diccionario de Datos** | Especificación técnica de tablas, campos, tipos y restricciones | [📊 Ver Excel](https://drive.google.com/file/d/1UzqMEZIm0xpVfJMkq-4Cwno6ymZs9C7R/view?usp=sharing) |
 | **Manual de Despliegue** | Guía paso a paso para la instalación y despliegue del software | [📕 Ver Manual de despliegue](./docs/Informe_Tecnico_Despliegue_SofInventory_v2.pdf) |
 | **Casos de Uso Extendidos** | Diagramas y descripciones detalladas por módulo del sistema | [📄 Ver Diagrama y plantillas por casos de uso](./docs/Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf) |
+| **Plan de Mantenimiento y Soporte del Software** | Plan de mantenimiento preventivo y correctivo con base en ISO/IEC 14764, incluyendo tiempos de respuesta por severidad | [📄 Ver Plan de Mantenimiento](./docs/Plan_de_Mantenimiento_y_Soporte_del_Software.pdf) |
+| **Plan de Migración y Respaldo de Datos** | Plan de copias de seguridad, restauración y gestión del riesgo con base en ISO/IEC 27001 | [📄 Ver Plan de Migración y Respaldo](./docs/Plan_Migracion_Respaldo_SofInventory.pdf) |
 | **Repositorio GitHub** | Código fuente del proyecto y configuración de contenedores Docker | [💻 Ver Repositorio](https://github.com/AlejandroSepulvedaDuarte/SofInventory.git) |
 
-### 10.3 Guías de Referencia
+### 12.3 Guías de Referencia
 
 | Guía | Fuente |
 |---|---|
 | Guía para la Elaboración del Manual Técnico y de Operación del Sistema | DNP (Departamento Nacional de Planeación), 2020 |
 | Marco de Referencia de Arquitectura | MinTIC — Directriz LI.SIS |
 | ISO/IEC 27001:2022 — Seguridad de la Información | International Organization for Standardization |
-| ISO 14724:2019 — Patrones de Arquitectura de Software | International Organization for Standardization |
+| ISO/IEC/IEEE 42010:2022 — Software, systems and enterprise: Architecture description | International Organization for Standardization |
 
 ---
 
 <div align="center">
-Documento técnico elaborado para la evaluación de la competencia de desarrollo de software. 
-SENA — 2026
+
+---
+
+### 🛠️ **SofInventory ERP**
+*Sistema de Gestión de Inventarios y Ventas para Ferreterías*
+
+**© 2026 SofInventory.** Todos los derechos reservados.  
+Documento elaborado por el Equipo de Desarrollo de Software — SENA
+
+---
 
 </div>
 
