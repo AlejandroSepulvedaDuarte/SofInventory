@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LayoutComponent } from '../../shared/components/layout.component';
 import { InventarioService, ProductosService } from '../../core/services/api.services';
-import { Almacen, Producto } from '../../core/models';
+import { Almacen, MovimientoInventarioRequest, Producto } from '../../core/models';
 
 @Component({
   selector: 'app-inventario',
@@ -45,7 +45,14 @@ export class InventarioComponent implements OnInit {
   almacenForm: Partial<Almacen> = {};
 
   // ── Estado del formulario de movimiento ──────────────────────────────────
-  movForm    = { producto_id: '', tipo: 'entrada', cantidad: 1, motivo: '' };
+  movForm: MovimientoInventarioRequest = {
+    producto_id: '',
+    almacen_id: '',
+    almacen_destino_id: null,
+    tipo: 'entrada',
+    cantidad: 1,
+    observacion: ''
+  };
   movSaving  = signal(false);
   movError   = signal('');
   /** Mensaje de confirmación; se muestra tras registrar y se limpia al siguiente envío. */
@@ -77,6 +84,22 @@ export class InventarioComponent implements OnInit {
   /** Recarga solo el stock; se llama al iniciar y tras cada movimiento registrado. */
   loadStock(): void {
     this.svc.listarStock().subscribe(s => this.stock.set(s));
+  }
+
+  almacenesActivos(): Almacen[] {
+    return this.almacenes().filter(a => a.estado === 'activo');
+  }
+
+  porcentajeAlerta(alerta: any): number {
+    if (!alerta.stock_minimo) return alerta.stock_actual === 0 ? 0 : 100;
+    return Math.min(100, (alerta.stock_actual / alerta.stock_minimo) * 100);
+  }
+
+  private recargarInventario(): void {
+    this.loadStock();
+    this.svc.estadisticas().subscribe(e => this.estadisticas.set(e));
+    this.svc.alertas().subscribe(a => this.alertas.set(a));
+    this.prodSvc.listar().subscribe(p => this.productos.set(p));
   }
 
   // ── Modal de almacén ─────────────────────────────────────────────────────
@@ -135,8 +158,12 @@ export class InventarioComponent implements OnInit {
    * el template lo oculta en el siguiente envío al limpiar el signal.
    */
   registrarMovimiento(): void {
-    if (!this.movForm.producto_id || !this.movForm.cantidad) {
+    if (!this.movForm.producto_id || !this.movForm.almacen_id || !this.movForm.cantidad) {
       this.movError.set('Completa todos los campos obligatorios.');
+      return;
+    }
+    if (this.movForm.tipo === 'transferencia' && !this.movForm.almacen_destino_id) {
+      this.movError.set('Selecciona el almacén destino.');
       return;
     }
 
@@ -148,8 +175,15 @@ export class InventarioComponent implements OnInit {
       next: () => {
         this.movSuccess.set('Movimiento registrado correctamente.');
         this.movSaving.set(false);
-        this.movForm = { producto_id: '', tipo: 'entrada', cantidad: 1, motivo: '' };
-        this.loadStock();
+        this.movForm = {
+          producto_id: '',
+          almacen_id: '',
+          almacen_destino_id: null,
+          tipo: 'entrada',
+          cantidad: 1,
+          observacion: ''
+        };
+        this.recargarInventario();
       },
       error: (e) => {
         this.movError.set(e.error?.error ?? 'Error');

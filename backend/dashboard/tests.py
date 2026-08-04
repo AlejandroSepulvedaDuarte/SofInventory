@@ -5,6 +5,7 @@ from rest_framework.test import APIClient
 
 from clientes.models import Cliente
 from compras.models import Compra
+from inventario.models import Almacen, StockAlmacen
 from productos.models import Categoria, Producto
 from proveedores.models import Proveedor
 from usuarios.models import Rol, TipoDocumento, Usuario
@@ -14,8 +15,8 @@ from ventas.models import Venta, DetalleVenta
 class DashboardTests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.tipo_documento = TipoDocumento.objects.create(codigo='CC', nombre='Cedula')
-        self.rol = Rol.objects.create(nombre='Administrador')
+        self.tipo_documento = TipoDocumento.objects.get(codigo='CC')
+        self.rol = Rol.objects.get(nombre='Administrador')
         self.usuario = Usuario.objects.create(
             tipo_documento=self.tipo_documento,
             numero_documento='2001',
@@ -44,6 +45,16 @@ class DashboardTests(TestCase):
             stock_minimo=5,
             estado='activo',
             creado_por=self.usuario,
+        )
+        self.almacen = Almacen.objects.create(
+            nombre='Almacen Dashboard',
+            codigo='ALM-DASH',
+            creado_por=self.usuario,
+        )
+        StockAlmacen.objects.create(
+            producto=self.producto,
+            almacen=self.almacen,
+            cantidad=3,
         )
         self.cliente = Cliente.objects.create(
             tipo_cliente='natural',

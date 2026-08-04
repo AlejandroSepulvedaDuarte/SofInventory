@@ -7,15 +7,15 @@ from .models import Usuario, Rol, TipoDocumento, SesionAPI
 class AutenticacionAPITests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.tipo_documento = TipoDocumento.objects.create(codigo='CC', nombre='Cedula')
-        self.rol_admin = Rol.objects.create(nombre='Administrador')
-        self.rol_vendedor = Rol.objects.create(nombre='Vendedor')
+        self.tipo_documento = TipoDocumento.objects.get(codigo='CC')
+        self.rol_admin = Rol.objects.get(nombre='Administrador')
+        self.rol_vendedor = Rol.objects.get(nombre='Vendedor')
         self.admin = Usuario.objects.create(
             tipo_documento=self.tipo_documento,
             numero_documento='1001',
             nombre_completo='Admin Principal',
-            email='admin@example.com',
-            username='admin',
+            email='admin-test@example.com',
+            username='admin_test',
             password='Secret123!',
             rol=self.rol_admin,
             fecha_creacion='2026-01-01',
@@ -31,7 +31,7 @@ class AutenticacionAPITests(TestCase):
             fecha_creacion='2026-01-01',
         )
 
-    def autenticar(self, username='admin', password='Secret123!'):
+    def autenticar(self, username='admin_test', password='Secret123!'):
         response = self.client.post('/api/auth/login/', {
             'username': username,
             'password': password,
@@ -43,7 +43,7 @@ class AutenticacionAPITests(TestCase):
 
     def test_login_retorna_token_y_usuario(self):
         response = self.client.post('/api/auth/login/', {
-            'username': 'admin',
+            'username': 'admin_test',
             'password': 'Secret123!',
         }, format='json')
 
@@ -61,7 +61,7 @@ class AutenticacionAPITests(TestCase):
         response = self.client.get('/api/auth/me/')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['usuario']['username'], 'admin')
+        self.assertEqual(response.data['usuario']['username'], 'admin_test')
 
     def test_permiso_admin_bloquea_vendedor_en_creacion_usuarios(self):
         self.autenticar(username='vendedor')

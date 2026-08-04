@@ -43,6 +43,11 @@ class Venta(models.Model):
                             Usuario, on_delete=models.PROTECT,
                             related_name='ventas_realizadas'
                         )
+    almacen          = models.ForeignKey(
+                            'inventario.Almacen', on_delete=models.PROTECT,
+                            related_name='ventas',
+                            blank=True, null=True
+                        )
 
     # Totales
     subtotal         = models.DecimalField(max_digits=14, decimal_places=2, default=0)
@@ -110,6 +115,17 @@ class Venta(models.Model):
         verbose_name    = 'Venta'
         verbose_name_plural = 'Ventas'
         ordering        = ['-fecha_creacion']
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(subtotal__gte=0) &
+                    models.Q(descuento__gte=0) &
+                    models.Q(iva_monto__gte=0) &
+                    models.Q(total__gte=0)
+                ),
+                name='ventas_totales_no_negativos',
+            ),
+        ]
 
 
 # ======================================================
@@ -146,3 +162,13 @@ class DetalleVenta(models.Model):
         db_table     = 'detalle_ventas'
         verbose_name = 'Detalle de Venta'
         verbose_name_plural = 'Detalles de Venta'
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    models.Q(cantidad__gt=0) &
+                    models.Q(precio_unitario__gte=0) &
+                    models.Q(subtotal__gte=0)
+                ),
+                name='ventas_detalle_valores_validos',
+            ),
+        ]

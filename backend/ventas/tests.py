@@ -12,8 +12,8 @@ from usuarios.models import TipoDocumento, Rol, Usuario
 class VentasTestCase(TestCase):
     def setUp(self):
         # crear usuario vendedor (modelo Usuario personalizado)
-        tipo = TipoDocumento.objects.create(codigo='CC', nombre='Cédula')
-        rol = Rol.objects.create(nombre='Vendedor')
+        tipo = TipoDocumento.objects.get(codigo='CC')
+        rol = Rol.objects.get(nombre='Vendedor')
         self.user = Usuario.objects.create(
             tipo_documento=tipo,
             numero_documento='123456',
@@ -34,7 +34,7 @@ class VentasTestCase(TestCase):
         self.producto = Producto.objects.create(
             sku='SKU-TEST-1', nombre='Producto Test', marca='M', referencia='R',
             categoria=self.categoria, precio_venta=Decimal('100.00'), iva_porcentaje=19,
-            creado_por=self.user, stock=0
+            creado_por=self.user, stock=0, estado='activo'
         )
 
         # almacen y stock

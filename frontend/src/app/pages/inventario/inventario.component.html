@@ -100,7 +100,7 @@
                 </span>
               </td>
               <td>{{ s.stock_minimo }}</td>
-              <td><span class="badge" [class]="'badge-' + s.estado">{{ s.estado }}</span></td>
+              <td><span class="badge" [class]="'badge-' + s.estado_stock">{{ s.estado_stock }}</span></td>
             </tr>
             <tr *ngIf="stock().length === 0">
               <td colspan="5" class="empty-row"><i class="fas fa-inbox"></i> Sin datos de stock</td>
@@ -135,7 +135,7 @@
           </div>
           <!-- Barra proporcional: ancho = (actual / mínimo) × 100 % -->
           <div class="alert-bar-wrap">
-            <div class="alert-bar" [style.width.%]="(a.stock_actual / a.stock_minimo) * 100"></div>
+            <div class="alert-bar" [style.width.%]="porcentajeAlerta(a)"></div>
           </div>
         </div>
 
@@ -215,7 +215,26 @@
             <select [(ngModel)]="movForm.tipo">
               <option value="entrada">Entrada</option>
               <option value="salida">Salida</option>
-              <option value="ajuste">Ajuste</option>
+              <option value="transferencia">Transferencia</option>
+            </select>
+          </div>
+          <div class="field">
+            <label><i class="fas fa-warehouse"></i> Almacén *</label>
+            <select [(ngModel)]="movForm.almacen_id">
+              <option value="">Seleccionar...</option>
+              <option *ngFor="let a of almacenesActivos()" [value]="a.id">
+                {{ a.codigo }} - {{ a.nombre }}
+              </option>
+            </select>
+          </div>
+          <div class="field" *ngIf="movForm.tipo === 'transferencia'">
+            <label><i class="fas fa-warehouse"></i> Almacén destino *</label>
+            <select [(ngModel)]="movForm.almacen_destino_id">
+              <option [ngValue]="null">Seleccionar...</option>
+              <option *ngFor="let a of almacenesActivos()" [ngValue]="a.id"
+                [disabled]="a.id == movForm.almacen_id">
+                {{ a.codigo }} - {{ a.nombre }}
+              </option>
             </select>
           </div>
           <div class="field">
@@ -224,7 +243,7 @@
           </div>
           <div class="field">
             <label><i class="fas fa-clipboard"></i> Motivo</label>
-            <input type="text" [(ngModel)]="movForm.motivo" placeholder="Motivo del movimiento" />
+            <input type="text" [(ngModel)]="movForm.observacion" placeholder="Motivo del movimiento" />
           </div>
         </div>
 

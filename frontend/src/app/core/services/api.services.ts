@@ -16,6 +16,7 @@ import {
   DetalleVenta,
   Venta,
   Almacen,
+  MovimientoInventarioRequest,
   DashboardData
 } from '../models';
 
@@ -81,7 +82,7 @@ export class ProductosService {
   }
 
   configurar(id: number, data: Partial<Producto>): Observable<any> {
-    return this.http.patch(`${API}/productos/configurar/${id}/`, data);
+    return this.http.put(`${API}/productos/configurar/${id}/`, data);
   }
 
   
@@ -210,6 +211,7 @@ export class ComprasService {
 
     return {
       proveedor_id: data.proveedor ? Number(data.proveedor) : null,
+      almacen_id: data.almacen ? Number(data.almacen) : null,
       numero_factura: String(data.numero_factura ?? '').trim(),
       fecha_compra: data.fecha_compra,
       tipo_compra: data.tipo_compra,
@@ -232,8 +234,8 @@ export class ComprasService {
     return this.http.get<Compra>(`${API}/compras/detalle/${id}/`);
   }
 
-  anular(id: number): Observable<any> {
-    return this.http.patch(`${API}/compras/anular/${id}/`, {});
+  anular(id: number, motivo = 'Anulacion de compra'): Observable<any> {
+    return this.http.patch(`${API}/compras/anular/${id}/`, { motivo });
   }
 }
 
@@ -296,8 +298,10 @@ export class VentasService {
 export class InventarioService {
   constructor(private http: HttpClient) {}
 
-  listarStock(): Observable<any[]> {
-    return this.http.get<any[]>(`${API}/inventario/stock/listar/`);
+  listarStock(almacenId?: number | null): Observable<any[]> {
+    let params = new HttpParams();
+    if (almacenId) params = params.set('almacen', String(almacenId));
+    return this.http.get<any[]>(`${API}/inventario/stock/listar/`, { params });
   }
 
   estadisticas(): Observable<any> {
@@ -308,7 +312,7 @@ export class InventarioService {
     return this.http.get<any[]>(`${API}/inventario/stock/alertas/`);
   }
 
-  movimientoRapido(data: any): Observable<any> {
+  movimientoRapido(data: MovimientoInventarioRequest): Observable<any> {
     return this.http.post(`${API}/inventario/stock/movimiento/`, data);
   }
 
@@ -328,8 +332,15 @@ export class InventarioService {
     return this.http.delete(`${API}/inventario/almacenes/eliminar/${id}/`);
   }
 
-  stockPorAlmacen(): Observable<any> {
-    return this.http.get<any>(`${API}/inventario/stock/por-almacen/`);
+  stockPorAlmacen(productoId: number, almacenId: number): Observable<{ cantidad: number }> {
+    const params = new HttpParams()
+      .set('producto_id', String(productoId))
+      .set('almacen_id', String(almacenId));
+    return this.http.get<{ cantidad: number }>(`${API}/inventario/stock/por-almacen/`, { params });
+  }
+
+  listarMovimientos(): Observable<any[]> {
+    return this.http.get<any[]>(`${API}/inventario/movimientos/listar/`);
   }
 }
 

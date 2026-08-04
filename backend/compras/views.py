@@ -1,181 +1,274 @@
+from decimal import Decimal
+
+from django.db import IntegrityError, transaction
+from django.utils import timezone
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-from django.db import transaction
+
+from inventario.models import Almacen, MovimientoInventario
+from inventario.services import InventarioError, ServicioInventario
+from productos.models import Producto
+from proveedores.models import Proveedor
+from usuarios.permissions import require_roles
 
 from .models import Compra, DetalleCompra
-from .serializers import CompraSerializer
-from productos.models import Producto
-from inventario.models import Almacen, StockAlmacen, MovimientoInventario
-from usuarios.permissions import require_roles
+from .serializers import (
+    AnularCompraSerializer,
+    CompraSerializer,
+    RegistrarCompraSerializer,
+)
+
+
+def _primer_error(errores):
+    for campo, mensajes in errores.items():
+        if isinstance(mensajes, dict):
+            return _primer_error(mensajes)
+        if isinstance(mensajes, list) and mensajes:
+            primer = mensajes[0]
+            if isinstance(primer, dict):
+                return _primer_error(primer)
+            return str(primer)
+        return f'{campo}: {mensajes}'
+    return 'Los datos enviados no son validos.'
+
+
+def _almacen_compra(almacen_id):
+    consulta = Almacen.objects.filter(estado='activo')
+    if almacen_id:
+        consulta = consulta.filter(pk=almacen_id)
+    almacen = consulta.order_by('pk').first()
+    if not almacen:
+        raise InventarioError(
+            'Debe seleccionar un almacen activo para registrar la compra.'
+        )
+    return almacen
 
 
 @api_view(['POST'])
 @require_roles('Administrador', 'Supervisor', 'Bodega')
 def registrar_compra(request):
-    data = request.data
-
-    numero_factura = str(data.get('numero_factura', '')).strip()
-    if not numero_factura.isdigit():
+    serializer = RegistrarCompraSerializer(data=request.data)
+    if not serializer.is_valid():
         return Response(
-            {'error': 'El numero de factura solo puede contener numeros.'},
-            status=status.HTTP_400_BAD_REQUEST
+            {'error': _primer_error(serializer.errors)},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
-    productos_data = data.get('productos', [])
-    if not productos_data:
-        return Response({'error': 'Debe agregar al menos un producto.'}, status=status.HTTP_400_BAD_REQUEST)
-
+    data = serializer.validated_data
     try:
         with transaction.atomic():
+            try:
+                proveedor = Proveedor.objects.select_for_update().get(
+                    pk=data['proveedor_id']
+                )
+            except Proveedor.DoesNotExist as exc:
+                raise InventarioError('Proveedor no encontrado.') from exc
+            if proveedor.estado.lower() != 'activo':
+                raise InventarioError('El proveedor seleccionado no esta activo.')
+
+            almacen = _almacen_compra(data.get('almacen_id'))
             compra = Compra.objects.create(
-                proveedor_id=data['proveedor_id'],
-                numero_factura=numero_factura,
+                proveedor=proveedor,
+                almacen=almacen,
+                numero_factura=data['numero_factura'].strip(),
                 fecha_compra=data['fecha_compra'],
                 tipo_compra=data['tipo_compra'],
-                subtotal=data['subtotal'],
-                iva_total=data['iva_total'],
-                total=data['total'],
+                subtotal=Decimal('0'),
+                iva_total=Decimal('0'),
+                total=Decimal('0'),
                 registrado_por=request.user,
             )
 
-            usuario = request.user
-            almacen_principal = Almacen.objects.filter(estado='activo').order_by('id').first()
-
-            for item in productos_data:
-                producto_id = item.get('producto_id')
-                if not producto_id:
-                    raise ValueError('Cada detalle de compra debe incluir producto_id.')
-
+            subtotal_compra = Decimal('0')
+            iva_total = Decimal('0')
+            for item in sorted(
+                data['productos'], key=lambda detalle: detalle['producto_id']
+            ):
                 try:
-                    producto = Producto.objects.get(id=producto_id)
-                except Producto.DoesNotExist:
-                    raise ValueError(f'Producto ID {producto_id} no encontrado.')
-
-                cantidad = int(item['cantidad'])
-                costo_unitario = item['costo_unitario']
-                iva_porcentaje = item.get('iva', 0)
-
-                producto.stock += cantidad
-                producto.precio_compra = costo_unitario
-                producto.iva_porcentaje = iva_porcentaje
-                producto.save()
-
-                if producto.estado != 'pendiente' and almacen_principal:
-                    stock_obj, _ = StockAlmacen.objects.get_or_create(
-                        producto=producto,
-                        almacen=almacen_principal,
-                        defaults={'cantidad': 0}
+                    producto = Producto.objects.select_for_update().get(
+                        pk=item['producto_id']
                     )
-                    stock_obj.cantidad += cantidad
-                    stock_obj.save()
+                except Producto.DoesNotExist as exc:
+                    raise InventarioError(
+                        f'Producto ID {item["producto_id"]} no encontrado.'
+                    ) from exc
 
-                    MovimientoInventario.objects.create(
-                        tipo='ENTRADA_COMPRA',
-                        producto=producto,
-                        almacen_destino=almacen_principal,
-                        cantidad=cantidad,
-                        costo_unitario=costo_unitario,
-                        referencia_tipo='COMPRA',
-                        referencia_id=compra.id,
-                        observacion=f'Compra {compra.numero_factura}',
-                        creado_por=usuario
-                    )
-
-                subtotal = float(cantidad) * float(costo_unitario)
-                iva_calc = subtotal * (float(iva_porcentaje) / 100)
-                total = subtotal + iva_calc
+                cantidad = item['cantidad']
+                costo = item['costo_unitario']
+                iva = item['iva']
+                subtotal = costo * cantidad
+                total_linea = subtotal + (subtotal * iva / Decimal('100'))
 
                 DetalleCompra.objects.create(
                     compra=compra,
                     producto=producto,
                     cantidad=cantidad,
-                    costo_unitario=costo_unitario,
-                    iva_porcentaje=iva_porcentaje,
+                    costo_unitario=costo,
+                    iva_porcentaje=iva,
                     subtotal=subtotal,
-                    total=total,
+                    total=total_linea,
                 )
+                ServicioInventario.entrada(
+                    producto=producto,
+                    almacen=almacen,
+                    cantidad=cantidad,
+                    usuario=request.user,
+                    tipo='ENTRADA_COMPRA',
+                    costo_unitario=costo,
+                    documento=compra,
+                    observacion=f'Compra {compra.numero_factura}',
+                )
+                producto.precio_compra = costo
+                producto.iva_porcentaje = iva
+                producto.save(
+                    update_fields=[
+                        'precio_compra',
+                        'iva_porcentaje',
+                        'fecha_actualizacion',
+                    ]
+                )
+                subtotal_compra += subtotal
+                iva_total += total_linea - subtotal
 
-            return Response({
+            compra.subtotal = subtotal_compra
+            compra.iva_total = iva_total
+            compra.total = subtotal_compra + iva_total
+            compra.save(update_fields=['subtotal', 'iva_total', 'total'])
+
+        return Response(
+            {
                 'mensaje': 'Compra registrada correctamente.',
-                'compra_id': compra.id
-            }, status=status.HTTP_201_CREATED)
-
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                'compra_id': compra.id,
+                'total': float(compra.total),
+            },
+            status=status.HTTP_201_CREATED,
+        )
+    except (InventarioError, IntegrityError) as exc:
+        mensaje = (
+            'Ya existe una compra con ese numero de factura.'
+            if isinstance(exc, IntegrityError)
+            else str(exc)
+        )
+        return Response(
+            {'error': mensaje},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 @api_view(['GET'])
 @require_roles('Administrador', 'Supervisor', 'Bodega')
 def listar_compras(request):
-    compras = Compra.objects.select_related('proveedor', 'registrado_por').all()
-    serializer = CompraSerializer(compras, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    compras = (
+        Compra.objects.select_related('proveedor', 'registrado_por', 'almacen')
+        .prefetch_related('detalles__producto')
+        .all()
+    )
+    return Response(CompraSerializer(compras, many=True).data)
 
 
 @api_view(['PATCH'])
 @require_roles('Administrador', 'Supervisor')
 def anular_compra(request, id):
+    entrada = AnularCompraSerializer(data=request.data)
+    if not entrada.is_valid():
+        return Response(
+            {'error': _primer_error(entrada.errors)},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    motivo = entrada.validated_data['motivo'].strip() or 'Anulacion de compra'
+
     try:
-        compra = Compra.objects.prefetch_related('detalles__producto').get(id=id)
+        with transaction.atomic():
+            try:
+                compra = Compra.objects.select_for_update().get(pk=id)
+            except Compra.DoesNotExist as exc:
+                raise InventarioError('Compra no encontrada.') from exc
+            if compra.estado == 'anulada':
+                raise InventarioError('La compra ya esta anulada.')
 
-        if compra.estado == 'anulada':
-            return Response({'error': 'La compra ya está anulada.'}, status=status.HTTP_400_BAD_REQUEST)
+            movimientos = list(
+                MovimientoInventario.objects.select_for_update()
+                .filter(
+                    compra=compra,
+                    tipo='ENTRADA_COMPRA',
+                )
+                .order_by('producto_id', 'pk')
+            )
+            if not movimientos:
+                raise InventarioError(
+                    'La compra no tiene movimientos de entrada auditables.'
+                )
 
-        for detalle in compra.detalles.all():
-            producto = detalle.producto
-            if producto.stock < detalle.cantidad:
-                return Response({
-                    'error': (
-                        f'No se puede anular esta compra. El producto '
-                        f'"{producto.nombre} - {producto.marca} - {producto.referencia}" '
-                        f'ya tiene unidades comprometidas.'
-                    )
-                }, status=status.HTTP_400_BAD_REQUEST)
+            cantidades_detalle = {}
+            for detalle in compra.detalles.all():
+                cantidades_detalle[detalle.producto_id] = (
+                    cantidades_detalle.get(detalle.producto_id, 0)
+                    + detalle.cantidad
+                )
+            cantidades_movimiento = {}
+            for movimiento in movimientos:
+                cantidades_movimiento[movimiento.producto_id] = (
+                    cantidades_movimiento.get(movimiento.producto_id, 0)
+                    + movimiento.cantidad
+                )
+            if cantidades_detalle != cantidades_movimiento:
+                raise InventarioError(
+                    'Los movimientos de la compra no coinciden con sus detalles.'
+                )
 
-        for detalle in compra.detalles.all():
-            producto = detalle.producto
-            producto.stock -= detalle.cantidad
-            producto.save()
+            for movimiento in movimientos:
+                ServicioInventario.revertir_entrada(
+                    movimiento,
+                    usuario=request.user,
+                    motivo=(
+                        f'Anulacion compra {compra.numero_factura}: {motivo}'
+                    ),
+                )
 
-            movimiento = MovimientoInventario.objects.filter(
-                referencia_tipo='COMPRA',
-                referencia_id=compra.id,
-                producto=producto,
-                tipo='ENTRADA_COMPRA'
-            ).first()
+            compra.estado = 'anulada'
+            compra.fecha_anulacion = timezone.now()
+            compra.anulado_por = request.user
+            compra.motivo_anulacion = motivo
+            compra.save(
+                update_fields=[
+                    'estado',
+                    'fecha_anulacion',
+                    'anulado_por',
+                    'motivo_anulacion',
+                ]
+            )
 
-            if movimiento and movimiento.almacen_destino:
-                stock_obj = StockAlmacen.objects.filter(
-                    producto=producto,
-                    almacen=movimiento.almacen_destino
-                ).first()
-                if stock_obj:
-                    stock_obj.cantidad = max(0, stock_obj.cantidad - detalle.cantidad)
-                    stock_obj.save()
-
-        compra.estado = 'anulada'
-        compra.save()
-
-        return Response({
-            'mensaje': 'Compra anulada correctamente.',
-            'estado': compra.estado
-        }, status=status.HTTP_200_OK)
-
-    except Compra.DoesNotExist:
-        return Response({'error': 'Compra no encontrada'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {
+                'mensaje': 'Compra anulada correctamente.',
+                'estado': compra.estado,
+            }
+        )
+    except InventarioError as exc:
+        codigo = (
+            status.HTTP_404_NOT_FOUND
+            if str(exc) == 'Compra no encontrada.'
+            else status.HTTP_400_BAD_REQUEST
+        )
+        return Response({'error': str(exc)}, status=codigo)
 
 
 @api_view(['GET'])
 @require_roles('Administrador', 'Supervisor', 'Bodega')
 def detalle_compra(request, id):
     try:
-        compra = Compra.objects.select_related(
-            'proveedor', 'registrado_por'
-        ).prefetch_related(
-            'detalles__producto'
-        ).get(id=id)
-        serializer = CompraSerializer(compra)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        compra = (
+            Compra.objects.select_related(
+                'proveedor', 'registrado_por', 'almacen',
+                'anulado_por',
+            )
+            .prefetch_related('detalles__producto')
+            .get(pk=id)
+        )
     except Compra.DoesNotExist:
-        return Response({'error': 'Compra no encontrada'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'error': 'Compra no encontrada.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    return Response(CompraSerializer(compra).data)

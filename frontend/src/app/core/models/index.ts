@@ -143,6 +143,8 @@ export interface Compra {
   numero_factura: string;
   fecha_compra: string;
   tipo_compra: 'Contado' | 'Credito';
+  almacen?: number | Almacen | null;
+  almacen_nombre?: string;
   subtotal?: number;
   iva_total?: number;
   total?: number;
@@ -166,6 +168,8 @@ export interface Venta {
   cliente?: number | null;
   cliente_nombre?: string;
   vendedor_nombre?: string;
+  almacen?: number | null;
+  almacen_nombre?: string;
   subtotal?: number;
   descuento?: number;
   tipo_iva?: 'automatico' | 'manual';
@@ -201,6 +205,18 @@ export interface StockItem {
   stock_actual: number;
   stock_minimo: number;
   estado: string;
+  estado_stock?: 'pendiente' | 'agotado' | 'bajo' | 'medio' | 'alto';
+  almacen_id?: number | null;
+  almacen_nombre?: string;
+}
+
+export interface MovimientoInventarioRequest {
+  producto_id: number | string;
+  almacen_id: number | string;
+  almacen_destino_id?: number | string | null;
+  cantidad: number;
+  tipo: 'entrada' | 'salida' | 'transferencia';
+  observacion?: string;
 }
 
 // ==================== DASHBOARD ====================

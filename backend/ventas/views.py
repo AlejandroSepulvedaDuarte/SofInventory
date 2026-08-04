@@ -1,139 +1,154 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from django.db import transaction, IntegrityError
-from django.db.models import Q, Sum
-from django.utils import timezone
 from decimal import Decimal
 
-from .models import Venta, DetalleVenta
-from .serializers import VentaSerializer
+from clientes.models import Cliente
+from django.db import IntegrityError, transaction
+from django.utils import timezone
+from inventario.models import Almacen, MovimientoInventario
+from inventario.services import InventarioError, ServicioInventario
 from productos.models import Producto
-from inventario.models import Almacen, StockAlmacen, MovimientoInventario
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from usuarios.permissions import require_roles
 
+from .models import DetalleVenta, Venta
+from .serializers import (
+    AnularVentaSerializer,
+    RegistrarVentaSerializer,
+    VentaSerializer,
+)
 
-def get_usuario(request):
-    user = getattr(request, 'user', None)
-    if user and getattr(user, 'is_authenticated', False):
-        return user
-    return None
+
+def _primer_error(errores):
+    for campo, mensajes in errores.items():
+        if isinstance(mensajes, dict):
+            return _primer_error(mensajes)
+        if isinstance(mensajes, list) and mensajes:
+            primer = mensajes[0]
+            if isinstance(primer, dict):
+                return _primer_error(primer)
+            return str(primer)
+        return f'{campo}: {mensajes}'
+    return 'Los datos enviados no son validos.'
 
 
 @api_view(['POST'])
 @require_roles('Administrador', 'Supervisor', 'Vendedor')
 def crear_venta(request):
-    data = request.data
-
-    productos_data = data.get('productos', [])
-    if not productos_data:
-        return Response({'error': 'Debe agregar al menos un producto.'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    almacen_id = data.get('almacen_id')
-    if not almacen_id:
-        return Response({'error': 'Debe seleccionar un almacén para la venta.'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    metodo_pago_data = data.get('metodo_pago', {})
-    metodo_pago = metodo_pago_data.get('metodo', '') if metodo_pago_data else ''
-    if not metodo_pago:
-        return Response({'error': 'Debe seleccionar un método de pago.'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    try:
-        almacen = Almacen.objects.get(pk=almacen_id)
-    except Almacen.DoesNotExist:
-        return Response({'error': 'Almacén no encontrado.'},
-                        status=status.HTTP_404_NOT_FOUND)
-
-    vendedor = get_usuario(request)
-    if not vendedor:
+    serializer = RegistrarVentaSerializer(data=request.data)
+    if not serializer.is_valid():
         return Response(
-            {'error': 'Debe enviar un vendedor_id valido para procesar la venta.'},
-            status=status.HTTP_400_BAD_REQUEST
+            {'error': _primer_error(serializer.errors)},
+            status=status.HTTP_400_BAD_REQUEST,
         )
+    data = serializer.validated_data
 
     try:
         with transaction.atomic():
+            try:
+                almacen = Almacen.objects.select_for_update().get(
+                    pk=data['almacen_id']
+                )
+            except Almacen.DoesNotExist as exc:
+                raise InventarioError('Almacen no encontrado.') from exc
+            if almacen.estado != 'activo':
+                raise InventarioError(
+                    'El almacen seleccionado no esta disponible para ventas.'
+                )
+
+            cliente = None
+            if data.get('cliente_id'):
+                try:
+                    cliente = Cliente.objects.get(pk=data['cliente_id'])
+                except Cliente.DoesNotExist as exc:
+                    raise InventarioError('Cliente no encontrado.') from exc
+                if cliente.estado != 'activo':
+                    raise InventarioError('El cliente seleccionado no esta activo.')
+
+            items = []
             subtotal_productos = Decimal('0')
             iva_total = Decimal('0')
             iva_porcentajes = set()
-            items = []
-
-            # Validaciones y bloqueo de filas de stock para evitar concurrencia
-            for item in productos_data:
-                prod_id = item.get('producto_id')
-                if prod_id is None:
-                    raise ValueError('Producto inválido en la lista.')
-
+            for item in sorted(
+                data['productos'], key=lambda detalle: detalle['producto_id']
+            ):
                 try:
-                    producto = Producto.objects.select_for_update().get(pk=prod_id)
-                except Producto.DoesNotExist:
-                    raise ValueError(f'Producto ID {prod_id} no encontrado.')
+                    producto = Producto.objects.select_for_update().get(
+                        pk=item['producto_id']
+                    )
+                except Producto.DoesNotExist as exc:
+                    raise InventarioError(
+                        f'Producto ID {item["producto_id"]} no encontrado.'
+                    ) from exc
+                if producto.estado != 'activo':
+                    raise InventarioError(
+                        f'El producto "{producto.nombre}" no esta activo para venta.'
+                    )
 
-                try:
-                    stock_obj = StockAlmacen.objects.select_for_update().get(producto=producto, almacen=almacen)
-                except StockAlmacen.DoesNotExist:
-                    raise ValueError(f'El producto "{producto.nombre}" no tiene stock en el almacén "{almacen.nombre}".')
-
-                # Validar cantidad
-                try:
-                    cantidad = int(item.get('cantidad', 0))
-                except (ValueError, TypeError):
-                    raise ValueError('La cantidad ingresada no es válida.')
-                if cantidad <= 0:
-                    raise ValueError('La cantidad ingresada no es válida. Debe ser mayor a 0.')
-
-                # Validar precio
-                try:
-                    precio = Decimal(str(item.get('precio_unitario', '0')))
-                except Exception:
-                    raise ValueError('El precio unitario no es válido.')
-                if precio < 0:
-                    raise ValueError('El precio unitario no puede ser negativo.')
-
-                if stock_obj.cantidad < cantidad:
-                    raise ValueError(f'El producto "{producto.nombre}" no tiene suficiente stock disponible. Disponible en {almacen.nombre}: {stock_obj.cantidad} unidades.')
-
+                precio = producto.precio_venta
+                cantidad = item['cantidad']
+                ServicioInventario.validar_disponibilidad(
+                    producto=producto,
+                    almacen=almacen,
+                    cantidad=cantidad,
+                )
                 subtotal_linea = precio * cantidad
-                iva_producto = Decimal(str(producto.iva_porcentaje))
-
+                iva_producto = producto.iva_porcentaje
                 subtotal_productos += subtotal_linea
-                iva_total += subtotal_linea * (iva_producto / Decimal('100'))
-                iva_porcentajes.add(float(iva_producto))
+                iva_total += (
+                    subtotal_linea * iva_producto / Decimal('100')
+                )
+                iva_porcentajes.add(iva_producto)
+                items.append((producto, cantidad, precio))
 
-                items.append({'producto': producto, 'stock_obj': stock_obj, 'cantidad': cantidad, 'precio': precio})
-
-            descuento = Decimal(str(data.get('descuento', 0) or 0))
-            total_venta = (subtotal_productos - descuento) + iva_total
+            descuento = data['descuento']
+            if descuento > subtotal_productos:
+                raise InventarioError(
+                    'El descuento no puede superar el subtotal de la venta.'
+                )
+            total_venta = subtotal_productos - descuento + iva_total
+            pago = data['metodo_pago']
+            efectivo_recibido = pago.get('efectivoRecibido')
+            if pago['metodo'] == 'efectivo':
+                if efectivo_recibido is None:
+                    raise InventarioError(
+                        'Debe indicar el efectivo recibido.'
+                    )
+                if efectivo_recibido < total_venta:
+                    raise InventarioError(
+                        'El efectivo recibido es menor que el total de la venta.'
+                    )
+                cambio = efectivo_recibido - total_venta
+            else:
+                cambio = None
 
             venta = Venta.objects.create(
-                cliente_id=data.get('cliente_id') or None,
-                vendedor=vendedor,
+                cliente=cliente,
+                vendedor=request.user,
+                almacen=almacen,
                 subtotal=subtotal_productos,
                 descuento=descuento,
                 tipo_iva='automatico',
-                iva_porcentaje=list(iva_porcentajes)[0] if len(iva_porcentajes) == 1 else 0,
+                iva_porcentaje=(
+                    next(iter(iva_porcentajes))
+                    if len(iva_porcentajes) == 1
+                    else Decimal('0')
+                ),
                 iva_monto=iva_total,
                 total=total_venta,
-                metodo_pago=metodo_pago,
-                observaciones=data.get('observaciones', ''),
-                efectivo_recibido=metodo_pago_data.get('efectivoRecibido'),
-                cambio=metodo_pago_data.get('cambio'),
-                numero_tarjeta=metodo_pago_data.get('numeroTarjeta'),
-                aprobacion_tarjeta=metodo_pago_data.get('aprobacionTarjeta'),
-                comprobante_transferencia=metodo_pago_data.get('comprobanteTransferencia'),
-                otro_metodo=metodo_pago_data.get('otroMetodo'),
+                metodo_pago=pago['metodo'],
+                observaciones=data['observaciones'],
+                efectivo_recibido=efectivo_recibido,
+                cambio=cambio,
+                numero_tarjeta=pago.get('numeroTarjeta'),
+                aprobacion_tarjeta=pago.get('aprobacionTarjeta'),
+                comprobante_transferencia=pago.get(
+                    'comprobanteTransferencia'
+                ),
+                otro_metodo=pago.get('otroMetodo'),
             )
 
-            # Crear detalles y actualizar stocks (filas ya bloqueadas)
-            for it in items:
-                producto = it['producto']
-                cantidad = it['cantidad']
-                precio = it['precio']
-                stock_obj = it['stock_obj']
-
+            for producto, cantidad, precio in items:
                 DetalleVenta.objects.create(
                     venta=venta,
                     producto=producto,
@@ -142,154 +157,151 @@ def crear_venta(request):
                     precio_unitario=precio,
                     cantidad=cantidad,
                 )
-
-                stock_obj.cantidad -= cantidad
-                stock_obj.save()
-
-                total_stock = producto.stocks.aggregate(t=Sum('cantidad'))['t'] or 0
-                Producto.objects.filter(pk=producto.id).update(stock=total_stock)
-
-                MovimientoInventario.objects.create(
-                    tipo='SALIDA_VENTA',
+                ServicioInventario.salida(
                     producto=producto,
-                    almacen_origen=almacen,
+                    almacen=almacen,
                     cantidad=cantidad,
+                    usuario=request.user,
+                    tipo='SALIDA_VENTA',
+                    costo_unitario=producto.precio_compra,
+                    documento=venta,
                     observacion=f'Venta {venta.numero_venta}',
-                    creado_por=vendedor
                 )
 
-            return Response({
+        return Response(
+            {
                 'mensaje': f'Venta {venta.numero_venta} procesada correctamente.',
                 'numero_factura': venta.numero_venta,
                 'total': float(venta.total),
                 'venta_id': venta.id,
-            }, status=status.HTTP_201_CREATED)
-
-    except ValueError as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    except IntegrityError:
-        return Response({'error': 'Error de integridad al guardar la venta. Por favor intente nuevamente.'}, status=status.HTTP_400_BAD_REQUEST)
-    except Exception:
-        return Response({'error': 'Ocurrió un error al procesar la venta.'}, status=status.HTTP_400_BAD_REQUEST)
+            },
+            status=status.HTTP_201_CREATED,
+        )
+    except (InventarioError, IntegrityError) as exc:
+        mensaje = (
+            'No fue posible guardar la venta por un conflicto de integridad.'
+            if isinstance(exc, IntegrityError)
+            else str(exc)
+        )
+        return Response({'error': mensaje}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
 @require_roles('Administrador', 'Supervisor', 'Vendedor')
 def listar_ventas(request):
-    ventas = Venta.objects.select_related('cliente', 'vendedor').prefetch_related('detalles__producto')
-
-    fecha_desde = request.GET.get('fecha_desde')
-    fecha_hasta = request.GET.get('fecha_hasta')
-    busqueda = request.GET.get('busqueda', '')
-    estado = request.GET.get('estado', '')
-
-    if fecha_desde:
-        ventas = ventas.filter(fecha_creacion__date__gte=fecha_desde)
-    if fecha_hasta:
-        ventas = ventas.filter(fecha_creacion__date__lte=fecha_hasta)
-    if estado:
-        ventas = ventas.filter(estado=estado)
+    ventas = (
+        Venta.objects.select_related('cliente', 'vendedor', 'almacen')
+        .prefetch_related('detalles')
+        .all()
+    )
+    busqueda = request.GET.get('busqueda', '').strip()
+    estado_venta = request.GET.get('estado', '').strip()
     if busqueda:
-        ventas = ventas.filter(
-            Q(numero_venta__icontains=busqueda) |
-            Q(cliente__nombres__icontains=busqueda) |
-            Q(cliente__apellidos__icontains=busqueda) |
-            Q(cliente__razon_social__icontains=busqueda) |
-            Q(detalles__nombre_producto__icontains=busqueda)
-        ).distinct()
-
-    serializer = VentaSerializer(ventas, many=True)
-    return Response(serializer.data)
+        ventas = ventas.filter(numero_venta__icontains=busqueda)
+    if estado_venta:
+        ventas = ventas.filter(estado=estado_venta)
+    return Response(VentaSerializer(ventas, many=True).data)
 
 
 @api_view(['GET'])
 @require_roles('Administrador', 'Supervisor', 'Vendedor')
 def detalle_venta(request, pk):
     try:
-        venta = Venta.objects.select_related('cliente', 'vendedor').prefetch_related(
-            'detalles__producto'
-        ).get(pk=pk)
+        venta = (
+            Venta.objects.select_related(
+                'cliente', 'vendedor', 'almacen', 'anulado_por'
+            )
+            .prefetch_related('detalles')
+            .get(pk=pk)
+        )
     except Venta.DoesNotExist:
-        return Response({'error': 'Venta no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
-
-    serializer = VentaSerializer(venta)
-    return Response(serializer.data)
+        return Response(
+            {'error': 'Venta no encontrada.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    return Response(VentaSerializer(venta).data)
 
 
 @api_view(['PATCH'])
 @require_roles('Administrador', 'Supervisor', 'Vendedor')
 def anular_venta(request, pk):
-    try:
-        venta = Venta.objects.prefetch_related('detalles__producto').get(pk=pk)
-    except Venta.DoesNotExist:
-        return Response({'error': 'Venta no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
-
-    if venta.estado == 'anulada':
-        return Response({'error': 'Esta venta ya está anulada.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    motivo = request.data.get('motivo', '').strip()
-    if not motivo:
-        return Response({'error': 'Debe ingresar el motivo de anulación.'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    vendedor = get_usuario(request)
-    if not vendedor:
+    entrada = AnularVentaSerializer(data=request.data)
+    if not entrada.is_valid():
         return Response(
-            {'error': 'Debe enviar un vendedor_id valido para anular la venta.'},
-            status=status.HTTP_400_BAD_REQUEST
+            {'error': _primer_error(entrada.errors)},
+            status=status.HTTP_400_BAD_REQUEST,
         )
+    motivo = entrada.validated_data['motivo'].strip()
 
     try:
         with transaction.atomic():
-            for detalle in venta.detalles.select_related('producto').all():
-                producto = detalle.producto
+            try:
+                venta = Venta.objects.select_for_update().get(pk=pk)
+            except Venta.DoesNotExist as exc:
+                raise InventarioError('Venta no encontrada.') from exc
+            if venta.estado == 'anulada':
+                raise InventarioError('Esta venta ya esta anulada.')
 
-                movimiento = MovimientoInventario.objects.filter(
+            movimientos = list(
+                MovimientoInventario.objects.select_for_update()
+                .filter(
+                    venta=venta,
                     tipo='SALIDA_VENTA',
-                    producto=producto,
-                    observacion__icontains=venta.numero_venta
-                ).first()
+                )
+                .order_by('producto_id', 'pk')
+            )
+            if not movimientos:
+                raise InventarioError(
+                    'La venta no tiene movimientos de salida auditables.'
+                )
 
-                almacen = movimiento.almacen_origen if movimiento else \
-                    Almacen.objects.filter(estado='activo').order_by('id').first()
+            cantidades_detalle = {}
+            for detalle in venta.detalles.all():
+                cantidades_detalle[detalle.producto_id] = (
+                    cantidades_detalle.get(detalle.producto_id, 0)
+                    + detalle.cantidad
+                )
+            cantidades_movimiento = {}
+            for movimiento in movimientos:
+                cantidades_movimiento[movimiento.producto_id] = (
+                    cantidades_movimiento.get(movimiento.producto_id, 0)
+                    + movimiento.cantidad
+                )
+            if cantidades_detalle != cantidades_movimiento:
+                raise InventarioError(
+                    'Los movimientos de la venta no coinciden con sus detalles.'
+                )
 
-                if not almacen:
-                    raise ValueError(f'No se encontró almacén para devolver "{producto.nombre}".')
-
-                # Intentar bloquear fila de stock; si no existe, crearla
-                try:
-                    stock_obj = StockAlmacen.objects.select_for_update().get(producto=producto, almacen=almacen)
-                    stock_obj.cantidad += detalle.cantidad
-                    stock_obj.save()
-                except StockAlmacen.DoesNotExist:
-                    StockAlmacen.objects.create(producto=producto, almacen=almacen, cantidad=detalle.cantidad)
-
-                total_stock = producto.stocks.aggregate(t=Sum('cantidad'))['t'] or 0
-                Producto.objects.filter(pk=producto.id).update(stock=total_stock)
-
-                MovimientoInventario.objects.create(
-                    tipo='DEVOLUCION_VENTA',
-                    producto=producto,
-                    almacen_destino=almacen,
-                    cantidad=detalle.cantidad,
-                    observacion=f'Anulación venta {venta.numero_venta}: {motivo}',
-                    creado_por=vendedor
+            for movimiento in movimientos:
+                ServicioInventario.revertir_salida(
+                    movimiento,
+                    usuario=request.user,
+                    motivo=f'Anulacion venta {venta.numero_venta}: {motivo}',
                 )
 
             venta.estado = 'anulada'
             venta.fecha_anulacion = timezone.now()
-            venta.anulado_por = vendedor
+            venta.anulado_por = request.user
             venta.motivo_anulacion = motivo
-            venta.save()
+            venta.save(
+                update_fields=[
+                    'estado',
+                    'fecha_anulacion',
+                    'anulado_por',
+                    'motivo_anulacion',
+                ]
+            )
 
-            return Response({
+        return Response(
+            {
                 'mensaje': f'Venta {venta.numero_venta} anulada correctamente.',
-                'estado': 'anulada'
-            })
-
-    except ValueError as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-    except IntegrityError:
-        return Response({'error': 'Error de integridad al anular la venta. Por favor intente nuevamente.'}, status=status.HTTP_400_BAD_REQUEST)
-    except Exception:
-        return Response({'error': 'Ocurrió un error al anular la venta.'}, status=status.HTTP_400_BAD_REQUEST)
+                'estado': 'anulada',
+            }
+        )
+    except InventarioError as exc:
+        codigo = (
+            status.HTTP_404_NOT_FOUND
+            if str(exc) == 'Venta no encontrada.'
+            else status.HTTP_400_BAD_REQUEST
+        )
+        return Response({'error': str(exc)}, status=codigo)

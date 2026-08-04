@@ -32,6 +32,7 @@ export class VentasComponent implements OnInit {
   clientes = signal<Cliente[]>([]);
   productos = signal<Producto[]>([]);
   almacenes = signal<Almacen[]>([]);
+  stockAlmacen = signal<Record<number, number>>({});
   showModal = signal(false);
   detalleVenta = signal<Venta | null>(null);  // null = modal cerrado
   saving = signal(false);
@@ -75,6 +76,10 @@ export class VentasComponent implements OnInit {
     return this.almacenes().filter((almacen) => almacen.estado !== 'inactivo' && almacen.estado !== 'mantenimiento');
   }
 
+  productosActivos(): Producto[] {
+    return this.productos().filter((producto) => producto.estado === 'activo');
+  }
+
   formatMetodoPago(value?: string): string {
     return this.metodosPago.find((item) => item.value === value)?.label ?? value ?? 'Sin método';
   }
@@ -95,7 +100,7 @@ export class VentasComponent implements OnInit {
   }
 
   getStockProducto(productoId: number): number {
-    return this.productos().find((producto) => producto.id === Number(productoId))?.stock ?? 0;
+    return this.stockAlmacen()[Number(productoId)] ?? 0;
   }
 
   getProductoLabel(producto: Producto): string {
@@ -122,6 +127,7 @@ export class VentasComponent implements OnInit {
       efectivo_recibido: 0,
     };
     this.almacenId = this.almacenesActivos()[0]?.id ?? null;
+    this.cargarStockAlmacen();
     this.detalles.set([{ producto: 0, cantidad: 1, precio_unitario: 0 }]);
     this.totales.set({ subtotal: 0, iva: 0, total: 0 });
     this.formError.set('');
@@ -130,6 +136,23 @@ export class VentasComponent implements OnInit {
 
   closeModal(): void {
     this.showModal.set(false);
+  }
+
+  onAlmacenChange(almacenId: number | null): void {
+    this.almacenId = almacenId;
+    this.cargarStockAlmacen();
+  }
+
+  private cargarStockAlmacen(): void {
+    if (!this.almacenId) {
+      this.stockAlmacen.set({});
+      return;
+    }
+    this.invSvc.listarStock(this.almacenId).subscribe((items) => {
+      const stock: Record<number, number> = {};
+      for (const item of items) stock[Number(item.producto_id)] = Number(item.stock_actual);
+      this.stockAlmacen.set(stock);
+    });
   }
 
   addLinea(): void {
@@ -196,6 +219,18 @@ export class VentasComponent implements OnInit {
       return;
     }
 
+    const cantidades = new Map<number, number>();
+    for (const detalle of detallesValidos) {
+      const productoId = Number(detalle.producto);
+      cantidades.set(productoId, (cantidades.get(productoId) ?? 0) + Number(detalle.cantidad));
+    }
+    for (const [productoId, cantidad] of cantidades.entries()) {
+      if (cantidad > this.getStockProducto(productoId)) {
+        this.formError.set(`Stock insuficiente para ${this.getProductoLabel(this.productos().find(p => p.id === productoId)!)}.`);
+        return;
+      }
+    }
+
     if (this.form.metodo_pago === 'efectivo' && Number(this.form.efectivo_recibido || 0) < this.totales().total) {
       this.formError.set('El efectivo recibido no puede ser menor al total de la venta.');
       return;
@@ -216,6 +251,7 @@ export class VentasComponent implements OnInit {
     this.svc.crear(payload).subscribe({
       next: () => {
         this.load();
+        this.prodSvc.listar().subscribe((productos) => this.productos.set(productos));
         this.closeModal();
         this.saving.set(false);
       },
@@ -235,7 +271,10 @@ export class VentasComponent implements OnInit {
     const motivo = prompt('Motivo de anulación:');
     if (motivo === null) return;
     this.svc.anular(v.id!, motivo).subscribe({
-      next: () => this.load(),
+      next: () => {
+        this.load();
+        this.prodSvc.listar().subscribe((productos) => this.productos.set(productos));
+      },
       error: (error) => this.formError.set(this.getErrorMessage(error)),
     });
   }

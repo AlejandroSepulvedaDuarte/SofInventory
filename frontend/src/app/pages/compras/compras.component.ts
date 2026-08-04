@@ -14,8 +14,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LayoutComponent } from '../../shared/components/layout.component';
-import { ComprasService, ProductosService, ProveedoresService } from '../../core/services/api.services';
-import { Compra, DetalleCompra, Producto, Proveedor } from '../../core/models';
+import { ComprasService, InventarioService, ProductosService, ProveedoresService } from '../../core/services/api.services';
+import { Almacen, Compra, DetalleCompra, Producto, Proveedor } from '../../core/models';
 
 @Component({
   selector: 'app-compras',
@@ -30,6 +30,7 @@ export class ComprasComponent implements OnInit {
   compras      = signal<Compra[]>([]);
   proveedores  = signal<Proveedor[]>([]);
   productos    = signal<Producto[]>([]);
+  almacenes    = signal<Almacen[]>([]);
   showModal    = signal(false);
   detalleCompra = signal<Compra | null>(null);  // null = modal cerrado
   saving       = signal(false);
@@ -42,13 +43,15 @@ export class ComprasComponent implements OnInit {
   constructor(
     private svc: ComprasService,
     private provSvc: ProveedoresService,
-    private prodSvc: ProductosService
+    private prodSvc: ProductosService,
+    private invSvc: InventarioService
   ) {}
 
   ngOnInit(): void {
     this.load();
     this.provSvc.listar().subscribe((p) => this.proveedores.set(p));
     this.prodSvc.listar().subscribe((p) => this.productos.set(p));
+    this.invSvc.listarAlmacenes().subscribe((almacenes) => this.almacenes.set(almacenes));
   }
 
   load(): void {
@@ -93,7 +96,14 @@ export class ComprasComponent implements OnInit {
 
   openModal(): void {
     const today = new Date().toISOString().split('T')[0];
-    this.form = { proveedor: null as any, numero_factura: '', fecha_compra: today, tipo_compra: 'Contado' };
+    const almacen = this.almacenes().find((item) => item.estado === 'activo');
+    this.form = {
+      proveedor: null as any,
+      almacen: almacen?.id ?? null,
+      numero_factura: '',
+      fecha_compra: today,
+      tipo_compra: 'Contado'
+    };
     this.detalles.set([{ producto: 0, cantidad: 1, costo_unitario: 0, iva_porcentaje: 0 }]);
     this.formError.set('');
     this.showModal.set(true);
@@ -133,7 +143,7 @@ export class ComprasComponent implements OnInit {
 
   save(): void {
     // Validaciones: proveedor, factura, al menos un detalle
-    if (!this.form.proveedor || !this.form.numero_factura || this.detalles().length === 0) {
+    if (!this.form.proveedor || !this.form.almacen || !this.form.numero_factura || this.detalles().length === 0) {
       this.formError.set('Completa todos los campos y agrega al menos un producto.');
       return;
     }
@@ -166,7 +176,9 @@ export class ComprasComponent implements OnInit {
 
   anular(c: Compra): void {
     if (!confirm(`¿Anular la compra ${c.numero_factura}?`)) return;
-    this.svc.anular(c.id!).subscribe({
+    const motivo = prompt('Motivo de anulacion:', 'Correccion de compra');
+    if (motivo === null) return;
+    this.svc.anular(c.id!, motivo).subscribe({
       next: () => this.load(),
       error: (e) => alert(this.getErrorMessage(e)),
     });

@@ -1,26 +1,47 @@
-from django.shortcuts import render
+from django.db import IntegrityError, transaction
+from django.db.models import IntegerField, Sum, Value
+from django.db.models.deletion import ProtectedError
+from django.db.models.functions import Coalesce
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-from django.db import transaction
-from django.db.models.deletion import ProtectedError
+from usuarios.permissions import require_roles
 
 from .models import Categoria, Producto
-from .serializers import CategoriaSerializer, ProductoSerializer
-from inventario.models import Almacen, StockAlmacen, MovimientoInventario
-from usuarios.permissions import require_roles
+from .serializers import (
+    CategoriaSerializer,
+    ProductoEscrituraSerializer,
+    ProductoSerializer,
+)
 
 
 def generar_sku(nombre, marca, referencia):
-    return f"{nombre}-{marca}-{referencia}".upper().replace(" ", "-")
+    return f'{nombre}-{marca}-{referencia}'.upper().replace(' ', '-')
 
 
-def obtener_usuario_responsable(request, producto=None):
-    if getattr(request, 'user', None) and getattr(request.user, 'is_authenticated', False):
-        return request.user
-    if producto and producto.creado_por_id:
-        return producto.creado_por
-    return None
+def _primer_error(errores):
+    for campo, mensajes in errores.items():
+        if isinstance(mensajes, list) and mensajes:
+            return f'{campo}: {mensajes[0]}'
+        return f'{campo}: {mensajes}'
+    return 'Los datos enviados no son validos.'
+
+
+def _producto_salida(producto, request):
+    producto = (
+        Producto.objects.filter(pk=producto.pk)
+        .select_related('categoria', 'creado_por')
+        .prefetch_related('stocks')
+        .annotate(
+            stock_actual_calculado=Coalesce(
+                Sum('stocks__cantidad'),
+                Value(0),
+                output_field=IntegerField(),
+            )
+        )
+        .get()
+    )
+    return ProductoSerializer(producto, context={'request': request}).data
 
 
 @api_view(['POST'])
@@ -29,236 +50,177 @@ def crear_categoria(request):
     serializer = CategoriaSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(creado_por=request.user)
-        return Response({'mensaje': 'Categoria creada exitosamente'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
 def listar_categorias(request):
     categorias = Categoria.objects.select_related('creado_por').all()
-    serializer = CategoriaSerializer(categorias, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(CategoriaSerializer(categorias, many=True).data)
 
 
 @api_view(['DELETE'])
 @require_roles('Administrador', 'Supervisor')
 def eliminar_categoria(request, id):
     try:
-        categoria = Categoria.objects.get(id=id)
-        try:
-            categoria.delete()
-            return Response({'mensaje': 'Categoria eliminada correctamente'}, status=status.HTTP_200_OK)
-        except ProtectedError:
-            return Response(
-                {'error': 'No se puede eliminar esta categoría porque tiene productos asociados.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        categoria = Categoria.objects.get(pk=id)
     except Categoria.DoesNotExist:
-        return Response({'error': 'Categoria no encontrada'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'error': 'Categoria no encontrada.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    try:
+        categoria.delete()
+    except ProtectedError:
+        return Response(
+            {'error': 'No se puede eliminar una categoria con productos.'},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])
 def listar_productos(request):
-    estado = request.query_params.get('estado', None)
-    if estado:
-        productos = Producto.objects.select_related('categoria', 'creado_por').filter(estado=estado)
-    else:
-        productos = Producto.objects.select_related('categoria', 'creado_por').all()
-    serializer = ProductoSerializer(productos, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    productos = (
+        Producto.objects.select_related('categoria', 'creado_por')
+        .prefetch_related('stocks')
+        .annotate(
+            stock_actual_calculado=Coalesce(
+                Sum('stocks__cantidad'),
+                Value(0),
+                output_field=IntegerField(),
+            )
+        )
+    )
+    estado_producto = request.query_params.get('estado')
+    if estado_producto:
+        productos = productos.filter(estado=estado_producto)
+    return Response(
+        ProductoSerializer(
+            productos, many=True, context={'request': request}
+        ).data
+    )
 
 
 @api_view(['POST'])
 @require_roles('Administrador', 'Supervisor')
 def crear_producto(request):
-    nombre = (request.data.get('nombre') or '').strip()
-    marca = (request.data.get('marca') or '').strip()
-    referencia = (request.data.get('referencia') or '').strip()
-    categoria_id = request.data.get('categoria')
-    unidad_medida = request.data.get('unidad_medida') or 'Unidad'
-    iva_porcentaje = request.data.get('iva_porcentaje', 0)
-    if not all([nombre, marca, referencia, categoria_id]):
+    serializer = ProductoEscrituraSerializer(data=request.data)
+    if not serializer.is_valid():
         return Response(
-            {'error': 'Nombre, marca, referencia y categoria son obligatorios.'},
-            status=status.HTTP_400_BAD_REQUEST
+            {'error': _primer_error(serializer.errors)},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
-    sku = generar_sku(nombre, marca, referencia)
-
-    if Producto.objects.filter(sku=sku).exists():
+    datos = dict(serializer.validated_data)
+    sku = generar_sku(
+        datos['nombre'].strip(),
+        datos['marca'].strip(),
+        datos['referencia'].strip(),
+    )
+    try:
+        with transaction.atomic():
+            producto = Producto.objects.create(
+                sku=sku,
+                creado_por=request.user,
+                estado='pendiente',
+                stock=0,
+                **datos,
+            )
+    except IntegrityError:
         return Response(
             {'error': f'Ya existe un producto con SKU {sku}.'},
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_400_BAD_REQUEST,
         )
-
-    try:
-        producto = Producto.objects.create(
-            sku=sku,
-            nombre=nombre,
-            marca=marca,
-            referencia=referencia,
-            unidad_medida=unidad_medida,
-            iva_porcentaje=iva_porcentaje,
-            categoria_id=categoria_id,
-            creado_por=request.user,
-            estado='pendiente',
-            stock=0,
-            precio_compra=0,
-            precio_venta=0,
-        )
-    except Exception:
-        return Response(
-            {'error': 'No se pudo crear el producto con los datos enviados.'},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
     return Response(
         {
             'mensaje': 'Producto creado correctamente.',
-            'producto': ProductoSerializer(producto, context={'request': request}).data,
+            'producto': _producto_salida(producto, request),
         },
-        status=status.HTTP_201_CREATED
+        status=status.HTTP_201_CREATED,
     )
 
 
-@api_view(['PUT'])
+@api_view(['PUT', 'PATCH'])
 @require_roles('Administrador', 'Supervisor', 'Bodega')
 def configurar_producto(request, id):
     try:
-        producto = Producto.objects.get(id=id)
-    except Producto.DoesNotExist:
-        return Response({'error': 'Producto no encontrado'}, status=status.HTTP_404_NOT_FOUND)
-
-    usuario = obtener_usuario_responsable(request, producto=producto)
-    if not usuario:
-        return Response(
-            {'error': 'No se encontro un usuario valido para registrar la configuracion.'},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-    with transaction.atomic():
-        producto.precio_venta = request.data.get('precio_venta', producto.precio_venta)
-        producto.stock_minimo = request.data.get('stock_minimo', producto.stock_minimo)
-        producto.iva_porcentaje = request.data.get('iva_porcentaje', producto.iva_porcentaje)
-        producto.descripcion = request.data.get('descripcion', '')
-        producto.observaciones = request.data.get('observaciones', '')
-        producto.estado = 'activo'
-
-        especificaciones = {}
-        for key in ['garantia_meses', 'voltaje', 'especificaciones_tecnicas', 'capacidad', 'medida']:
-            if key in request.data:
-                especificaciones[key] = request.data[key]
-        if especificaciones:
-            producto.especificaciones = especificaciones
-
-        if 'imagen' in request.FILES:
-            producto.imagen = request.FILES['imagen']
-
-        producto.save()
-
-        almacen_principal = Almacen.objects.filter(estado='activo').order_by('id').first()
-        if almacen_principal:
-            stock_obj, creado = StockAlmacen.objects.get_or_create(
-                producto=producto,
-                almacen=almacen_principal,
-                defaults={'cantidad': 0}
+        with transaction.atomic():
+            producto = Producto.objects.select_for_update().get(pk=id)
+            serializer = ProductoEscrituraSerializer(
+                producto, data=request.data, partial=True
             )
-
-            if creado:
-                stock_obj.cantidad = producto.stock
-                stock_obj.save()
-
-                if producto.stock > 0:
-                    MovimientoInventario.objects.create(
-                        tipo='ENTRADA_COMPRA',
-                        producto=producto,
-                        almacen_destino=almacen_principal,
-                        almacen_origen=None,
-                        cantidad=producto.stock,
-                        observacion=f'Entrada inicial al configurar producto [{producto.sku}]',
-                        creado_por=usuario
-                    )
-            elif producto.stock > stock_obj.cantidad:
-                diferencia = producto.stock - stock_obj.cantidad
-                stock_obj.cantidad = producto.stock
-                stock_obj.save()
-
-                MovimientoInventario.objects.create(
-                    tipo='AJUSTE_POSITIVO',
-                    producto=producto,
-                    almacen_destino=almacen_principal,
-                    almacen_origen=None,
-                    cantidad=diferencia,
-                    observacion=f'Ajuste de stock al reconfigurar producto [{producto.sku}]',
-                    creado_por=usuario
+            if not serializer.is_valid():
+                return Response(
+                    {'error': _primer_error(serializer.errors)},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
+            producto = serializer.save(estado='activo')
+    except Producto.DoesNotExist:
+        return Response(
+            {'error': 'Producto no encontrado.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    return Response(
+        {
+            'mensaje': 'Producto configurado correctamente.',
+            'producto': _producto_salida(producto, request),
+        }
+    )
 
-    return Response({
-        'mensaje': 'Producto configurado correctamente.',
-        'producto': ProductoSerializer(producto).data
-    }, status=status.HTTP_200_OK)
 
-
-@api_view(['PUT'])
+@api_view(['PUT', 'PATCH'])
 @require_roles('Administrador', 'Supervisor')
 def editar_producto(request, id):
     try:
-        producto = Producto.objects.get(id=id)
+        with transaction.atomic():
+            producto = Producto.objects.select_for_update().get(pk=id)
+            serializer = ProductoEscrituraSerializer(
+                producto, data=request.data, partial=True
+            )
+            if not serializer.is_valid():
+                return Response(
+                    {'error': _primer_error(serializer.errors)},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            producto = serializer.save()
     except Producto.DoesNotExist:
-        return Response({'error': 'Producto no encontrado'}, status=status.HTTP_404_NOT_FOUND)
-
-    if 'precio_venta' in request.data:
-        producto.precio_venta = float(request.data['precio_venta'])
-
-    if 'stock_minimo' in request.data:
-        producto.stock_minimo = int(request.data['stock_minimo'])
-
-    if 'iva_porcentaje' in request.data:
-        producto.iva_porcentaje = float(request.data['iva_porcentaje'])
-
-    if 'observaciones' in request.data:
-        producto.observaciones = request.data['observaciones']
-
-    if 'descripcion' in request.data:
-        producto.descripcion = request.data['descripcion']
-
-    especificaciones = producto.especificaciones or {}
-    for key in ['garantia_meses', 'voltaje', 'especificaciones_tecnicas', 'capacidad', 'medida']:
-        if key in request.data:
-            especificaciones[key] = request.data[key]
-    producto.especificaciones = especificaciones
-
-    if 'imagen' in request.FILES:
-        producto.imagen = request.FILES['imagen']
-
-    producto.save()
-    return Response({
-        'mensaje': 'Producto actualizado correctamente.',
-        'producto': ProductoSerializer(producto, context={'request': request}).data
-    }, status=status.HTTP_200_OK)
+        return Response(
+            {'error': 'Producto no encontrado.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    return Response(
+        {
+            'mensaje': 'Producto actualizado correctamente.',
+            'producto': _producto_salida(producto, request),
+        }
+    )
 
 
 @api_view(['PATCH'])
 @require_roles('Administrador', 'Supervisor')
 def cambiar_estado_producto(request, producto_id):
-    try:
-        producto = Producto.objects.get(id=producto_id)
-    except Producto.DoesNotExist:
-        return Response({'error': 'Producto no encontrado'}, status=status.HTTP_404_NOT_FOUND)
-
     nuevo_estado = request.data.get('estado')
-
-    if nuevo_estado not in ['activo', 'inactivo']:
+    if nuevo_estado not in ('activo', 'inactivo'):
         return Response(
-            {'error': 'Estado no valido. Use "activo" o "inactivo"'},
-            status=status.HTTP_400_BAD_REQUEST
+            {'error': 'Estado no valido. Use "activo" o "inactivo".'},
+            status=status.HTTP_400_BAD_REQUEST,
         )
-
-    producto.estado = nuevo_estado
-    producto.save()
-
-    return Response({
-        'mensaje': f'Producto {nuevo_estado} correctamente',
-        'estado': nuevo_estado,
-        'producto': ProductoSerializer(producto).data
-    }, status=status.HTTP_200_OK)
+    try:
+        with transaction.atomic():
+            producto = Producto.objects.select_for_update().get(pk=producto_id)
+            producto.estado = nuevo_estado
+            producto.save(update_fields=['estado', 'fecha_actualizacion'])
+    except Producto.DoesNotExist:
+        return Response(
+            {'error': 'Producto no encontrado.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    return Response(
+        {
+            'mensaje': f'Producto {nuevo_estado} correctamente.',
+            'estado': nuevo_estado,
+            'producto': _producto_salida(producto, request),
+        }
+    )

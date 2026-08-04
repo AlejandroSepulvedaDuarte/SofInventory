@@ -1,6 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.db.models import Sum, Count, F
+from django.db.models import Sum, Count, F, IntegerField, Value
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from datetime import timedelta
 
@@ -24,14 +25,23 @@ def datos_dashboard(request):
     # ─────────────────────────────────────────────────────
     # MÉTRICAS PRINCIPALES
     # ─────────────────────────────────────────────────────
-    total_productos   = Producto.objects.filter(estado='activo').count()
-    productos_en_stock = Producto.objects.filter(estado='activo', stock__gt=0).count()
+    productos_activos = Producto.objects.filter(estado='activo').annotate(
+        stock_actual=Coalesce(
+            Sum('stocks__cantidad'),
+            Value(0),
+            output_field=IntegerField(),
+        )
+    )
+    total_productos = productos_activos.count()
+    productos_en_stock = productos_activos.filter(stock_actual__gt=0).count()
     total_clientes    = Cliente.objects.filter(estado='activo').count()
     total_proveedores = Proveedor.objects.filter(estado__iexact='activo').count()
 
     # Stock bajo = stock > 0 y stock <= stock_minimo
-    stock_bajo = Producto.objects.filter(
-        estado='activo', stock__gt=0, stock__lte=F('stock_minimo')
+    stock_bajo = productos_activos.filter(
+        stock_actual__gt=0,
+        stock_minimo__gt=0,
+        stock_actual__lte=F('stock_minimo')
     ).count()
 
     # Ventas
@@ -45,7 +55,10 @@ def datos_dashboard(request):
     total_dia  = ventas_dia.aggregate(t=Sum('total'))['t'] or 0
 
     # Compras del mes
-    compras_mes   = Compra.objects.filter(fecha_compra__gte=inicio_mes.date())
+    compras_mes = Compra.objects.filter(
+        fecha_compra__gte=inicio_mes.date(),
+        estado='completada',
+    )
     total_compras_mes = compras_mes.aggregate(t=Sum('total'))['t'] or 0
 
     # Margen del mes = ventas - compras
@@ -97,10 +110,15 @@ def datos_dashboard(request):
     # ─────────────────────────────────────────────────────
     # ESTADO DEL STOCK
     # ─────────────────────────────────────────────────────
-    productos_activos = Producto.objects.filter(estado='activo')
-    agotados     = productos_activos.filter(stock=0).count()
-    stock_bajo_n = productos_activos.filter(stock__gt=0, stock__lte=F('stock_minimo')).count()
-    stock_normal = productos_activos.filter(stock__gt=F('stock_minimo')).count()
+    agotados = productos_activos.filter(stock_actual=0).count()
+    stock_bajo_n = productos_activos.filter(
+        stock_actual__gt=0,
+        stock_minimo__gt=0,
+        stock_actual__lte=F('stock_minimo'),
+    ).count()
+    stock_normal = productos_activos.filter(
+        stock_actual__gt=F('stock_minimo')
+    ).count()
 
     estado_stock = {
         'agotados':     agotados,
@@ -148,11 +166,22 @@ def datos_dashboard(request):
     # ─────────────────────────────────────────────────────
     # ALERTAS DE STOCK — productos con stock <= stock_minimo
     # ─────────────────────────────────────────────────────
-    alertas_qs = Producto.objects.filter(
-        estado='activo', stock__gt=0, stock__lte=F('stock_minimo')
-    ).values('id', 'nombre', 'sku', 'stock', 'stock_minimo').order_by('stock')[:8]
+    alertas_qs = productos_activos.filter(
+        stock_actual__lte=F('stock_minimo')
+    ).values(
+        'id', 'nombre', 'sku', 'stock_actual', 'stock_minimo'
+    ).order_by('stock_actual')[:8]
 
-    alertas_stock = list(alertas_qs)
+    alertas_stock = [
+        {
+            'id': alerta['id'],
+            'nombre': alerta['nombre'],
+            'sku': alerta['sku'],
+            'stock': alerta['stock_actual'],
+            'stock_minimo': alerta['stock_minimo'],
+        }
+        for alerta in alertas_qs
+    ]
 
     # ─────────────────────────────────────────────────────
     # VENTAS RECIENTES — últimas 5

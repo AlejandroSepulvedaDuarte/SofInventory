@@ -34,6 +34,12 @@ class Almacen(models.Model):
         verbose_name = 'Almacén'
         verbose_name_plural = 'Almacenes'
         ordering = ['nombre']
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(capacidad__isnull=True) | models.Q(capacidad__gte=0),
+                name='inventario_almacen_capacidad_no_negativa',
+            ),
+        ]
 
 
 # ==============================
@@ -54,6 +60,12 @@ class StockAlmacen(models.Model):
         verbose_name  = 'Stock por Almacén'
         verbose_name_plural = 'Stocks por Almacén'
         unique_together = ('producto', 'almacen')
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(cantidad__gte=0),
+                name='inventario_stock_cantidad_no_negativa',
+            ),
+        ]
 
 
 # ==============================
@@ -84,6 +96,34 @@ class MovimientoInventario(models.Model):
     costo_unitario  = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     referencia_tipo = models.CharField(max_length=50, blank=True, null=True)
     referencia_id   = models.PositiveIntegerField(blank=True, null=True)
+    compra           = models.ForeignKey(
+        'compras.Compra',
+        on_delete=models.PROTECT,
+        related_name='movimientos_inventario',
+        blank=True,
+        null=True,
+    )
+    venta            = models.ForeignKey(
+        'ventas.Venta',
+        on_delete=models.PROTECT,
+        related_name='movimientos_inventario',
+        blank=True,
+        null=True,
+    )
+    traslado         = models.ForeignKey(
+        'inventario.Traslado',
+        on_delete=models.PROTECT,
+        related_name='movimientos_inventario',
+        blank=True,
+        null=True,
+    )
+    movimiento_revertido = models.OneToOneField(
+        'self',
+        on_delete=models.PROTECT,
+        related_name='movimiento_reversion',
+        blank=True,
+        null=True,
+    )
     observacion     = models.TextField(blank=True, null=True)
     fecha           = models.DateTimeField(auto_now_add=True)
     creado_por      = models.ForeignKey(Usuario, on_delete=models.PROTECT, related_name='movimientos_creados')
@@ -96,6 +136,24 @@ class MovimientoInventario(models.Model):
         verbose_name = 'Movimiento de Inventario'
         verbose_name_plural = 'Movimientos de Inventario'
         ordering = ['-fecha']
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(cantidad__gt=0),
+                name='inventario_movimiento_cantidad_positiva',
+            ),
+            models.CheckConstraint(
+                condition=(
+                    (models.Q(compra__isnull=True) | models.Q(venta__isnull=True)) &
+                    (models.Q(compra__isnull=True) | models.Q(traslado__isnull=True)) &
+                    (models.Q(venta__isnull=True) | models.Q(traslado__isnull=True))
+                ),
+                name='inventario_movimiento_un_documento',
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['producto', 'fecha'], name='inv_mov_producto_fecha_idx'),
+            models.Index(fields=['tipo', 'fecha'], name='inv_mov_tipo_fecha_idx'),
+        ]
 
 
 # ==============================
@@ -139,6 +197,12 @@ class TrasladoDetalle(models.Model):
 
     class Meta:
         db_table = 'traslados_detalle'
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(cantidad__gt=0),
+                name='inventario_traslado_cantidad_positiva',
+            ),
+        ]
 
 
 # ==============================

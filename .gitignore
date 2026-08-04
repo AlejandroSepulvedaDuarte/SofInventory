@@ -63,3 +63,9 @@ dist/
 # base de datos de respaldo
 # ==============================
 sofinventory.backup
+
+# Archivos temporales y generados
+.codex_work/
+output/
+site/
+tmp/

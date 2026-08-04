@@ -82,6 +82,16 @@
                             </select>
                         </div>
                         <div class="field">
+                            <label>Almacén receptor *</label>
+                            <select [(ngModel)]="form.almacen">
+                                <option [ngValue]="null">Seleccionar...</option>
+                                <option *ngFor="let a of almacenes()" [ngValue]="a.id"
+                                    [disabled]="a.estado !== 'activo'">
+                                    {{ a.codigo }} - {{ a.nombre }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="field">
                             <label>Número Factura *</label>
                             <input type="text" [(ngModel)]="form.numero_factura" placeholder="Solo números" />
                         </div>

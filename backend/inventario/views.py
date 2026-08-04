@@ -1,79 +1,73 @@
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from django.db.models import Sum, Q
-from django.http import HttpResponse
-from .models import (Almacen, StockAlmacen, MovimientoInventario)
-from .serializers import (AlmacenSerializer, StockInventarioSerializer,
-                           MovimientoRapidoSerializer)
-from productos.models import Producto
-from usuarios.permissions import require_roles
 import csv
 
+from django.db.models import IntegerField, Q, Sum, Value
+from django.db.models.deletion import ProtectedError
+from django.db.models.functions import Coalesce
+from django.http import HttpResponse
+from productos.models import Producto
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from usuarios.permissions import require_roles
 
-# =========================================================
-# UTILIDAD: OBTENER USUARIO
-# =========================================================
-def get_usuario(request):
-    user = getattr(request, 'user', None)
-    if user and getattr(user, 'is_authenticated', False):
-        return user
-    return None
+from .models import Almacen, MovimientoInventario, StockAlmacen
+from .serializers import (
+    AlmacenSerializer,
+    MovimientoInventarioSerializer,
+    MovimientoRapidoSerializer,
+    StockInventarioSerializer,
+)
+from .services import InventarioError, ServicioInventario
 
 
-# =========================================================
-# UTILIDAD: CALCULAR ESTADO DE STOCK POR PRODUCTO
-# Usa stock_minimo del producto (campo ya existente en BD)
-# Regla:
-#   agotado → stock == 0
-#   bajo    → stock <= stock_minimo
-#   medio   → stock <= stock_minimo * 2
-#   alto    → stock >  stock_minimo * 2
-# =========================================================
 def calcular_estado_stock(stock_actual, stock_minimo):
-    if stock_minimo is None or stock_minimo <= 0:
-        stock_minimo = 5  # valor de seguridad si el producto no tiene stock_minimo definido
-
     if stock_actual == 0:
         return 'agotado'
-    elif stock_actual <= stock_minimo:
+    if stock_minimo > 0 and stock_actual <= stock_minimo:
         return 'bajo'
-    elif stock_actual <= stock_minimo * 2:
+    if stock_minimo > 0 and stock_actual <= stock_minimo * 2:
         return 'medio'
-    else:
-        return 'alto'
+    return 'alto'
 
 
-# =========================================================
-# ALMACENES
-# =========================================================
+def productos_con_stock(queryset=None, almacen_id=None):
+    if queryset is None:
+        queryset = Producto.objects.all()
+    filtro = Q(stocks__almacen_id=almacen_id) if almacen_id else Q()
+    return queryset.annotate(
+        stock_actual_calculado=Coalesce(
+            Sum('stocks__cantidad', filter=filtro),
+            Value(0),
+            output_field=IntegerField(),
+        )
+    )
+
 
 @api_view(['POST'])
 @require_roles('Administrador', 'Supervisor', 'Bodega')
 def crear_almacen(request):
-    usuario = get_usuario(request)
-    if not usuario:
-        return Response({'error': 'Debe enviar un usuario_id valido.'},
-                        status=status.HTTP_400_BAD_REQUEST)
     serializer = AlmacenSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(creado_por=usuario)
+        serializer.save(creado_por=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def listar_almacenes(request):
-    almacenes  = Almacen.objects.all()
-    serializer = AlmacenSerializer(almacenes, many=True)
-    return Response(serializer.data)
+    almacenes = Almacen.objects.prefetch_related('stocks').all()
+    return Response(AlmacenSerializer(almacenes, many=True).data)
+
 
 @api_view(['GET'])
 def detalle_almacen(request, pk):
     try:
-        almacen = Almacen.objects.get(pk=pk)
+        almacen = Almacen.objects.prefetch_related('stocks').get(pk=pk)
     except Almacen.DoesNotExist:
-        return Response({'error': 'Almacén no encontrado.'},
-                        status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'error': 'Almacen no encontrado.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     return Response(AlmacenSerializer(almacen).data)
 
 
@@ -83,8 +77,10 @@ def editar_almacen(request, pk):
     try:
         almacen = Almacen.objects.get(pk=pk)
     except Almacen.DoesNotExist:
-        return Response({'error': 'Almacén no encontrado.'},
-                        status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'error': 'Almacen no encontrado.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     serializer = AlmacenSerializer(almacen, data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -98,382 +94,278 @@ def eliminar_almacen(request, pk):
     try:
         almacen = Almacen.objects.get(pk=pk)
     except Almacen.DoesNotExist:
-        return Response({'error': 'Almacén no encontrado.'},
-                        status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'error': 'Almacen no encontrado.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
     if almacen.stocks.filter(cantidad__gt=0).exists():
         return Response(
-            {'error': f'No se puede eliminar. El almacén "{almacen.nombre}" tiene productos con stock.'},
-            status=status.HTTP_400_BAD_REQUEST
+            {
+                'error': (
+                    f'No se puede eliminar. El almacen "{almacen.nombre}" '
+                    'tiene productos con stock.'
+                )
+            },
+            status=status.HTTP_400_BAD_REQUEST,
         )
-    almacen.delete()
-    return Response({'mensaje': 'Almacén eliminado correctamente.'},
-                    status=status.HTTP_200_OK)
+    try:
+        almacen.delete()
+    except ProtectedError:
+        return Response(
+            {
+                'error': (
+                    'El almacen tiene historial asociado. Cambie su estado '
+                    'a inactivo en lugar de eliminarlo.'
+                )
+            },
+            status=status.HTTP_409_CONFLICT,
+        )
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-# =========================================================
-# ESTADÍSTICAS
-# NOTA: Ya no usa ConfiguracionRangosStock global.
-#       Cada producto usa su propio stock_minimo.
-# =========================================================
 
 @api_view(['GET'])
 def estadisticas_inventario(request):
-    productos         = Producto.objects.all()
-    total             = productos.count()
-    configurados      = productos.exclude(estado='pendiente').count()
-    pendientes        = productos.filter(estado='pendiente').count()
-    almacenes_activos = Almacen.objects.filter(estado='activo').count()
+    productos = list(productos_con_stock())
+    configurados = [p for p in productos if p.estado != 'pendiente']
+    disponibles = sum(1 for p in configurados if p.stock_actual_calculado > 0)
+    stock_bajo = sum(
+        1
+        for producto in configurados
+        if calcular_estado_stock(
+            producto.stock_actual_calculado, producto.stock_minimo
+        ) in ('bajo', 'agotado')
+    )
+    almacenes = Almacen.objects.filter(estado='activo').count()
+    return Response(
+        {
+            'total_productos': len(productos),
+            'productos': len(productos),
+            'productos_configurados': len(configurados),
+            'productos_pendientes': len(productos) - len(configurados),
+            'disponible': disponibles,
+            'en_stock': disponibles,
+            'stock_bajo': stock_bajo,
+            'bajo_stock': stock_bajo,
+            'total_almacenes': almacenes,
+            'almacenes': almacenes,
+        }
+    )
 
-    stock_bajo = 0
-    for p in productos.exclude(estado='pendiente'):
-        stock_actual = p.stocks.aggregate(t=Sum('cantidad'))['t'] or 0
-        estado       = calcular_estado_stock(stock_actual, p.stock_minimo)
-        if estado in ('bajo', 'agotado'):
-            stock_bajo += 1
-
-    return Response({
-        'total_productos':        total,
-        'productos_configurados': configurados,
-        'productos_pendientes':   pendientes,
-        'stock_bajo':             stock_bajo,
-        'total_almacenes':        almacenes_activos,
-    })
-
-
-# =========================================================
-# TABLA DE INVENTARIO CON FILTROS
-# NOTA: estado_stock calculado por producto con su stock_minimo
-# =========================================================
 
 @api_view(['GET'])
 def listar_inventario(request):
-    productos = Producto.objects.select_related('categoria').prefetch_related('stocks__almacen')
+    busqueda = request.GET.get('busqueda', '').strip()
+    categoria = request.GET.get('categoria', '').strip()
+    almacen_id = request.GET.get('almacen', '').strip()
+    filtro_stock = request.GET.get('stock', '').strip()
+    filtro_estado = request.GET.get('estado', '').strip()
 
-    busqueda      = request.GET.get('busqueda', '')
-    categoria     = request.GET.get('categoria', '')
-    almacen       = request.GET.get('almacen', '')
-    filtro_stock  = request.GET.get('stock', '')
-    filtro_estado = request.GET.get('estado', '')
-
+    productos = Producto.objects.select_related('categoria').prefetch_related(
+        'stocks__almacen'
+    )
     if busqueda:
         productos = productos.filter(
-            Q(nombre__icontains=busqueda) |
-            Q(marca__icontains=busqueda)  |
-            Q(sku__icontains=busqueda)
+            Q(nombre__icontains=busqueda)
+            | Q(marca__icontains=busqueda)
+            | Q(sku__icontains=busqueda)
         )
     if categoria:
-        productos = productos.filter(categoria__id=categoria)
-    if almacen:
-        productos = productos.filter(stocks__almacen__id=almacen)
+        productos = productos.filter(categoria_id=categoria)
     if filtro_estado == 'configurado':
         productos = productos.exclude(estado='pendiente')
     elif filtro_estado == 'pendiente':
         productos = productos.filter(estado='pendiente')
+    if almacen_id:
+        productos = productos.filter(stocks__almacen_id=almacen_id)
 
-    serializer = StockInventarioSerializer(
-        productos, many=True, context={'request': request}
+    productos = list(
+        productos_con_stock(productos, almacen_id=almacen_id).distinct()
     )
-
-    resultado = []
-    for item, producto in zip(serializer.data, productos):
-        item = dict(item)
-        stocks_producto = producto.stocks.select_related('almacen').filter(cantidad__gt=0)
-
-        if almacen:
-            stock_filtrado = stocks_producto.filter(almacen__id=almacen).first()
-            if stock_filtrado:
-                item['almacen_id'] = stock_filtrado.almacen.id
-                item['almacen_nombre'] = stock_filtrado.almacen.nombre
-            else:
-                item['almacen_id'] = None
-                item['almacen_nombre'] = 'Sin almacén'
-        else:
-            almacenes_nombres = list(
-                stocks_producto.order_by('almacen__nombre').values_list('almacen__nombre', flat=True)
-            )
-            if len(almacenes_nombres) == 1:
-                item['almacen_nombre'] = almacenes_nombres[0]
-            elif len(almacenes_nombres) > 1:
-                item['almacen_nombre'] = ', '.join(almacenes_nombres)
-            else:
-                item['almacen_nombre'] = 'Sin almacén'
-
-        # Productos pendientes no tienen stock real aun
-        # se muestran con estado especial para no generar falsas alertas en rojo
-        if producto.estado == 'pendiente':
-            item['estado_stock'] = 'pendiente'
-            item['stock_minimo'] = 0
-        else:
-            stock_actual         = item['stock_actual']
-            stock_minimo         = producto.stock_minimo
-            item['estado_stock'] = calcular_estado_stock(stock_actual, stock_minimo)
-            item['stock_minimo'] = stock_minimo
-
-        # El filtro de stock no aplica a productos pendientes
-        if filtro_stock and item['estado_stock'] != filtro_stock:
-            continue
-
-        resultado.append(item)
-
-    # Pendientes al final, luego ordenar por stock ascendente
-    resultado.sort(key=lambda x: (x['estado_stock'] == 'pendiente', x['stock_actual']))
+    datos = StockInventarioSerializer(
+        productos,
+        many=True,
+        context={'request': request, 'almacen_id': almacen_id or None},
+    ).data
+    resultado = [
+        item
+        for item in datos
+        if not filtro_stock or item['estado_stock'] == filtro_stock
+    ]
+    resultado.sort(
+        key=lambda item: (
+            item['estado_stock'] == 'pendiente',
+            item['stock_actual'],
+        )
+    )
     return Response(resultado)
 
 
-# =========================================================
-# ALERTAS DE STOCK
-# NOTA: Alerta cuando estado es 'bajo' o 'agotado'
-#       usando stock_minimo de cada producto
-# =========================================================
-
 @api_view(['GET'])
 def alertas_stock(request):
+    productos = productos_con_stock(
+        Producto.objects.filter(estado='activo')
+    ).order_by('stock_actual_calculado', 'nombre')
     alertas = []
-
-    for p in Producto.objects.exclude(estado='pendiente').prefetch_related('stocks'):
-        stock_actual = p.stocks.aggregate(t=Sum('cantidad'))['t'] or 0
-        estado       = calcular_estado_stock(stock_actual, p.stock_minimo)
-
-        if estado in ('bajo', 'agotado'):
-            alertas.append({
-                'producto_id':  p.id,
-                'sku':          p.sku,
-                'nombre':       p.nombre,
-                'stock_actual': stock_actual,
-                'stock_minimo': p.stock_minimo,
-                'tipo_alerta':  estado,
-            })
-
+    for producto in productos:
+        estado_stock = calcular_estado_stock(
+            producto.stock_actual_calculado, producto.stock_minimo
+        )
+        if estado_stock in ('bajo', 'agotado'):
+            alertas.append(
+                {
+                    'producto_id': producto.id,
+                    'sku': producto.sku,
+                    'nombre': producto.nombre,
+                    'stock_actual': producto.stock_actual_calculado,
+                    'stock_minimo': producto.stock_minimo,
+                    'tipo_alerta': estado_stock,
+                }
+            )
     return Response(alertas)
 
-
-# =========================================================
-# MOVIMIENTO RÁPIDO
-# =========================================================
 
 @api_view(['POST'])
 @require_roles('Administrador', 'Supervisor', 'Bodega')
 def movimiento_rapido(request):
-    usuario = get_usuario(request)
-    if not usuario:
-        return Response({'error': 'Debe enviar un usuario_id valido.'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
     serializer = MovimientoRapidoSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    data              = serializer.validated_data
-    producto_id       = data['producto_id']
-    almacen_id        = data['almacen_id']
-    almacen_destino_id = data.get('almacen_destino_id')  # solo para transferencia
-    cantidad          = data['cantidad']
-    tipo              = data['tipo']
-    observacion       = data.get('observacion', '')
+    data = serializer.validated_data
+    observacion = data.get('observacion', '')
 
     try:
-        producto = Producto.objects.get(pk=producto_id)
-        almacen  = Almacen.objects.get(pk=almacen_id)
-    except Producto.DoesNotExist:
-        return Response({'error': 'Producto no encontrado.'},
-                        status=status.HTTP_404_NOT_FOUND)
-    except Almacen.DoesNotExist:
-        return Response({'error': 'Almacén no encontrado.'},
-                        status=status.HTTP_404_NOT_FOUND)
-
-    # ----------------------------------------------------------
-    # ENTRADA: Ajuste positivo de inventario
-    # No es una compra. Solo corrige o agrega unidades al almacén.
-    # ----------------------------------------------------------
-    if tipo == 'entrada':
-        stock_obj, _ = StockAlmacen.objects.get_or_create(
-            producto=producto, almacen=almacen,
-            defaults={'cantidad': 0}
-        )
-        stock_anterior      = stock_obj.cantidad
-        stock_obj.cantidad += cantidad
-        stock_obj.save()
-
-        MovimientoInventario.objects.create(
-            tipo            = 'AJUSTE_POSITIVO',
-            producto        = producto,
-            almacen_destino = almacen,
-            almacen_origen  = None,
-            cantidad        = cantidad,
-            observacion     = observacion or 'Entrada manual de inventario',
-            creado_por      = usuario
-        )
-
-    # ----------------------------------------------------------
-    # SALIDA: Ajuste negativo de inventario
-    # No es una venta. Solo retira unidades del almacén.
-    # ----------------------------------------------------------
-    elif tipo == 'salida':
-        try:
-            stock_obj = StockAlmacen.objects.get(producto=producto, almacen=almacen)
-        except StockAlmacen.DoesNotExist:
-            return Response({'error': 'Este producto no tiene stock en el almacén seleccionado.'},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        if stock_obj.cantidad < cantidad:
-            return Response(
-                {'error': f'Stock insuficiente. Stock actual en este almacén: {stock_obj.cantidad}'},
-                status=status.HTTP_400_BAD_REQUEST
+        if data['tipo'] == 'entrada':
+            _, anterior, _, total = ServicioInventario.entrada(
+                producto=data['producto_id'],
+                almacen=data['almacen_id'],
+                cantidad=data['cantidad'],
+                usuario=request.user,
+                tipo='AJUSTE_POSITIVO',
+                observacion=observacion or 'Entrada manual de inventario',
             )
-
-        stock_anterior      = stock_obj.cantidad
-        stock_obj.cantidad -= cantidad
-        stock_obj.save()
-
-        MovimientoInventario.objects.create(
-            tipo           = 'AJUSTE_NEGATIVO',
-            producto       = producto,
-            almacen_origen = almacen,
-            almacen_destino = None,
-            cantidad       = cantidad,
-            observacion    = observacion or 'Salida manual de inventario',
-            creado_por     = usuario
-        )
-
-    # ----------------------------------------------------------
-    # TRANSFERENCIA: Mueve unidades de un almacén a otro
-    # Descuenta del almacén origen y suma al almacén destino.
-    # ----------------------------------------------------------
-    elif tipo == 'transferencia':
-        if not almacen_destino_id:
-            return Response(
-                {'error': 'Debe seleccionar un almacén destino para la transferencia.'},
-                status=status.HTTP_400_BAD_REQUEST
+        elif data['tipo'] == 'salida':
+            _, anterior, _, total = ServicioInventario.salida(
+                producto=data['producto_id'],
+                almacen=data['almacen_id'],
+                cantidad=data['cantidad'],
+                usuario=request.user,
+                tipo='AJUSTE_NEGATIVO',
+                observacion=observacion or 'Salida manual de inventario',
             )
-        if almacen_id == almacen_destino_id:
-            return Response(
-                {'error': 'El almacén origen y destino no pueden ser el mismo.'},
-                status=status.HTTP_400_BAD_REQUEST
+        else:
+            _, _, _, anterior, total = ServicioInventario.transferir(
+                producto=data['producto_id'],
+                almacen_origen=data['almacen_id'],
+                almacen_destino=data['almacen_destino_id'],
+                cantidad=data['cantidad'],
+                usuario=request.user,
+                observacion=observacion,
             )
-
-        try:
-            almacen_destino = Almacen.objects.get(pk=almacen_destino_id)
-        except Almacen.DoesNotExist:
-            return Response({'error': 'Almacén destino no encontrado.'},
-                            status=status.HTTP_404_NOT_FOUND)
-
-        # Verificar stock en origen
-        try:
-            stock_origen = StockAlmacen.objects.get(producto=producto, almacen=almacen)
-        except StockAlmacen.DoesNotExist:
-            return Response({'error': 'Este producto no tiene stock en el almacén origen.'},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        if stock_origen.cantidad < cantidad:
-            return Response(
-                {'error': f'Stock insuficiente en almacén origen. Disponible: {stock_origen.cantidad}'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        # Descontar del origen
-        stock_anterior          = stock_origen.cantidad
-        stock_origen.cantidad  -= cantidad
-        stock_origen.save()
-
-        # Sumar al destino
-        stock_destino, _ = StockAlmacen.objects.get_or_create(
-            producto=producto, almacen=almacen_destino,
-            defaults={'cantidad': 0}
-        )
-        stock_destino.cantidad += cantidad
-        stock_destino.save()
-
-        nota = observacion or f'Transferencia: {almacen.nombre} → {almacen_destino.nombre}'
-
-        # Registro de SALIDA en almacén origen
-        MovimientoInventario.objects.create(
-            tipo           = 'TRASLADO_SALIDA',
-            producto       = producto,
-            almacen_origen = almacen,
-            almacen_destino = None,
-            cantidad       = cantidad,
-            observacion    = nota,
-            creado_por     = usuario
+    except InventarioError as exc:
+        return Response(
+            {'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST
         )
 
-        # Registro de ENTRADA en almacén destino
-        MovimientoInventario.objects.create(
-            tipo            = 'TRASLADO_ENTRADA',
-            producto        = producto,
-            almacen_origen  = None,
-            almacen_destino = almacen_destino,
-            cantidad        = cantidad,
-            observacion     = nota,
-            creado_por      = usuario
-        )
+    return Response(
+        {
+            'mensaje': (
+                f'Movimiento "{data["tipo"]}" realizado correctamente.'
+            ),
+            'stock_anterior': anterior,
+            'stock_nuevo': total,
+        }
+    )
 
-    else:
-        return Response({'error': f'Tipo de movimiento no válido: {tipo}'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    # Actualizar stock total en el modelo Producto
-    total_stock = producto.stocks.aggregate(t=Sum('cantidad'))['t'] or 0
-    Producto.objects.filter(pk=producto_id).update(stock=total_stock)
-
-    return Response({
-        'mensaje':        f'Movimiento "{tipo}" realizado correctamente: {cantidad} unidades de {producto.nombre}',
-        'stock_anterior': stock_anterior,
-        'stock_nuevo':    total_stock,
-    })
-
-
-# =========================================================
-# STOCK POR ALMACÉN
-# Devuelve la cantidad disponible de un producto en un almacén
-# específico — usado por el formulario de transferencia
-# =========================================================
 
 @api_view(['GET'])
 def stock_por_almacen(request):
     producto_id = request.GET.get('producto_id')
-    almacen_id  = request.GET.get('almacen_id')
-
+    almacen_id = request.GET.get('almacen_id')
     if not producto_id or not almacen_id:
-        return Response({'error': 'producto_id y almacen_id son requeridos.'},
-                        status=status.HTTP_400_BAD_REQUEST)
-    try:
-        stock = StockAlmacen.objects.get(
-            producto_id=producto_id,
-            almacen_id=almacen_id
+        return Response(
+            {'error': 'producto_id y almacen_id son requeridos.'},
+            status=status.HTTP_400_BAD_REQUEST,
         )
-        return Response({'cantidad': stock.cantidad})
-    except StockAlmacen.DoesNotExist:
-        return Response({'cantidad': 0})
+    cantidad = (
+        StockAlmacen.objects.filter(
+            producto_id=producto_id, almacen_id=almacen_id
+        )
+        .values_list('cantidad', flat=True)
+        .first()
+        or 0
+    )
+    return Response({'cantidad': cantidad})
 
 
-# =========================================================
-# EXPORTAR CSV
-# NOTA: usa stock_minimo por producto, no rangos globales
-# =========================================================
+@api_view(['GET'])
+def listar_movimientos(request):
+    movimientos = MovimientoInventario.objects.select_related(
+        'producto',
+        'almacen_origen',
+        'almacen_destino',
+        'creado_por',
+    )
+    if request.GET.get('producto_id'):
+        movimientos = movimientos.filter(
+            producto_id=request.GET['producto_id']
+        )
+    if request.GET.get('tipo'):
+        movimientos = movimientos.filter(tipo=request.GET['tipo'])
+    if request.GET.get('desde'):
+        movimientos = movimientos.filter(fecha__date__gte=request.GET['desde'])
+    if request.GET.get('hasta'):
+        movimientos = movimientos.filter(fecha__date__lte=request.GET['hasta'])
+    return Response(
+        MovimientoInventarioSerializer(
+            movimientos.order_by('-fecha')[:500], many=True
+        ).data
+    )
+
 
 @api_view(['GET'])
 @require_roles('Administrador', 'Supervisor', 'Bodega')
 def exportar_inventario_csv(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="inventario.csv"'
-
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = (
+        'attachment; filename="inventario.csv"'
+    )
+    response.write('\ufeff')
     writer = csv.writer(response)
-    writer.writerow(['SKU', 'Producto', 'Marca', 'Referencia', 'Categoría',
-                     'Almacén', 'Stock Actual', 'Stock Mínimo', 'Estado Stock',
-                     'Precio Compra', 'Precio Venta', 'Estado'])
-
-    for p in Producto.objects.select_related('categoria').prefetch_related('stocks__almacen'):
-        stock_actual   = p.stocks.aggregate(t=Sum('cantidad'))['t'] or 0
-        primer_stock   = p.stocks.select_related('almacen').first()
-        almacen_nombre = primer_stock.almacen.nombre if primer_stock else 'Sin almacén'
-        estado_stock   = calcular_estado_stock(stock_actual, p.stock_minimo)
-
-        writer.writerow([
-            p.sku, p.nombre, p.marca, p.referencia,
-            p.categoria.nombre if p.categoria else '',
-            almacen_nombre, stock_actual, p.stock_minimo,
-            estado_stock.capitalize(),
-            p.precio_compra, p.precio_venta, p.estado
-        ])
-
+    writer.writerow(
+        [
+            'SKU', 'Producto', 'Categoria', 'Almacenes', 'Stock Actual',
+            'Stock Minimo', 'Estado Stock', 'Precio Compra',
+            'Precio Venta', 'Estado Producto',
+        ]
+    )
+    productos = productos_con_stock(
+        Producto.objects.select_related('categoria').prefetch_related(
+            'stocks__almacen'
+        )
+    )
+    for producto in productos:
+        almacenes = ', '.join(
+            sorted(
+                stock.almacen.nombre
+                for stock in producto.stocks.all()
+                if stock.cantidad > 0
+            )
+        ) or 'Sin almacen'
+        writer.writerow(
+            [
+                producto.sku,
+                producto.nombre,
+                producto.categoria.nombre,
+                almacenes,
+                producto.stock_actual_calculado,
+                producto.stock_minimo,
+                calcular_estado_stock(
+                    producto.stock_actual_calculado,
+                    producto.stock_minimo,
+                ).capitalize(),
+                producto.precio_compra,
+                producto.precio_venta,
+                producto.estado,
+            ]
+        )
     return response

@@ -83,7 +83,7 @@
 
             <div class="field">
               <label><i class="fas fa-warehouse"></i> Almacén *</label>
-              <select [(ngModel)]="almacenId">
+              <select [(ngModel)]="almacenId" (ngModelChange)="onAlmacenChange($event)">
                 <option [ngValue]="null">Seleccionar...</option>
                 <option *ngFor="let a of almacenesActivos()" [ngValue]="a.id">
                   {{ a.codigo ? a.codigo + ' - ' : '' }}{{ a.nombre }}
@@ -149,10 +149,10 @@
                   <td>
                     <select [(ngModel)]="d.producto" (ngModelChange)="onProductoChange(d)" style="width:100%">
                       <option [ngValue]="0">Seleccionar...</option>
-                      <option *ngFor="let p of productos()" [ngValue]="p.id">{{ getProductoLabel(p) }}</option>
+                      <option *ngFor="let p of productosActivos()" [ngValue]="p.id">{{ getProductoLabel(p) }}</option>
                     </select>
                   </td>
-                  <td><input type="number" [(ngModel)]="d.precio_unitario" min="0" style="width:120px" (input)="recalc()" /></td>
+                  <td><input type="number" [(ngModel)]="d.precio_unitario" min="0" style="width:120px" readonly /></td>
                   <td><input type="number" [(ngModel)]="d.cantidad" min="1" style="width:80px" (input)="recalc()" /></td>
                   <td>{{ getStockProducto(d.producto) }}</td>
                   <td>{{ (d.precio_unitario * d.cantidad) | currency:'COP':'symbol':'1.0-0' }}</td>

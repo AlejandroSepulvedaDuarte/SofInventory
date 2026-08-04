@@ -8,14 +8,14 @@ from .models import Proveedor
 class ProveedorAPITests(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.tipo_documento = TipoDocumento.objects.create(codigo='CC', nombre='Cedula')
-        self.rol = Rol.objects.create(nombre='Administrador')
+        self.tipo_documento = TipoDocumento.objects.get(codigo='CC')
+        self.rol = Rol.objects.get(nombre='Administrador')
         self.usuario = Usuario.objects.create(
             tipo_documento=self.tipo_documento,
             numero_documento='1001',
             nombre_completo='Admin Principal',
-            email='admin@example.com',
-            username='admin',
+            email='admin-proveedores@example.com',
+            username='admin_proveedores',
             password='Secret123!',
             rol=self.rol,
             fecha_creacion='2026-01-01',
@@ -40,7 +40,7 @@ class ProveedorAPITests(TestCase):
 
     def autenticar(self):
         response = self.client.post('/api/auth/login/', {
-            'username': 'admin',
+            'username': 'admin_proveedores',
             'password': 'Secret123!',
         }, format='json')
         self.assertEqual(response.status_code, 200)
