@@ -1,7 +1,8 @@
-import { Component, computed, signal, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, computed, signal, OnInit, OnDestroy, Output, EventEmitter, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService, ThemeKey } from '../../../core/services/theme.service';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
@@ -43,7 +44,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userName = computed(() => this.auth.currentUser()?.nombre ?? 'Usuario');
   userRole = computed(() => this.auth.currentUser()?.rol ?? '');
 
-  constructor(public auth: AuthService, private router: Router) {}
+  themeMenuOpen = signal(false);
+  themeOptions = this.themeService.options;
+  currentTheme = this.themeService.current;
+
+  themeIcon = computed(() => {
+    const found = this.themeService.options.find((o) => o.key === this.currentTheme());
+    return found?.icon ?? 'fa-moon';
+  });
+
+  constructor(
+    public auth: AuthService,
+    private router: Router,
+    private themeService: ThemeService,
+  ) {}
 
   ngOnInit(): void {
     // Set initial title
@@ -69,6 +83,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   toggleMobile(): void {
     this.mobileMenuToggle.emit();
+  }
+
+  toggleThemeMenu(): void {
+    this.themeMenuOpen.update((v) => !v);
+  }
+
+  closeThemeMenu(): void {
+    this.themeMenuOpen.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    if (!this.themeMenuOpen()) return;
+    const target = event.target as HTMLElement | null;
+    if (!target?.closest('.theme-switcher')) {
+      this.closeThemeMenu();
+    }
+  }
+
+  setTheme(theme: ThemeKey): void {
+    this.themeService.apply(theme);
+    this.closeThemeMenu();
+  }
+
+  logout(): void {
+    this.auth.logout();
   }
 
   private _updateTime(): void {

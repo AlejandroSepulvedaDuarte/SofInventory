@@ -1,15 +1,12 @@
 from django.db import migrations
-from django.contrib.auth.hashers import make_password
-from django.utils import timezone
 
 
 def seed_initial_data(apps, schema_editor):
     TipoDocumento = apps.get_model('usuarios', 'TipoDocumento')
     Rol = apps.get_model('usuarios', 'Rol')
-    Usuario = apps.get_model('usuarios', 'Usuario')
 
     # ── Tipos de Documento ─────────────────────────────
-    cc, _ = TipoDocumento.objects.get_or_create(
+    TipoDocumento.objects.get_or_create(
         codigo='CC', defaults={'nombre': 'Cédula de Ciudadanía'}
     )
     TipoDocumento.objects.get_or_create(
@@ -26,7 +23,7 @@ def seed_initial_data(apps, schema_editor):
     )
 
     # ── Roles ──────────────────────────────────────────
-    admin_rol, _ = Rol.objects.get_or_create(
+    Rol.objects.get_or_create(
         nombre='Administrador',
         defaults={'descripcion': 'Acceso total al sistema'}
     )
@@ -43,26 +40,10 @@ def seed_initial_data(apps, schema_editor):
         defaults={'descripcion': 'Registro de ventas y clientes'}
     )
 
-    # ── Usuario Administrador por defecto ──────────────
-    if not Usuario.objects.filter(username='admin').exists():
-        Usuario.objects.create(
-            tipo_documento=cc,
-            numero_documento='1234567890',
-            nombre_completo='Administrador del Sistema',
-            email='admin@sofinventory.com',
-            username='admin',
-            password=make_password('admin123'),
-            rol=admin_rol,
-            estado='activo',
-            fecha_creacion=timezone.now().date(),
-            observaciones='Usuario creado automáticamente al inicializar la base de datos.',
-        )
-
 
 def unseed_initial_data(apps, schema_editor):
     """Elimina los datos creados (rollback)."""
-    Usuario = apps.get_model('usuarios', 'Usuario')
-    Usuario.objects.filter(username='admin').delete()
+    pass
 
 
 class Migration(migrations.Migration):

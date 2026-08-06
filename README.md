@@ -4,7 +4,9 @@ Frontend Angular del sistema SofInventory. Este proyecto consume un backend Djan
 
 ## Objetivo
 
-Centralizar la operación del inventario en una interfaz moderna, profesional y consistente con las reglas del backend, evitando guardar sesión en `localStorage` o `sessionStorage`.
+Centralizar la operación del inventario en una interfaz moderna, profesional y consistente con las reglas del backend.
+
+> **Nota sobre sesiones:** el token de sesión se conserva en `localStorage` para mantener la sesión activa entre recargas. El interceptor lo agrega a cada petición HTTP y, si el backend responde `401`, limpia la sesión y redirige al login. En despliegues productivos se recomienda migrar a cookies `HttpOnly`.
 
 ## Tecnologías principales
 
@@ -47,10 +49,10 @@ frontend/
 
 ## Flujo de autenticación
 
-- El login guarda token y usuario únicamente en memoria.
+- El login guarda token y usuario en `localStorage` (`auth_token`, `auth_expires_at`, `auth_user`) y restaura la sesión al recargar.
 - El interceptor agrega el token a cada petición HTTP.
-- Si el backend responde `401`, el frontend redirige al login.
-- No se usan mecanismos de persistencia del navegador para la sesión.
+- Si el backend responde `401`, el frontend limpia la sesión y redirige al login.
+- El token tiene una expiración de 12 horas definida por el backend (`SesionAPI`).
 
 ## Comandos útiles
 

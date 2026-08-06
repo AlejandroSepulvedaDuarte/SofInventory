@@ -181,6 +181,12 @@
   font-size: 16px;
 }
 
+.nav-icon i {
+  font-size: 16px;
+  width: 16px;
+  text-align: center;
+}
+
 .nav-label {
   flex: 1;
   overflow: hidden;
@@ -193,7 +199,7 @@
 
 .nav-badge {
   background: var(--warning);
-  color: #0c0e14;
+  color: var(--on-accent);
   font-size: 10px;
   font-weight: 700;
   padding: 1px 6px;
@@ -230,7 +236,7 @@
   height: 34px;
   border-radius: 9px;
   background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  color: #0c0e14;
+  color: var(--on-accent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -272,14 +278,31 @@
   border: 1px solid transparent;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 7px;
+  padding: 8px 10px;
   border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   flex-shrink: 0;
   transition: all 0.15s;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
 }
+
+.logout-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.logout-label {
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.sidebar.collapsed .logout-label { opacity: 0; }
 
 .logout-btn:hover {
   background: var(--danger-light);

@@ -1,21 +1,9 @@
 #!/bin/bash
 
-# ── Debug: mostrar variables PG ──────────────
-echo "===== ENV DEBUG (bash) ====="
-echo "PGHOST='$PGHOST' PGPORT='$PGPORT' PGUSER='$PGUSER' PGDATABASE='$PGDATABASE'"
-echo "DATABASE_URL='$DATABASE_URL'"
-python -c "
-import os
-for k in sorted(os.environ):
-    if 'PG' in k or 'DB_' in k or 'DATABASE' in k:
-        print(f'{k}={repr(os.environ[k])}')"
-echo "============================"
-
 # ── Construir DATABASE_URL desde variables PG de Railway ──
 if [ -n "$PGHOST" ]; then
-    PGPASSWORD_ENCODED=$(python -c "import urllib.parse; print(urllib.parse.quote('$PGPASSWORD', safe=''))" 2>/dev/null || echo "$PGPASSWORD")
+    PGPASSWORD_ENCODED=$(python -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1], safe=''))" "$PGPASSWORD" 2>/dev/null || echo "$PGPASSWORD")
     export DATABASE_URL="postgresql://${PGUSER}:${PGPASSWORD_ENCODED}@${PGHOST}:${PGPORT}/${PGDATABASE}"
-    echo "DATABASE_URL construida desde PGHOST"
 fi
 
 if [ -z "$DATABASE_URL" ]; then

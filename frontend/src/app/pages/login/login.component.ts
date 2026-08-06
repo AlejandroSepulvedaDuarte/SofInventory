@@ -15,13 +15,14 @@
  * 4. Si falla:
  *    - se muestra el mensaje de error en pantalla.
  */
-import { Component, signal } from '@angular/core';
+import { Component, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService, ThemeKey } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-login',
@@ -69,9 +70,15 @@ export class LoginComponent {
   // Controla si la contraseña se muestra o se oculta
   showPass = signal(false);
 
+  // Tema de pantalla seleccionado
+  themeMenuOpen = signal(false);
+  themeOptions = this.themeService.options;
+  currentTheme = this.themeService.current;
+
   constructor(
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private themeService: ThemeService,
   ) {}
 
   /* ──────────────────────────────────────────────────────────────────────
@@ -81,6 +88,28 @@ export class LoginComponent {
    * ─────────────────────────────────────────────────────────────────── */
   togglePass(): void {
     this.showPass.set(!this.showPass());
+  }
+
+  toggleThemeMenu(): void {
+    this.themeMenuOpen.update((v) => !v);
+  }
+
+  closeThemeMenu(): void {
+    this.themeMenuOpen.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    if (!this.themeMenuOpen()) return;
+    const target = event.target as HTMLElement | null;
+    if (!target?.closest('.theme-switcher')) {
+      this.closeThemeMenu();
+    }
+  }
+
+  setTheme(theme: ThemeKey): void {
+    this.themeService.apply(theme);
+    this.closeThemeMenu();
   }
 
   /* ──────────────────────────────────────────────────────────────────────
