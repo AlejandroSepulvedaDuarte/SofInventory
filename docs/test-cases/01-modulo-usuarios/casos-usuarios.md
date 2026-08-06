@@ -81,7 +81,7 @@ El servidor Django y la base de datos PostgreSQL están en línea.
   "nombre_completo": "Carlos Pérez",
   "email": "carlos1p@gmail.com",
   "username": "carlos",
-  "password": "carlos123",
+  "password": "<password-de-prueba>",
   "rol": 1,
   "fecha_creacion": "2026-05-16",
   "estado": "activo"
@@ -152,7 +152,7 @@ El tester está autenticado como administrador con un token Bearer válido.
   "nombre_completo": "Laura Gómez",
   "email": "laura1g@gmail.com",
   "username": "lauraG",
-  "password": "laura123",
+  "password": "<password-de-prueba>",
   "rol": 2,
   "fecha_creacion": "2026-05-14",
   "estado": "activo"
@@ -164,7 +164,7 @@ El tester está autenticado como administrador con un token Bearer válido.
 2. Navegar a Configuración > Usuarios > Nuevo Usuario.
 3. Completar los datos con rol "Supervisor".
 4. Guardar.
-5. Cerrar sesión e iniciar sesión con `lauraG` / `laura123`.
+5. Cerrar sesión e iniciar sesión con `lauraG` / `<password-de-prueba>`.
 6. Verificar que el módulo de administración de usuarios no es accesible.
 7. En pgAdmin verificar:
    ```sql
@@ -440,7 +440,7 @@ Verificar que la contraseña del usuario es almacenada en PostgreSQL utilizando 
 | Estado | ✅ Pasó |
 
 **Precondiciones**
-El usuario `carlos` fue creado en TC-USR-001 con contraseña `carlos123`.
+El usuario `carlos` fue creado en TC-USR-001 con contraseña `<password-de-prueba>`.
 Acceso a pgAdmin 4 con conexión a la base de datos de SofInventory.
 
 **Datos de entrada**
@@ -458,7 +458,7 @@ WHERE username = 'carlos';
 
 **Resultado esperado**
 - El campo `password` muestra un hash con el formato Django: `pbkdf2_sha256$<iteraciones>$<salt>$<hash_base64>`.
-- La cadena `carlos123` **no debe aparecer** en ninguna columna.
+- La cadena `<password-de-prueba>` **no debe aparecer** en ninguna columna.
 
 **Resultado obtenido**
 El campo `password` contenía el hash completo en formato PBKDF2-SHA256. La contraseña en texto plano no era visible en ninguna columna.
@@ -494,11 +494,11 @@ Verificar que un usuario recién creado puede autenticarse exitosamente en el m�
 | Estado | ✅ Pasó |
 
 **Precondiciones**
-Usuario `lauraG` fue creado en TC-USR-002 con contraseña `laura123` y estado activo.
+Usuario `lauraG` fue creado en TC-USR-002 con contraseña `<password-de-prueba>` y estado activo.
 
 **Datos de entrada**
 ```json
-{ "username": "lauraG", "password": "laura123" }
+{ "username": "lauraG", "password": "<password-de-prueba>" }
 ```
 
 **Pasos a seguir**

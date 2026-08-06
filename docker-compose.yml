@@ -1,28 +1,48 @@
-
 services:
   db:
     image: postgres:15-alpine
     container_name: sofinventory_final_db
     environment:
-      POSTGRES_DB: db_backend_sofinventory
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: alejo123
+      POSTGRES_DB: ${POSTGRES_DB:-db_backend_sofinventory}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - sofinventory_postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-db_backend_sofinventory}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   backend:
     build: ./backend
     container_name: sofinventory_final_backend
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - "8000:8000"
     env_file:
       - ./backend/.env
     environment:
-      - DB_HOST=db
+      DB_HOST: db
+      DB_NAME: ${POSTGRES_DB:-db_backend_sofinventory}
+      DB_USER: ${POSTGRES_USER:-postgres}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: ${DEBUG:-False}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-}
+      INITIAL_ADMIN_USERNAME: ${INITIAL_ADMIN_USERNAME:-admin}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD}
+      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL}
+      INITIAL_ADMIN_NOMBRE_COMPLETO: ${INITIAL_ADMIN_NOMBRE_COMPLETO}
+      INITIAL_ADMIN_TIPO_DOCUMENTO: ${INITIAL_ADMIN_TIPO_DOCUMENTO:-CC}
+      INITIAL_ADMIN_NUMERO_DOCUMENTO: ${INITIAL_ADMIN_NUMERO_DOCUMENTO:-1234567890}
+    volumes:
+      - sofinventory_media_data:/app/media
 
   frontend:
     build: ./frontend
@@ -33,7 +53,9 @@ services:
       - backend
     environment:
       - BACKEND_URL=http://backend:8000
-
+    volumes:
+      - sofinventory_media_data:/usr/share/nginx/html/media
 
 volumes:
   sofinventory_postgres_data:
+  sofinventory_media_data:

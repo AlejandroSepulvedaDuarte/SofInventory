@@ -62,12 +62,12 @@ Verificar que un usuario con rol Administrador puede autenticarse correctamente 
 | Estado | ✅ Pasó |
 
 **Precondiciones**
-Existe usuario con `username = 'admin'`, contraseña `Admin123`, rol Administrador y estado activo en la tabla `usuarios`.
+Existe usuario con `username = 'admin'`, contraseña `<password-de-prueba>`, rol Administrador y estado activo en la tabla `usuarios`.
 El servidor Django y la base de datos PostgreSQL están en línea.
 
 **Datos de entrada**
 ```json
-{ "username": "admin", "password": "Admin123" }
+{ "username": "admin", "password": "<password-de-prueba>" }
 ```
 
 **Pasos a seguir**
@@ -77,7 +77,7 @@ El servidor Django y la base de datos PostgreSQL están en línea.
 4. Verificar redirección al dashboard.
 5. En Postman: `POST /api/auth/login/` con el body indicado:
    ```json
-   { "username": "admin", "password": "Admin123" }
+   { "username": "admin", "password": "<password-de-prueba>" }
    ```
 6. En pgAdmin ejecutar:
    ```sql
@@ -130,11 +130,11 @@ Verificar que un usuario con rol Supervisor puede autenticarse y acceder al sist
 | Estado | ✅ Pasó |
 
 **Precondiciones**
-Existe usuario con `username = 'sebascal'`, contraseña `sebas123`, rol Supervisor y estado activo en la tabla `usuarios`.
+Existe usuario con `username = 'sebascal'`, contraseña `<password-de-prueba>`, rol Supervisor y estado activo en la tabla `usuarios`.
 
 **Datos de entrada**
 ```json
-{ "username": "sebascal", "password": "sebas123" }
+{ "username": "sebascal", "password": "<password-de-prueba>" }
 ```
 
 **Pasos a seguir**
@@ -291,7 +291,7 @@ Verificar que el sistema rechaza el intento de login de un usuario cuyo estado s
 | Estado | ✅ Pasó |
 
 **Precondiciones**
-Existe usuario con `username = 'inactivo'`, contraseña `Inac@1234` y `estado = 'inactivo'` en la tabla `usuarios`.
+Existe usuario con `username = 'inactivo'`, contraseña `<password-de-prueba>` y `estado = 'inactivo'` en la tabla `usuarios`.
 Verificar estado previo en pgAdmin:
 ```sql
 SELECT username, estado FROM usuarios WHERE username = 'inactivo';
@@ -299,7 +299,7 @@ SELECT username, estado FROM usuarios WHERE username = 'inactivo';
 
 **Datos de entrada**
 ```json
-{ "username": "sebascal", "password": "sebas123" }
+{ "username": "sebascal", "password": "<password-de-prueba>" }
 ```
 
 **Pasos a seguir**

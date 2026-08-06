@@ -27,9 +27,9 @@
 
 | Rol | Username | Email | Contraseña | Estado |
 |-----|----------|-------|-----------|--------|
-| Administrador | `admin` | `admin@sofinventory.com` | `Admin123` | Activo |
-| Supervisor | `sebascal` | `sebas@gmail.com` | `sebas123` | Activo |
-| Usuario inactivo | `sebascal` | `sebas@gmail.com` | `sebas123` | Inactivo |
+| Administrador | `admin` | `admin@sofinventory.com` | `<definida-por-INITIAL_ADMIN_PASSWORD>` | Activo |
+| Supervisor | `sebascal` | `sebas@gmail.com` | `<password-de-prueba>` | Activo |
+| Usuario inactivo | `sebascal` | `sebas@gmail.com` | `<password-de-prueba>` | Inactivo |
 
 > ⚠️ Estos datos son exclusivamente para el ambiente de pruebas. No deben usarse en producción.
 

@@ -712,16 +712,16 @@ Cree el archivo `.env` dentro de la carpeta `backend/` con el siguiente contenid
 
 ```env
 # ========================================
-# VARIABLES DE ENTorno - Backend SofInventory
+# VARIABLES DE ENTORNO - Backend SofInventory
 # ========================================
 
-# Clave secreta de Django (cambiar en producción)
-SECRET_KEY=django-insecure-qnqdjpswh7=yoa*njm+j6b*cn-e(^@@l2a0*t-g1rz5^k57hnd
+# Clave secreta de Django (generar una única por entorno)
+SECRET_KEY=generar-con-python-secrets
 
 # Configuración de la base de datos PostgreSQL
 DB_NAME=db_sofinventory
 DB_USER=postgres
-DB_PASSWORD=alejo123
+DB_PASSWORD=generar-contrasena-segura
 DB_HOST=db
 DB_PORT=5432
 
@@ -736,7 +736,7 @@ CORS_ALLOW_ALL_ORIGINS=True
 
 # Credenciales del usuario administrador inicial
 INITIAL_ADMIN_USERNAME=admin
-INITIAL_ADMIN_PASSWORD=admin123
+INITIAL_ADMIN_PASSWORD=definir-contrasena-segura
 INITIAL_ADMIN_EMAIL=admin@sofinventory.com
 INITIAL_ADMIN_NOMBRE_COMPLETO=Administrador Principal
 INITIAL_ADMIN_TIPO_DOCUMENTO=CC
@@ -745,7 +745,13 @@ INITIAL_ADMIN_NUMERO_DOCUMENTO=1000000000
 
 **IMPORTANTE:** El valor de `DB_HOST` debe ser `db` (el nombre del servicio en `docker-compose.yml`), NO `localhost`. Los contenedores se comunican entre sí a través de la red Docker interna usando los nombres de servicio.
 
-⚠️ **ADVERTENCIA DE SEGURIDAD:** Los valores de `SECRET_KEY`, `DB_PASSWORD` e `INITIAL_ADMIN_PASSWORD` mostrados arriba corresponden únicamente al entorno de despliegue de prueba/ejemplo de este proyecto formativo. Una vez ingrese al sistema con el usuario administrador inicial, debe cambiar inmediatamente la contraseña desde el módulo de Usuarios, por motivos de seguridad. Para cualquier despliegue distinto al de prueba, genere una `SECRET_KEY` nueva y una `DB_PASSWORD` propia — nunca reutilice los valores de ejemplo de este manual.
+⚠️ **ADVERTENCIA DE SEGURIDAD:** Los valores de `SECRET_KEY`, `DB_PASSWORD` e `INITIAL_ADMIN_PASSWORD` del ejemplo anterior son **solo ilustrativos** y no deben usarse en ningún despliegue real. Genere secretos únicos para cada entorno con:
+
+```powershell
+python -c "import secrets; print(secrets.token_urlsafe(50))"
+```
+
+Si `INITIAL_ADMIN_PASSWORD` se deja vacío, el comando `seed_data` genera una contraseña aleatoria segura y la imprime una sola vez en los logs del contenedor al primer arranque.
 
 **Descripción de las variables principales:**
 
@@ -899,8 +905,8 @@ Resultado esperado: Se carga la pantalla de inicio de sesión de SofInventory.
 
 | Campo | Valor |
 |---|---|
-| **Usuario** | `admin` |
-| **Contraseña** | `admin123` |
+| **Usuario** | `admin` (o el valor de `INITIAL_ADMIN_USERNAME`) |
+| **Contraseña** | La definida en `INITIAL_ADMIN_PASSWORD` (o la generada por `seed_data` y mostrada en los logs del contenedor) |
 
 Figura 2.
 Pantalla de inicio de sesión 

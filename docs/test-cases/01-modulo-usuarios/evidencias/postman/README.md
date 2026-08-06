@@ -42,7 +42,7 @@ Authorization: Bearer {{access_token}}
   "nombre_completo": "Carlos Pérez",
   "email": "carlos.perez@sofinventory.com",
   "username": "carlos.perez",
-  "password": "Admin@1234",
+  "password": "<password-de-prueba>",
   "rol": 1,
   "fecha_creacion": "2026-05-14",
   "estado": "activo"

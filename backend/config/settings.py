@@ -14,7 +14,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 from dotenv import load_dotenv
 import os
-import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
 load_dotenv()
 
@@ -46,10 +46,20 @@ def parse_database_url(database_url):
 
 
 SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    raise ImproperlyConfigured('SECRET_KEY no está definida. Configúrela en las variables de entorno.')
 
 DEBUG = env_bool('DEBUG', False)
 
-ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', '127.0.0.1,localhost' if DEBUG else '*')
+if DEBUG:
+    ALLOWED_HOSTS = env_list('ALLOWED_HOSTS', '127.0.0.1,localhost')
+else:
+    ALLOWED_HOSTS = env_list('ALLOWED_HOSTS')
+    if not ALLOWED_HOSTS:
+        raise ImproperlyConfigured(
+            'ALLOWED_HOSTS no puede estar vacío con DEBUG=False. '
+            'Defina la lista de hosts permitidos en las variables de entorno.'
+        )
 
 
 INSTALLED_APPS = [

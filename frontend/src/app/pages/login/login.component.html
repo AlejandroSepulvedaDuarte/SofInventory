@@ -13,6 +13,36 @@
 -->
 <div class="login-page">
 
+  <!-- Selector de color de pantalla -->
+  <div class="theme-switcher" [class.open]="themeMenuOpen()">
+    <button
+      class="theme-toggle"
+      (click)="toggleThemeMenu()"
+      title="Cambiar color de la pantalla"
+      aria-haspopup="menu"
+      [attr.aria-expanded]="themeMenuOpen()"
+    >
+      <i class="fa-solid fa-palette"></i>
+      <span>Color de pantalla</span>
+      <i class="fa-solid fa-chevron-down theme-chevron"></i>
+    </button>
+
+    <div class="theme-menu" role="menu" *ngIf="themeMenuOpen()">
+      <button
+        *ngFor="let option of themeOptions"
+        class="theme-option"
+        [class.active]="currentTheme() === option.key"
+        (click)="setTheme(option.key); $event.stopPropagation()"
+        role="menuitemradio"
+        [attr.aria-checked]="currentTheme() === option.key"
+      >
+        <i class="fa-solid" [ngClass]="option.icon"></i>
+        <span>{{ option.label }}</span>
+        <i class="fa-solid fa-check theme-option-check" *ngIf="currentTheme() === option.key"></i>
+      </button>
+    </div>
+  </div>
+
   <!-- Elementos decorativos del fondo para profundidad visual -->
   <div class="bg-grid"></div>
   <div class="bg-glow"></div>

@@ -1,12 +1,14 @@
 /* ═══════════════════════════════════════════════════════════
-   ERP Pro — Global Styles v2
+   ERP Pro — Global Styles v3
    Aesthetic: Corporate Dark — Refined, clean, profesional
+   Temas: Claro (light) · Azul corporativo (blue) · Oscuro (dark)
    Fuentes: DM Sans + DM Mono + Fraunces
    ═══════════════════════════════════════════════════════════ */
 @import '@fortawesome/fontawesome-free/css/all.min.css';
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,700;9..144,800&display=swap');
 
-:root {
+:root,
+:root[data-theme='dark'] {
   --font-display: 'Fraunces', serif;
   --font-body:    'DM Sans', sans-serif;
   --font-mono:    'DM Mono', monospace;
@@ -30,6 +32,8 @@
   --accent-light: rgba(34, 211, 200, 0.10);
   --accent-dark:  #18aaa0;
   --accent-glow:  rgba(34, 211, 200, 0.20);
+  --on-accent:    #0c0e14;
+  --placeholder:  #aab1d3;
 
   --danger:        #f87171;
   --danger-light:  rgba(248, 113, 113, 0.10);
@@ -52,6 +56,88 @@
   --shadow-md:     0 4px 20px rgba(0,0,0,0.35);
   --shadow-lg:     0 8px 40px rgba(0,0,0,0.50);
   --shadow-accent: 0 0 20px rgba(34, 211, 200, 0.15);
+}
+
+/* ── Tema Claro (casi blanco) ─────────────────────────────── */
+:root[data-theme='light'] {
+  --bg-page:     #f3f5fb;
+  --bg-sidebar:  #ffffff;
+  --bg-card:     #ffffff;
+  --bg-input:    #ffffff;
+  --bg-hover:    #eef1f8;
+  --bg-elevated: #fafbfe;
+  --border:      #dde2ee;
+  --border-light: #e8ebf4;
+
+  --text-primary:   #1c2333;
+  --text-secondary: #4a5572;
+  --text-muted:     #8a94ab;
+  --text-contrast:  #141a29;
+  --text-soft:      #3a435c;
+
+  --accent:       #2563eb;
+  --accent-light: rgba(37, 99, 235, 0.10);
+  --accent-dark:  #1d4ed8;
+  --accent-glow:  rgba(37, 99, 235, 0.18);
+  --on-accent:    #ffffff;
+  --placeholder:  #98a1b5;
+
+  --danger:        #dc2626;
+  --danger-light:  rgba(220, 38, 38, 0.10);
+  --warning:       #d97706;
+  --warning-light: rgba(217, 119, 6, 0.12);
+  --success:       #16a34a;
+  --success-light: rgba(22, 163, 74, 0.10);
+  --info:          #2563eb;
+  --info-light:    rgba(37, 99, 235, 0.10);
+
+  --shadow-sm:     0 2px 8px rgba(15, 23, 42, 0.08);
+  --shadow-md:     0 4px 20px rgba(15, 23, 42, 0.12);
+  --shadow-lg:     0 8px 40px rgba(15, 23, 42, 0.18);
+  --shadow-accent: 0 0 20px rgba(37, 99, 235, 0.15);
+}
+
+/* ── Tema Azul corporativo ────────────────────────────────── */
+:root[data-theme='blue'] {
+  --bg-page:     #0f172a;
+  --bg-sidebar:  #1b263b;
+  --bg-card:     #16223a;
+  --bg-input:    #1c2a47;
+  --bg-hover:    #22314f;
+  --bg-elevated: #182741;
+  --border:      #2c3e61;
+  --border-light: #23344f;
+
+  --text-primary:   #eaf1ff;
+  --text-secondary: #a8b7d8;
+  --text-muted:     #5b6f94;
+  --text-contrast:  #f8fbff;
+  --text-soft:      #c9d7f2;
+
+  --accent:       #38bdf8;
+  --accent-light: rgba(56, 189, 248, 0.12);
+  --accent-dark:  #0ea5e9;
+  --accent-glow:  rgba(56, 189, 248, 0.22);
+  --on-accent:    #08203a;
+  --placeholder:  #6b7fa3;
+
+  --danger:        #f87171;
+  --danger-light:  rgba(248, 113, 113, 0.12);
+  --warning:       #fbbf24;
+  --warning-light: rgba(251, 191, 36, 0.12);
+  --success:       #4ade80;
+  --success-light: rgba(74, 222, 128, 0.12);
+  --info:          #60a5fa;
+  --info-light:    rgba(96, 165, 250, 0.12);
+
+  --shadow-sm:     0 2px 8px rgba(2, 6, 23, 0.35);
+  --shadow-md:     0 4px 20px rgba(2, 6, 23, 0.45);
+  --shadow-lg:     0 8px 40px rgba(2, 6, 23, 0.60);
+  --shadow-accent: 0 0 20px rgba(56, 189, 248, 0.18);
+}
+
+body {
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -155,7 +241,7 @@ code {
 .filter-tabs button:hover { color: var(--text-primary); background: var(--bg-hover); }
 .filter-tabs button.active {
   background: var(--accent);
-  color: #0c0e14;
+  color: var(--on-accent);
   font-weight: 600;
 }
 
@@ -266,7 +352,7 @@ code {
   gap: 7px;
   padding: 9px 18px;
   background: var(--accent);
-  color: #0c0e14;
+  color: var(--on-accent);
   border: none;
   border-radius: var(--radius-md);
   font-size: 13px;
@@ -349,7 +435,7 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 3px var(--accent-light);
 }
 
-input::placeholder, textarea::placeholder { color: #aab1d3; }
+input::placeholder, textarea::placeholder { color: var(--placeholder); }
 select option { background: var(--bg-card); color: var(--text-primary); }
 textarea { resize: vertical; min-height: 80px; }
 
