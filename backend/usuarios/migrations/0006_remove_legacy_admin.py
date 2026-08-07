@@ -1,10 +1,18 @@
+from django.contrib.auth.hashers import make_password
 from django.db import migrations
 
 
-def remove_legacy_admin(apps, schema_editor):
-    """Elimina el usuario admin creado con contraseña hardcodeada en migraciones previas."""
+def disable_legacy_admin_password(apps, schema_editor):
+    """Invalida la clave expuesta sin romper las relaciones historicas del usuario."""
     Usuario = apps.get_model('usuarios', 'Usuario')
-    Usuario.objects.filter(username='admin', numero_documento='1234567890').delete()
+    Usuario.objects.filter(
+        username='admin',
+        numero_documento='1234567890',
+    ).update(
+        password=make_password(None),
+        cuenta_bloqueada=False,
+        fecha_bloqueo=None,
+    )
 
 
 def noop(apps, schema_editor):
@@ -18,5 +26,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(remove_legacy_admin, noop),
+        migrations.RunPython(disable_legacy_admin_password, noop),
     ]

@@ -2,7 +2,7 @@ import os
 import secrets
 
 from django.core.management.base import BaseCommand
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import is_password_usable, make_password
 from django.utils import timezone
 from usuarios.models import TipoDocumento, Rol, Usuario
 
@@ -52,31 +52,44 @@ class Command(BaseCommand):
         )
 
         username = os.getenv('INITIAL_ADMIN_USERNAME', 'admin')
-        if Usuario.objects.filter(username=username).exists():
+        configured_password = os.getenv('INITIAL_ADMIN_PASSWORD')
+        password = configured_password or secrets.token_urlsafe(18)
+        admin = Usuario.objects.filter(username=username).first()
+
+        if admin and is_password_usable(admin.password):
             self.stdout.write(f'Admin user "{username}" already exists')
             return
 
-        password = os.getenv('INITIAL_ADMIN_PASSWORD') or secrets.token_urlsafe(18)
+        if admin:
+            Usuario.objects.filter(pk=admin.pk).update(
+                password=make_password(password),
+                rol=admin_rol,
+                estado='activo',
+                cuenta_bloqueada=False,
+                fecha_bloqueo=None,
+            )
+            action = 'reactivated with a secure password'
+        else:
+            Usuario.objects.create(
+                tipo_documento=cc,
+                numero_documento=os.getenv('INITIAL_ADMIN_NUMERO_DOCUMENTO', '1234567890'),
+                nombre_completo=os.getenv('INITIAL_ADMIN_NOMBRE_COMPLETO', 'Administrador del Sistema'),
+                email=os.getenv('INITIAL_ADMIN_EMAIL', 'admin@sofinventory.com'),
+                username=username,
+                password=make_password(password),
+                rol=admin_rol,
+                estado='activo',
+                fecha_creacion=timezone.now().date(),
+                observaciones='Usuario creado automáticamente al inicializar la base de datos.',
+            )
+            action = 'created from environment'
 
-        Usuario.objects.create(
-            tipo_documento=cc,
-            numero_documento=os.getenv('INITIAL_ADMIN_NUMERO_DOCUMENTO', '1234567890'),
-            nombre_completo=os.getenv('INITIAL_ADMIN_NOMBRE_COMPLETO', 'Administrador del Sistema'),
-            email=os.getenv('INITIAL_ADMIN_EMAIL', 'admin@sofinventory.com'),
-            username=username,
-            password=make_password(password),
-            rol=admin_rol,
-            estado='activo',
-            fecha_creacion=timezone.now().date(),
-            observaciones='Usuario creado automáticamente al inicializar la base de datos.',
-        )
-
-        if 'INITIAL_ADMIN_PASSWORD' not in os.environ or not os.getenv('INITIAL_ADMIN_PASSWORD'):
+        if not configured_password:
             self.stdout.write(self.style.WARNING(
                 f'[SEGURIDAD] Se generó una contraseña aleatoria para "{username}". '
-                f'Estabézcala con INITIAL_ADMIN_PASSWORD o cámbiela tras el primer ingreso.'
+                f'Establézcala con INITIAL_ADMIN_PASSWORD o cámbiela tras el primer ingreso.'
             ))
             if options.get('print_password'):
                 self.stdout.write(f'Contraseña temporal de "{username}": {password}')
         else:
-            self.stdout.write(self.style.SUCCESS(f'Admin user "{username}" created from environment'))
+            self.stdout.write(self.style.SUCCESS(f'Admin user "{username}" {action}'))

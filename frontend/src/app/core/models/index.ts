@@ -220,13 +220,79 @@ export interface MovimientoInventarioRequest {
 }
 
 // ==================== DASHBOARD ====================
+export type PeriodoDashboard = 'hoy' | 'semana' | 'mes' | 'anio' | 'total';
+export type RangoGraficaDashboard = 'siete_dias' | 'mes' | 'anio';
+
+export interface ComparacionDashboard {
+  disponible: boolean;
+  porcentaje: number | null;
+  direccion: 'sube' | 'baja' | 'igual' | 'sin_datos' | 'acumulado';
+  valor_anterior: number | null;
+  texto: string;
+}
+
+export interface IndicadorPeriodo {
+  valor: number;
+  cantidad: number;
+  cantidad_anterior?: number | null;
+  comparacion: ComparacionDashboard;
+  ingreso_neto_sin_iva?: number;
+  costo_ventas?: number;
+  operaciones_sin_costo?: number;
+}
+
+export interface SerieOperacionesDashboard {
+  labels: string[];
+  ventas: number[];
+  compras: number[];
+  cantidad_ventas: number[];
+  cantidad_compras: number[];
+}
+
 export interface DashboardData {
-  ventas_hoy?: number;
-  ventas_mes?: number;
-  total_productos?: number;
-  productos_bajo_stock?: number;
-  total_clientes?: number;
-  total_proveedores?: number;
-  [key: string]: any;
+  version: number;
+  metricas: {
+    total_productos: number;
+    productos_en_stock: number;
+    total_ventas: number;
+    ventas_mes: number;
+    ventas_dia: number;
+    total_clientes: number;
+    total_proveedores: number;
+    stock_bajo: number;
+    compras_mes: number;
+    margen_mes: number;
+  };
+  periodos: {
+    ventas: Record<PeriodoDashboard, IndicadorPeriodo>;
+    compras: Record<PeriodoDashboard, IndicadorPeriodo>;
+    margen: Record<Exclude<PeriodoDashboard, 'total'>, IndicadorPeriodo>;
+  };
+  graficas: {
+    operaciones: Record<RangoGraficaDashboard, SerieOperacionesDashboard>;
+  };
+  ventas_por_mes: Array<{ mes: string; total: number; cantidad: number }>;
+  metodos_pago: Array<{ metodo: string; total: number; cantidad: number }>;
+  estado_stock: { agotados: number; stock_bajo: number; stock_normal: number };
+  top_vendedores: Array<{ nombre: string; total: number; ventas: number }>;
+  mejor_vendedor_mes: { nombre: string; total: number; ventas: number } | null;
+  alertas_stock: Array<{
+    id: number; nombre: string; sku: string; stock: number; stock_minimo: number;
+  }>;
+  ventas_recientes: Array<{
+    id: number; numero_venta: string; cliente: string; vendedor: string;
+    total: number; metodo_pago: string; fecha_creacion: string;
+  }>;
+  top_productos: Array<{
+    nombre: string; sku: string; total_vendido: number; total_ingresos: number;
+  }>;
+  reglas_calculo: {
+    zona_horaria: string;
+    inicio_semana: string;
+    ventas: string;
+    compras: string;
+    margen: string;
+    excluidos: Record<string, string[]>;
+  };
 }
 

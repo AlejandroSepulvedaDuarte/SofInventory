@@ -351,10 +351,10 @@ export class InventarioService {
 export class DashboardService {
   constructor(private http: HttpClient) {}
 
-  getDashboardData(): Observable<any> {
+  getDashboardData(): Observable<DashboardData> {
     // Obtener el rol directamente del AuthService sin almacenamiento
     // El token se envía automáticamente por el interceptor
-    return this.http.get(`${API}/dashboard/`);
+    return this.http.get<DashboardData>(`${API}/dashboard/`);
   }
 }
 

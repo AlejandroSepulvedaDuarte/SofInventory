@@ -2,7 +2,7 @@ import secrets
 from datetime import timedelta
 
 from django.db import models
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import identify_hasher, is_password_usable, make_password
 from django.utils import timezone
 
 
@@ -67,8 +67,11 @@ class Usuario(models.Model):
     fecha_bloqueo = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if not self.password.startswith('pbkdf2_'):
-            self.password = make_password(self.password)
+        if is_password_usable(self.password):
+            try:
+                identify_hasher(self.password)
+            except ValueError:
+                self.password = make_password(self.password)
         super().save(*args, **kwargs)
 
     @property
