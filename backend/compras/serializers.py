@@ -27,16 +27,33 @@ class CompraSerializer(serializers.ModelSerializer):
     proveedor_nombre = serializers.CharField(
         source='proveedor.razon_social', read_only=True
     )
-    registrado_por_nombre = serializers.CharField(
-        source='registrado_por.nombre_completo', read_only=True
-    )
+    registrado_por_nombre = serializers.SerializerMethodField()
     almacen_nombre = serializers.CharField(
         source='almacen.nombre', read_only=True, allow_null=True
     )
+    proveedor_documento = serializers.SerializerMethodField()
+    anulado_por_nombre = serializers.SerializerMethodField()
 
     class Meta:
         model = Compra
         fields = '__all__'
+        read_only_fields = [
+            'registrado_por', 'anulado_por', 'fecha_anulacion', 'empresa_snapshot'
+        ]
+
+    def get_proveedor_documento(self, obj):
+        codigo = getattr(obj.proveedor.tipo_documento, 'codigo', '')
+        return f'{codigo} {obj.proveedor.numero_documento}'.strip()
+
+    def get_registrado_por_nombre(self, obj):
+        return (
+            obj.registrado_por.nombre_completo
+            if obj.registrado_por
+            else 'No disponible'
+        )
+
+    def get_anulado_por_nombre(self, obj):
+        return obj.anulado_por.nombre_completo if obj.anulado_por else ''
 
 
 class DetalleCompraEntradaSerializer(serializers.Serializer):
@@ -64,6 +81,9 @@ class RegistrarCompraSerializer(serializers.Serializer):
     fecha_compra = serializers.DateField()
     tipo_compra = serializers.ChoiceField(choices=['Contado', 'Credito'])
     productos = DetalleCompraEntradaSerializer(many=True, allow_empty=False)
+    observaciones = serializers.CharField(
+        required=False, allow_blank=True, default='', max_length=2000
+    )
 
     def validate_productos(self, productos):
         ids = [item['producto_id'] for item in productos]

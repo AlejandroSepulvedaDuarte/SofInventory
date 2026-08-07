@@ -1,9 +1,14 @@
 from django.contrib.auth.hashers import check_password, make_password
-from django.core.validators import RegexValidator
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import Usuario, Rol, TipoDocumento
+from .models import EventoAuditoriaUsuario, Usuario, Rol, TipoDocumento
+from .validators import (
+    document_type_code,
+    validate_document_number,
+    validate_person_or_place,
+    validate_username_value,
+)
 
 
 class TipoDocumentoSerializer(serializers.ModelSerializer):
@@ -24,6 +29,12 @@ class UsuarioSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
     username = serializers.CharField(
+        max_length=50,
+        error_messages={
+            'required': 'El nombre de usuario es obligatorio.',
+            'blank': 'El nombre de usuario no puede estar vacío.',
+            'max_length': 'El nombre de usuario no puede superar 50 caracteres.',
+        },
         validators=[
             UniqueValidator(
                 queryset=Usuario.objects.all(),
@@ -40,12 +51,13 @@ class UsuarioSerializer(serializers.ModelSerializer):
         ]
     )
     numero_documento = serializers.CharField(
-        max_length=10,
+        max_length=20,
+        error_messages={
+            'required': 'El número de documento es obligatorio.',
+            'blank': 'El número de documento no puede estar vacío.',
+            'max_length': 'El número de documento no puede superar 20 caracteres.',
+        },
         validators=[
-            RegexValidator(
-                regex=r'^\d{1,10}$',
-                message='El número de documento debe contener solo números y máximo 10 caracteres.'
-            ),
             UniqueValidator(
                 queryset=Usuario.objects.all(),
                 message='El número de documento ya se encuentra registrado.'
@@ -58,7 +70,36 @@ class UsuarioSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'password': {'write_only': True, 'required': False},
+            'nombre_completo': {
+                'error_messages': {
+                    'required': 'El nombre completo es obligatorio.',
+                    'blank': 'El nombre completo no puede estar formado solamente por espacios.',
+                    'max_length': 'El nombre completo no puede superar 150 caracteres.',
+                }
+            },
         }
+
+    def validate_nombre_completo(self, value):
+        return validate_person_or_place(
+            value,
+            empty_message='El nombre completo es obligatorio.',
+            number_message='El nombre completo no puede contener números.',
+            invalid_message='El nombre solo puede contener letras, espacios, apóstrofos y guiones.',
+        )
+
+    def validate_username(self, value):
+        return validate_username_value(value)
+
+    def validate_numero_documento(self, value):
+        normalized = validate_document_number(value, document_type_code(self))
+        queryset = Usuario.objects.filter(numero_documento__iexact=normalized)
+        if self.instance:
+            queryset = queryset.exclude(pk=self.instance.pk)
+        if queryset.exists():
+            raise serializers.ValidationError(
+                'El número de documento ya se encuentra registrado.'
+            )
+        return normalized
 
     def validate(self, attrs):
         password = attrs.get('password')
@@ -99,3 +140,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
+
+
+class EventoAuditoriaUsuarioSerializer(serializers.ModelSerializer):
+    accion_display = serializers.CharField(source='get_accion_display', read_only=True)
+
+    class Meta:
+        model = EventoAuditoriaUsuario
+        fields = '__all__'

@@ -2,14 +2,17 @@
   <!-- Marca del sistema y control para expandir o colapsar la navegación -->
   <div class="sidebar-brand">
     <div class="brand-logo">
-      <div class="logo-mark">
+      <div class="logo-mark" [class.has-company-logo]="companyLogo()">
+        <img *ngIf="companyLogo(); else defaultLogo" [src]="companyLogo()" [alt]="'Logo de ' + companyName()" />
+        <ng-template #defaultLogo>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path d="M12 2L2 7l10 5 10-5-10-5z" fill="var(--accent)" opacity="0.9"/>
           <path d="M2 17l10 5 10-5" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" fill="none"/>
           <path d="M2 12l10 5 10-5" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
         </svg>
+        </ng-template>
       </div>
-      <span class="brand-name"><strong>SofInventory</strong></span>
+      <span class="brand-name"><strong>{{ companyName() }}</strong><small *ngIf="companyName() !== 'SofInventory'">SofInventory</small></span>
     </div>
     <button class="toggle-btn" (click)="toggleCollapse()" [title]="collapsed() ? 'Expandir menú' : 'Colapsar menú'">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">

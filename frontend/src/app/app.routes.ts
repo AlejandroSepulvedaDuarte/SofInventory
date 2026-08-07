@@ -78,6 +78,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/usuarios/usuarios.component').then((m) => m.UsuariosComponent),
   },
 
+  {
+    path: 'empresa',
+    canActivate: [authGuard, adminGuard],
+    loadComponent: () => import('./pages/empresa/empresa.component').then((m) => m.EmpresaComponent),
+  },
+
   // Wildcard: redirige a dashboard por defecto
   { path: '**', redirectTo: 'dashboard' },
 ];

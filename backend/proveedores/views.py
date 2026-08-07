@@ -54,7 +54,13 @@ def crear_proveedor(request):
             )
         return Response({'mensaje': 'Proveedor creado exitosamente'}, status=status.HTTP_201_CREATED)
     # Formatear errores para devolver mensaje amigable
-    return Response({'error': _format_serializer_errors(serializer.errors)}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(
+        {
+            'error': _format_serializer_errors(serializer.errors),
+            'errors': serializer.errors,
+        },
+        status=status.HTTP_400_BAD_REQUEST,
+    )
 
 
 # ── LISTAR PROVEEDORES ─────────────────────────────────────
@@ -96,7 +102,13 @@ def editar_proveedor(request, id):
             )
         return Response({'mensaje': 'Proveedor actualizado correctamente'}, status=status.HTTP_200_OK)
     # Formatear errores del serializer
-    return Response({'error': _format_serializer_errors(serializer.errors)}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(
+        {
+            'error': _format_serializer_errors(serializer.errors),
+            'errors': serializer.errors,
+        },
+        status=status.HTTP_400_BAD_REQUEST,
+    )
 
 
 # ── CAMBIAR ESTADO PROVEEDOR ───────────────────────────────

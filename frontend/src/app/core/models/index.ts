@@ -82,6 +82,7 @@ export interface Producto {
   especificaciones?: any;
   estado: 'pendiente' | 'activo' | 'inactivo';
   imagen?: string;
+  imagen_url?: string | null;
   creado_por?: number;
 }
 
@@ -135,6 +136,12 @@ export interface DetalleCompra {
   iva_porcentaje: number;
   subtotal?: number;
   total?: number;
+  producto_nombre?: string;
+  producto_marca?: string;
+  producto_referencia?: string;
+  producto_unidad?: string;
+  nombre_producto?: string;
+  sku_producto?: string;
 }
 
 export interface Compra {
@@ -149,6 +156,15 @@ export interface Compra {
   iva_total?: number;
   total?: number;
   estado?: 'pendiente' | 'completada' | 'anulada';
+  registrado_por_nombre?: string;
+  proveedor_nombre?: string;
+  proveedor_documento?: string;
+  observaciones?: string;
+  fecha_registro?: string;
+  fecha_anulacion?: string | null;
+  anulado_por_nombre?: string;
+  motivo_anulacion?: string;
+  empresa_snapshot?: Partial<Empresa>;
   detalles: DetalleCompra[];
 }
 
@@ -160,6 +176,9 @@ export interface DetalleVenta {
   subtotal?: number;
   nombre_producto?: string;
   sku_producto?: string;
+  iva_porcentaje?: number;
+  iva_monto?: number;
+  total?: number;
 }
 
 export interface Venta {
@@ -168,6 +187,7 @@ export interface Venta {
   cliente?: number | null;
   cliente_nombre?: string;
   vendedor_nombre?: string;
+  cliente_documento?: string;
   almacen?: number | null;
   almacen_nombre?: string;
   subtotal?: number;
@@ -182,7 +202,42 @@ export interface Venta {
   observaciones?: string;
   estado?: 'completada' | 'anulada';
   fecha_creacion?: string;
+  fecha_anulacion?: string | null;
+  anulado_por_nombre?: string;
+  motivo_anulacion?: string;
+  empresa_snapshot?: Partial<Empresa>;
   detalles: DetalleVenta[];
+}
+
+// ==================== EMPRESA ====================
+export interface Empresa {
+  id?: number;
+  nombre_comercial: string;
+  razon_social?: string;
+  nit: string;
+  digito_verificacion?: string;
+  logo?: string | null;
+  logo_url?: string | null;
+  direccion: string;
+  pais: string;
+  departamento: string;
+  ciudad: string;
+  telefono: string;
+  email?: string;
+  sitio_web?: string;
+  mensaje_comprobante?: string;
+  moneda: 'COP';
+  prefijo_ventas?: string;
+  creado_por_nombre?: string;
+  actualizado_por_nombre?: string;
+  fecha_creacion?: string;
+  fecha_actualizacion?: string;
+}
+
+export interface EmpresaResponse {
+  configurada: boolean;
+  puede_editar: boolean;
+  empresa: Empresa | null;
 }
 
 // ==================== INVENTARIO ====================

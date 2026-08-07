@@ -10,7 +10,7 @@ from rest_framework.test import APIClient
 
 from clientes.models import Cliente
 
-from .models import Usuario, Rol, TipoDocumento, SesionAPI
+from .models import EventoAuditoriaUsuario, Usuario, Rol, TipoDocumento, SesionAPI
 
 
 class AutenticacionAPITests(TestCase):
@@ -86,6 +86,104 @@ class AutenticacionAPITests(TestCase):
         }, format='json')
 
         self.assertEqual(response.status_code, 403)
+
+    def test_nombre_compuesto_pasaporte_y_username_alfanumerico_son_validos(self):
+        self.autenticar()
+        passport = TipoDocumento.objects.get(codigo='PA')
+        response = self.client.post('/api/usuarios/crear/', {
+            'tipo_documento': passport.id,
+            'numero_documento': 'PA2026A1',
+            'nombre_completo': "  María-José   D'Angelo  ",
+            'email': 'maria.dangelo@example.com',
+            'username': 'maria.jose_2026',
+            'password': 'ClaveUsuarioNueva-2026!',
+            'confirm_password': 'ClaveUsuarioNueva-2026!',
+            'rol': self.rol_vendedor.id,
+        }, format='json')
+
+        self.assertEqual(response.status_code, 201, response.data)
+        created = Usuario.objects.get(username='maria.jose_2026')
+        self.assertEqual(created.nombre_completo, "María-José D'Angelo")
+        self.assertEqual(created.numero_documento, 'PA2026A1')
+
+    def test_nombre_de_usuario_con_numeros_en_nombre_personal_se_rechaza(self):
+        self.autenticar()
+        response = self.client.post('/api/usuarios/crear/', {
+            'tipo_documento': self.tipo_documento.id,
+            'numero_documento': '100300400',
+            'nombre_completo': 'Juan123 Pérez',
+            'email': 'juan123@example.com',
+            'username': 'juan_123',
+            'password': 'ClaveUsuarioNueva-2027!',
+            'confirm_password': 'ClaveUsuarioNueva-2027!',
+            'rol': self.rol_vendedor.id,
+        }, format='json')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('nombre_completo', response.data)
+
+    def test_username_con_espacios_se_rechaza(self):
+        self.autenticar()
+        response = self.client.post('/api/usuarios/crear/', {
+            'tipo_documento': self.tipo_documento.id,
+            'numero_documento': '100300401',
+            'nombre_completo': 'Juan Pérez',
+            'email': 'juan.perez@example.com',
+            'username': 'juan perez',
+            'password': 'ClaveUsuarioNueva-2028!',
+            'confirm_password': 'ClaveUsuarioNueva-2028!',
+            'rol': self.rol_vendedor.id,
+        }, format='json')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('username', response.data)
+
+    def test_operaciones_administrativas_generan_auditoria_sin_secretos(self):
+        self.autenticar()
+        create = self.client.post('/api/usuarios/crear/', {
+            'tipo_documento': self.tipo_documento.id,
+            'numero_documento': '100300499',
+            'nombre_completo': 'Usuario Auditado',
+            'email': 'auditado@example.com',
+            'username': 'usuario_auditado',
+            'password': 'ClaveAuditoria-2030!',
+            'confirm_password': 'ClaveAuditoria-2030!',
+            'rol': self.rol_vendedor.id,
+        }, format='json')
+        self.assertEqual(create.status_code, 201, create.data)
+        target = Usuario.objects.get(username='usuario_auditado')
+
+        state = self.client.patch(f'/api/usuarios/estado/{target.id}/', {}, format='json')
+        self.assertEqual(state.status_code, 200)
+        actions = list(
+            EventoAuditoriaUsuario.objects.filter(usuario=target)
+            .values_list('accion', flat=True)
+        )
+        self.assertIn('creacion', actions)
+        self.assertIn('cambio_estado', actions)
+
+        report = self.client.get('/api/usuarios/auditoria/')
+        self.assertEqual(report.status_code, 200)
+        serialized = str(report.data).lower()
+        self.assertNotIn('claveauditoria', serialized)
+        self.assertNotIn('password', serialized)
+
+    def test_nombre_completo_formado_solo_por_espacios_se_rechaza_en_espanol(self):
+        self.autenticar()
+        response = self.client.post('/api/usuarios/crear/', {
+            'tipo_documento': self.tipo_documento.id,
+            'numero_documento': '100300402',
+            'nombre_completo': '   ',
+            'email': 'espacios@example.com',
+            'username': 'nombre_espacios',
+            'password': 'ClaveUsuarioNueva-2029!',
+            'confirm_password': 'ClaveUsuarioNueva-2029!',
+            'rol': self.rol_vendedor.id,
+        }, format='json')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('nombre_completo', response.data)
+        self.assertIn('espacios', str(response.data['nombre_completo'][0]))
 
     def test_logout_invalida_token(self):
         self.autenticar()

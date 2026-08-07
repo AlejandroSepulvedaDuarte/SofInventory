@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'inventario',
     'ventas',
     'dashboard',
+    'empresa',
 ]
 
 MIDDLEWARE = [
@@ -148,7 +149,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-co'
 
 TIME_ZONE = os.getenv('TIME_ZONE', 'America/Bogota')
 

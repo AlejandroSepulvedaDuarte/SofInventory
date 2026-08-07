@@ -41,7 +41,8 @@ class Venta(models.Model):
                         )
     vendedor         = models.ForeignKey(
                             Usuario, on_delete=models.PROTECT,
-                            related_name='ventas_realizadas'
+                            related_name='ventas_realizadas',
+                            null=True, blank=True,
                         )
     almacen          = models.ForeignKey(
                             'inventario.Almacen', on_delete=models.PROTECT,
@@ -93,6 +94,7 @@ class Venta(models.Model):
                             related_name='ventas_anuladas'
                         )
     motivo_anulacion  = models.TextField(null=True, blank=True)
+    empresa_snapshot  = models.JSONField(default=dict, blank=True)
 
     def save(self, *args, **kwargs):
         # Generar número de venta seguro basado en el id para evitar race conditions.
@@ -146,6 +148,9 @@ class DetalleVenta(models.Model):
     precio_unitario  = models.DecimalField(max_digits=12, decimal_places=2)
     cantidad         = models.IntegerField()
     subtotal         = models.DecimalField(max_digits=14, decimal_places=2)
+    iva_porcentaje   = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    iva_monto        = models.DecimalField(max_digits=14, decimal_places=2, default=0)
+    total            = models.DecimalField(max_digits=14, decimal_places=2, default=0)
 
     # Snapshot del nombre por si el producto cambia después
     nombre_producto  = models.CharField(max_length=150)
@@ -153,6 +158,8 @@ class DetalleVenta(models.Model):
 
     def save(self, *args, **kwargs):
         self.subtotal = self.precio_unitario * self.cantidad
+        self.iva_monto = self.subtotal * self.iva_porcentaje / 100
+        self.total = self.subtotal + self.iva_monto
         super().save(*args, **kwargs)
 
     def __str__(self):

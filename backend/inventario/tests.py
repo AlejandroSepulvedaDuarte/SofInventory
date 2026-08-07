@@ -313,3 +313,48 @@ class FlujoInventarioTests(TestCase):
                     almacen=self.almacen,
                     cantidad=-1,
                 )
+
+    def test_validacion_almacen_devuelve_campos_y_mensajes_en_espanol(self):
+        respuesta = self.client.post(
+            '/api/inventario/almacenes/crear/',
+            {},
+            format='json',
+        )
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertEqual(str(respuesta.data['nombre'][0]), 'El nombre es obligatorio.')
+        self.assertEqual(str(respuesta.data['codigo'][0]), 'El código es obligatorio.')
+
+    def test_almacen_duplicado_identifica_nombre_y_codigo(self):
+        for payload in (
+            {'nombre': 'principal', 'codigo': 'pri'},
+            {'nombre': 'Principal', 'codigo': 'PRI'},
+        ):
+            with self.subTest(payload=payload):
+                respuesta = self.client.post(
+                    '/api/inventario/almacenes/crear/',
+                    payload,
+                    format='json',
+                )
+                self.assertEqual(respuesta.status_code, 400)
+                self.assertEqual(
+                    str(respuesta.data['nombre'][0]),
+                    'Ya existe un almacén con este nombre.',
+                )
+                self.assertEqual(
+                    str(respuesta.data['codigo'][0]),
+                    'Ya existe un almacén con este código.',
+                )
+
+    def test_almacen_rechaza_nombre_numerico_y_responsable_con_numeros(self):
+        for payload, field in (
+            ({'nombre': '444444', 'codigo': 'NUM'}, 'nombre'),
+            ({'nombre': 'Bodega Norte 2', 'codigo': 'RESP', 'responsable': 'Juan123'}, 'responsable'),
+        ):
+            with self.subTest(field=field):
+                respuesta = self.client.post(
+                    '/api/inventario/almacenes/crear/',
+                    payload,
+                    format='json',
+                )
+                self.assertEqual(respuesta.status_code, 400)
+                self.assertIn(field, respuesta.data)

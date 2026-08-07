@@ -1,0 +1,47 @@
+.company-page { padding: 32px; }
+.page-header h1 { display: flex; align-items: center; gap: 10px; }
+.page-header h1 i { color: var(--accent); }
+.company-state, .company-empty, .company-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; }
+.company-state { padding: 32px; color: var(--text-muted); }
+.company-empty { padding: 56px 24px; text-align: center; color: var(--text-secondary); }
+.company-placeholder { width: 72px; height: 72px; display: grid; place-items: center; margin: 0 auto 16px; border-radius: 18px; background: var(--accent-soft); color: var(--accent); font-size: 30px; }
+.company-empty h2 { color: var(--text-primary); margin: 0 0 8px; }
+.company-empty p { max-width: 560px; margin: 0 auto; }
+.company-card { padding: 28px; }
+.company-identity { display: flex; align-items: center; gap: 20px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.company-identity img, .company-initials { width: 92px; height: 92px; border-radius: 16px; object-fit: contain; background: #fff; border: 1px solid var(--border); }
+.company-initials { display: grid; place-items: center; color: var(--accent); font-weight: 800; font-size: 28px; background: var(--accent-soft); }
+.company-identity h2 { margin: 0 0 4px; color: var(--text-primary); font-size: 26px; }
+.company-identity p, .company-identity span { margin: 0 0 4px; color: var(--text-secondary); }
+.company-data-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding: 24px 0; }
+.company-data-grid div { display: flex; flex-direction: column; gap: 4px; }
+.company-data-grid small { color: var(--text-muted); }
+.company-data-grid strong { color: var(--text-primary); overflow-wrap: anywhere; }
+.receipt-message { padding: 14px 16px; border-radius: 10px; background: var(--bg-input); color: var(--text-secondary); }
+.receipt-message i { color: var(--accent); margin-right: 8px; }
+.audit-note { margin: 14px 0 0; color: var(--text-muted); font-size: 12px; }
+.company-form { width: min(1120px, 94vw); max-height: 94vh; }
+.company-form-grid { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 28px; }
+.logo-editor { display: flex; flex-direction: column; gap: 14px; }
+.logo-preview { width: 200px; height: 150px; display: grid; place-items: center; border: 1px dashed var(--border); border-radius: 14px; background: var(--bg-input); color: var(--text-muted); font-size: 38px; overflow: hidden; }
+.logo-preview img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
+.logo-actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.logo-actions input[type=file] { position: absolute; opacity: 0; pointer-events: none; }
+.file-button { cursor: pointer; }
+.btn-text-danger { border: 0; background: transparent; color: var(--danger); cursor: pointer; padding: 4px 0; }
+.logo-actions small { color: var(--text-muted); }
+.company-fields { margin: 0; }
+.location-fields-group { display: contents; }
+@media (max-width: 850px) {
+  .company-page { padding: 20px; }
+  .company-data-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .company-form-grid { grid-template-columns: 1fr; }
+  .logo-editor { align-items: center; }
+}
+@media (max-width: 560px) {
+  .company-page { padding: 14px; }
+  .page-header, .company-identity { align-items: flex-start; flex-direction: column; }
+  .company-data-grid { grid-template-columns: 1fr; }
+  .company-card { padding: 20px; }
+  .company-form { width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; }
+}

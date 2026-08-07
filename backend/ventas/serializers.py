@@ -9,6 +9,7 @@ class DetalleVentaSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'producto', 'nombre_producto', 'sku_producto',
             'precio_unitario', 'cantidad', 'subtotal',
+            'iva_porcentaje', 'iva_monto', 'total',
         ]
 
 
@@ -19,11 +20,13 @@ class VentaSerializer(serializers.ModelSerializer):
     almacen_nombre = serializers.CharField(
         source='almacen.nombre', read_only=True, allow_null=True
     )
+    cliente_documento = serializers.SerializerMethodField()
+    anulado_por_nombre = serializers.SerializerMethodField()
 
     class Meta:
         model = Venta
         fields = [
-            'id', 'numero_venta', 'cliente', 'cliente_nombre',
+            'id', 'numero_venta', 'cliente', 'cliente_nombre', 'cliente_documento',
             'vendedor', 'vendedor_nombre', 'almacen', 'almacen_nombre',
             'subtotal', 'descuento', 'tipo_iva', 'iva_porcentaje',
             'iva_monto', 'total', 'metodo_pago',
@@ -31,8 +34,12 @@ class VentaSerializer(serializers.ModelSerializer):
             'numero_tarjeta', 'aprobacion_tarjeta',
             'comprobante_transferencia', 'otro_metodo',
             'observaciones', 'estado', 'fecha_creacion',
-            'fecha_anulacion', 'anulado_por', 'motivo_anulacion',
+            'fecha_anulacion', 'anulado_por', 'anulado_por_nombre', 'motivo_anulacion',
+            'empresa_snapshot',
             'detalles',
+        ]
+        read_only_fields = [
+            'vendedor', 'anulado_por', 'fecha_anulacion', 'empresa_snapshot'
         ]
 
     def get_cliente_nombre(self, obj):
@@ -48,7 +55,16 @@ class VentaSerializer(serializers.ModelSerializer):
         )
 
     def get_vendedor_nombre(self, obj):
-        return obj.vendedor.nombre_completo if obj.vendedor else ''
+        return obj.vendedor.nombre_completo if obj.vendedor else 'No disponible'
+
+    def get_cliente_documento(self, obj):
+        if not obj.cliente:
+            return ''
+        codigo = getattr(obj.cliente.tipo_documento, 'codigo', '')
+        return f'{codigo} {obj.cliente.numero_documento}'.strip()
+
+    def get_anulado_por_nombre(self, obj):
+        return obj.anulado_por.nombre_completo if obj.anulado_por else ''
 
 
 class DetalleVentaEntradaSerializer(serializers.Serializer):

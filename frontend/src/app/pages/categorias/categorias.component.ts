@@ -13,11 +13,17 @@ import { FormsModule } from '@angular/forms';
 import { LayoutComponent } from '../../shared/components/layout.component';
 import { ProductosService } from '../../core/services/api.services';
 import { Categoria } from '../../core/models';
+import { FieldErrorComponent } from '../../shared/forms/field-error.component';
+import { FieldValidationDirective } from '../../shared/forms/field-validation.directive';
+import { FormErrorSummaryComponent } from '../../shared/forms/form-error-summary.component';
+import { FormFeedbackService, FormFeedbackState } from '../../shared/forms/form-feedback.service';
+import { commercialNameError, normalizeSemanticText } from '../../shared/forms/semantic-validators';
+import { NotificationService } from '../../shared/notifications/notification.service';
 
 @Component({
   selector: 'app-categorias',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective],
   templateUrl: './categorias.component.html',
   styleUrls: ['./categorias.component.css']
 })
@@ -27,7 +33,7 @@ export class CategoriasComponent implements OnInit {
   categorias = signal<Categoria[]>([]);
   showModal = signal(false);
   saving = signal(false);
-  formError = signal('');
+  readonly validation: FormFeedbackState;
 
   //Formulario 
   form: Partial<Categoria> = {};
@@ -41,7 +47,13 @@ export class CategoriasComponent implements OnInit {
     { value: 'TORNILLERIA', label: 'Tornillería'  },
   ];
 
-  constructor(private svc: ProductosService) {}
+  constructor(
+    private svc: ProductosService,
+    feedback: FormFeedbackService,
+    private notifications: NotificationService,
+  ) {
+    this.validation = new FormFeedbackState(feedback, 'No fue posible guardar la categoría. Revisa los campos señalados.', '.category-form-modal');
+  }
 
   ngOnInit(): void {
     this.load();
@@ -55,31 +67,39 @@ export class CategoriasComponent implements OnInit {
   // ── Modal 
   openModal(): void {
     this.form = { nombre: '', tipo_control: 'GENERAL', descripcion: '' };
-    this.formError.set('');
+    this.validation.clear();
     this.showModal.set(true);
   }
 
   closeModal(): void {
-    this.showModal.set(false);
+    if (!this.saving()) this.showModal.set(false);
   }
 
   //CRUD 
   save(): void {
-    if (!this.form.nombre) {
-      this.formError.set('El nombre es obligatorio.');
+    const errors: Record<string, string> = {};
+    const categoryNameError = commercialNameError(this.form.nombre, 'categoria');
+    if (categoryNameError) errors['nombre'] = categoryNameError;
+    if (!this.form.tipo_control) errors['tipo_control'] = 'Selecciona un tipo de control.';
+    if (Object.keys(errors).length) {
+      this.validation.reject(errors);
       return;
     }
 
+    this.validation.clear();
     this.saving.set(true);
+
+    this.form = { ...this.form, nombre: normalizeSemanticText(this.form.nombre) };
 
     this.svc.crearCategoria(this.form).subscribe({
       next: () => {
         this.load();
-        this.closeModal();
         this.saving.set(false);
+        this.showModal.set(false);
+        this.notifications.success('Categoría registrada satisfactoriamente.');
       },
       error: (e) => {
-        this.formError.set(e.error?.error ?? 'Error al guardar');
+        this.validation.fromHttp(e);
         this.saving.set(false);
       },
     });
@@ -89,10 +109,10 @@ export class CategoriasComponent implements OnInit {
     if (!confirm(`¿Eliminar la categoría "${c.nombre}"?`)) return;
 
     this.svc.eliminarCategoria(c.id!).subscribe({
-      next: () => this.load(),
+      next: () => { this.load(); this.notifications.success('Categoría eliminada satisfactoriamente.'); },
       error: (e) => {
         const msg = e.error?.error || e.error?.detail || 'Error al eliminar';
-        alert(msg);
+        this.notifications.error(msg);
       },
     });
   }

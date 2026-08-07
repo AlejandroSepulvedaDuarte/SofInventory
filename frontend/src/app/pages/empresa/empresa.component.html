@@ -1,0 +1,91 @@
+<app-layout>
+  <div class="page company-page">
+    <div class="page-header">
+      <div>
+        <h1><i class="fas fa-building"></i> Configuración de la empresa</h1>
+        <p>Identidad y datos del único negocio que utiliza SofInventory.</p>
+      </div>
+      <button *ngIf="company.puedeEditar() && !loading()" class="btn-primary" (click)="openForm()">
+        <i class="fas" [class.fa-plus]="!company.configurada()" [class.fa-pen]="company.configurada()"></i>
+        {{ company.configurada() ? 'Editar configuración' : 'Configurar empresa' }}
+      </button>
+    </div>
+
+    <div *ngIf="loading()" class="company-state"><i class="fas fa-spinner fa-spin"></i> Cargando configuración…</div>
+
+    <div *ngIf="!loading() && !company.configurada()" class="company-empty">
+      <div class="company-placeholder"><i class="fas fa-building-circle-exclamation"></i></div>
+      <h2>La empresa aún no está configurada</h2>
+      <p>Un administrador debe registrar los datos que aparecerán en comprobantes y en la identidad del sistema.</p>
+    </div>
+
+    <section *ngIf="!loading() && company.empresa() as business" class="company-card">
+      <div class="company-identity">
+        <img *ngIf="business.logo_url; else initials" [src]="business.logo_url" [alt]="'Logo de ' + business.nombre_comercial" />
+        <ng-template #initials><div class="company-initials">{{ companyInitials() }}</div></ng-template>
+        <div>
+          <h2>{{ business.nombre_comercial }}</h2>
+          <p *ngIf="business.razon_social">{{ business.razon_social }}</p>
+          <span>NIT {{ business.nit }}<ng-container *ngIf="business.digito_verificacion">-{{ business.digito_verificacion }}</ng-container></span>
+        </div>
+      </div>
+      <div class="company-data-grid">
+        <div><small>Ubicación</small><strong>{{ business.ciudad }}, {{ business.departamento }}</strong><span>{{ business.pais }}</span></div>
+        <div><small>Dirección</small><strong>{{ business.direccion }}</strong></div>
+        <div><small>Teléfono</small><strong>{{ business.telefono }}</strong></div>
+        <div *ngIf="business.email"><small>Correo</small><strong>{{ business.email }}</strong></div>
+        <div *ngIf="business.sitio_web"><small>Sitio web</small><strong>{{ business.sitio_web }}</strong></div>
+        <div><small>Moneda</small><strong>{{ business.moneda }}</strong></div>
+      </div>
+      <div class="receipt-message"><i class="fas fa-receipt"></i> {{ business.mensaje_comprobante || 'Sin mensaje configurado' }}</div>
+      <p class="audit-note">Última actualización: {{ business.fecha_actualizacion | date:'dd/MM/yyyy HH:mm' }} · {{ business.actualizado_por_nombre || 'No disponible' }}</p>
+    </section>
+
+    <div class="modal-overlay" *ngIf="showForm()" (click)="closeForm()">
+      <div class="modal modal-xl company-form" role="dialog" aria-modal="true" aria-labelledby="company-form-title" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2 id="company-form-title">{{ company.configurada() ? 'Editar configuración de la empresa' : 'Configurar empresa' }}</h2>
+          <button type="button" class="close-btn" aria-label="Cerrar" (click)="closeForm()"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
+        <div class="modal-body">
+          <p class="required-hint">Los campos marcados con <span class="required-marker">*</span> son obligatorios.</p>
+          <div class="company-form-grid">
+            <div class="logo-editor">
+              <div class="logo-preview">
+                <img *ngIf="logoPreview; else logoFallback" [src]="logoPreview" alt="Vista previa del logo empresarial" />
+                <ng-template #logoFallback><i class="fas fa-building"></i></ng-template>
+              </div>
+              <div class="logo-actions">
+                <label class="btn-secondary file-button" for="company-logo"><i class="fas fa-image"></i> Seleccionar logo</label>
+                <input id="company-logo" type="file" accept="image/png,image/jpeg,image/webp" (change)="onLogoSelected($event)" />
+                <button *ngIf="logoPreview" type="button" class="btn-text-danger" (click)="removeCurrentLogo()">Quitar logo</button>
+                <small>PNG, JPG, JPEG o WebP. Máximo 2 MB.</small>
+                <app-field-error [message]="validation.error('logo')" />
+              </div>
+            </div>
+
+            <div class="form-grid company-fields">
+              <div class="field"><label for="company-name">Nombre comercial <span class="required-marker">*</span></label><input id="company-name" maxlength="150" [(ngModel)]="form.nombre_comercial" (ngModelChange)="validation.clearField('nombre_comercial')" [appFieldValidation]="validation.error('nombre_comercial')" validationMessageId="company-name-error" /><app-field-error id="company-name-error" [message]="validation.error('nombre_comercial')" /></div>
+              <div class="field"><label for="company-legal-name">Razón social</label><input id="company-legal-name" maxlength="180" [(ngModel)]="form.razon_social" /></div>
+              <div class="field"><label for="company-nit">NIT o identificación <span class="required-marker">*</span></label><input id="company-nit" maxlength="30" [(ngModel)]="form.nit" (ngModelChange)="validation.clearField('nit')" [appFieldValidation]="validation.error('nit')" validationMessageId="company-nit-error" /><app-field-error id="company-nit-error" [message]="validation.error('nit')" /></div>
+              <div class="field"><label for="company-dv">Dígito de verificación</label><input id="company-dv" maxlength="2" [(ngModel)]="form.digito_verificacion" /></div>
+              <div class="field full"><label for="company-address">Dirección <span class="required-marker">*</span></label><input id="company-address" maxlength="220" [(ngModel)]="form.direccion" (ngModelChange)="validation.clearField('direccion')" placeholder="Calle 10 # 25-30" [appFieldValidation]="validation.error('direccion')" validationMessageId="company-address-error" /><app-field-error id="company-address-error" [message]="validation.error('direccion')" /></div>
+              <app-location-fields class="location-fields-group" idPrefix="company-location" [validation]="validation" [location]="location" (locationChange)="updateLocation($event)" />
+              <div class="field"><label for="company-phone">Teléfono <span class="required-marker">*</span></label><input id="company-phone" maxlength="30" [(ngModel)]="form.telefono" (ngModelChange)="validation.clearField('telefono')" [appFieldValidation]="validation.error('telefono')" validationMessageId="company-phone-error" /><app-field-error id="company-phone-error" [message]="validation.error('telefono')" /></div>
+              <div class="field"><label for="company-email">Correo</label><input id="company-email" type="email" [(ngModel)]="form.email" /></div>
+              <div class="field"><label for="company-web">Sitio web</label><input id="company-web" type="url" [(ngModel)]="form.sitio_web" placeholder="https://" /></div>
+              <div class="field"><label for="company-currency">Moneda</label><select id="company-currency" [(ngModel)]="form.moneda" disabled><option value="COP">COP - Peso colombiano</option></select></div>
+              <div class="field"><label for="company-prefix">Prefijo de ventas</label><input id="company-prefix" maxlength="10" [(ngModel)]="form.prefijo_ventas" placeholder="Opcional" /></div>
+              <div class="field full"><label for="company-message">Mensaje final del comprobante</label><textarea id="company-message" rows="2" maxlength="250" [(ngModel)]="form.mensaje_comprobante"></textarea></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" (click)="closeForm()">Cancelar</button>
+          <button type="button" class="btn-primary" [disabled]="saving()" (click)="save()"><i class="fas" [class.fa-spinner]="saving()" [class.fa-spin]="saving()" [class.fa-floppy-disk]="!saving()"></i> {{ saving() ? 'Guardando…' : 'Guardar configuración' }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-layout>

@@ -1,7 +1,9 @@
 from django.db.models import Sum
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from productos.models import Producto
+from usuarios.validators import validate_commercial_name, validate_person_or_place
 
 from .models import Almacen, MovimientoInventario
 
@@ -20,6 +22,41 @@ class AlmacenSerializer(serializers.ModelSerializer):
             'fecha_creacion', 'fecha_actualizacion',
         ]
         read_only_fields = ['id', 'fecha_creacion', 'fecha_actualizacion']
+        extra_kwargs = {
+            'nombre': {
+                'validators': [
+                    UniqueValidator(
+                        queryset=Almacen.objects.all(),
+                        message='Ya existe un almacén con este nombre.',
+                    )
+                ],
+                'error_messages': {
+                    'required': 'El nombre es obligatorio.',
+                    'blank': 'El nombre no puede estar vacío.',
+                    'unique': 'Ya existe un almacén con este nombre.',
+                    'max_length': 'El nombre no puede superar 100 caracteres.',
+                }
+            },
+            'codigo': {
+                'validators': [
+                    UniqueValidator(
+                        queryset=Almacen.objects.all(),
+                        message='Ya existe un almacén con este código.',
+                    )
+                ],
+                'error_messages': {
+                    'required': 'El código es obligatorio.',
+                    'blank': 'El código no puede estar vacío.',
+                    'unique': 'Ya existe un almacén con este código.',
+                    'max_length': 'El código no puede superar 10 caracteres.',
+                }
+            },
+            'estado': {
+                'error_messages': {
+                    'invalid_choice': 'Selecciona un estado válido.',
+                }
+            },
+        }
 
     def get_total_productos(self, obj):
         return obj.stocks.filter(cantidad__gt=0).count()
@@ -37,12 +74,41 @@ class AlmacenSerializer(serializers.ModelSerializer):
         value = value.upper().strip()
         if len(value) < 2 or len(value) > 10:
             raise serializers.ValidationError(
-                'El codigo debe tener entre 2 y 10 caracteres.'
+                'El código debe tener entre 2 y 10 caracteres.'
+            )
+        queryset = Almacen.objects.filter(codigo__iexact=value)
+        if self.instance:
+            queryset = queryset.exclude(pk=self.instance.pk)
+        if queryset.exists():
+            raise serializers.ValidationError(
+                'Ya existe un almacén con este código.'
             )
         return value
 
     def validate_nombre(self, value):
-        return value.strip()
+        value = validate_commercial_name(
+            value,
+            empty_message='El nombre del almacén es obligatorio.',
+            letter_message='El nombre del almacén debe contener al menos una letra.',
+        )
+        queryset = Almacen.objects.filter(nombre__iexact=value)
+        if self.instance:
+            queryset = queryset.exclude(pk=self.instance.pk)
+        if queryset.exists():
+            raise serializers.ValidationError(
+                'Ya existe un almacén con este nombre.'
+            )
+        return value
+
+    def validate_responsable(self, value):
+        if value in (None, ''):
+            return value
+        return validate_person_or_place(
+            value,
+            empty_message='El responsable no puede estar formado solamente por espacios.',
+            number_message='El nombre del responsable no puede contener números.',
+            invalid_message='El nombre del responsable solo puede contener letras, espacios, apóstrofos y guiones.',
+        )
 
     def validate_capacidad(self, value):
         if value is not None and value < 0:
@@ -50,6 +116,14 @@ class AlmacenSerializer(serializers.ModelSerializer):
                 'La capacidad no puede ser negativa.'
             )
         return value
+
+    def validate(self, attrs):
+        raw_responsible = self.initial_data.get('responsable')
+        if isinstance(raw_responsible, str) and raw_responsible and not raw_responsible.strip():
+            raise serializers.ValidationError({
+                'responsable': 'El responsable no puede estar formado solamente por espacios.'
+            })
+        return attrs
 
 
 class StockInventarioSerializer(serializers.ModelSerializer):
@@ -101,7 +175,7 @@ class StockInventarioSerializer(serializers.ModelSerializer):
     def get_almacen_nombre(self, obj):
         stocks = self._stocks_visibles(obj)
         if not stocks:
-            return 'Sin almacen'
+            return 'Sin almacén'
         return ', '.join(sorted({stock.almacen.nombre for stock in stocks}))
 
     def get_estado_stock(self, obj):
@@ -119,12 +193,33 @@ class StockInventarioSerializer(serializers.ModelSerializer):
 
 
 class MovimientoRapidoSerializer(serializers.Serializer):
-    producto_id = serializers.IntegerField(min_value=1)
-    almacen_id = serializers.IntegerField(min_value=1)
+    producto_id = serializers.IntegerField(
+        min_value=1,
+        error_messages={
+            'required': 'Selecciona un producto.',
+            'invalid': 'Selecciona un producto válido.',
+            'min_value': 'Selecciona un producto válido.',
+        },
+    )
+    almacen_id = serializers.IntegerField(
+        min_value=1,
+        error_messages={
+            'required': 'Selecciona un almacén.',
+            'invalid': 'Selecciona un almacén válido.',
+            'min_value': 'Selecciona un almacén válido.',
+        },
+    )
     almacen_destino_id = serializers.IntegerField(
         min_value=1, required=False, allow_null=True
     )
-    cantidad = serializers.IntegerField(min_value=1)
+    cantidad = serializers.IntegerField(
+        min_value=1,
+        error_messages={
+            'required': 'La cantidad es obligatoria.',
+            'invalid': 'La cantidad debe ser un número entero válido.',
+            'min_value': 'La cantidad debe ser mayor que cero.',
+        },
+    )
     tipo = serializers.ChoiceField(
         choices=['entrada', 'salida', 'transferencia']
     )
@@ -144,11 +239,11 @@ class MovimientoRapidoSerializer(serializers.Serializer):
             destino = attrs.get('almacen_destino_id')
             if not destino:
                 raise serializers.ValidationError(
-                    'Debe seleccionar un almacen destino.'
+                    'Selecciona un almacén destino.'
                 )
             if destino == attrs['almacen_id']:
                 raise serializers.ValidationError(
-                    'El almacen origen y destino no pueden ser el mismo.'
+                    'El almacén de origen y el de destino deben ser diferentes.'
                 )
         return attrs
 

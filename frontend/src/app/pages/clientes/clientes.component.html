@@ -40,7 +40,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let c of filteredClientes()">
+          <tr *ngFor="let c of filteredClientes()" [class.recently-updated]="highlightedId() === c.id">
             <!-- getNombre(): retorna nombres+apellidos o razón social según tipo -->
             <td>
               <div class="entity-cell">
@@ -108,29 +108,32 @@
 
     <!-- Modal de creación/edición de cliente -->
     <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
-      <div class="modal modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal modal-lg client-form-modal" role="dialog" aria-modal="true" aria-labelledby="client-form-title" (click)="$event.stopPropagation()">
 
         <!-- Cabecera dinámica según modo (edición o creación) -->
         <div class="modal-header">
-          <h2>
+          <h2 id="client-form-title">
             <i class="fas" [class.fa-pen]="editing()" [class.fa-user-plus]="!editing()"></i>
             {{ editing() ? 'Editar Cliente' : 'Nuevo Cliente' }}
           </h2>
-          <button class="close-btn" (click)="closeModal()">
+          <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()">
             <i class="fas fa-xmark"></i>
           </button>
         </div>
+        <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
 
         <div class="modal-body">
+          <p class="required-hint">Los campos marcados con <span class="required-marker">*</span> son obligatorios.</p>
           <div class="form-grid">
 
             <!-- Campos comunes -->
             <div class="field">
-              <label><i class="fas fa-user-tag"></i> Tipo de Cliente *</label>
-              <select [(ngModel)]="form.tipo_cliente">
+              <label for="client-type"><i class="fas fa-user-tag"></i> Tipo de Cliente <span class="required-marker">*</span></label>
+              <select id="client-type" required aria-required="true" [(ngModel)]="form.tipo_cliente" (ngModelChange)="validation.clearField('tipo_cliente')" [appFieldValidation]="validation.error('tipo_cliente')" validationMessageId="client-type-error">
                 <option value="natural">Persona Natural</option>
                 <option value="juridica">Persona Jurídica</option>
               </select>
+              <app-field-error id="client-type-error" [message]="validation.error('tipo_cliente')" />
             </div>
 
             <div class="field">
@@ -144,84 +147,76 @@
             </div>
 
             <div class="field">
-              <label><i class="fas fa-file-lines"></i> Tipo Documento *</label>
-              <select [(ngModel)]="form.tipo_documento">
+              <label for="client-document-type"><i class="fas fa-file-lines"></i> Tipo Documento <span class="required-marker">*</span></label>
+              <select id="client-document-type" required aria-required="true" [(ngModel)]="form.tipo_documento" (ngModelChange)="validation.clearField('tipo_documento'); validation.clearField('numero_documento')" [appFieldValidation]="validation.error('tipo_documento')" validationMessageId="client-document-type-error">
                 <option [ngValue]="null">Seleccionar...</option>
                 <option *ngFor="let t of tiposDoc()" [ngValue]="t.id">
                   {{ t.codigo }} - {{ t.nombre }}
                 </option>
               </select>
+              <app-field-error id="client-document-type-error" [message]="validation.error('tipo_documento')" />
             </div>
 
             <div class="field">
-              <label><i class="fas fa-id-card"></i> Número Documento *</label>
-              <input type="text" [(ngModel)]="form.numero_documento" placeholder="Número de documento" maxlength="10" inputmode="numeric" pattern="[0-9]*" (input)="onNumeroInput($event)" />
-              <div class="help-text" *ngIf="form.numero_documento && !isNumeroDocumentoValido(form.numero_documento)">
-                No se permiten letras. Debe tener entre 6 y 10 dígitos.
-              </div>
+              <label for="client-document"><i class="fas fa-id-card"></i> Número Documento <span class="required-marker">*</span></label>
+              <input id="client-document" type="text" required aria-required="true" [(ngModel)]="form.numero_documento" placeholder="Según el tipo seleccionado" maxlength="20" autocapitalize="characters" (ngModelChange)="validation.clearField('numero_documento')" [appFieldValidation]="numeroDocumentoMessage()" validationMessageId="client-document-error" />
+              <app-field-error id="client-document-error" [message]="numeroDocumentoMessage()" />
             </div>
 
             <!-- Campos para Persona Natural -->
             <ng-container *ngIf="form.tipo_cliente === 'natural'">
               <div class="field">
-                <label><i class="fas fa-user"></i> Nombres *</label>
-                <input type="text" [(ngModel)]="form.nombres" placeholder="Nombres" />
+                <label for="client-names"><i class="fas fa-user"></i> Nombres <span class="required-marker">*</span></label>
+                <input id="client-names" type="text" required aria-required="true" maxlength="100" [(ngModel)]="form.nombres" (ngModelChange)="validation.clearField('nombres')" placeholder="Nombres" [appFieldValidation]="validation.error('nombres')" validationMessageId="client-names-error" />
+                <app-field-error id="client-names-error" [message]="validation.error('nombres')" />
               </div>
               <div class="field">
-                <label><i class="fas fa-user"></i> Apellidos *</label>
-                <input type="text" [(ngModel)]="form.apellidos" placeholder="Apellidos" />
+                <label for="client-last-names"><i class="fas fa-user"></i> Apellidos <span class="required-marker">*</span></label>
+                <input id="client-last-names" type="text" required aria-required="true" maxlength="100" [(ngModel)]="form.apellidos" (ngModelChange)="validation.clearField('apellidos')" placeholder="Apellidos" [appFieldValidation]="validation.error('apellidos')" validationMessageId="client-last-names-error" />
+                <app-field-error id="client-last-names-error" [message]="validation.error('apellidos')" />
               </div>
             </ng-container>
 
             <!-- Campos para Persona Jurídica -->
             <ng-container *ngIf="form.tipo_cliente === 'juridica'">
               <div class="field">
-                <label><i class="fas fa-building"></i> Razón Social *</label>
-                <input type="text" [(ngModel)]="form.razon_social" placeholder="Razón social" />
+                <label for="client-business-name"><i class="fas fa-building"></i> Razón Social <span class="required-marker">*</span></label>
+                <input id="client-business-name" type="text" required aria-required="true" maxlength="150" [(ngModel)]="form.razon_social" (ngModelChange)="validation.clearField('razon_social')" placeholder="Razón social" [appFieldValidation]="validation.error('razon_social')" validationMessageId="client-business-name-error" />
+                <app-field-error id="client-business-name-error" [message]="validation.error('razon_social')" />
               </div>
               <div class="field">
                 <label><i class="fas fa-store"></i> Nombre Comercial</label>
-                <input type="text" [(ngModel)]="form.nombre_comercial" placeholder="Nombre comercial" />
+                <input type="text" maxlength="150" [(ngModel)]="form.nombre_comercial" (ngModelChange)="validation.clearField('nombre_comercial')" placeholder="Nombre comercial" [appFieldValidation]="validation.error('nombre_comercial')" validationMessageId="client-commercial-name-error" />
+                <app-field-error id="client-commercial-name-error" [message]="validation.error('nombre_comercial')" />
               </div>
             </ng-container>
 
             <!-- Contacto -->
             <div class="field">
               <label><i class="fas fa-envelope"></i> Email</label>
-              <input type="email" [(ngModel)]="form.email" placeholder="correo@ejemplo.com" />
+              <input type="email" [(ngModel)]="form.email" (ngModelChange)="validation.clearField('email')" placeholder="correo@ejemplo.com" [appFieldValidation]="validation.error('email')" validationMessageId="client-email-error" />
+              <app-field-error id="client-email-error" [message]="validation.error('email')" />
             </div>
 
             <div class="field">
               <label><i class="fas fa-phone"></i> Teléfono</label>
-              <input type="text" [(ngModel)]="form.telefono" placeholder="Teléfono principal" maxlength="15" inputmode="numeric" pattern="[0-9]*" (input)="onTelefonoInput($event, 'telefono')" />
-              <div class="help-text" *ngIf="form.telefono && !isTelefonoValido(form.telefono)">
-                El teléfono debe contener solo números y como máximo 15 dígitos.
-              </div>
+              <input type="text" [(ngModel)]="form.telefono" placeholder="Teléfono principal" maxlength="15" inputmode="numeric" pattern="[0-9]*" (input)="onTelefonoInput($event, 'telefono'); validation.clearField('telefono')" [appFieldValidation]="telefonoMessage('telefono')" validationMessageId="client-phone-error" />
+              <app-field-error id="client-phone-error" [message]="telefonoMessage('telefono')" />
             </div>
 
             <div class="field">
               <label><i class="fas fa-phone-volume"></i> Teléfono 2</label>
-              <input type="text" [(ngModel)]="form.telefono2" placeholder="Teléfono alterno" maxlength="15" inputmode="numeric" pattern="[0-9]*" (input)="onTelefonoInput($event, 'telefono2')" />
-              <div class="help-text" *ngIf="form.telefono2 && !isTelefonoValido(form.telefono2)">
-                El teléfono alterno debe contener solo números y como máximo 15 dígitos.
-              </div>
+              <input type="text" [(ngModel)]="form.telefono2" placeholder="Teléfono alterno" maxlength="15" inputmode="numeric" pattern="[0-9]*" (input)="onTelefonoInput($event, 'telefono2'); validation.clearField('telefono2')" [appFieldValidation]="telefonoMessage('telefono2')" validationMessageId="client-phone2-error" />
+              <app-field-error id="client-phone2-error" [message]="telefonoMessage('telefono2')" />
             </div>
 
-            <!-- Ubicación -->
-            <div class="field">
-              <label><i class="fas fa-map-location-dot"></i> Ciudad</label>
-              <input type="text" [(ngModel)]="form.ciudad" placeholder="Ciudad" />
-            </div>
-
-            <div class="field">
-              <label><i class="fas fa-map"></i> Departamento</label>
-              <input type="text" [(ngModel)]="form.departamento" placeholder="Departamento" />
-            </div>
-
-            <div class="field">
-              <label><i class="fas fa-earth-americas"></i> País</label>
-              <input type="text" [(ngModel)]="form.pais" placeholder="País" />
-            </div>
+            <!-- Ubicación compartida: Colombia dependiente u otro país manual -->
+            <app-location-fields
+              idPrefix="client-location"
+              [(location)]="location"
+              [validation]="validation"
+              [allowUnchangedLegacy]="!!editing()"
+            />
 
             <div class="field">
               <label><i class="fas fa-mail-bulk"></i> Código Postal</label>
@@ -249,9 +244,6 @@
 
           </div>
 
-          <div class="error-msg" *ngIf="formError()">
-            <i class="fas fa-circle-xmark"></i> {{ formError() }}
-          </div>
         </div>
 
         <div class="modal-footer">

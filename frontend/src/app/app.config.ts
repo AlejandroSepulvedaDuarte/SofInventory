@@ -5,7 +5,7 @@
  * Define los providers globales: router, HTTP client con interceptores y animaciones.
  */
 
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -17,5 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),                                      // Configuración de rutas
     provideHttpClient(withInterceptors([authInterceptor])),    // HTTP con interceptor de autenticación
     provideAnimations(),                                        // Soporte para animaciones Angular
+    { provide: LOCALE_ID, useValue: 'es-CO' },
   ],
 };

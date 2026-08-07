@@ -35,7 +35,13 @@ class Compra(models.Model):
         blank=True,
         null=True,
     )
-    registrado_por   = models.ForeignKey(Usuario, on_delete=models.PROTECT, related_name='compras_registradas')
+    registrado_por   = models.ForeignKey(
+        Usuario,
+        on_delete=models.PROTECT,
+        related_name='compras_registradas',
+        blank=True,
+        null=True,
+    )
     fecha_registro   = models.DateTimeField(auto_now_add=True)
     fecha_anulacion  = models.DateTimeField(blank=True, null=True)
     anulado_por      = models.ForeignKey(
@@ -46,6 +52,8 @@ class Compra(models.Model):
         null=True,
     )
     motivo_anulacion = models.TextField(blank=True, null=True)
+    observaciones     = models.TextField(blank=True, null=True)
+    empresa_snapshot = models.JSONField(default=dict, blank=True)
 
     def __str__(self):
         return f"Compra {self.numero_factura} - {self.proveedor.razon_social}"
@@ -74,6 +82,8 @@ class DetalleCompra(models.Model):
 
     compra           = models.ForeignKey(Compra, on_delete=models.CASCADE, related_name='detalles')
     producto         = models.ForeignKey(Producto, on_delete=models.PROTECT, related_name='detalles_compra')
+    nombre_producto  = models.CharField(max_length=150, blank=True, default='')
+    sku_producto     = models.CharField(max_length=200, blank=True, default='')
     cantidad         = models.IntegerField()
     costo_unitario   = models.DecimalField(max_digits=12, decimal_places=2)
     iva_porcentaje   = models.DecimalField(max_digits=5, decimal_places=2, default=0)

@@ -1,238 +1,93 @@
-<!--
-  Pantalla de ventas.
-  Gestiona el registro de ventas con cabecera (cliente, almacén, método de pago, descuento)
-  y detalle de productos. Calcula subtotales, IVA y total en tiempo real.
-  Permite ver detalle histórico y anular ventas.
--->
 <app-layout>
-  <div class="page">
-    <!-- Encabezado: título, contador y botón nueva venta -->
+  <div class="page sales-page">
     <div class="page-header">
-      <div>
-        <h1><i class="fas fa-cash-register"></i> Ventas</h1>
-        <p><i class="fas fa-circle-info"></i> {{ ventas().length }} ventas registradas</p>
-      </div>
-      <button class="btn-primary" (click)="openModal()">
-        <i class="fas fa-plus"></i> Nueva Venta
-      </button>
+      <div><h1><i class="fas fa-cash-register"></i> Ventas</h1><p>{{ ventas().length }} ventas registradas</p></div>
+      <button class="btn-primary" (click)="openModal()"><i class="fas fa-plus"></i> Nueva venta</button>
     </div>
 
-    <!-- Tabla resumen de ventas registradas -->
     <div class="table-container">
       <table class="data-table">
-        <thead>
-          <tr>
-            <th><i class="fas fa-receipt"></i> Venta</th>
-            <th><i class="fas fa-user"></i> Cliente</th>
-            <th><i class="fas fa-warehouse"></i> Método</th>
-            <th><i class="fas fa-sack-dollar"></i> Total</th>
-            <th><i class="fas fa-circle-half-stroke"></i> Estado</th>
-            <th><i class="fas fa-calendar"></i> Fecha</th>
-            <th><i class="fas fa-gear"></i> Acciones</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Venta</th><th>Cliente</th><th>Registrado por</th><th>Método</th><th>Total</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead>
         <tbody>
-          <tr *ngFor="let v of ventas()">
-            <td><code>{{ v.numero_venta }}</code></td>
-            <!-- getClienteNombre() resuelve nombre desde ID u objeto -->
-            <td>{{ v.cliente_nombre || getClienteNombre(v.cliente) }}</td>
-            <td>{{ formatMetodoPago(v.metodo_pago) }}</td>
-            <td>{{ v.total | currency:'COP':'symbol':'1.0-0' }}</td>
-            <!-- Badge según estado: completada (verde) o anulada (rojo) -->
-            <td><span class="badge" [class]="v.estado === 'completada' ? 'badge-activo' : 'badge-inactivo'">{{ v.estado }}</span></td>
-            <td>{{ v.fecha_creacion | date:'dd/MM/yy HH:mm' }}</td>
-            <td>
-              <div class="action-btns">
-                <button class="btn-icon" title="Ver detalle" (click)="verDetalle(v)">
-                  <i class="fas fa-eye"></i>
-                </button>
-                <!-- Botón anular oculto si ya está anulada -->
-                <button class="btn-icon btn-danger" title="Anular" *ngIf="v.estado !== 'anulada'" (click)="anular(v)">
-                  <i class="fas fa-ban"></i>
-                </button>
-              </div>
-            </td>
+          <tr *ngFor="let sale of ventas()">
+            <td><code>{{ sale.numero_venta }}</code></td>
+            <td>{{ sale.cliente_nombre || getClienteNombre(sale.cliente) }}</td>
+            <td>{{ sale.vendedor_nombre || 'No disponible' }}</td>
+            <td>{{ formatMetodoPago(sale.metodo_pago) }}</td>
+            <td>{{ sale.total | currency:'COP':'symbol':'1.0-0' }}</td>
+            <td><span class="badge" [class]="sale.estado === 'completada' ? 'badge-activo' : 'badge-inactivo'">{{ sale.estado }}</span></td>
+            <td>{{ sale.fecha_creacion | date:'dd/MM/yy HH:mm' }}</td>
+            <td><div class="action-btns"><button class="btn-icon" title="Ver detalle" (click)="viewDetail(sale)"><i class="fas fa-eye"></i></button><button class="btn-icon" title="Imprimir comprobante" (click)="viewDetail(sale)"><i class="fas fa-print"></i></button><button class="btn-icon btn-danger" title="Anular" *ngIf="sale.estado !== 'anulada'" (click)="cancelSale(sale)"><i class="fas fa-ban"></i></button></div></td>
           </tr>
-          <!-- Fila vacía cuando no hay ventas -->
-          <tr *ngIf="ventas().length === 0">
-            <td colspan="7" class="empty-row"><i class="fas fa-inbox"></i> No hay ventas registradas</td>
-          </tr>
+          <tr *ngIf="ventas().length === 0"><td colspan="8" class="empty-row"><i class="fas fa-inbox"></i> No hay ventas registradas</td></tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Modal de registro de venta -->
-    <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
-      <div class="modal modal-xl" (click)="$event.stopPropagation()">
-        
-        <div class="modal-header">
-          <h2><i class="fas fa-cash-register"></i> Nueva Venta</h2>
-          <button class="close-btn" (click)="closeModal()"><i class="fas fa-xmark"></i></button>
+    <div class="modal-overlay pos-overlay" *ngIf="showModal()" (click)="requestClose()">
+      <section #saleDialog class="modal sale-form-modal" role="dialog" aria-modal="true" aria-labelledby="sale-form-title" (click)="$event.stopPropagation()">
+        <header class="modal-header pos-header">
+          <div><h2 id="sale-form-title"><i class="fas fa-cash-register"></i> Nueva venta</h2><span>Punto de venta</span></div>
+          <button type="button" class="close-btn" aria-label="Cerrar formulario" (click)="requestClose()"><i class="fas fa-xmark"></i></button>
+        </header>
+        <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
+
+        <div class="pos-context">
+          <div class="field"><label for="sale-client"><i class="fas fa-user"></i> Cliente</label><select id="sale-client" [(ngModel)]="form.cliente"><option [ngValue]="null">Cliente general</option><option *ngFor="let client of clientes()" [ngValue]="client.id">{{ getClienteNombreObj(client) }}</option></select></div>
+          <div class="field"><label for="sale-warehouse"><i class="fas fa-warehouse"></i> Almacén <span class="required-marker">*</span></label><select id="sale-warehouse" required [(ngModel)]="almacenId" (ngModelChange)="onAlmacenChange($event)" [appFieldValidation]="validation.error('almacen')" validationMessageId="sale-warehouse-error"><option [ngValue]="null">Seleccionar…</option><option *ngFor="let warehouse of almacenesActivos()" [ngValue]="warehouse.id">{{ warehouse.codigo }} · {{ warehouse.nombre }}</option></select><app-field-error id="sale-warehouse-error" [message]="validation.error('almacen')" /></div>
         </div>
 
-        <div class="modal-body">
-          <!-- Cabecera: cliente, almacén, método de pago, descuento -->
-          <div class="form-grid">
-            <div class="field">
-              <label><i class="fas fa-user"></i> Cliente</label>
-              <select [(ngModel)]="form.cliente">
-                <option [ngValue]="null">Cliente General</option>
-                <option *ngFor="let c of clientes()" [ngValue]="c.id">{{ getClienteNombreObj(c) }}</option>
-              </select>
+        <div class="pos-body">
+          <section class="pos-products">
+            <div class="product-toolbar">
+              <div class="product-search"><i class="fas fa-magnifying-glass"></i><input type="search" [value]="productSearch()" (input)="productSearch.set($any($event.target).value)" placeholder="Buscar por nombre, código, referencia o marca" aria-label="Buscar producto" /></div>
+              <select #productPicker [(ngModel)]="productToAdd" aria-label="Producto para agregar"><option [ngValue]="null">Seleccione un producto</option><option *ngFor="let product of filteredProducts()" [ngValue]="product.id" [disabled]="getStockProducto(product.id!) <= 0">{{ getProductoLabel(product) }} · Stock {{ getStockProducto(product.id!) }}</option></select>
+              <button type="button" class="btn-primary add-product" (click)="addSelectedProduct()"><i class="fas fa-plus"></i> Agregar</button>
             </div>
-
-            <div class="field">
-              <label><i class="fas fa-warehouse"></i> Almacén *</label>
-              <select [(ngModel)]="almacenId" (ngModelChange)="onAlmacenChange($event)">
-                <option [ngValue]="null">Seleccionar...</option>
-                <option *ngFor="let a of almacenesActivos()" [ngValue]="a.id">
-                  {{ a.codigo ? a.codigo + ' - ' : '' }}{{ a.nombre }}
-                </option>
-              </select>
+            <app-field-error id="sale-details-error" [message]="validation.error('detalles')" />
+            <div class="pos-lines" [class.empty]="detalles().length === 0">
+              <div *ngIf="detalles().length === 0" class="empty-cart"><i class="fas fa-cart-plus"></i><strong>Agrega el primer producto</strong><span>Los artículos y sus totales aparecerán aquí.</span></div>
+              <table *ngIf="detalles().length" class="data-table sale-lines-table">
+                <thead><tr><th>Producto</th><th>Precio</th><th>Cantidad</th><th>Stock</th><th>IVA</th><th>Subtotal</th><th></th></tr></thead>
+                <tbody><tr *ngFor="let detail of detalles(); let index = index"><td><strong>{{ getProduct(detail.producto)?.nombre }}</strong><small>{{ getProduct(detail.producto)?.sku }} · {{ getProduct(detail.producto)?.referencia }}</small></td><td>{{ detail.precio_unitario | currency:'COP':'symbol':'1.0-0' }}</td><td><input class="quantity-input" type="number" min="1" [(ngModel)]="detail.cantidad" (change)="changeQuantity(detail)" (input)="recalc()" /></td><td><span [class.stock-warning]="detail.cantidad > getStockProducto(detail.producto)">{{ getStockProducto(detail.producto) }}</span></td><td>{{ getProduct(detail.producto)?.iva_porcentaje || 0 }}%<small>{{ lineIva(detail) | currency:'COP':'symbol':'1.0-0' }}</small></td><td><strong>{{ lineSubtotal(detail) | currency:'COP':'symbol':'1.0-0' }}</strong></td><td><button type="button" class="btn-icon btn-danger" title="Quitar producto" (click)="removeLine(index)"><i class="fas fa-trash"></i></button></td></tr></tbody>
+              </table>
             </div>
+          </section>
 
-            <div class="field">
-              <label><i class="fas fa-credit-card"></i> Método de Pago *</label>
-              <select [(ngModel)]="form.metodo_pago">
-                <option *ngFor="let m of metodosPago" [ngValue]="m.value">{{ m.label }}</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label><i class="fas fa-percent"></i> Descuento</label>
-              <input type="number" [(ngModel)]="form.descuento" min="0" (input)="recalc()" />
-            </div>
-
-            <!-- Campos específicos para pago en efectivo -->
-            <ng-container *ngIf="form.metodo_pago === 'efectivo'">
-              <div class="field">
-                <label><i class="fas fa-money-bill-wave"></i> Efectivo Recibido</label>
-                <input type="number" [(ngModel)]="form.efectivo_recibido" min="0" (input)="recalc()" />
-              </div>
-              <div class="field">
-                <label><i class="fas fa-arrow-right-arrow-left"></i> Cambio</label>
-                <input type="number" [value]="calcCambioVal()" readonly />
-              </div>
-            </ng-container>
-
-            <div class="field full">
-              <label><i class="fas fa-clipboard"></i> Observaciones</label>
-              <textarea [(ngModel)]="form.observaciones" rows="2" placeholder="Observaciones de la venta"></textarea>
-            </div>
-          </div>
-
-          <!-- Detalle de productos -->
-          <div class="detalle-section">
-            <div class="detalle-header">
-              <div>
-                <h3><i class="fas fa-box-open"></i> Productos</h3>
-                <p>Agrega los productos que formarán parte de la venta.</p>
-              </div>
-              <button type="button" class="btn-secondary btn-sm" (click)="addLinea()">
-                <i class="fas fa-plus"></i> Agregar
-              </button>
-            </div>
-
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Precio Unit.</th>
-                  <th>Cantidad</th>
-                  <th>Stock</th>
-                  <th>Subtotal</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let d of detalles(); let i = index">
-                  <td>
-                    <select [(ngModel)]="d.producto" (ngModelChange)="onProductoChange(d)" style="width:100%">
-                      <option [ngValue]="0">Seleccionar...</option>
-                      <option *ngFor="let p of productosActivos()" [ngValue]="p.id">{{ getProductoLabel(p) }}</option>
-                    </select>
-                  </td>
-                  <td><input type="number" [(ngModel)]="d.precio_unitario" min="0" style="width:120px" readonly /></td>
-                  <td><input type="number" [(ngModel)]="d.cantidad" min="1" style="width:80px" (input)="recalc()" /></td>
-                  <td>{{ getStockProducto(d.producto) }}</td>
-                  <td>{{ (d.precio_unitario * d.cantidad) | currency:'COP':'symbol':'1.0-0' }}</td>
-                  <td>
-                    <button class="btn-icon btn-danger" title="Quitar" (click)="removeLinea(i)">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <!-- Totales calculados en tiempo real -->
-            <div class="totales">
-              <div>Subtotal: <strong>{{ totales().subtotal | currency:'COP':'symbol':'1.0-0' }}</strong></div>
-              <div>Descuento: <strong>{{ (form.descuento || 0) | currency:'COP':'symbol':'1.0-0' }}</strong></div>
-              <div>IVA estimado: <strong>{{ totales().iva | currency:'COP':'symbol':'1.0-0' }}</strong></div>
-              <div class="total-final">Total: <strong>{{ totales().total | currency:'COP':'symbol':'1.0-0' }}</strong></div>
-            </div>
-          </div>
-
-          <div class="error-msg" *ngIf="formError()">
-            <i class="fas fa-circle-xmark"></i> {{ formError() }}
-          </div>
+          <aside class="pos-summary">
+            <div class="summary-title"><i class="fas fa-receipt"></i><span>Resumen y pago</span></div>
+            <dl class="amount-breakdown"><div><dt>Subtotal</dt><dd>{{ totales().subtotal | currency:'COP':'symbol':'1.0-0' }}</dd></div><div><dt>IVA</dt><dd>{{ totales().iva | currency:'COP':'symbol':'1.0-0' }}</dd></div></dl>
+            <div class="field"><label for="sale-discount">Descuento</label><input id="sale-discount" type="number" min="0" [(ngModel)]="form.descuento" (input)="recalc(); validation.clearField('descuento')" [appFieldValidation]="validation.error('descuento')" validationMessageId="sale-discount-error" /><app-field-error id="sale-discount-error" [message]="validation.error('descuento')" /></div>
+            <div class="grand-total"><span>Total</span><strong>{{ totales().total | currency:'COP':'symbol':'1.0-0' }}</strong></div>
+            <div class="field"><label for="sale-payment">Método de pago <span class="required-marker">*</span></label><select id="sale-payment" [(ngModel)]="form.metodo_pago" (ngModelChange)="onPaymentChange()" [appFieldValidation]="validation.error('metodo_pago')" validationMessageId="sale-payment-error"><option *ngFor="let method of metodosPago" [value]="method.value">{{ method.label }}</option></select><app-field-error id="sale-payment-error" [message]="validation.error('metodo_pago')" /></div>
+            <ng-container *ngIf="form.metodo_pago === 'efectivo'"><div class="field"><label for="sale-cash">Efectivo recibido</label><input id="sale-cash" type="number" min="0" [(ngModel)]="form.efectivo_recibido" (input)="validation.clearField('efectivo_recibido')" [appFieldValidation]="validation.error('efectivo_recibido')" validationMessageId="sale-cash-error" /><app-field-error id="sale-cash-error" [message]="validation.error('efectivo_recibido')" /></div><div class="change-row"><span>Cambio</span><output>{{ calcCambioVal() | currency:'COP':'symbol':'1.0-0' }}</output></div></ng-container>
+            <details class="observation-panel"><summary><i class="fas fa-note-sticky"></i> Agregar observación</summary><textarea rows="2" maxlength="2000" [(ngModel)]="form.observaciones" placeholder="Observación opcional"></textarea></details>
+          </aside>
         </div>
 
-        <div class="modal-footer">
-          <button class="btn-secondary" (click)="closeModal()">
-            <i class="fas fa-xmark"></i> Cancelar
-          </button>
-          <button class="btn-primary" (click)="save()" [disabled]="saving()">
-            <i class="fas" [class.fa-spinner]="saving()" [class.fa-spin]="saving()" [class.fa-floppy-disk]="!saving()"></i>
-            {{ saving() ? 'Registrando...' : 'Registrar Venta' }}
-          </button>
-        </div>
-      </div>
+        <footer class="modal-footer pos-footer"><div class="mobile-total"><span>Total</span><strong>{{ totales().total | currency:'COP':'symbol':'1.0-0' }}</strong></div><button type="button" class="btn-secondary" (click)="requestClose()">Cancelar</button><button type="button" class="btn-primary" (click)="save()" [disabled]="!canSave()"><i class="fas" [class.fa-spinner]="saving()" [class.fa-spin]="saving()" [class.fa-check]="!saving()"></i> {{ saving() ? 'Registrando…' : 'Registrar venta' }}</button></footer>
+      </section>
     </div>
 
-    <!-- Modal de detalle de venta (solo lectura) -->
-    <div class="modal-overlay" *ngIf="detalleVenta()" (click)="detalleVenta.set(null)">
-      <div class="modal modal-lg" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-          <h2><i class="fas fa-receipt"></i> Venta {{ detalleVenta()?.numero_venta }}</h2>
-          <button class="close-btn" (click)="detalleVenta.set(null)">
-            <i class="fas fa-xmark"></i>
-          </button>
-        </div>
-        
-        <div class="modal-body">
-          <!-- Resumen de cabecera -->
-          <div class="detalle-summary">
-            <span><strong>Cliente:</strong> {{ detalleVenta()?.cliente_nombre || getClienteNombre(detalleVenta()?.cliente) }}</span>
-            <span><strong>Método:</strong> {{ formatMetodoPago(detalleVenta()?.metodo_pago) }}</span>
-          </div>
-          
-          <!-- Tabla de productos vendidos -->
-          <table class="data-table">
-            <thead>
-              <tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Subtotal</th></tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let d of detalleVenta()!.detalles">
-                <!-- getDetalleProductoLabel() resuelve nombre desde SKU o ID -->
-                <td>{{ getDetalleProductoLabel(d) }}</td>
-                <td>{{ d.cantidad }}</td>
-                <td>{{ d.precio_unitario | currency:'COP':'symbol':'1.0-0' }}</td>
-                <td>{{ d.subtotal | currency:'COP':'symbol':'1.0-0' }}</td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <!-- Totales almacenados en backend -->
-          <div class="totales detail-totals">
-            <div>Subtotal: <strong>{{ detalleVenta()?.subtotal | currency:'COP':'symbol':'1.0-0' }}</strong></div>
-            <div>IVA: <strong>{{ detalleVenta()?.iva_monto | currency:'COP':'symbol':'1.0-0' }}</strong></div>
-            <div class="total-final">Total: <strong>{{ detalleVenta()?.total | currency:'COP':'symbol':'1.0-0' }}</strong></div>
-          </div>
-        </div>
-      </div>
+    <div class="modal-overlay" *ngIf="saleResult() as result" (click)="saleResult.set(null)">
+      <section class="modal sale-result-modal" role="dialog" aria-modal="true" (click)="$event.stopPropagation()"><div class="sale-success-icon"><i class="fas fa-check"></i></div><h2>Venta registrada</h2><p>La venta <strong>{{ result.number }}</strong> quedó guardada correctamente.</p><div class="result-total">{{ result.total | currency:'COP':'symbol':'1.0-0' }}</div><div class="result-actions"><button class="btn-primary" (click)="printResult()"><i class="fas fa-print"></i> Imprimir comprobante</button><button class="btn-secondary" (click)="viewResultDetail()"><i class="fas fa-eye"></i> Ver detalle</button><button class="btn-secondary" (click)="saleResult.set(null)">Volver a ventas</button></div></section>
     </div>
-    
+
+    <div class="modal-overlay sale-detail-overlay" *ngIf="detalleVenta() as sale" (click)="detalleVenta.set(null)">
+      <section class="modal modal-lg sale-detail-modal" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+        <div class="modal-header screen-only"><h2><i class="fas fa-receipt"></i> Venta {{ sale.numero_venta }}</h2><div class="detail-actions"><button class="btn-primary" (click)="printReceipt()"><i class="fas fa-print"></i> Imprimir comprobante</button><button class="close-btn" (click)="detalleVenta.set(null)" aria-label="Cerrar"><i class="fas fa-xmark"></i></button></div></div>
+        <div class="modal-body receipt-print">
+          <header class="receipt-company"><img *ngIf="currentLogo()" [src]="currentLogo()" [alt]="'Logo de ' + (receiptCompany(sale).nombre_comercial || 'la empresa')" /><h1>{{ receiptCompany(sale).nombre_comercial || 'Empresa no configurada' }}</h1><p *ngIf="receiptCompany(sale).razon_social">{{ receiptCompany(sale).razon_social }}</p><p *ngIf="receiptCompany(sale).nit">NIT {{ receiptCompany(sale).nit }}<ng-container *ngIf="receiptCompany(sale).digito_verificacion">-{{ receiptCompany(sale).digito_verificacion }}</ng-container></p><p>{{ receiptCompany(sale).direccion }}</p><p>{{ receiptCompany(sale).ciudad }}<ng-container *ngIf="receiptCompany(sale).departamento">, {{ receiptCompany(sale).departamento }}</ng-container></p><p>{{ receiptCompany(sale).telefono }}</p></header>
+          <div class="receipt-title"><strong>COMPROBANTE DE VENTA</strong><span>{{ sale.numero_venta }}</span></div>
+          <dl class="receipt-meta"><div><dt>Fecha</dt><dd>{{ sale.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</dd></div><div><dt>Cliente</dt><dd>{{ sale.cliente_nombre || 'Cliente general' }}</dd></div><div *ngIf="sale.cliente_documento"><dt>Documento</dt><dd>{{ sale.cliente_documento }}</dd></div><div><dt>Registrado por</dt><dd>{{ sale.vendedor_nombre || 'No disponible' }}</dd></div><div><dt>Almacén</dt><dd>{{ sale.almacen_nombre || 'No disponible' }}</dd></div><div><dt>Estado</dt><dd>{{ sale.estado }}</dd></div></dl>
+          <table class="receipt-items"><thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Total</th></tr></thead><tbody><tr *ngFor="let detail of sale.detalles"><td>{{ detail.nombre_producto || getDetalleProductoLabel(detail) }}<small *ngIf="detail.iva_porcentaje">IVA {{ detail.iva_porcentaje }}% · {{ detail.iva_monto | currency:'COP':'symbol':'1.0-0' }}</small></td><td>{{ detail.cantidad }}</td><td>{{ detail.precio_unitario | currency:'COP':'symbol':'1.0-0' }}</td><td>{{ detail.subtotal | currency:'COP':'symbol':'1.0-0' }}</td></tr></tbody></table>
+          <dl class="receipt-totals"><div><dt>Subtotal</dt><dd>{{ sale.subtotal | currency:'COP':'symbol':'1.0-0' }}</dd></div><div><dt>Descuento</dt><dd>{{ sale.descuento | currency:'COP':'symbol':'1.0-0' }}</dd></div><div><dt>IVA</dt><dd>{{ sale.iva_monto | currency:'COP':'symbol':'1.0-0' }}</dd></div><div class="receipt-grand-total"><dt>Total</dt><dd>{{ sale.total | currency:'COP':'symbol':'1.0-0' }}</dd></div></dl>
+          <dl class="receipt-payment"><div><dt>Método de pago</dt><dd>{{ formatMetodoPago(sale.metodo_pago) }}</dd></div><div *ngIf="sale.metodo_pago === 'efectivo'"><dt>Efectivo recibido</dt><dd>{{ sale.efectivo_recibido | currency:'COP':'symbol':'1.0-0' }}</dd></div><div *ngIf="sale.metodo_pago === 'efectivo'"><dt>Cambio</dt><dd>{{ sale.cambio | currency:'COP':'symbol':'1.0-0' }}</dd></div></dl>
+          <p *ngIf="sale.observaciones" class="receipt-observation"><strong>Observaciones:</strong> {{ sale.observaciones }}</p>
+          <div *ngIf="sale.estado === 'anulada'" class="receipt-cancelled"><strong>VENTA ANULADA</strong><span>{{ sale.fecha_anulacion | date:'dd/MM/yyyy HH:mm' }} · {{ sale.anulado_por_nombre || 'No disponible' }}</span><span>{{ sale.motivo_anulacion }}</span></div>
+          <footer class="receipt-footer"><p>{{ receiptCompany(sale).mensaje_comprobante || 'Gracias por su compra.' }}</p><small>Gestionado con SofInventory</small></footer>
+        </div>
+      </section>
+    </div>
   </div>
 </app-layout>

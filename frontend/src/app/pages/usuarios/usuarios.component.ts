@@ -14,11 +14,22 @@ import { LayoutComponent } from '../../shared/components/layout.component';
 import { UsuariosService } from '../../core/services/api.services';
 import { AuthService } from '../../core/services/auth.service';
 import { Usuario, Rol, TipoDocumento } from '../../core/models';
+import { FieldErrorComponent } from '../../shared/forms/field-error.component';
+import { FieldValidationDirective } from '../../shared/forms/field-validation.directive';
+import { FormErrorSummaryComponent } from '../../shared/forms/form-error-summary.component';
+import { FormFeedbackService, FormFeedbackState } from '../../shared/forms/form-feedback.service';
+import {
+  documentNumberError,
+  normalizeSemanticText,
+  personNameError,
+  usernameError,
+} from '../../shared/forms/semantic-validators';
+import { NotificationService } from '../../shared/notifications/notification.service';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective],
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.css'],
 })
@@ -31,7 +42,7 @@ export class UsuariosComponent implements OnInit {
   showModal = signal(false);
   editing = signal<Usuario | null>(null);    // null = creación, con datos = edición
   saving = signal(false);
-  formError = signal('');
+  readonly validation: FormFeedbackState;
   showPassword = signal(false);
   showConfirmPassword = signal(false);
   
@@ -49,7 +60,14 @@ export class UsuariosComponent implements OnInit {
     );
   });
 
-  constructor(private svc: UsuariosService, public auth: AuthService) {}
+  constructor(
+    private svc: UsuariosService,
+    public auth: AuthService,
+    feedback: FormFeedbackService,
+    private notifications: NotificationService,
+  ) {
+    this.validation = new FormFeedbackState(feedback, 'No fue posible guardar el usuario. Revisa los campos señalados.', '.user-form-modal');
+  }
 
   ngOnInit(): void {
     this.load();
@@ -97,49 +115,52 @@ export class UsuariosComponent implements OnInit {
     this.form = initialForm;
     this.showPassword.set(false);
     this.showConfirmPassword.set(false);
-    this.formError.set('');
+    this.validation.clear();
     this.showModal.set(true);
   }
 
   closeModal(): void { 
-    this.showModal.set(false); 
+    if (!this.saving()) this.showModal.set(false);
   }
 
   save(): void {
-    const required = ['nombre_completo', 'email', 'username', 'rol', 'tipo_documento', 'numero_documento'];
-    const missing = required.some(k => !(this.form as any)[k]);
     const documento = String(this.form.numero_documento ?? '').trim();
+    const nombreCompleto = String(this.form.nombre_completo ?? '');
+    const username = String(this.form.username ?? '').trim();
     const password = String(this.form.password ?? '').trim();
     const confirmPassword = String((this.form as any).confirm_password ?? '').trim();
-
-    if (missing) {
-      this.formError.set('Completa todos los campos obligatorios.');
-      return;
-    }
-
-    if (!/^[0-9]{1,10}$/.test(documento)) {
-      this.formError.set('El número de documento debe contener solo números y máximo 10 caracteres.');
-      return;
-    }
+    const errors: Record<string, string> = {};
+    if (!this.form.tipo_documento) errors['tipo_documento'] = 'Selecciona un tipo de documento.';
+    const documentError = documentNumberError(documento, this.selectedDocumentTypeCode());
+    if (documentError) errors['numero_documento'] = documentError;
+    const fullNameError = personNameError(nombreCompleto, 'nombre_completo');
+    if (fullNameError) errors['nombre_completo'] = fullNameError;
+    if (!String(this.form.email ?? '').trim()) errors['email'] = 'El correo electrónico es obligatorio.';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(this.form.email))) errors['email'] = 'El formato del correo electrónico no es válido.';
+    const usernameValidationError = usernameError(username);
+    if (usernameValidationError) errors['username'] = usernameValidationError;
+    if (!this.form.rol) errors['rol'] = 'Selecciona un rol.';
 
     if (!this.editing() || password) {
-      if (!password) {
-        this.formError.set('La contraseña es obligatoria.');
-        return;
-      }
-      if (!confirmPassword) {
-        this.formError.set('Confirma la contraseña.');
-        return;
-      }
-      if (password !== confirmPassword) {
-        this.formError.set('Las contraseñas no coinciden.');
-        return;
-      }
+      if (!password) errors['password'] = 'La contraseña es obligatoria.';
+      if (!confirmPassword) errors['confirm_password'] = 'Confirma la contraseña.';
+      else if (password !== confirmPassword) errors['confirm_password'] = 'Las contraseñas no coinciden.';
     }
 
+    if (Object.keys(errors).length) {
+      this.validation.reject(errors);
+      return;
+    }
+
+    this.validation.clear();
     this.saving.set(true);
 
-    const payload: any = { ...this.form, numero_documento: documento };
+    const payload: any = {
+      ...this.form,
+      numero_documento: documento,
+      nombre_completo: normalizeSemanticText(nombreCompleto),
+      username,
+    };
     if (this.editing() && !password) {
       delete payload.password;
       delete payload.confirm_password;
@@ -151,12 +172,14 @@ export class UsuariosComponent implements OnInit {
 
     req.subscribe({
       next: () => {
+        const wasEditing = Boolean(this.editing());
         this.load();
-        this.closeModal();
         this.saving.set(false);
+        this.showModal.set(false);
+        this.notifications.success(`Usuario ${wasEditing ? 'actualizado' : 'registrado'} satisfactoriamente.`);
       },
       error: (e) => {
-        this.formError.set(this.formatFormError(e.error));
+        this.validation.fromHttp(e);
         this.saving.set(false);
       },
     });
@@ -205,30 +228,31 @@ export class UsuariosComponent implements OnInit {
     this.showConfirmPassword.set(!this.showConfirmPassword());
   }
 
-  allowOnlyNumbers(event: KeyboardEvent): void {
-    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab'];
-    if (allowedKeys.includes(event.key)) return;
-    if (!/^[0-9]$/.test(event.key)) {
-      event.preventDefault();
-    }
+  selectedDocumentTypeCode(): string {
+    const selected = this.form.tipo_documento;
+    if (selected && typeof selected === 'object') return selected.codigo;
+    return this.tiposDoc().find((type) => String(type.id) === String(selected))?.codigo ?? '';
   }
 
   // Cambia entre activo ↔ inactivo
   cambiarEstado(u: Usuario): void {
-    this.svc.cambiarEstado(u.id!).subscribe(() => this.load());
+    this.svc.cambiarEstado(u.id!).subscribe({
+      next: () => { this.load(); this.notifications.success('Estado del usuario actualizado satisfactoriamente.'); },
+      error: (e) => this.notifications.error(e.error?.error ?? 'No fue posible cambiar el estado del usuario.'),
+    });
   }
 
   eliminar(u: Usuario): void {
     if (!confirm(`¿Eliminar al usuario "${u.username}"? Esta acción no se puede deshacer.`)) return;
     this.svc.eliminar(u.id!).subscribe({
-      next: () => this.load(),
-      error: (e) => alert(e.error?.error ?? 'Error al eliminar'),
+      next: () => { this.load(); this.notifications.success('Usuario eliminado satisfactoriamente.'); },
+      error: (e) => this.notifications.error(e.error?.error ?? 'No fue posible eliminar el usuario.'),
     });
   }
 
   desbloquear(u: Usuario): void {
     if (!this.auth.isAdmin()) {
-      alert('No tienes permisos para desbloquear cuentas.');
+      this.notifications.error('No tienes permisos para desbloquear cuentas.');
       return;
     }
 
@@ -236,11 +260,11 @@ export class UsuariosComponent implements OnInit {
 
     this.svc.desbloquear(u.id!).subscribe({
       next: () => {
-        alert('Cuenta desbloqueada correctamente.');
+        this.notifications.success('Cuenta desbloqueada satisfactoriamente.');
         this.load();
       },
       error: (e) => {
-        alert(e.error?.error ?? 'Error al desbloquear la cuenta');
+        this.notifications.error(e.error?.error ?? 'No fue posible desbloquear la cuenta.');
       }
     });
   }

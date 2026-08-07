@@ -16,11 +16,18 @@ import { FormsModule } from '@angular/forms';
 import { LayoutComponent } from '../../shared/components/layout.component';
 import { ComprasService, InventarioService, ProductosService, ProveedoresService } from '../../core/services/api.services';
 import { Almacen, Compra, DetalleCompra, Producto, Proveedor } from '../../core/models';
+import { FieldErrorComponent } from '../../shared/forms/field-error.component';
+import { FieldValidationDirective } from '../../shared/forms/field-validation.directive';
+import { FormErrorSummaryComponent } from '../../shared/forms/form-error-summary.component';
+import { FormFeedbackService, FormFeedbackState } from '../../shared/forms/form-feedback.service';
+import { NotificationService } from '../../shared/notifications/notification.service';
+import { EmpresaService } from '../../core/services/empresa.service';
+import { Empresa } from '../../core/models';
 
 @Component({
   selector: 'app-compras',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective],
   templateUrl: './compras.component.html',
   styleUrls: ['./compras.component.css']
 })
@@ -34,7 +41,7 @@ export class ComprasComponent implements OnInit {
   showModal    = signal(false);
   detalleCompra = signal<Compra | null>(null);  // null = modal cerrado
   saving       = signal(false);
-  formError    = signal('');
+  readonly validation: FormFeedbackState;
 
   // ── Formulario ───────────────────────────────────────────────────────────
   form: Partial<Compra> = {};
@@ -44,14 +51,20 @@ export class ComprasComponent implements OnInit {
     private svc: ComprasService,
     private provSvc: ProveedoresService,
     private prodSvc: ProductosService,
-    private invSvc: InventarioService
-  ) {}
+    private invSvc: InventarioService,
+    public company: EmpresaService,
+    feedback: FormFeedbackService,
+    private notifications: NotificationService,
+  ) {
+    this.validation = new FormFeedbackState(feedback, 'No fue posible registrar la compra. Revisa los campos señalados.', '.purchase-form-modal');
+  }
 
   ngOnInit(): void {
     this.load();
     this.provSvc.listar().subscribe((p) => this.proveedores.set(p));
     this.prodSvc.listar().subscribe((p) => this.productos.set(p));
     this.invSvc.listarAlmacenes().subscribe((almacenes) => this.almacenes.set(almacenes));
+    this.company.cargar().subscribe({ error: () => undefined });
   }
 
   load(): void {
@@ -102,14 +115,15 @@ export class ComprasComponent implements OnInit {
       almacen: almacen?.id ?? null,
       numero_factura: '',
       fecha_compra: today,
-      tipo_compra: 'Contado'
+      tipo_compra: 'Contado',
+      observaciones: '',
     };
     this.detalles.set([{ producto: 0, cantidad: 1, costo_unitario: 0, iva_porcentaje: 0 }]);
-    this.formError.set('');
+    this.validation.clear();
     this.showModal.set(true);
   }
 
-  closeModal(): void { this.showModal.set(false); }
+  closeModal(): void { if (!this.saving()) this.showModal.set(false); }
 
   addLinea(): void {
     this.detalles.update((d) => [...d, { producto: 0, cantidad: 1, costo_unitario: 0, iva_porcentaje: 0 }]);
@@ -142,31 +156,37 @@ export class ComprasComponent implements OnInit {
   // ── CRUD ─────────────────────────────────────────────────────────────────
 
   save(): void {
-    // Validaciones: proveedor, factura, al menos un detalle
-    if (!this.form.proveedor || !this.form.almacen || !this.form.numero_factura || this.detalles().length === 0) {
-      this.formError.set('Completa todos los campos y agrega al menos un producto.');
-      return;
-    }
-    // Factura solo números
-    if (!/^\d+$/.test(String(this.form.numero_factura).trim())) {
-      this.formError.set('El número de factura debe contener solo números.');
-      return;
-    }
+    const errors: Record<string, string> = {};
+    const factura = String(this.form.numero_factura ?? '').trim();
+    if (!this.form.proveedor) errors['proveedor'] = 'Selecciona un proveedor.';
+    if (!this.form.almacen) errors['almacen'] = 'Selecciona un almacén receptor.';
+    if (!factura) errors['numero_factura'] = 'El número de factura es obligatorio.';
+    else if (!/^\d+$/.test(factura)) errors['numero_factura'] = 'El número de factura debe contener solo números.';
+    if (!this.form.fecha_compra) errors['fecha_compra'] = 'La fecha de compra es obligatoria.';
+    if (!this.form.tipo_compra) errors['tipo_compra'] = 'Selecciona un tipo de compra.';
 
     const detallesValidos = this.detalles().filter(
       (d) => Number(d.producto) > 0 && Number(d.cantidad) > 0
     );
-    if (detallesValidos.length === 0) {
-      this.formError.set('Agrega al menos un producto válido.');
+    if (detallesValidos.length === 0) errors['detalles'] = 'Agrega al menos un producto con una cantidad mayor que cero.';
+    if (this.detalles().some((d) => Number(d.costo_unitario) < 0)) errors['detalles'] = 'El costo unitario no puede ser negativo.';
+    if (Object.keys(errors).length) {
+      this.validation.reject(errors);
       return;
     }
 
+    this.validation.clear();
     this.saving.set(true);
     const payload = { ...this.form, detalles: detallesValidos };
 
     this.svc.registrar(payload).subscribe({
-      next: () => { this.load(); this.closeModal(); this.saving.set(false); },
-      error: (e) => { this.formError.set(this.getErrorMessage(e)); this.saving.set(false); },
+      next: () => {
+        this.load();
+        this.saving.set(false);
+        this.showModal.set(false);
+        this.notifications.success('Compra registrada satisfactoriamente.');
+      },
+      error: (e) => { this.validation.fromHttp(e); this.saving.set(false); },
     });
   }
 
@@ -174,13 +194,26 @@ export class ComprasComponent implements OnInit {
     this.svc.detalle(c.id!).subscribe((d) => this.detalleCompra.set(d));
   }
 
+  printReceipt(): void {
+    window.setTimeout(() => window.print(), 50);
+  }
+
+  receiptCompany(purchase: Compra | null): Partial<Empresa> {
+    const snapshot = purchase?.empresa_snapshot ?? {};
+    return Object.keys(snapshot).length ? snapshot : (this.company.empresa() ?? {});
+  }
+
+  currentLogo(): string {
+    return this.company.empresa()?.logo_url ?? '';
+  }
+
   anular(c: Compra): void {
     if (!confirm(`¿Anular la compra ${c.numero_factura}?`)) return;
     const motivo = prompt('Motivo de anulacion:', 'Correccion de compra');
     if (motivo === null) return;
     this.svc.anular(c.id!, motivo).subscribe({
-      next: () => this.load(),
-      error: (e) => alert(this.getErrorMessage(e)),
+      next: () => { this.load(); this.notifications.success('Compra anulada satisfactoriamente.'); },
+      error: (e) => this.notifications.error(this.getErrorMessage(e)),
     });
   }
 
