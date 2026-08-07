@@ -27,6 +27,13 @@ def _primer_error(errores):
     return 'Los datos enviados no son validos.'
 
 
+def _respuesta_validacion(errores):
+    return {
+        'error': _primer_error(errores),
+        'errors': errores,
+    }
+
+
 def _producto_salida(producto, request):
     producto = (
         Producto.objects.filter(pk=producto.pk)
@@ -109,7 +116,7 @@ def crear_producto(request):
     serializer = ProductoEscrituraSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(
-            {'error': _primer_error(serializer.errors)},
+            _respuesta_validacion(serializer.errors),
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -130,7 +137,12 @@ def crear_producto(request):
             )
     except IntegrityError:
         return Response(
-            {'error': f'Ya existe un producto con SKU {sku}.'},
+            {
+                'error': 'Ya existe un producto con este código.',
+                'errors': {
+                    'referencia': ['Ya existe un producto con esta combinación de nombre, marca y referencia.']
+                },
+            },
             status=status.HTTP_400_BAD_REQUEST,
         )
     return Response(
@@ -145,15 +157,17 @@ def crear_producto(request):
 @api_view(['PUT', 'PATCH'])
 @require_roles('Administrador', 'Supervisor', 'Bodega')
 def configurar_producto(request, id):
+    old_image = None
     try:
         with transaction.atomic():
             producto = Producto.objects.select_for_update().get(pk=id)
+            old_image = producto.imagen if producto.imagen else None
             serializer = ProductoEscrituraSerializer(
                 producto, data=request.data, partial=True
             )
             if not serializer.is_valid():
                 return Response(
-                    {'error': _primer_error(serializer.errors)},
+                    _respuesta_validacion(serializer.errors),
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             producto = serializer.save(estado='activo')
@@ -162,6 +176,10 @@ def configurar_producto(request, id):
             {'error': 'Producto no encontrado.'},
             status=status.HTTP_404_NOT_FOUND,
         )
+    if old_image and (
+        not producto.imagen or old_image.name != producto.imagen.name
+    ):
+        transaction.on_commit(lambda: old_image.storage.delete(old_image.name))
     return Response(
         {
             'mensaje': 'Producto configurado correctamente.',
@@ -173,15 +191,17 @@ def configurar_producto(request, id):
 @api_view(['PUT', 'PATCH'])
 @require_roles('Administrador', 'Supervisor')
 def editar_producto(request, id):
+    old_image = None
     try:
         with transaction.atomic():
             producto = Producto.objects.select_for_update().get(pk=id)
+            old_image = producto.imagen if producto.imagen else None
             serializer = ProductoEscrituraSerializer(
                 producto, data=request.data, partial=True
             )
             if not serializer.is_valid():
                 return Response(
-                    {'error': _primer_error(serializer.errors)},
+                    _respuesta_validacion(serializer.errors),
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             producto = serializer.save()
@@ -190,6 +210,10 @@ def editar_producto(request, id):
             {'error': 'Producto no encontrado.'},
             status=status.HTTP_404_NOT_FOUND,
         )
+    if old_image and (
+        not producto.imagen or old_image.name != producto.imagen.name
+    ):
+        transaction.on_commit(lambda: old_image.storage.delete(old_image.name))
     return Response(
         {
             'mensaje': 'Producto actualizado correctamente.',

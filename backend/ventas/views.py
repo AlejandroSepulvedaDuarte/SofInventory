@@ -6,6 +6,7 @@ from django.utils import timezone
 from inventario.models import Almacen, MovimientoInventario
 from inventario.services import InventarioError, ServicioInventario
 from productos.models import Producto
+from empresa.services import obtener_snapshot_empresa
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -146,6 +147,7 @@ def crear_venta(request):
                     'comprobanteTransferencia'
                 ),
                 otro_metodo=pago.get('otroMetodo'),
+                empresa_snapshot=obtener_snapshot_empresa(),
             )
 
             for producto, cantidad, precio in items:
@@ -156,6 +158,7 @@ def crear_venta(request):
                     sku_producto=producto.sku,
                     precio_unitario=precio,
                     cantidad=cantidad,
+                    iva_porcentaje=producto.iva_porcentaje,
                 )
                 ServicioInventario.salida(
                     producto=producto,
@@ -190,7 +193,9 @@ def crear_venta(request):
 @require_roles('Administrador', 'Supervisor', 'Vendedor')
 def listar_ventas(request):
     ventas = (
-        Venta.objects.select_related('cliente', 'vendedor', 'almacen')
+        Venta.objects.select_related(
+            'cliente', 'cliente__tipo_documento', 'vendedor', 'almacen'
+        )
         .prefetch_related('detalles')
         .all()
     )
@@ -209,7 +214,7 @@ def detalle_venta(request, pk):
     try:
         venta = (
             Venta.objects.select_related(
-                'cliente', 'vendedor', 'almacen', 'anulado_por'
+                'cliente', 'cliente__tipo_documento', 'vendedor', 'almacen', 'anulado_por'
             )
             .prefetch_related('detalles')
             .get(pk=pk)

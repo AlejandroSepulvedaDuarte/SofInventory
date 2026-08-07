@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('catalogos.urls')),
     path('api/', include('usuarios.urls')),
     path('api/', include('productos.urls')),
     path('api/', include('proveedores.urls')),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('api/inventario/', include('inventario.urls')),
     path('api/', include('ventas.urls')),
     path('api/', include('dashboard.urls')),
+    path('api/', include('empresa.urls')),
 ]
 
 if settings.FRONTEND_DIR:

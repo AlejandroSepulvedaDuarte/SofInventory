@@ -166,7 +166,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let a of almacenes()">
+            <tr *ngFor="let a of almacenes()" [class.recently-updated]="highlightedAlmacenId() === a.id">
               <td><strong><i class="fas fa-warehouse"></i> {{ a.nombre }}</strong></td>
               <td><code class="sku-code">{{ a.codigo }}</code></td>
               <td>
@@ -201,54 +201,56 @@
       <div class="movimiento-form">
         <h3><i class="fas fa-arrows-rotate"></i> Movimiento de Stock</h3>
         <p class="form-subtitle">Registra entradas, salidas o ajustes de inventario</p>
+        <app-form-error-summary [message]="movValidation.summary()" />
+        <p class="required-hint">Los campos marcados con <span class="required-marker">*</span> son obligatorios.</p>
 
         <div class="form-grid">
           <div class="field">
-            <label><i class="fas fa-box"></i> Producto *</label>
-            <select [(ngModel)]="movForm.producto_id">
+            <label for="movement-product"><i class="fas fa-box"></i> Producto <span class="required-marker">*</span></label>
+            <select id="movement-product" required aria-required="true" [(ngModel)]="movForm.producto_id" (ngModelChange)="movValidation.clearField('producto')" [appFieldValidation]="movValidation.error('producto')" validationMessageId="movement-product-error">
               <option value="">Seleccionar...</option>
               <option *ngFor="let p of productos()" [value]="p.id">{{ p.nombre }} — {{ p.marca }} ({{ p.referencia }})</option>
             </select>
+            <app-field-error id="movement-product-error" [message]="movValidation.error('producto')" />
           </div>
           <div class="field">
-            <label><i class="fas fa-arrows-rotate"></i> Tipo *</label>
-            <select [(ngModel)]="movForm.tipo">
+            <label><i class="fas fa-arrows-rotate"></i> Tipo <span class="required-marker">*</span></label>
+            <select required aria-required="true" [(ngModel)]="movForm.tipo">
               <option value="entrada">Entrada</option>
               <option value="salida">Salida</option>
               <option value="transferencia">Transferencia</option>
             </select>
           </div>
           <div class="field">
-            <label><i class="fas fa-warehouse"></i> Almacén *</label>
-            <select [(ngModel)]="movForm.almacen_id">
+            <label for="movement-warehouse"><i class="fas fa-warehouse"></i> Almacén <span class="required-marker">*</span></label>
+            <select id="movement-warehouse" required aria-required="true" [(ngModel)]="movForm.almacen_id" (ngModelChange)="movValidation.clearField('almacen')" [appFieldValidation]="movValidation.error('almacen')" validationMessageId="movement-warehouse-error">
               <option value="">Seleccionar...</option>
               <option *ngFor="let a of almacenesActivos()" [value]="a.id">
                 {{ a.codigo }} - {{ a.nombre }}
               </option>
             </select>
+            <app-field-error id="movement-warehouse-error" [message]="movValidation.error('almacen')" />
           </div>
           <div class="field" *ngIf="movForm.tipo === 'transferencia'">
-            <label><i class="fas fa-warehouse"></i> Almacén destino *</label>
-            <select [(ngModel)]="movForm.almacen_destino_id">
+            <label for="movement-destination"><i class="fas fa-warehouse"></i> Almacén destino <span class="required-marker">*</span></label>
+            <select id="movement-destination" required aria-required="true" [(ngModel)]="movForm.almacen_destino_id" (ngModelChange)="movValidation.clearField('almacen_destino')" [appFieldValidation]="movValidation.error('almacen_destino')" validationMessageId="movement-destination-error">
               <option [ngValue]="null">Seleccionar...</option>
               <option *ngFor="let a of almacenesActivos()" [ngValue]="a.id"
                 [disabled]="a.id == movForm.almacen_id">
                 {{ a.codigo }} - {{ a.nombre }}
               </option>
             </select>
+            <app-field-error id="movement-destination-error" [message]="movValidation.error('almacen_destino')" />
           </div>
           <div class="field">
-            <label><i class="fas fa-hashtag"></i> Cantidad *</label>
-            <input type="number" [(ngModel)]="movForm.cantidad" min="1" placeholder="0" />
+            <label for="movement-quantity"><i class="fas fa-hashtag"></i> Cantidad <span class="required-marker">*</span></label>
+            <input id="movement-quantity" type="number" required aria-required="true" [(ngModel)]="movForm.cantidad" (ngModelChange)="movValidation.clearField('cantidad')" min="1" placeholder="0" [appFieldValidation]="movValidation.error('cantidad')" validationMessageId="movement-quantity-error" />
+            <app-field-error id="movement-quantity-error" [message]="movValidation.error('cantidad')" />
           </div>
           <div class="field">
             <label><i class="fas fa-clipboard"></i> Motivo</label>
             <input type="text" [(ngModel)]="movForm.observacion" placeholder="Motivo del movimiento" />
           </div>
-        </div>
-
-        <div class="error-msg" *ngIf="movError()">
-          <i class="fas fa-circle-xmark"></i> {{ movError() }}
         </div>
 
         <div style="margin-top:16px">
@@ -262,38 +264,36 @@
           </button>
         </div>
 
-        <div class="success-msg" *ngIf="movSuccess()">
-          <i class="fas fa-circle-check"></i> {{ movSuccess() }}
-        </div>
       </div>
     </div>
 
     <!-- Modal de almacén (crear / editar)
          editingAlmacen() controla el título e ícono; null = modo creación. -->
     <div class="modal-overlay" *ngIf="showAlmacenModal()" (click)="closeAlmacenModal()">
-      <div class="modal modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal modal-sm warehouse-form-modal" role="dialog" aria-modal="true" aria-labelledby="warehouse-form-title" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h2>
+          <h2 id="warehouse-form-title">
             <i class="fas"
                [class.fa-pen]="editingAlmacen()"
                [class.fa-warehouse]="!editingAlmacen()"></i>
             {{ editingAlmacen() ? 'Editar Almacén' : 'Nuevo Almacén' }}
           </h2>
-          <button class="close-btn" (click)="closeAlmacenModal()">
+          <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeAlmacenModal()">
             <i class="fas fa-xmark"></i>
           </button>
         </div>
+        <div class="modal-error-region"><app-form-error-summary [message]="almacenValidation.summary()" /></div>
         <div class="modal-body">
-          <div class="error-msg" *ngIf="almacenError()">
-            <i class="fas fa-circle-xmark"></i> {{ almacenError() }}
+          <p class="required-hint">Los campos marcados con <span class="required-marker">*</span> son obligatorios.</p>
+          <div class="field">
+            <label for="warehouse-name"><i class="fas fa-tag"></i> Nombre <span class="required-marker">*</span></label>
+            <input id="warehouse-name" type="text" required aria-required="true" maxlength="100" [(ngModel)]="almacenForm.nombre" (ngModelChange)="almacenValidation.clearField('nombre')" placeholder="Nombre del almacén" [appFieldValidation]="almacenValidation.error('nombre')" validationMessageId="warehouse-name-error" />
+            <app-field-error id="warehouse-name-error" [message]="almacenValidation.error('nombre')" />
           </div>
           <div class="field">
-            <label><i class="fas fa-tag"></i> Nombre *</label>
-            <input type="text" [(ngModel)]="almacenForm.nombre" placeholder="Nombre del almacén" />
-          </div>
-          <div class="field">
-            <label><i class="fas fa-barcode"></i> Código *</label>
-            <input type="text" [(ngModel)]="almacenForm.codigo" placeholder="Ej: ALM001" />
+            <label for="warehouse-code"><i class="fas fa-barcode"></i> Código <span class="required-marker">*</span></label>
+            <input id="warehouse-code" type="text" required aria-required="true" [(ngModel)]="almacenForm.codigo" (ngModelChange)="almacenValidation.clearField('codigo')" placeholder="Ej: ALM001" maxlength="10" [appFieldValidation]="almacenValidation.error('codigo')" validationMessageId="warehouse-code-error" />
+            <app-field-error id="warehouse-code-error" [message]="almacenValidation.error('codigo')" />
           </div>
           <div class="field">
             <label><i class="fas fa-location-dot"></i> Dirección</label>

@@ -65,47 +65,58 @@
 
         <!-- Modal de registro de compra -->
         <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
-            <div class="modal modal-xl" (click)="$event.stopPropagation()">
+            <div class="modal modal-xl purchase-form-modal" role="dialog" aria-modal="true" aria-labelledby="purchase-form-title" (click)="$event.stopPropagation()">
                 <div class="modal-header">
-                    <h2><i class="fas fa-cart-shopping"></i> Registrar Compra</h2>
-                    <button class="close-btn" (click)="closeModal()"><i class="fas fa-xmark"></i></button>
+                    <h2 id="purchase-form-title"><i class="fas fa-cart-shopping"></i> Registrar Compra</h2>
+                    <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()"><i class="fas fa-xmark"></i></button>
                 </div>
+                <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
 
                 <div class="modal-body">
+                    <p class="required-hint">Los campos marcados con <span class="required-marker">*</span> son obligatorios.</p>
                     <!-- Cabecera: proveedor, factura, fecha, tipo -->
                     <div class="form-grid">
                         <div class="field">
-                            <label>Proveedor *</label>
-                            <select [(ngModel)]="form.proveedor">
+                            <label>Proveedor <span class="required-marker">*</span></label>
+                            <select required aria-required="true" [(ngModel)]="form.proveedor" (ngModelChange)="validation.clearField('proveedor')" [appFieldValidation]="validation.error('proveedor')" validationMessageId="purchase-provider-error">
                                 <option [ngValue]="null">Seleccionar...</option>
                                 <option *ngFor="let p of proveedores()" [ngValue]="p.id">{{ p.razon_social }}</option>
                             </select>
+                            <app-field-error id="purchase-provider-error" [message]="validation.error('proveedor')" />
                         </div>
                         <div class="field">
-                            <label>Almacén receptor *</label>
-                            <select [(ngModel)]="form.almacen">
+                            <label>Almacén receptor <span class="required-marker">*</span></label>
+                            <select required aria-required="true" [(ngModel)]="form.almacen" (ngModelChange)="validation.clearField('almacen')" [appFieldValidation]="validation.error('almacen')" validationMessageId="purchase-warehouse-error">
                                 <option [ngValue]="null">Seleccionar...</option>
                                 <option *ngFor="let a of almacenes()" [ngValue]="a.id"
                                     [disabled]="a.estado !== 'activo'">
                                     {{ a.codigo }} - {{ a.nombre }}
                                 </option>
                             </select>
+                            <app-field-error id="purchase-warehouse-error" [message]="validation.error('almacen')" />
                         </div>
                         <div class="field">
-                            <label>Número Factura *</label>
-                            <input type="text" [(ngModel)]="form.numero_factura" placeholder="Solo números" />
+                            <label>Número Factura <span class="required-marker">*</span></label>
+                            <input type="text" required aria-required="true" [(ngModel)]="form.numero_factura" (ngModelChange)="validation.clearField('numero_factura')" placeholder="Solo números" inputmode="numeric" [appFieldValidation]="validation.error('numero_factura')" validationMessageId="purchase-invoice-error" />
+                            <app-field-error id="purchase-invoice-error" [message]="validation.error('numero_factura')" />
                         </div>
                         <div class="field">
-                            <label>Fecha *</label>
-                            <input type="date" [(ngModel)]="form.fecha_compra" />
+                            <label>Fecha <span class="required-marker">*</span></label>
+                            <input type="date" required aria-required="true" [(ngModel)]="form.fecha_compra" (ngModelChange)="validation.clearField('fecha_compra')" [appFieldValidation]="validation.error('fecha_compra')" validationMessageId="purchase-date-error" />
+                            <app-field-error id="purchase-date-error" [message]="validation.error('fecha_compra')" />
                         </div>
                         <div class="field">
-                            <label>Tipo de Compra *</label>
-                            <select [(ngModel)]="form.tipo_compra">
+                            <label>Tipo de Compra <span class="required-marker">*</span></label>
+                            <select required aria-required="true" [(ngModel)]="form.tipo_compra" (ngModelChange)="validation.clearField('tipo_compra')">
                                 <option value="Contado">Contado</option>
                                 <option value="Credito">Crédito</option>
                             </select>
                         </div>
+                    </div>
+
+                    <div class="field purchase-observation">
+                        <label for="purchase-observations">Observaciones</label>
+                        <textarea id="purchase-observations" rows="2" maxlength="2000" [(ngModel)]="form.observaciones" placeholder="Observación opcional de recepción"></textarea>
                     </div>
 
                     <!-- Detalle de productos: líneas dinámicas -->
@@ -132,7 +143,7 @@
                                 <tbody>
                                     <tr *ngFor="let d of detalles(); let i = index">
                                         <td>
-                                            <select [(ngModel)]="d.producto" style="width:100%">
+                                            <select [(ngModel)]="d.producto" (ngModelChange)="validation.clearField('detalles')" style="width:100%" [appFieldValidation]="i === 0 ? validation.error('detalles') : ''" validationMessageId="purchase-details-error">
                                                 <option [ngValue]="0">Seleccionar...</option>
                                                 <option *ngFor="let p of productos()" [ngValue]="p.id">{{
                                                     getProductoLabel(p) }}</option>
@@ -155,6 +166,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <app-field-error id="purchase-details-error" [message]="validation.error('detalles')" />
 
                         <!-- Totales calculados en tiempo real -->
                         <div class="totales">
@@ -166,7 +178,6 @@
                         </div>
                     </div>
 
-                    <div class="error-msg" *ngIf="formError()">{{ formError() }}</div>
                 </div>
 
                 <div class="modal-footer">
@@ -178,16 +189,19 @@
             </div>
         </div>
 
-        <!-- Modal de detalle (solo lectura) -->
+        <!-- Detalle y comprobante interno de recepción -->
         <div class="modal-overlay" *ngIf="detalleCompra()" (click)="detalleCompra.set(null)">
-            <div class="modal modal-lg" (click)="$event.stopPropagation()">
-                <div class="modal-header">
+            <div class="modal modal-lg purchase-detail-modal" (click)="$event.stopPropagation()">
+                <div class="modal-header screen-only">
                     <h2>Detalle Compra - {{ detalleCompra()?.numero_factura }}</h2>
-                    <button class="close-btn" (click)="detalleCompra.set(null)"><i class="fas fa-xmark"></i></button>
+                    <div class="detail-actions"><button class="btn-primary" (click)="printReceipt()"><i class="fas fa-print"></i> Imprimir comprobante interno</button><button class="close-btn" (click)="detalleCompra.set(null)"><i class="fas fa-xmark"></i></button></div>
                 </div>
 
-                <div class="modal-body">
-                    <table class="data-table" *ngIf="detalleCompra()?.detalles">
+                <div class="modal-body purchase-receipt" *ngIf="detalleCompra() as purchase">
+                    <header class="purchase-receipt-company"><img *ngIf="currentLogo()" [src]="currentLogo()" [alt]="'Logo de ' + (receiptCompany(purchase).nombre_comercial || 'la empresa')" /><h1>{{ receiptCompany(purchase).nombre_comercial || 'Empresa no configurada' }}</h1><p *ngIf="receiptCompany(purchase).nit">NIT {{ receiptCompany(purchase).nit }}</p><p>{{ receiptCompany(purchase).direccion }}</p><p>{{ receiptCompany(purchase).ciudad }}, {{ receiptCompany(purchase).departamento }}</p></header>
+                    <div class="purchase-receipt-title"><strong>COMPROBANTE INTERNO DE RECEPCIÓN</strong><span>No reemplaza la factura del proveedor</span></div>
+                    <dl class="purchase-meta"><div><dt>Número de compra</dt><dd>#{{ purchase.id }}</dd></div><div><dt>Factura del proveedor</dt><dd>{{ purchase.numero_factura }}</dd></div><div><dt>Fecha de compra</dt><dd>{{ purchase.fecha_compra | date:'dd/MM/yyyy' }}</dd></div><div><dt>Fecha de registro</dt><dd>{{ purchase.fecha_registro | date:'dd/MM/yyyy HH:mm' }}</dd></div><div><dt>Proveedor</dt><dd>{{ purchase.proveedor_nombre || getProvNombre(purchase.proveedor) }}</dd></div><div *ngIf="purchase.proveedor_documento"><dt>Identificación</dt><dd>{{ purchase.proveedor_documento }}</dd></div><div><dt>Registrado por</dt><dd>{{ purchase.registrado_por_nombre || 'No disponible' }}</dd></div><div><dt>Almacén de ingreso</dt><dd>{{ purchase.almacen_nombre || 'No disponible' }}</dd></div><div><dt>Condición de pago</dt><dd>{{ purchase.tipo_compra }}</dd></div><div><dt>Estado</dt><dd>{{ purchase.estado }}</dd></div></dl>
+                    <table class="data-table purchase-items" *ngIf="purchase.detalles">
                         <thead>
                             <tr>
                                 <th>Producto</th>
@@ -212,14 +226,17 @@
                     </table>
 
                     <!-- Totales devueltos por el backend (no recalculados) -->
-                    <div class="totales" style="margin-top:16px">
-                        <div>Subtotal: <strong>{{ detalleCompra()?.subtotal | currency:'COP':'symbol':'1.0-0'
+                    <div class="totales purchase-totals" style="margin-top:16px">
+                        <div>Subtotal: <strong>{{ purchase.subtotal | currency:'COP':'symbol':'1.0-0'
                                 }}</strong></div>
-                        <div>IVA: <strong>{{ detalleCompra()?.iva_total | currency:'COP':'symbol':'1.0-0' }}</strong>
+                        <div>IVA: <strong>{{ purchase.iva_total | currency:'COP':'symbol':'1.0-0' }}</strong>
                         </div>
-                        <div class="total-final">Total: <strong>{{ detalleCompra()?.total |
+                        <div class="total-final">Total: <strong>{{ purchase.total |
                                 currency:'COP':'symbol':'1.0-0' }}</strong></div>
                     </div>
+                    <p *ngIf="purchase.observaciones" class="purchase-receipt-observation"><strong>Observaciones:</strong> {{ purchase.observaciones }}</p>
+                    <div *ngIf="purchase.estado === 'anulada'" class="purchase-cancelled"><strong>COMPRA ANULADA</strong><span>{{ purchase.fecha_anulacion | date:'dd/MM/yyyy HH:mm' }} · {{ purchase.anulado_por_nombre || 'No disponible' }}</span><span>{{ purchase.motivo_anulacion }}</span></div>
+                    <footer class="purchase-receipt-footer"><small>Reporte interno · Gestionado con SofInventory</small></footer>
                 </div>
             </div>
         </div>

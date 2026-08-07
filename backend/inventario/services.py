@@ -53,11 +53,11 @@ class ServicioInventario:
                 pk=cls._id(almacen)
             )
         except Almacen.DoesNotExist as exc:
-            raise InventarioError('Almacen no encontrado.') from exc
+            raise InventarioError('Almacén no encontrado.') from exc
 
         if not permitir_no_activo and almacen_obj.estado != 'activo':
             raise InventarioError(
-                f'El almacen "{almacen_obj.nombre}" no esta activo.'
+                f'El almacén "{almacen_obj.nombre}" no está activo.'
             )
         return almacen_obj
 
@@ -80,7 +80,7 @@ class ServicioInventario:
             if not crear:
                 raise InventarioError(
                     f'El producto "{producto.nombre}" no tiene stock '
-                    f'en el almacen "{almacen.nombre}".'
+                    f'en el almacén "{almacen.nombre}".'
                 )
 
         try:
@@ -104,7 +104,7 @@ class ServicioInventario:
         )
         if actual + incremento > almacen.capacidad:
             raise InventarioError(
-                f'La operacion supera la capacidad del almacen '
+                f'La operación supera la capacidad del almacén '
                 f'"{almacen.nombre}".'
             )
 
@@ -270,7 +270,7 @@ class ServicioInventario:
         destino_id = cls._id(almacen_destino)
         if origen_id == destino_id:
             raise InventarioError(
-                'El almacen origen y destino no pueden ser el mismo.'
+                'El almacén de origen y el de destino deben ser diferentes.'
             )
 
         almacenes = {
@@ -280,7 +280,7 @@ class ServicioInventario:
             .order_by('pk')
         }
         if len(almacenes) != 2:
-            raise InventarioError('Almacen origen o destino no encontrado.')
+            raise InventarioError('Almacén de origen o destino no encontrado.')
         origen = almacenes[origen_id]
         destino = almacenes[destino_id]
         if origen.estado != 'activo' or destino.estado != 'activo':
@@ -298,7 +298,7 @@ class ServicioInventario:
         if not stock_origen or stock_origen.cantidad < cantidad:
             disponible = stock_origen.cantidad if stock_origen else 0
             raise InventarioError(
-                f'Stock insuficiente en almacen origen. Disponible: {disponible}.'
+                f'Stock insuficiente en el almacén de origen. Disponible: {disponible}.'
             )
 
         stock_destino = stocks.get(destino_id)

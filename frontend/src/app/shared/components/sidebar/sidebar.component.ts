@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, computed, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, computed, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
+import { EmpresaService } from '../../../core/services/empresa.service';
 
 interface NavItem {
   label: string;
@@ -17,7 +18,7 @@ interface NavItem {
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
 })
-export class SidebarComponent implements OnChanges {
+export class SidebarComponent implements OnChanges, OnInit {
   collapsed = signal(false);
   mobileOpen = signal(false);
 
@@ -70,6 +71,11 @@ export class SidebarComponent implements OnChanges {
 
   private readonly adminNavItems: NavItem[] = [
     {
+      label: 'Empresa',
+      icon: 'fa-building',
+      route: '/empresa',
+    },
+    {
       label: 'Usuarios',
       icon: 'fa-shield-halved',
       route: '/usuarios',
@@ -85,8 +91,14 @@ export class SidebarComponent implements OnChanges {
   });
   userName = computed(() => this.auth.currentUser()?.nombre ?? 'Usuario');
   userRole = computed(() => this.auth.currentUser()?.rol ?? '');
+  companyName = computed(() => this.company.empresa()?.nombre_comercial ?? 'SofInventory');
+  companyLogo = computed(() => this.company.empresa()?.logo_url ?? '');
 
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, private company: EmpresaService) {}
+
+  ngOnInit(): void {
+    this.company.cargar().subscribe({ error: () => undefined });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['mobileOpenState']) {

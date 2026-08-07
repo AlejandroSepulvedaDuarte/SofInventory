@@ -7,6 +7,7 @@ from productos.models import Categoria, Producto
 from inventario.models import Almacen, StockAlmacen, MovimientoInventario
 from ventas.models import Venta, DetalleVenta
 from usuarios.models import TipoDocumento, Rol, Usuario
+from empresa.models import Empresa
 
 
 class VentasTestCase(TestCase):
@@ -40,6 +41,18 @@ class VentasTestCase(TestCase):
         # almacen y stock
         self.almacen = Almacen.objects.create(nombre='Almacen Prueba', codigo='ALM-1', creado_por=self.user)
         self.stock = StockAlmacen.objects.create(producto=self.producto, almacen=self.almacen, cantidad=10)
+        self.empresa = Empresa.objects.create(
+            nombre_comercial='Ferretería de Prueba',
+            razon_social='Ferretería de Prueba S.A.S.',
+            nit='900123456',
+            direccion='Calle 10 # 20-30',
+            pais='Colombia',
+            departamento='Antioquia',
+            ciudad='Medellín',
+            telefono='6045550000',
+            creado_por=self.user,
+            actualizado_por=self.user,
+        )
 
     def test_crear_venta_correcta_reduccion_stock(self):
         payload = {
@@ -145,6 +158,55 @@ class VentasTestCase(TestCase):
         numero = resp.data.get('numero_factura')
         self.assertIsNotNone(numero)
         self.assertTrue(numero.startswith('VTA-'))
+
+    def test_responsable_no_se_puede_suplantar_y_se_guarda_snapshot_completo(self):
+        tipo = TipoDocumento.objects.get(codigo='CC')
+        otro = Usuario.objects.create(
+            tipo_documento=tipo,
+            numero_documento='654321',
+            nombre_completo='Vendedor Suplantado',
+            email='otro-vendedor@test.local',
+            username='other_seller',
+            password='pass',
+            rol=self.user.rol,
+            estado='activo',
+        )
+        payload = {
+            'vendedor': otro.id,
+            'almacen_id': self.almacen.id,
+            'productos': [
+                {'producto_id': self.producto.id, 'cantidad': 2, 'precio_unitario': 1}
+            ],
+            'metodo_pago': {'metodo': 'efectivo', 'efectivoRecibido': 500},
+        }
+        response = self.client.post('/api/ventas/crear/', payload, format='json')
+        self.assertEqual(response.status_code, 201, response.data)
+
+        venta = Venta.objects.get(pk=response.data['venta_id'])
+        detalle = venta.detalles.get()
+        self.assertEqual(venta.vendedor, self.user)
+        self.assertEqual(venta.empresa_snapshot['nombre_comercial'], 'Ferretería de Prueba')
+        self.assertEqual(detalle.precio_unitario, Decimal('100.00'))
+        self.assertEqual(detalle.iva_porcentaje, Decimal('19'))
+        self.assertEqual(detalle.iva_monto, Decimal('38.00'))
+        self.assertEqual(detalle.total, Decimal('238.00'))
+
+        detail_response = self.client.get(f'/api/ventas/detalle/{venta.id}/')
+        self.assertEqual(detail_response.data['vendedor_nombre'], self.user.nombre_completo)
+        self.assertEqual(detail_response.data['empresa_snapshot']['nit'], '900123456')
+
+    def test_venta_historica_sin_vendedor_muestra_no_disponible(self):
+        venta = Venta.objects.create(
+            vendedor=None,
+            almacen=self.almacen,
+            subtotal=Decimal('0'),
+            iva_monto=Decimal('0'),
+            total=Decimal('0'),
+            metodo_pago='transferencia',
+        )
+        response = self.client.get(f'/api/ventas/detalle/{venta.id}/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['vendedor_nombre'], 'No disponible')
 
     def test_errores_en_espanol_no_exponen_trazas(self):
         # Forzar error interno: enviar almacen inexistente

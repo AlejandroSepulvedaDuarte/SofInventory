@@ -1,5 +1,13 @@
 from rest_framework import serializers
 from django.db.models import Q
+from usuarios.validators import (
+    document_type_code,
+    normalize_semantic_text,
+    validate_commercial_name,
+    validate_document_number,
+    validate_person_or_place,
+)
+from catalogos.locations import validate_location
 from .models import Cliente
 
 
@@ -9,7 +17,14 @@ class ClienteSerializer(serializers.ModelSerializer):
     creado_por_nombre      = serializers.CharField(source='creado_por.nombre_completo', read_only=True)
     nombre_display         = serializers.SerializerMethodField()
     documento_display      = serializers.SerializerMethodField()
-    numero_documento = serializers.CharField(validators=[], required=True, error_messages={'required': 'El número de documento es obligatorio.'})
+    numero_documento = serializers.CharField(
+        validators=[],
+        required=True,
+        error_messages={
+            'required': 'El número de documento es obligatorio.',
+            'blank': 'El número de documento no puede estar vacío.',
+        },
+    )
 
     class Meta:
         model = Cliente
@@ -62,11 +77,7 @@ class ClienteSerializer(serializers.ModelSerializer):
         return f'{tipo} {numero}'.strip()
 
     def validate_numero_documento(self, value):
-        value = (value or '').strip()
-        if not value.isdigit():
-            raise serializers.ValidationError('No se permiten letras en el número de documento.')
-        if len(value) < 6 or len(value) > 10:
-            raise serializers.ValidationError('El número de documento debe tener entre 6 y 10 dígitos.')
+        value = validate_document_number(value, document_type_code(self))
         # Unicidad (excluir instancia actual en edición)
         queryset = Cliente.objects.filter(numero_documento__iexact=value)
         if self.instance:
@@ -74,6 +85,26 @@ class ClienteSerializer(serializers.ModelSerializer):
         if queryset.exists():
             raise serializers.ValidationError('El número de documento ya se encuentra registrado.')
         return value
+
+    def validate_nombres(self, value):
+        if value in (None, ''):
+            return value
+        return validate_person_or_place(
+            value,
+            empty_message='Los nombres no pueden estar formados solamente por espacios.',
+            number_message='Los nombres no pueden contener números.',
+            invalid_message='Los nombres solo pueden contener letras, espacios, apóstrofos y guiones.',
+        )
+
+    def validate_apellidos(self, value):
+        if value in (None, ''):
+            return value
+        return validate_person_or_place(
+            value,
+            empty_message='Los apellidos no pueden estar formados solamente por espacios.',
+            number_message='Los apellidos no pueden contener números.',
+            invalid_message='Los apellidos solo pueden contener letras, espacios, apóstrofos y guiones.',
+        )
 
     def validate_telefono(self, value):
         if value in (None, ''):
@@ -108,7 +139,14 @@ class ClienteSerializer(serializers.ModelSerializer):
         return value
 
     def validate_razon_social(self, value):
-        value = (value or '').strip()
+        if value in (None, ''):
+            value = value or ''
+        else:
+            value = validate_commercial_name(
+                value,
+                empty_message='La razón social no puede estar formada solamente por espacios.',
+                letter_message='La razón social debe contener al menos una letra.',
+            )
         tipo = self.initial_data.get('tipo_cliente') or getattr(self.instance, 'tipo_cliente', None)
         if tipo == 'juridica' and not value:
             raise serializers.ValidationError('La razón social es obligatoria para persona jurídica.')
@@ -122,7 +160,14 @@ class ClienteSerializer(serializers.ModelSerializer):
         return value
 
     def validate_nombre_comercial(self, value):
-        value = (value or '').strip()
+        if value in (None, ''):
+            value = value or ''
+        else:
+            value = validate_commercial_name(
+                value,
+                empty_message='El nombre comercial no puede estar formado solamente por espacios.',
+                letter_message='El nombre comercial debe contener al menos una letra.',
+            )
         tipo = self.initial_data.get('tipo_cliente') or getattr(self.instance, 'tipo_cliente', None)
         if tipo == 'juridica' and value:
             queryset = Cliente.objects.filter(tipo_cliente='juridica', nombre_comercial__iexact=value)
@@ -147,6 +192,33 @@ class ClienteSerializer(serializers.ModelSerializer):
         tipo_cliente = attrs.get('tipo_cliente') or getattr(self.instance, 'tipo_cliente', None)
         razon_social = attrs.get('razon_social') if 'razon_social' in attrs else getattr(self.instance, 'razon_social', None)
         nombre_comercial = attrs.get('nombre_comercial') if 'nombre_comercial' in attrs else getattr(self.instance, 'nombre_comercial', None)
+
+        semantic_errors = {}
+        for field, message in {
+            'nombres': 'Los nombres no pueden estar formados solamente por espacios.',
+            'apellidos': 'Los apellidos no pueden estar formados solamente por espacios.',
+            'razon_social': 'La razón social no puede estar formada solamente por espacios.',
+            'nombre_comercial': 'El nombre comercial no puede estar formado solamente por espacios.',
+            'pais': 'El país no puede estar formado solamente por espacios.',
+            'departamento': 'El departamento no puede estar formado solamente por espacios.',
+            'ciudad': 'La ciudad no puede estar formada solamente por espacios.',
+        }.items():
+            raw_value = self.initial_data.get(field)
+            if isinstance(raw_value, str) and raw_value and not raw_value.strip():
+                semantic_errors[field] = message
+
+        if tipo_cliente == 'natural':
+            if not normalize_semantic_text(attrs.get('nombres', getattr(self.instance, 'nombres', ''))):
+                semantic_errors['nombres'] = 'Los nombres son obligatorios.'
+            if not normalize_semantic_text(attrs.get('apellidos', getattr(self.instance, 'apellidos', ''))):
+                semantic_errors['apellidos'] = 'Los apellidos son obligatorios.'
+        elif tipo_cliente == 'juridica' and not normalize_semantic_text(razon_social):
+            semantic_errors['razon_social'] = 'La razón social es obligatoria para persona jurídica.'
+
+        if semantic_errors:
+            raise serializers.ValidationError(semantic_errors)
+
+        attrs = validate_location(attrs, self.instance)
 
         # Verificar que los teléfonos no sean iguales
         telefono_val = attrs.get('telefono') if 'telefono' in attrs else getattr(self.instance, 'telefono', None)

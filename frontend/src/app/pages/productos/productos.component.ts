@@ -15,11 +15,17 @@ import { FormsModule } from '@angular/forms';
 import { LayoutComponent } from '../../shared/components/layout.component';
 import { ProductosService } from '../../core/services/api.services';
 import { Producto, Categoria } from '../../core/models';
+import { FieldErrorComponent } from '../../shared/forms/field-error.component';
+import { FieldValidationDirective } from '../../shared/forms/field-validation.directive';
+import { FormErrorSummaryComponent } from '../../shared/forms/form-error-summary.component';
+import { FormFeedbackService, FormFeedbackState } from '../../shared/forms/form-feedback.service';
+import { commercialNameError, normalizeSemanticText } from '../../shared/forms/semantic-validators';
+import { NotificationService } from '../../shared/notifications/notification.service';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective],
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.css']
 })
@@ -31,7 +37,12 @@ export class ProductosComponent implements OnInit {
   showModal = signal(false);
   editing = signal<Producto | null>(null);   // null = creación, con datos = edición
   saving = signal(false);
-  formError = signal('');
+  readonly validation: FormFeedbackState;
+  highlightedId = signal<number | null>(null);
+  detalleProducto = signal<Producto | null>(null);
+  selectedImage: File | null = null;
+  imagePreview = '';
+  removeImage = false;
   
   // Filtros reactivos (se usan en el computed filteredProductos)
   searchTerm = signal('');
@@ -63,7 +74,13 @@ export class ProductosComponent implements OnInit {
     return list;
   });
 
-  constructor(private svc: ProductosService) { }
+  constructor(
+    private svc: ProductosService,
+    feedback: FormFeedbackService,
+    private notifications: NotificationService,
+  ) {
+    this.validation = new FormFeedbackState(feedback, 'No fue posible guardar el producto. Revisa los campos señalados.', '.product-form-modal');
+  }
 
   ngOnInit(): void {
     this.load();
@@ -98,12 +115,48 @@ export class ProductosComponent implements OnInit {
           unidad_medida: 'Unidad', precio_compra: 0, precio_venta: 0,
           iva_porcentaje: 0, stock_minimo: 0, descripcion: '',
         };
-    this.formError.set('');
+    this.validation.clear();
+    this.revokePreview();
+    this.selectedImage = null;
+    this.removeImage = false;
+    this.imagePreview = p?.imagen_url ?? '';
     this.showModal.set(true);
   }
 
   closeModal(): void {
-    this.showModal.set(false);
+    if (!this.saving()) {
+      this.showModal.set(false);
+      this.revokePreview();
+    }
+  }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    this.validation.clearField('imagen');
+    if (!file) return;
+    const extension = file.name.split('.').pop()?.toLowerCase();
+    if (!extension || !['png', 'jpg', 'jpeg', 'webp'].includes(extension)) {
+      this.validation.reject({ imagen: 'Selecciona una imagen PNG, JPG, JPEG o WebP.' });
+      input.value = '';
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      this.validation.reject({ imagen: 'La imagen no puede superar los 2 MB.' });
+      input.value = '';
+      return;
+    }
+    this.revokePreview();
+    this.selectedImage = file;
+    this.imagePreview = URL.createObjectURL(file);
+    this.removeImage = false;
+  }
+
+  removeCurrentImage(): void {
+    this.revokePreview();
+    this.selectedImage = null;
+    this.imagePreview = '';
+    this.removeImage = true;
   }
 
   /**
@@ -111,24 +164,56 @@ export class ProductosComponent implements OnInit {
    * Validación básica: campos obligatorios deben tener valor.
    */
   save(): void {
-    if (!this.form.nombre || !this.form.marca || !this.form.referencia || !this.form.categoria) {
-      this.formError.set('Completa los campos obligatorios.');
+    const errors: Record<string, string> = {};
+    const productNameError = commercialNameError(this.form.nombre, 'producto');
+    const brandError = commercialNameError(this.form.marca, 'marca');
+    if (productNameError) errors['nombre'] = productNameError;
+    if (brandError) errors['marca'] = brandError;
+    if (!String(this.form.referencia ?? '').trim()) errors['referencia'] = 'La referencia es obligatoria.';
+    if (!this.form.categoria) errors['categoria'] = 'Selecciona una categoría.';
+    if (Number(this.form.precio_compra ?? 0) < 0) errors['precio_compra'] = 'El precio de compra no puede ser negativo.';
+    if (Number(this.form.precio_venta ?? 0) < 0) errors['precio_venta'] = 'El precio de venta no puede ser negativo.';
+    if (Number(this.form.stock_minimo ?? 0) < 0) errors['stock_minimo'] = 'El stock mínimo no puede ser negativo.';
+    if (Object.keys(errors).length) {
+      this.validation.reject(errors);
       return;
     }
-    
+    this.validation.clear();
     this.saving.set(true);
+
+    this.form = {
+      ...this.form,
+      nombre: normalizeSemanticText(this.form.nombre),
+      marca: normalizeSemanticText(this.form.marca),
+      referencia: normalizeSemanticText(this.form.referencia),
+    };
+    const payload = new FormData();
+    for (const [key, value] of Object.entries(this.form)) {
+      if (['id', 'sku', 'stock', 'estado', 'imagen', 'imagen_url', 'creado_por'].includes(key)) continue;
+      if (value == null || typeof value === 'object') continue;
+      payload.append(key, String(value));
+    }
+    payload.append('quitar_imagen', String(this.removeImage));
+    if (this.selectedImage) payload.append('imagen', this.selectedImage, this.selectedImage.name);
+
     const req = this.editing()
-      ? this.svc.editar(this.editing()!.id!, this.form)
-      : this.svc.crear(this.form);
+      ? this.svc.editar(this.editing()!.id!, payload)
+      : this.svc.crear(payload);
 
     req.subscribe({
-      next: () => {
+      next: (response) => {
+        const wasEditing = Boolean(this.editing());
+        const id = Number(response?.producto?.id ?? this.editing()?.id ?? 0) || null;
         this.load();
-        this.closeModal();
         this.saving.set(false);
+        this.showModal.set(false);
+        this.revokePreview();
+        this.selectedImage = null;
+        this.notifications.success(`Producto ${wasEditing ? 'actualizado' : 'registrado'} satisfactoriamente.`);
+        this.highlight(id);
       },
       error: (e) => {
-        this.formError.set(e.error?.error ?? 'Error al guardar');
+        this.validation.fromHttp(e);
         this.saving.set(false);
       },
     });
@@ -168,7 +253,7 @@ export class ProductosComponent implements OnInit {
           // Actualización local + recarga completa para consistencia
           p.estado = nuevoEstado;
           this.load();
-          alert(`Producto ${mensajeAccion}do correctamente`);
+          this.notifications.success('Estado del producto actualizado satisfactoriamente.');
         },
         error: (e) => {
           console.error('Error detallado:', e);
@@ -182,9 +267,23 @@ export class ProductosComponent implements OnInit {
             errorMsg = e.error;
           }
 
-          alert(errorMsg);
+          this.notifications.error(errorMsg);
         }
       });
     }
+  }
+
+  verDetalle(producto: Producto): void {
+    this.detalleProducto.set(producto);
+  }
+
+  private highlight(id: number | null): void {
+    if (!id) return;
+    this.highlightedId.set(id);
+    window.setTimeout(() => this.highlightedId.set(null), 3500);
+  }
+
+  private revokePreview(): void {
+    if (this.imagePreview.startsWith('blob:')) URL.revokeObjectURL(this.imagePreview);
   }
 }

@@ -5,9 +5,35 @@ from rest_framework import status
 from django.contrib.auth.hashers import check_password
 from django.utils import timezone
 
-from .models import Usuario, Rol, TipoDocumento, SesionAPI, IntentoFallidoLogin
+from .models import (
+    EventoAuditoriaUsuario,
+    IntentoFallidoLogin,
+    Rol,
+    SesionAPI,
+    TipoDocumento,
+    Usuario,
+)
 from .permissions import require_roles
-from .serializers import UsuarioSerializer, RolSerializer, TipoDocumentoSerializer, LoginSerializer
+from .serializers import (
+    EventoAuditoriaUsuarioSerializer,
+    LoginSerializer,
+    RolSerializer,
+    TipoDocumentoSerializer,
+    UsuarioSerializer,
+)
+
+
+def registrar_evento_usuario(
+    actor, target, accion, detalle=None, target_name=None, actor_name=None
+):
+    EventoAuditoriaUsuario.objects.create(
+        usuario=target,
+        usuario_nombre=target_name or getattr(target, 'nombre_completo', 'No disponible'),
+        realizado_por=actor,
+        realizado_por_nombre=actor_name or getattr(actor, 'nombre_completo', 'No disponible'),
+        accion=accion,
+        detalle=detalle or {},
+    )
 
 
 def serializar_usuario_publico(user):
@@ -120,7 +146,13 @@ def crear_usuario(request):
 
     serializer = UsuarioSerializer(data=data)
     if serializer.is_valid():
-        serializer.save()
+        usuario = serializer.save()
+        registrar_evento_usuario(
+            request.user,
+            usuario,
+            'creacion',
+            {'rol': usuario.rol.nombre, 'estado': usuario.estado},
+        )
         return Response({'mensaje': 'Usuario creado exitosamente'}, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -162,8 +194,20 @@ def eliminar_usuario(request, id):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
+        nombre_usuario = user.nombre_completo
+        username = user.username
+        actor_nombre = request.user.nombre_completo
+        actor_evento = request.user if request.user.pk != user.pk else None
         SesionAPI.objects.filter(usuario=user, activa=True).update(activa=False)
         user.delete()
+        registrar_evento_usuario(
+            actor_evento,
+            None,
+            'eliminacion',
+            {'username': username},
+            target_name=nombre_usuario,
+            actor_name=actor_nombre,
+        )
         return Response({'mensaje': 'Usuario eliminado correctamente'}, status=status.HTTP_200_OK)
     except Usuario.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
@@ -176,6 +220,9 @@ def cambiar_estado(request, id):
         user = Usuario.objects.get(id=id)
         user.estado = 'inactivo' if user.estado == 'activo' else 'activo'
         user.save()
+        registrar_evento_usuario(
+            request.user, user, 'cambio_estado', {'estado': user.estado}
+        )
 
         if user.estado == 'inactivo':
             SesionAPI.objects.filter(usuario=user, activa=True).update(activa=False)
@@ -205,6 +252,7 @@ def desbloquear_usuario(request, id):
     user.cuenta_bloqueada = False
     user.fecha_bloqueo = None
     user.save(update_fields=['cuenta_bloqueada', 'fecha_bloqueo'])
+    registrar_evento_usuario(request.user, user, 'desbloqueo')
 
     # Opcional: invalidar sesiones existentes por seguridad (no estrictamente necesario al desbloquear)
     SesionAPI.objects.filter(usuario=user, activa=True).update(activa=False)
@@ -220,9 +268,20 @@ def editar_usuario(request, id):
     except Usuario.DoesNotExist:
         return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
 
+    rol_anterior = user.rol.nombre
     serializer = UsuarioSerializer(user, data=request.data, partial=True)
     if serializer.is_valid():
-        serializer.save()
+        usuario = serializer.save()
+        accion = 'cambio_rol' if usuario.rol.nombre != rol_anterior else 'edicion'
+        detalle = (
+            {'rol_anterior': rol_anterior, 'rol_nuevo': usuario.rol.nombre}
+            if accion == 'cambio_rol'
+            else {'campos': sorted(
+                field for field in serializer.validated_data.keys()
+                if field not in {'password', 'confirm_password'}
+            )}
+        )
+        registrar_evento_usuario(request.user, usuario, accion, detalle)
         return Response({'mensaje': 'Usuario actualizado correctamente'}, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -253,3 +312,12 @@ def reporte_roles(request):
             ]
         })
     return Response(reporte, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@require_roles('Administrador')
+def auditoria_usuarios(request):
+    eventos = EventoAuditoriaUsuario.objects.select_related(
+        'usuario', 'realizado_por'
+    )[:250]
+    return Response(EventoAuditoriaUsuarioSerializer(eventos, many=True).data)

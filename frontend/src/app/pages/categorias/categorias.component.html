@@ -46,23 +46,27 @@
 
     <!-- Modal de creación de categoría -->
     <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
-      <div class="modal modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal modal-sm category-form-modal" role="dialog" aria-modal="true" aria-labelledby="category-form-title" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h2>Nueva Categoría</h2>
-          <button class="close-btn" (click)="closeModal()">×</button>
+          <h2 id="category-form-title">Nueva Categoría</h2>
+          <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()"><i class="fas fa-xmark" aria-hidden="true"></i></button>
         </div>
+        <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
 
         <div class="modal-body">
+          <p class="required-hint">Los campos marcados con <span class="required-marker">*</span> son obligatorios.</p>
           <div class="field">
-            <label>Nombre *</label>
-            <input type="text" [(ngModel)]="form.nombre" placeholder="Nombre de la categoría" />
+            <label for="category-name">Nombre <span class="required-marker">*</span></label>
+            <input id="category-name" type="text" required aria-required="true" maxlength="100" [(ngModel)]="form.nombre" (ngModelChange)="validation.clearField('nombre')" placeholder="Nombre de la categoría" [appFieldValidation]="validation.error('nombre')" validationMessageId="category-name-error" />
+            <app-field-error id="category-name-error" [message]="validation.error('nombre')" />
           </div>
 
           <div class="field">
-            <label>Tipo de Control *</label>
-            <select [(ngModel)]="form.tipo_control">
+            <label for="category-control">Tipo de Control <span class="required-marker">*</span></label>
+            <select id="category-control" required aria-required="true" [(ngModel)]="form.tipo_control" (ngModelChange)="validation.clearField('tipo_control')" [appFieldValidation]="validation.error('tipo_control')" validationMessageId="category-control-error">
               <option *ngFor="let t of tiposControl" [value]="t.value">{{ t.label }}</option>
             </select>
+            <app-field-error id="category-control-error" [message]="validation.error('tipo_control')" />
           </div>
 
           <div class="field">
@@ -70,7 +74,6 @@
             <textarea [(ngModel)]="form.descripcion" rows="3" placeholder="Descripción opcional"></textarea>
           </div>
 
-          <div class="error-msg" *ngIf="formError()">{{ formError() }}</div>
         </div>
 
         <div class="modal-footer">

@@ -10,6 +10,7 @@ from inventario.models import Almacen, MovimientoInventario
 from inventario.services import InventarioError, ServicioInventario
 from productos.models import Producto
 from proveedores.models import Proveedor
+from empresa.services import obtener_snapshot_empresa
 from usuarios.permissions import require_roles
 
 from .models import Compra, DetalleCompra
@@ -78,6 +79,8 @@ def registrar_compra(request):
                 iva_total=Decimal('0'),
                 total=Decimal('0'),
                 registrado_por=request.user,
+                observaciones=data['observaciones'],
+                empresa_snapshot=obtener_snapshot_empresa(),
             )
 
             subtotal_compra = Decimal('0')
@@ -103,6 +106,8 @@ def registrar_compra(request):
                 DetalleCompra.objects.create(
                     compra=compra,
                     producto=producto,
+                    nombre_producto=producto.nombre,
+                    sku_producto=producto.sku,
                     cantidad=cantidad,
                     costo_unitario=costo,
                     iva_porcentaje=iva,
@@ -160,7 +165,9 @@ def registrar_compra(request):
 @require_roles('Administrador', 'Supervisor', 'Bodega')
 def listar_compras(request):
     compras = (
-        Compra.objects.select_related('proveedor', 'registrado_por', 'almacen')
+        Compra.objects.select_related(
+            'proveedor', 'proveedor__tipo_documento', 'registrado_por', 'almacen'
+        )
         .prefetch_related('detalles__producto')
         .all()
     )
@@ -260,7 +267,7 @@ def detalle_compra(request, id):
     try:
         compra = (
             Compra.objects.select_related(
-                'proveedor', 'registrado_por', 'almacen',
+                'proveedor', 'proveedor__tipo_documento', 'registrado_por', 'almacen',
                 'anulado_por',
             )
             .prefetch_related('detalles__producto')

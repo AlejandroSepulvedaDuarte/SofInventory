@@ -66,59 +66,72 @@
 
     <!-- Modal de creación/edición de usuario -->
     <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
-      <div class="modal modal-lg" (click)="$event.stopPropagation()">
+      <div class="modal modal-lg user-form-modal" role="dialog" aria-modal="true" aria-labelledby="user-form-title" (click)="$event.stopPropagation()">
         
         <div class="modal-header">
-          <h2>{{ editing() ? 'Editar Usuario' : 'Nuevo Usuario' }}</h2>
-          <button class="close-btn" (click)="closeModal()">✕</button>
+          <h2 id="user-form-title">{{ editing() ? 'Editar Usuario' : 'Nuevo Usuario' }}</h2>
+          <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()"><i class="fas fa-xmark" aria-hidden="true"></i></button>
         </div>
+        <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
         
         <div class="modal-body">
+          <p class="required-hint">Los campos marcados con <span class="required-marker">*</span> son obligatorios.</p>
           <div class="form-grid">
             <!-- Campos comunes -->
             <div class="field">
-              <label>Tipo Documento *</label>
-              <select [(ngModel)]="form.tipo_documento">
+              <label>Tipo Documento <span class="required-marker">*</span></label>
+              <select required aria-required="true" [(ngModel)]="form.tipo_documento" (ngModelChange)="validation.clearField('tipo_documento'); validation.clearField('numero_documento')" [appFieldValidation]="validation.error('tipo_documento')" validationMessageId="user-document-type-error">
                 <option value="">Seleccionar...</option>
                 <option *ngFor="let t of tiposDoc()" [value]="t.id">{{ t.codigo }} - {{ t.nombre }}</option>
               </select>
+              <app-field-error id="user-document-type-error" [message]="validation.error('tipo_documento')" />
             </div>
             
             <div class="field">
-              <label>Número Documento *</label>
+              <label>Número Documento <span class="required-marker">*</span></label>
               <input type="text"
+                     required aria-required="true"
                      [(ngModel)]="form.numero_documento"
                      placeholder="Número de documento"
-                     maxlength="10"
-                     inputmode="numeric"
-                     pattern="[0-9]*"
-                     (keydown)="allowOnlyNumbers($event)"
+                     maxlength="20"
+                     autocapitalize="characters"
+                     (ngModelChange)="validation.clearField('numero_documento')"
+                     [appFieldValidation]="validation.error('numero_documento')"
+                     validationMessageId="user-document-error"
               />
+              <app-field-error id="user-document-error" [message]="validation.error('numero_documento')" />
             </div>
             
             <div class="field">
-              <label>Nombre Completo *</label>
-              <input type="text" [(ngModel)]="form.nombre_completo" placeholder="Nombre completo" />
+              <label>Nombre Completo <span class="required-marker">*</span></label>
+              <input type="text" required aria-required="true" maxlength="150" [(ngModel)]="form.nombre_completo" (ngModelChange)="validation.clearField('nombre_completo')" placeholder="Nombre completo" [appFieldValidation]="validation.error('nombre_completo')" validationMessageId="user-full-name-error" />
+              <app-field-error id="user-full-name-error" [message]="validation.error('nombre_completo')" />
             </div>
             
             <div class="field">
-              <label>Email *</label>
-              <input type="email" [(ngModel)]="form.email" placeholder="correo@empresa.com" />
+              <label>Email <span class="required-marker">*</span></label>
+              <input type="email" required aria-required="true" [(ngModel)]="form.email" (ngModelChange)="validation.clearField('email')" placeholder="correo@empresa.com" [appFieldValidation]="validation.error('email')" validationMessageId="user-email-error" />
+              <app-field-error id="user-email-error" [message]="validation.error('email')" />
             </div>
             
             <div class="field">
-              <label>Username *</label>
-              <input type="text" [(ngModel)]="form.username" placeholder="nombre.usuario" />
+              <label>Nombre de usuario <span class="required-marker">*</span></label>
+              <input type="text" required aria-required="true" maxlength="50" autocapitalize="none" [(ngModel)]="form.username" (ngModelChange)="validation.clearField('username')" placeholder="nombre.usuario" [appFieldValidation]="validation.error('username')" validationMessageId="username-error" />
+              <app-field-error id="username-error" [message]="validation.error('username')" />
             </div>
             
             <!-- Contraseña: obligatoria en creación, opcional en edición -->
             <div class="field">
-              <label>{{ editing() ? 'Nueva Contraseña (opcional)' : 'Contraseña *' }}</label>
+              <label>Nueva Contraseña <span *ngIf="!editing()" class="required-marker">*</span><span *ngIf="editing()"> (opcional)</span></label>
               <div class="input-wrap">
                 <input [type]="showPassword() ? 'text' : 'password'"
                        [(ngModel)]="form.password"
                        [placeholder]="editing() ? 'Dejar vacío para no cambiar' : 'Contraseña'"
                        autocomplete="new-password"
+                       [attr.aria-required]="!editing() ? 'true' : null"
+                       (ngModelChange)="validation.clearField('password')"
+                       [appFieldValidation]="validation.error('password')"
+                       validationMessageId="user-password-error"
                 />
                 <button type="button" class="eye-btn" (click)="togglePassword()" [title]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
                   <svg *ngIf="!showPassword()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -130,15 +143,20 @@
                   </svg>
                 </button>
               </div>
+              <app-field-error id="user-password-error" [message]="validation.error('password')" />
             </div>
 
             <div class="field">
-              <label>Confirmar Contraseña {{ editing() ? '(opcional)' : '*' }}</label>
+              <label>Confirmar Contraseña <span *ngIf="!editing()" class="required-marker">*</span><span *ngIf="editing()"> (opcional)</span></label>
               <div class="input-wrap">
                 <input [type]="showConfirmPassword() ? 'text' : 'password'"
                        [(ngModel)]="form.confirm_password"
                        [placeholder]="editing() ? 'Dejar vacío para no cambiar' : 'Confirmar contraseña'"
                        autocomplete="new-password"
+                       [attr.aria-required]="!editing() ? 'true' : null"
+                       (ngModelChange)="validation.clearField('confirm_password')"
+                       [appFieldValidation]="validation.error('confirm_password')"
+                       validationMessageId="user-confirm-password-error"
                 />
                 <button type="button" class="eye-btn" (click)="toggleConfirmPassword()" [title]="showConfirmPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
                   <svg *ngIf="!showConfirmPassword()" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -150,19 +168,21 @@
                   </svg>
                 </button>
               </div>
+              <app-field-error id="user-confirm-password-error" [message]="validation.error('confirm_password')" />
             </div>
 
             <div class="field">
-              <label>Rol *</label>
-              <select [(ngModel)]="form.rol">
+              <label>Rol <span class="required-marker">*</span></label>
+              <select required aria-required="true" [(ngModel)]="form.rol" (ngModelChange)="validation.clearField('rol')" [appFieldValidation]="validation.error('rol')" validationMessageId="user-role-error">
                 <option value="">Seleccionar...</option>
                 <option *ngFor="let r of roles()" [value]="r.id">{{ r.nombre }}</option>
               </select>
+              <app-field-error id="user-role-error" [message]="validation.error('rol')" />
             </div>
             
             <div class="field">
-              <label>Fecha Creación *</label>
-              <input type="date" [(ngModel)]="form.fecha_creacion" />
+              <label>Fecha Creación <span class="required-marker">*</span></label>
+              <input type="date" required aria-required="true" [(ngModel)]="form.fecha_creacion" />
             </div>
             
             <div class="field full">
@@ -171,7 +191,6 @@
             </div>
           </div>
           
-          <div class="error-msg" *ngIf="formError()">{{ formError() }}</div>
         </div>
         
         <div class="modal-footer">

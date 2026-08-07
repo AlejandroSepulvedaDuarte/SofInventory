@@ -1,0 +1,160 @@
+<div class="field">
+  <label [for]="idPrefix + '-mode'">
+    <i class="fas fa-earth-americas"></i> País / tipo de ubicación
+    <span class="required-marker">*</span>
+  </label>
+  <select
+    [id]="idPrefix + '-mode'"
+    required
+    aria-required="true"
+    [ngModel]="mode"
+    (ngModelChange)="onModeChange($event)"
+    [appFieldValidation]="mode === 'colombia' ? error('pais') : ''"
+    [validationMessageId]="idPrefix + '-country-error'"
+  >
+    <option value="colombia">Colombia</option>
+    <option value="foreign">Otro país</option>
+  </select>
+  <app-field-error
+    *ngIf="mode === 'colombia'"
+    [id]="idPrefix + '-country-error'"
+    [message]="error('pais')"
+  />
+</div>
+
+<ng-container *ngIf="mode === 'colombia'; else foreignFields">
+  <div class="field">
+    <label [for]="idPrefix + '-department'">
+      <i class="fas fa-map"></i> Departamento
+      <span class="required-marker">*</span>
+    </label>
+    <select
+      [id]="idPrefix + '-department'"
+      required
+      aria-required="true"
+      [disabled]="loading() || !!catalogError()"
+      [ngModel]="location.departamento"
+      (ngModelChange)="onDepartmentChange($event)"
+      [appFieldValidation]="error('departamento')"
+      [validationMessageId]="idPrefix + '-department-error'"
+    >
+      <option value="">Seleccione un departamento</option>
+      <option *ngIf="hasLegacyDepartment()" [value]="location.departamento">
+        Valor existente: {{ location.departamento }}
+      </option>
+      <option *ngFor="let department of departments()" [value]="department.name">
+        {{ department.name }}
+      </option>
+    </select>
+    <app-field-error
+      [id]="idPrefix + '-department-error'"
+      [message]="error('departamento')"
+    />
+  </div>
+
+  <div class="field">
+    <label [for]="idPrefix + '-city'">
+      <i class="fas fa-city"></i> Ciudad o municipio
+      <span class="required-marker">*</span>
+    </label>
+    <select
+      [id]="idPrefix + '-city'"
+      required
+      aria-required="true"
+      [disabled]="cityDisabled()"
+      [ngModel]="location.ciudad"
+      (ngModelChange)="onCityChange($event)"
+      [appFieldValidation]="error('ciudad')"
+      [validationMessageId]="idPrefix + '-city-error'"
+    >
+      <option value="">Seleccione una ciudad o municipio</option>
+      <option *ngIf="hasLegacyCity()" [value]="location.ciudad">
+        Valor existente: {{ location.ciudad }}
+      </option>
+      <option *ngFor="let municipality of municipalities()" [value]="municipality.name">
+        {{ municipality.name }}
+      </option>
+    </select>
+    <small *ngIf="!location.departamento" class="location-help">
+      Selecciona primero un departamento para habilitar este campo.
+    </small>
+    <app-field-error [id]="idPrefix + '-city-error'" [message]="error('ciudad')" />
+  </div>
+</ng-container>
+
+<ng-template #foreignFields>
+  <div class="field">
+    <label [for]="idPrefix + '-foreign-country'">
+      <i class="fas fa-earth-americas"></i> País
+      <span class="required-marker">*</span>
+    </label>
+    <input
+      [id]="idPrefix + '-foreign-country'"
+      type="text"
+      required
+      aria-required="true"
+      maxlength="100"
+      [ngModel]="location.pais"
+      (ngModelChange)="onForeignFieldChange('pais', $event)"
+      placeholder="Ej. México"
+      [appFieldValidation]="error('pais')"
+      [validationMessageId]="idPrefix + '-country-error'"
+    />
+    <app-field-error [id]="idPrefix + '-country-error'" [message]="error('pais')" />
+  </div>
+
+  <div class="field">
+    <label [for]="idPrefix + '-foreign-department'">
+      <i class="fas fa-map"></i> Estado, provincia o departamento
+      <span class="required-marker">*</span>
+    </label>
+    <input
+      [id]="idPrefix + '-foreign-department'"
+      type="text"
+      required
+      aria-required="true"
+      maxlength="100"
+      [ngModel]="location.departamento"
+      (ngModelChange)="onForeignFieldChange('departamento', $event)"
+      placeholder="Ej. Jalisco"
+      [appFieldValidation]="error('departamento')"
+      [validationMessageId]="idPrefix + '-department-error'"
+    />
+    <app-field-error
+      [id]="idPrefix + '-department-error'"
+      [message]="error('departamento')"
+    />
+  </div>
+
+  <div class="field">
+    <label [for]="idPrefix + '-foreign-city'">
+      <i class="fas fa-city"></i> Ciudad
+      <span class="required-marker">*</span>
+    </label>
+    <input
+      [id]="idPrefix + '-foreign-city'"
+      type="text"
+      required
+      aria-required="true"
+      maxlength="100"
+      [ngModel]="location.ciudad"
+      (ngModelChange)="onForeignFieldChange('ciudad', $event)"
+      placeholder="Ej. Guadalajara"
+      [appFieldValidation]="error('ciudad')"
+      [validationMessageId]="idPrefix + '-city-error'"
+    />
+    <app-field-error [id]="idPrefix + '-city-error'" [message]="error('ciudad')" />
+  </div>
+</ng-template>
+
+<div *ngIf="loading()" class="field full location-catalog-status" aria-live="polite">
+  <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+  Cargando departamentos y municipios…
+</div>
+
+<div *ngIf="catalogError()" class="field full location-catalog-status catalog-error" role="alert">
+  <span><i class="fas fa-triangle-exclamation" aria-hidden="true"></i> {{ catalogError() }}</span>
+  <button type="button" class="btn-secondary retry-button" (click)="loadCatalog(true)">
+    Reintentar
+  </button>
+</div>

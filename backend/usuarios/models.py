@@ -155,3 +155,44 @@ class IntentoFallidoLogin(models.Model):
         indexes = [
             models.Index(fields=['usuario', '-fecha_intento']),
         ]
+
+
+class EventoAuditoriaUsuario(models.Model):
+    ACCION_CHOICES = [
+        ('creacion', 'Creación'),
+        ('edicion', 'Edición'),
+        ('cambio_rol', 'Cambio de rol'),
+        ('cambio_estado', 'Activación o desactivación'),
+        ('desbloqueo', 'Desbloqueo'),
+        ('eliminacion', 'Eliminación'),
+    ]
+
+    usuario = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        related_name='eventos_auditoria_recibidos',
+        null=True,
+        blank=True,
+    )
+    usuario_nombre = models.CharField(max_length=150)
+    realizado_por = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        related_name='eventos_auditoria_realizados',
+        null=True,
+        blank=True,
+    )
+    realizado_por_nombre = models.CharField(max_length=150)
+    accion = models.CharField(max_length=20, choices=ACCION_CHOICES)
+    detalle = models.JSONField(default=dict, blank=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'auditoria_usuarios'
+        ordering = ['-fecha']
+        indexes = [
+            models.Index(
+                fields=['-fecha', 'accion'],
+                name='auditoria_u_fecha_5131b5_idx',
+            )
+        ]

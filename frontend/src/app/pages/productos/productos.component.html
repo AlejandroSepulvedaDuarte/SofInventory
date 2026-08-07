@@ -37,6 +37,7 @@
       <table class="data-table">
         <thead>
           <tr>
+            <th>Imagen</th>
             <th>SKU</th>
             <th>Nombre</th>
             <th>Marca</th>
@@ -48,7 +49,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let p of filteredProductos()">
+          <tr *ngFor="let p of filteredProductos()" [class.recently-updated]="highlightedId() === p.id">
+            <td><div class="product-thumb"><img *ngIf="p.imagen_url; else productPlaceholder" [src]="p.imagen_url" [alt]="'Imagen de ' + p.nombre" /><ng-template #productPlaceholder><i class="fas fa-box-open"></i></ng-template></div></td>
             <td><code>{{ p.sku }}</code></td>
             <td>{{ p.nombre }}</td>
             <td>{{ p.marca }}</td>
@@ -68,6 +70,7 @@
             </td>
             <td>
               <div class="action-btns">
+                <button class="btn-icon" title="Ver detalle" (click)="verDetalle(p)"><i class="fas fa-eye"></i></button>
                 <!-- Editar: abre modal con datos del producto -->
                 <button class="btn-icon" title="Editar" (click)="openModal(p)">
                   <i class="fas fa-edit"></i>
@@ -81,7 +84,7 @@
           </tr>
           <!-- Fila vacía cuando no hay resultados -->
           <tr *ngIf="filteredProductos().length === 0">
-            <td colspan="8" class="empty-row">No se encontraron productos</td>
+            <td colspan="9" class="empty-row">No se encontraron productos</td>
           </tr>
         </tbody>
       </table>
@@ -89,37 +92,56 @@
 
     <!-- Modal: formulario para crear o editar producto -->
     <div class="modal-overlay" *ngIf="showModal()" (click)="closeModal()">
-      <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal product-form-modal" role="dialog" aria-modal="true" aria-labelledby="product-form-title" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h2>{{ editing() ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
-          <button class="close-btn" (click)="closeModal()">×</button>
+          <h2 id="product-form-title">{{ editing() ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+          <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()"><i class="fas fa-xmark" aria-hidden="true"></i></button>
         </div>
+        <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
         
         <div class="modal-body">
+          <p class="required-hint">Los campos marcados con <span class="required-marker">*</span> son obligatorios.</p>
           <div class="form-grid">
+            <div class="field full product-image-field">
+              <label>Imagen del producto</label>
+              <div class="product-image-editor">
+                <div class="product-image-preview"><img *ngIf="imagePreview; else formImagePlaceholder" [src]="imagePreview" alt="Vista previa de la imagen del producto" /><ng-template #formImagePlaceholder><i class="fas fa-image"></i></ng-template></div>
+                <div class="product-image-actions">
+                  <label for="product-image" class="btn-secondary file-button"><i class="fas fa-folder-open"></i> Seleccionar imagen</label>
+                  <input id="product-image" type="file" accept="image/png,image/jpeg,image/webp" (change)="onImageSelected($event)" />
+                  <button *ngIf="imagePreview" type="button" class="btn-text-danger" (click)="removeCurrentImage()">Quitar imagen</button>
+                  <small>Opcional. PNG, JPG, JPEG o WebP; máximo 2 MB.</small>
+                </div>
+              </div>
+              <app-field-error [message]="validation.error('imagen')" />
+            </div>
             <!-- Campos básicos del producto -->
             <div class="field">
-              <label>Nombre *</label>
-              <input type="text" [(ngModel)]="form.nombre" placeholder="Nombre del producto" />
+              <label for="product-name">Nombre <span class="required-marker">*</span></label>
+              <input id="product-name" type="text" required aria-required="true" maxlength="150" [(ngModel)]="form.nombre" (ngModelChange)="validation.clearField('nombre')" placeholder="Nombre del producto" [appFieldValidation]="validation.error('nombre')" validationMessageId="product-name-error" />
+              <app-field-error id="product-name-error" [message]="validation.error('nombre')" />
             </div>
             
             <div class="field">
-              <label>Marca *</label>
-              <input type="text" [(ngModel)]="form.marca" placeholder="Marca" />
+              <label for="product-brand">Marca <span class="required-marker">*</span></label>
+              <input id="product-brand" type="text" required aria-required="true" maxlength="100" [(ngModel)]="form.marca" (ngModelChange)="validation.clearField('marca')" placeholder="Marca" [appFieldValidation]="validation.error('marca')" validationMessageId="product-brand-error" />
+              <app-field-error id="product-brand-error" [message]="validation.error('marca')" />
             </div>
             
             <div class="field">
-              <label>Referencia *</label>
-              <input type="text" [(ngModel)]="form.referencia" placeholder="Referencia" />
+              <label for="product-reference">Referencia <span class="required-marker">*</span></label>
+              <input id="product-reference" type="text" required aria-required="true" maxlength="100" [(ngModel)]="form.referencia" (ngModelChange)="validation.clearField('referencia')" placeholder="REF-2026-A1" [appFieldValidation]="validation.error('referencia')" validationMessageId="product-reference-error" />
+              <app-field-error id="product-reference-error" [message]="validation.error('referencia')" />
             </div>
             
             <!-- Categoría: carga desde catálogo de categorías -->
             <div class="field">
-              <label>Categoría *</label>
-              <select [(ngModel)]="form.categoria">
+              <label for="product-category">Categoría <span class="required-marker">*</span></label>
+              <select id="product-category" required aria-required="true" [(ngModel)]="form.categoria" (ngModelChange)="validation.clearField('categoria')" [appFieldValidation]="validation.error('categoria')" validationMessageId="product-category-error">
                 <option value="">Seleccionar...</option>
                 <option *ngFor="let c of categorias()" [value]="c.id">{{ c.nombre }}</option>
               </select>
+              <app-field-error id="product-category-error" [message]="validation.error('categoria')" />
             </div>
             
             <div class="field">
@@ -132,12 +154,14 @@
             <!-- Precios e impuestos -->
             <div class="field">
               <label>Precio Compra</label>
-              <input type="number" [(ngModel)]="form.precio_compra" placeholder="0" />
+              <input type="number" min="0" [(ngModel)]="form.precio_compra" (ngModelChange)="validation.clearField('precio_compra')" placeholder="0" [appFieldValidation]="validation.error('precio_compra')" validationMessageId="product-purchase-price-error" />
+              <app-field-error id="product-purchase-price-error" [message]="validation.error('precio_compra')" />
             </div>
             
             <div class="field">
               <label>Precio Venta</label>
-              <input type="number" [(ngModel)]="form.precio_venta" placeholder="0" />
+              <input type="number" min="0" [(ngModel)]="form.precio_venta" (ngModelChange)="validation.clearField('precio_venta')" placeholder="0" [appFieldValidation]="validation.error('precio_venta')" validationMessageId="product-sale-price-error" />
+              <app-field-error id="product-sale-price-error" [message]="validation.error('precio_venta')" />
             </div>
             
             <div class="field">
@@ -148,7 +172,8 @@
             <!-- Control de inventario -->
             <div class="field">
               <label>Stock Mínimo</label>
-              <input type="number" [(ngModel)]="form.stock_minimo" placeholder="0" />
+              <input type="number" min="0" [(ngModel)]="form.stock_minimo" (ngModelChange)="validation.clearField('stock_minimo')" placeholder="0" [appFieldValidation]="validation.error('stock_minimo')" validationMessageId="product-minimum-stock-error" />
+              <app-field-error id="product-minimum-stock-error" [message]="validation.error('stock_minimo')" />
             </div>
             
             <!-- Campo texto largo para descripción detallada -->
@@ -158,15 +183,24 @@
             </div>
           </div>
           
-          <!-- Mensaje de error (validaciones frontend o backend) -->
-          <div class="error-msg" *ngIf="formError()">{{ formError() }}</div>
         </div>
         
         <div class="modal-footer">
           <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
           <button class="btn-primary" (click)="save()" [disabled]="saving()">
+            <span *ngIf="saving()" class="btn-spinner" aria-hidden="true"></span>
             {{ saving() ? 'Guardando...' : 'Guardar' }}
           </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" *ngIf="detalleProducto() as product" (click)="detalleProducto.set(null)">
+      <div class="modal product-detail-modal" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+        <div class="modal-header"><h2>Detalle del producto</h2><button class="close-btn" (click)="detalleProducto.set(null)" aria-label="Cerrar"><i class="fas fa-xmark"></i></button></div>
+        <div class="modal-body product-detail">
+          <div class="product-detail-image"><img *ngIf="product.imagen_url; else detailImagePlaceholder" [src]="product.imagen_url" [alt]="'Imagen de ' + product.nombre" /><ng-template #detailImagePlaceholder><i class="fas fa-box-open"></i><span>Sin imagen</span></ng-template></div>
+          <div class="product-detail-data"><h3>{{ product.nombre }}</h3><p>{{ product.marca }} · {{ product.referencia }}</p><dl><div><dt>SKU</dt><dd>{{ product.sku }}</dd></div><div><dt>Categoría</dt><dd>{{ getCatNombre(product.categoria) }}</dd></div><div><dt>Precio de venta</dt><dd>{{ product.precio_venta | currency:'COP':'symbol':'1.0-0' }}</dd></div><div><dt>Stock</dt><dd>{{ product.stock }} {{ product.unidad_medida }}</dd></div><div><dt>IVA</dt><dd>{{ product.iva_porcentaje }}%</dd></div><div><dt>Estado</dt><dd>{{ product.estado }}</dd></div></dl><p *ngIf="product.descripcion" class="product-description">{{ product.descripcion }}</p></div>
         </div>
       </div>
     </div>

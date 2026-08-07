@@ -16,11 +16,17 @@ import { FormsModule } from '@angular/forms';
 import { LayoutComponent } from '../../shared/components/layout.component';
 import { InventarioService, ProductosService } from '../../core/services/api.services';
 import { Almacen, MovimientoInventarioRequest, Producto } from '../../core/models';
+import { FieldErrorComponent } from '../../shared/forms/field-error.component';
+import { FieldValidationDirective } from '../../shared/forms/field-validation.directive';
+import { FormErrorSummaryComponent } from '../../shared/forms/form-error-summary.component';
+import { FormFeedbackService, FormFeedbackState } from '../../shared/forms/form-feedback.service';
+import { commercialNameError, normalizeSemanticText } from '../../shared/forms/semantic-validators';
+import { NotificationService } from '../../shared/notifications/notification.service';
 
 @Component({
   selector: 'app-inventario',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective],
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
 })
@@ -41,7 +47,8 @@ export class InventarioComponent implements OnInit {
   /** null = modo creación; Almacen = modo edición. */
   editingAlmacen   = signal<Almacen | null>(null);
   almacenSaving    = signal(false);
-  almacenError     = signal('');
+  readonly almacenValidation: FormFeedbackState;
+  highlightedAlmacenId = signal<number | null>(null);
   almacenForm: Partial<Almacen> = {};
 
   // ── Estado del formulario de movimiento ──────────────────────────────────
@@ -54,9 +61,7 @@ export class InventarioComponent implements OnInit {
     observacion: ''
   };
   movSaving  = signal(false);
-  movError   = signal('');
-  /** Mensaje de confirmación; se muestra tras registrar y se limpia al siguiente envío. */
-  movSuccess = signal('');
+  readonly movValidation: FormFeedbackState;
 
   // ── Utilidad ─────────────────────────────────────────────────────────────
   /** Devuelve las claves numéricas de estadisticas(); útil para renderizado dinámico. */
@@ -66,7 +71,15 @@ export class InventarioComponent implements OnInit {
     );
 
   // ── Constructor ──────────────────────────────────────────────────────────
-  constructor(private svc: InventarioService, private prodSvc: ProductosService) {}
+  constructor(
+    private svc: InventarioService,
+    private prodSvc: ProductosService,
+    feedback: FormFeedbackService,
+    private notifications: NotificationService,
+  ) {
+    this.almacenValidation = new FormFeedbackState(feedback, 'No fue posible guardar el almacén. Revisa los campos señalados.', '.warehouse-form-modal');
+    this.movValidation = new FormFeedbackState(feedback, 'No fue posible registrar el movimiento. Revisa los campos señalados.', '.movimiento-form');
+  }
 
   // ── Ciclo de vida ────────────────────────────────────────────────────────
 
@@ -108,11 +121,11 @@ export class InventarioComponent implements OnInit {
   openAlmacenModal(a?: Almacen): void {
     this.editingAlmacen.set(a ?? null);
     this.almacenForm = a ? { ...a } : { nombre: '', codigo: '', direccion: '' };
-    this.almacenError.set('');
+    this.almacenValidation.clear();
     this.showAlmacenModal.set(true);
   }
 
-  closeAlmacenModal(): void { this.showAlmacenModal.set(false); }
+  closeAlmacenModal(): void { if (!this.almacenSaving()) this.showAlmacenModal.set(false); }
 
   /**
    * Crea o edita el almacén según editingAlmacen().
@@ -120,24 +133,41 @@ export class InventarioComponent implements OnInit {
    * El error solo desactiva almacenSaving(); no muestra mensaje (pendiente de mejora).
    */
   saveAlmacen(): void {
+    const errors: Record<string, string> = {};
+    const nombre = String(this.almacenForm.nombre ?? '');
+    const codigo = String(this.almacenForm.codigo ?? '').trim();
+    const warehouseNameError = commercialNameError(nombre, 'almacen');
+    if (warehouseNameError) errors['nombre'] = warehouseNameError;
+    if (!codigo) errors['codigo'] = 'El código es obligatorio.';
+    else if (codigo.length < 2 || codigo.length > 10) errors['codigo'] = 'El código debe tener entre 2 y 10 caracteres.';
+    if (this.almacenForm.capacidad != null && Number(this.almacenForm.capacidad) < 0) errors['capacidad'] = 'La capacidad no puede ser negativa.';
+    if (Object.keys(errors).length) {
+      this.almacenValidation.reject(errors);
+      return;
+    }
+    this.almacenValidation.clear();
     this.almacenSaving.set(true);
+    this.almacenForm = {
+      ...this.almacenForm,
+      nombre: normalizeSemanticText(nombre),
+      codigo,
+    };
     const req = this.editingAlmacen()
       ? this.svc.editarAlmacen(this.editingAlmacen()!.id!, this.almacenForm)
       : this.svc.crearAlmacen(this.almacenForm);
 
     req.subscribe({
-      next: () => {
+      next: (response) => {
+        const wasEditing = Boolean(this.editingAlmacen());
+        const id = Number(response?.id ?? this.editingAlmacen()?.id ?? 0) || null;
         this.svc.listarAlmacenes().subscribe(a => this.almacenes.set(a));
-        this.closeAlmacenModal();
         this.almacenSaving.set(false);
+        this.showAlmacenModal.set(false);
+        this.notifications.success(`Almacén ${wasEditing ? 'actualizado' : 'registrado'} satisfactoriamente.`);
+        this.highlightAlmacen(id);
       },
       error: (e) => {
-        const err = e.error;
-        if (typeof err === 'object') {
-          this.almacenError.set(Object.values(err).flat().join(' '));
-        } else {
-          this.almacenError.set(err ?? 'Error al guardar el almacén.');
-        }
+        this.almacenValidation.fromHttp(e);
         this.almacenSaving.set(false);
       },
     });
@@ -146,9 +176,13 @@ export class InventarioComponent implements OnInit {
   /** Pide confirmación y elimina el almacén; recarga la lista tras el éxito. */
   eliminarAlmacen(a: Almacen): void {
     if (!confirm(`¿Eliminar almacén "${a.nombre}"?`)) return;
-    this.svc.eliminarAlmacen(a.id!).subscribe(() =>
-      this.svc.listarAlmacenes().subscribe(al => this.almacenes.set(al))
-    );
+    this.svc.eliminarAlmacen(a.id!).subscribe({
+      next: () => {
+        this.svc.listarAlmacenes().subscribe(al => this.almacenes.set(al));
+        this.notifications.success('Almacén eliminado satisfactoriamente.');
+      },
+      error: (error) => this.notifications.error((error as any)?.error?.error ?? 'No fue posible eliminar el almacén.'),
+    });
   }
 
   // ── Movimiento de stock ──────────────────────────────────────────────────
@@ -158,22 +192,27 @@ export class InventarioComponent implements OnInit {
    * el template lo oculta en el siguiente envío al limpiar el signal.
    */
   registrarMovimiento(): void {
-    if (!this.movForm.producto_id || !this.movForm.almacen_id || !this.movForm.cantidad) {
-      this.movError.set('Completa todos los campos obligatorios.');
-      return;
-    }
+    const errors: Record<string, string> = {};
+    if (!this.movForm.producto_id) errors['producto'] = 'Selecciona un producto.';
+    if (!this.movForm.almacen_id) errors['almacen'] = 'Selecciona un almacén.';
+    if (!this.movForm.cantidad || Number(this.movForm.cantidad) <= 0) errors['cantidad'] = 'La cantidad debe ser mayor que cero.';
     if (this.movForm.tipo === 'transferencia' && !this.movForm.almacen_destino_id) {
-      this.movError.set('Selecciona el almacén destino.');
+      errors['almacen_destino'] = 'Selecciona el almacén destino.';
+    }
+    if (this.movForm.tipo === 'transferencia' && Number(this.movForm.almacen_destino_id) === Number(this.movForm.almacen_id)) {
+      errors['almacen_destino'] = 'El almacén de origen y el de destino deben ser diferentes.';
+    }
+    if (Object.keys(errors).length) {
+      this.movValidation.reject(errors);
       return;
     }
 
     this.movSaving.set(true);
-    this.movError.set('');
-    this.movSuccess.set('');
+    this.movValidation.clear();
 
     this.svc.movimientoRapido(this.movForm).subscribe({
       next: () => {
-        this.movSuccess.set('Movimiento registrado correctamente.');
+        this.notifications.success('Movimiento de inventario registrado satisfactoriamente.');
         this.movSaving.set(false);
         this.movForm = {
           producto_id: '',
@@ -186,9 +225,15 @@ export class InventarioComponent implements OnInit {
         this.recargarInventario();
       },
       error: (e) => {
-        this.movError.set(e.error?.error ?? 'Error');
+        this.movValidation.fromHttp(e);
         this.movSaving.set(false);
       },
     });
+  }
+
+  private highlightAlmacen(id: number | null): void {
+    if (!id) return;
+    this.highlightedAlmacenId.set(id);
+    window.setTimeout(() => this.highlightedAlmacenId.set(null), 3500);
   }
 }

@@ -215,6 +215,7 @@ export class ComprasService {
       numero_factura: String(data.numero_factura ?? '').trim(),
       fecha_compra: data.fecha_compra,
       tipo_compra: data.tipo_compra,
+      observaciones: data.observaciones ?? '',
       subtotal,
       iva_total,
       total: subtotal + iva_total,

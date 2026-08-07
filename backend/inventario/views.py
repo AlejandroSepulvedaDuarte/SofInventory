@@ -65,7 +65,7 @@ def detalle_almacen(request, pk):
         almacen = Almacen.objects.prefetch_related('stocks').get(pk=pk)
     except Almacen.DoesNotExist:
         return Response(
-            {'error': 'Almacen no encontrado.'},
+            {'error': 'Almacén no encontrado.'},
             status=status.HTTP_404_NOT_FOUND,
         )
     return Response(AlmacenSerializer(almacen).data)
@@ -78,7 +78,7 @@ def editar_almacen(request, pk):
         almacen = Almacen.objects.get(pk=pk)
     except Almacen.DoesNotExist:
         return Response(
-            {'error': 'Almacen no encontrado.'},
+            {'error': 'Almacén no encontrado.'},
             status=status.HTTP_404_NOT_FOUND,
         )
     serializer = AlmacenSerializer(almacen, data=request.data)
@@ -95,14 +95,14 @@ def eliminar_almacen(request, pk):
         almacen = Almacen.objects.get(pk=pk)
     except Almacen.DoesNotExist:
         return Response(
-            {'error': 'Almacen no encontrado.'},
+            {'error': 'Almacén no encontrado.'},
             status=status.HTTP_404_NOT_FOUND,
         )
     if almacen.stocks.filter(cantidad__gt=0).exists():
         return Response(
             {
                 'error': (
-                    f'No se puede eliminar. El almacen "{almacen.nombre}" '
+                    f'No se puede eliminar. El almacén "{almacen.nombre}" '
                     'tiene productos con stock.'
                 )
             },
@@ -114,7 +114,7 @@ def eliminar_almacen(request, pk):
         return Response(
             {
                 'error': (
-                    'El almacen tiene historial asociado. Cambie su estado '
+                    'El almacén tiene historial asociado. Cambia su estado '
                     'a inactivo en lugar de eliminarlo.'
                 )
             },
@@ -283,7 +283,7 @@ def stock_por_almacen(request):
     almacen_id = request.GET.get('almacen_id')
     if not producto_id or not almacen_id:
         return Response(
-            {'error': 'producto_id y almacen_id son requeridos.'},
+            {'error': 'Selecciona un producto y un almacén.'},
             status=status.HTTP_400_BAD_REQUEST,
         )
     cantidad = (
@@ -350,7 +350,7 @@ def exportar_inventario_csv(request):
                 for stock in producto.stocks.all()
                 if stock.cantidad > 0
             )
-        ) or 'Sin almacen'
+        ) or 'Sin almacén'
         writer.writerow(
             [
                 producto.sku,
