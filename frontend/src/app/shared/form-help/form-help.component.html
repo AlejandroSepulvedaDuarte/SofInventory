@@ -1,0 +1,74 @@
+<button
+  #helpButton
+  type="button"
+  class="btn-secondary form-help-trigger"
+  [attr.aria-label]="buttonLabel()"
+  [attr.aria-expanded]="isOpen()"
+  [attr.aria-controls]="panelId()"
+  (click)="openHelp()"
+>
+  <i class="fas fa-circle-question" aria-hidden="true"></i>
+  <span class="form-help-trigger-label">Ayuda</span>
+</button>
+
+<aside
+  *ngIf="isOpen()"
+  class="form-help-panel"
+  role="region"
+  [id]="panelId()"
+  [attr.aria-labelledby]="titleId()"
+>
+  <header class="form-help-panel-header">
+    <div>
+      <span class="form-help-eyebrow"><i class="fas fa-circle-question" aria-hidden="true"></i> Orientación general</span>
+      <h2 [id]="titleId()">{{ title() }}</h2>
+    </div>
+    <button
+      #closeButton
+      type="button"
+      class="form-help-close"
+      aria-label="Cerrar ayuda"
+      (click)="closeHelp()"
+    >
+      <i class="fas fa-xmark" aria-hidden="true"></i>
+    </button>
+  </header>
+
+  <div class="form-help-panel-body">
+    <section>
+      <h3><i class="fas fa-bullseye" aria-hidden="true"></i> Objetivo</h3>
+      <p>{{ purpose() }}</p>
+    </section>
+
+    <section>
+      <h3><i class="fas fa-lightbulb" aria-hidden="true"></i> Recomendaciones generales</h3>
+      <ul>
+        <li *ngFor="let recommendation of content().recommendations">{{ recommendation }}</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3><i class="fas fa-link" aria-hidden="true"></i> Relación con otros módulos</h3>
+      <ul>
+        <li *ngFor="let relationship of content().relationships">{{ relationship }}</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3><i class="fas fa-list-check" aria-hidden="true"></i> Antes de guardar</h3>
+      <ul class="form-help-checklist">
+        <li *ngFor="let item of content().checklist">
+          <i class="far fa-square-check" aria-hidden="true"></i>
+          <span>{{ item }}</span>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <footer class="form-help-panel-footer">
+    <button type="button" class="btn-secondary" (click)="closeHelp()">
+      <i class="fas fa-arrow-left" aria-hidden="true"></i>
+      Cerrar ayuda
+    </button>
+  </footer>
+</aside>

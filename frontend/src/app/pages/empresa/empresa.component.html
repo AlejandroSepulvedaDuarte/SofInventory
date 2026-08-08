@@ -45,7 +45,14 @@
       <div class="modal modal-xl company-form" role="dialog" aria-modal="true" aria-labelledby="company-form-title" (click)="$event.stopPropagation()">
         <div class="modal-header">
           <h2 id="company-form-title">{{ company.configurada() ? 'Editar configuración de la empresa' : 'Configurar empresa' }}</h2>
-          <button type="button" class="close-btn" aria-label="Cerrar" (click)="closeForm()"><i class="fas fa-xmark"></i></button>
+          <div class="modal-header-actions">
+            <app-form-help
+              [content]="companyHelp"
+              [operation]="company.configurada() ? 'edit' : 'create'"
+              panelId="company-form-help"
+            />
+            <button type="button" class="close-btn" aria-label="Cerrar" (click)="closeForm()"><i class="fas fa-xmark"></i></button>
+          </div>
         </div>
         <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
         <div class="modal-body">

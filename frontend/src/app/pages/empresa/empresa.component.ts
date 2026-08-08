@@ -13,6 +13,8 @@ import { LayoutComponent } from '../../shared/components/layout.component';
 import { LocationFieldsComponent } from '../../shared/locations/location-fields.component';
 import { LocationValue } from '../../shared/locations/location-form';
 import { NotificationService } from '../../shared/notifications/notification.service';
+import { FormHelpComponent } from '../../shared/form-help/form-help.component';
+import { FORM_HELP_CONTENT } from '../../shared/form-help/form-help-content';
 
 
 @Component({
@@ -26,11 +28,13 @@ import { NotificationService } from '../../shared/notifications/notification.ser
     FieldErrorComponent,
     FieldValidationDirective,
     LocationFieldsComponent,
+    FormHelpComponent,
   ],
   templateUrl: './empresa.component.html',
   styleUrls: ['./empresa.component.css'],
 })
 export class EmpresaComponent implements OnInit {
+  readonly companyHelp = FORM_HELP_CONTENT.company;
   @ViewChild(LocationFieldsComponent) locationFields?: LocationFieldsComponent;
 
   readonly loading = signal(true);

@@ -22,15 +22,23 @@ import { FormErrorSummaryComponent } from '../../shared/forms/form-error-summary
 import { FormFeedbackService, FormFeedbackState } from '../../shared/forms/form-feedback.service';
 import { commercialNameError, normalizeSemanticText } from '../../shared/forms/semantic-validators';
 import { NotificationService } from '../../shared/notifications/notification.service';
+import { FormHelpComponent } from '../../shared/form-help/form-help.component';
+import { FORM_HELP_CONTENT } from '../../shared/form-help/form-help-content';
 
 @Component({
   selector: 'app-inventario',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective, FormHelpComponent],
   templateUrl: './inventario.component.html',
   styleUrls: ['./inventario.component.css'],
 })
 export class InventarioComponent implements OnInit {
+  readonly warehouseHelp = FORM_HELP_CONTENT.warehouse;
+  readonly movementHelp = {
+    entrada: FORM_HELP_CONTENT.inventoryEntry,
+    salida: FORM_HELP_CONTENT.inventoryExit,
+    transferencia: FORM_HELP_CONTENT.inventoryTransfer,
+  } as const;
 
   // ── Navegación ───────────────────────────────────────────────────────────
   tab = signal<'stock' | 'alertas' | 'almacenes' | 'movimiento'>('stock');

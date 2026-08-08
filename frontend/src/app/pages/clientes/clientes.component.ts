@@ -27,15 +27,18 @@ import {
 import { NotificationService } from '../../shared/notifications/notification.service';
 import { LocationFieldsComponent } from '../../shared/locations/location-fields.component';
 import { LocationValue } from '../../shared/locations/location-form';
+import { FormHelpComponent } from '../../shared/form-help/form-help.component';
+import { FORM_HELP_CONTENT } from '../../shared/form-help/form-help-content';
 
 @Component({
   selector: 'app-clientes',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective, LocationFieldsComponent],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective, LocationFieldsComponent, FormHelpComponent],
   templateUrl: './clientes.component.html',
   styleUrls: ['./clientes.component.css']
 })
 export class ClientesComponent implements OnInit {
+  readonly clientHelp = FORM_HELP_CONTENT.client;
 
   @ViewChild(LocationFieldsComponent) private locationFields?: LocationFieldsComponent;
 

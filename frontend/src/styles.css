@@ -581,6 +581,14 @@ textarea { resize: vertical; min-height: 80px; }
 
 .modal-header h2 { font-size: 17px; color: var(--text-primary); margin: 0; }
 
+.modal-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-left: 16px;
+}
+
 .close-btn {
   background: none;
   border: 1px solid transparent;

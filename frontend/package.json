@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "node --test tests/semantic-validators.test.mjs tests/location-form.test.mjs"
+    "test": "node --test tests/semantic-validators.test.mjs tests/location-form.test.mjs tests/form-help.test.mjs"
   },
   "private": true,
   "dependencies": {

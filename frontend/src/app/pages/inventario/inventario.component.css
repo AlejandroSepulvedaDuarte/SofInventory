@@ -260,6 +260,13 @@
   max-width: 700px;
 }
 
+.movement-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .movimiento-form h3 {
   font-family: var(--font-display);
   color: var(--text-primary);

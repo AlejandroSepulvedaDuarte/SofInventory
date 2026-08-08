@@ -30,15 +30,18 @@ import {
 import { NotificationService } from '../../shared/notifications/notification.service';
 import { LocationFieldsComponent } from '../../shared/locations/location-fields.component';
 import { LocationValue } from '../../shared/locations/location-form';
+import { FormHelpComponent } from '../../shared/form-help/form-help.component';
+import { FORM_HELP_CONTENT } from '../../shared/form-help/form-help-content';
 
 @Component({
   selector: 'app-proveedores',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective, LocationFieldsComponent],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective, LocationFieldsComponent, FormHelpComponent],
   templateUrl: './proveedores.component.html',
   styleUrls: ['./proveedores.component.css'],
 })
 export class ProveedoresComponent implements OnInit {
+  readonly providerHelp = FORM_HELP_CONTENT.provider;
 
   @ViewChild(LocationFieldsComponent) private locationFields?: LocationFieldsComponent;
   

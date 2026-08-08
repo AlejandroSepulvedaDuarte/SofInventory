@@ -23,15 +23,18 @@ import { FormFeedbackService, FormFeedbackState } from '../../shared/forms/form-
 import { NotificationService } from '../../shared/notifications/notification.service';
 import { EmpresaService } from '../../core/services/empresa.service';
 import { Empresa } from '../../core/models';
+import { FormHelpComponent } from '../../shared/form-help/form-help.component';
+import { FORM_HELP_CONTENT } from '../../shared/form-help/form-help-content';
 
 @Component({
   selector: 'app-compras',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective, FormHelpComponent],
   templateUrl: './compras.component.html',
   styleUrls: ['./compras.component.css']
 })
 export class ComprasComponent implements OnInit {
+  readonly purchaseHelp = FORM_HELP_CONTENT.purchase;
 
   // ── Signals ──────────────────────────────────────────────────────────────
   compras      = signal<Compra[]>([]);
