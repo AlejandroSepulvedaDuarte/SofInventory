@@ -135,16 +135,16 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'usuarios.password_validators.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'usuarios.password_validators.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'usuarios.password_validators.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'usuarios.password_validators.NumericPasswordValidator',
     },
 ]
 
@@ -173,7 +173,11 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.MultiPartParser',
         'rest_framework.parsers.FormParser',
     ],
+    'NUM_PROXIES': 1,
 }
+
+# Intentos de inicio de sesión permitidos por IP (throttling del endpoint login).
+LOGIN_THROTTLE_RATE = os.getenv('LOGIN_THROTTLE_RATE', '5/min')
 
 
 MEDIA_URL = '/media/'

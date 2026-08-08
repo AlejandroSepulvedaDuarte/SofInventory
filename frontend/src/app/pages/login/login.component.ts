@@ -154,7 +154,13 @@ export class LoginComponent {
       // Error de autenticación o conexión
       error: (err) => {
         console.error('Error detectado:', err);
-        
+
+        // Límite de intentos por IP (throttling del backend)
+        if (err.status === 429) {
+          this.error.set('Demasiados intentos de inicio de sesión. Espera un momento e inténtalo de nuevo.');
+          return;
+        }
+
         // Extraer información de la respuesta del backend
         const errorResponse = err.error || {};
         const mensajeError = errorResponse.error ?? 'Credenciales incorrectas. Intenta de nuevo.';

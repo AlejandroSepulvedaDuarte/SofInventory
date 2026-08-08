@@ -1,4 +1,6 @@
+from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import check_password, make_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
@@ -114,6 +116,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
         if password:
             if password != confirm_password:
                 raise serializers.ValidationError({'confirm_password': 'Las contraseñas no coinciden.'})
+
+            try:
+                password_validation.validate_password(password, user=self.instance)
+            except DjangoValidationError as exc:
+                raise serializers.ValidationError({'password': exc.messages})
 
             existing_users = Usuario.objects.exclude(pk=self.instance.pk) if self.instance else Usuario.objects.all()
             for usuario in existing_users:
