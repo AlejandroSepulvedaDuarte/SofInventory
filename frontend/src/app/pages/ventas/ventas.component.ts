@@ -16,6 +16,8 @@ import { FieldValidationDirective } from '../../shared/forms/field-validation.di
 import { FormErrorSummaryComponent } from '../../shared/forms/form-error-summary.component';
 import { FormFeedbackService, FormFeedbackState } from '../../shared/forms/form-feedback.service';
 import { NotificationService } from '../../shared/notifications/notification.service';
+import { FormHelpComponent } from '../../shared/form-help/form-help.component';
+import { FORM_HELP_CONTENT } from '../../shared/form-help/form-help-content';
 
 
 interface SaleResult {
@@ -35,11 +37,13 @@ interface SaleResult {
     FormErrorSummaryComponent,
     FieldErrorComponent,
     FieldValidationDirective,
+    FormHelpComponent,
   ],
   templateUrl: './ventas.component.html',
   styleUrls: ['./ventas.component.css'],
 })
 export class VentasComponent implements OnInit {
+  readonly saleHelp = FORM_HELP_CONTENT.sale;
   @ViewChild('saleDialog') saleDialog?: ElementRef<HTMLElement>;
   @ViewChild('productPicker') productPicker?: ElementRef<HTMLSelectElement>;
 

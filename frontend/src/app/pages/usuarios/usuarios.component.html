@@ -70,7 +70,14 @@
         
         <div class="modal-header">
           <h2 id="user-form-title">{{ editing() ? 'Editar Usuario' : 'Nuevo Usuario' }}</h2>
-          <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+          <div class="modal-header-actions">
+            <app-form-help
+              [content]="userHelp"
+              [operation]="editing() ? 'edit' : 'create'"
+              panelId="user-form-help"
+            />
+            <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()"><i class="fas fa-xmark" aria-hidden="true"></i></button>
+          </div>
         </div>
         <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
         

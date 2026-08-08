@@ -68,7 +68,10 @@
             <div class="modal modal-xl purchase-form-modal" role="dialog" aria-modal="true" aria-labelledby="purchase-form-title" (click)="$event.stopPropagation()">
                 <div class="modal-header">
                     <h2 id="purchase-form-title"><i class="fas fa-cart-shopping"></i> Registrar Compra</h2>
-                    <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()"><i class="fas fa-xmark"></i></button>
+                    <div class="modal-header-actions">
+                        <app-form-help [content]="purchaseHelp" panelId="purchase-form-help" />
+                        <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()"><i class="fas fa-xmark"></i></button>
+                    </div>
                 </div>
                 <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
 

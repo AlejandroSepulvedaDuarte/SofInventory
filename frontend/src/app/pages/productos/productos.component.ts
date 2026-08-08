@@ -21,15 +21,18 @@ import { FormErrorSummaryComponent } from '../../shared/forms/form-error-summary
 import { FormFeedbackService, FormFeedbackState } from '../../shared/forms/form-feedback.service';
 import { commercialNameError, normalizeSemanticText } from '../../shared/forms/semantic-validators';
 import { NotificationService } from '../../shared/notifications/notification.service';
+import { FormHelpComponent } from '../../shared/form-help/form-help.component';
+import { FORM_HELP_CONTENT } from '../../shared/form-help/form-help-content';
 
 @Component({
   selector: 'app-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective, FormHelpComponent],
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.css']
 })
 export class ProductosComponent implements OnInit {
+  readonly productHelp = FORM_HELP_CONTENT.product;
   
   // ── Señales de estado ──────────────────────────────────────────
   productos = signal<Producto[]>([]);

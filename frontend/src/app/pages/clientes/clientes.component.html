@@ -116,9 +116,16 @@
             <i class="fas" [class.fa-pen]="editing()" [class.fa-user-plus]="!editing()"></i>
             {{ editing() ? 'Editar Cliente' : 'Nuevo Cliente' }}
           </h2>
-          <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()">
-            <i class="fas fa-xmark"></i>
-          </button>
+          <div class="modal-header-actions">
+            <app-form-help
+              [content]="clientHelp"
+              [operation]="editing() ? 'edit' : 'create'"
+              panelId="client-form-help"
+            />
+            <button class="close-btn" type="button" aria-label="Cerrar formulario" (click)="closeModal()">
+              <i class="fas fa-xmark"></i>
+            </button>
+          </div>
         </div>
         <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
 

@@ -25,15 +25,18 @@ import {
   usernameError,
 } from '../../shared/forms/semantic-validators';
 import { NotificationService } from '../../shared/notifications/notification.service';
+import { FormHelpComponent } from '../../shared/form-help/form-help.component';
+import { FORM_HELP_CONTENT } from '../../shared/form-help/form-help-content';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective],
+  imports: [CommonModule, FormsModule, LayoutComponent, FormErrorSummaryComponent, FieldErrorComponent, FieldValidationDirective, FormHelpComponent],
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.css'],
 })
 export class UsuariosComponent implements OnInit {
+  readonly userHelp = FORM_HELP_CONTENT.user;
   
   // ── Signals ──────────────────────────────────────────────────────────────
   usuarios = signal<Usuario[]>([]);

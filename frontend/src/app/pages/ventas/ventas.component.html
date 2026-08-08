@@ -28,7 +28,10 @@
       <section #saleDialog class="modal sale-form-modal" role="dialog" aria-modal="true" aria-labelledby="sale-form-title" (click)="$event.stopPropagation()">
         <header class="modal-header pos-header">
           <div><h2 id="sale-form-title"><i class="fas fa-cash-register"></i> Nueva venta</h2><span>Punto de venta</span></div>
-          <button type="button" class="close-btn" aria-label="Cerrar formulario" (click)="requestClose()"><i class="fas fa-xmark"></i></button>
+          <div class="modal-header-actions">
+            <app-form-help [content]="saleHelp" panelId="sale-form-help" />
+            <button type="button" class="close-btn" aria-label="Cerrar formulario" (click)="requestClose()"><i class="fas fa-xmark"></i></button>
+          </div>
         </header>
         <div class="modal-error-region"><app-form-error-summary [message]="validation.summary()" /></div>
 
