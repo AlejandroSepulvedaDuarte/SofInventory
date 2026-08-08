@@ -1,4 +1,4 @@
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,6 +14,7 @@ from .models import (
     Usuario,
 )
 from .permissions import require_roles
+from .throttles import LoginRateThrottle
 from .serializers import (
     EventoAuditoriaUsuarioSerializer,
     LoginSerializer,
@@ -57,6 +58,7 @@ def obtener_ip_cliente(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@throttle_classes([LoginRateThrottle])
 def login(request):
     serializer = LoginSerializer(data=request.data)
     if not serializer.is_valid():

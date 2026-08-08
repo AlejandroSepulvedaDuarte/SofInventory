@@ -4,8 +4,9 @@ from unittest.mock import patch
 
 from django.apps import apps
 from django.contrib.auth.hashers import check_password, is_password_usable
+from django.core.cache import cache
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 
 from clientes.models import Cliente
@@ -267,3 +268,238 @@ class CredentialBootstrapTests(TestCase):
             'NoDebeReemplazarLaClaveActual!',
             admin.password,
         ))
+
+
+@override_settings(LOGIN_THROTTLE_RATE='3/min')
+class LoginThrottlingTests(TestCase):
+    """El endpoint login limita intentos por IP para reducir fuerza bruta y
+    bloqueos intencionales de cuenta."""
+
+    def setUp(self):
+        cache.clear()
+        self.client = APIClient()
+        self.tipo_documento = TipoDocumento.objects.get(codigo='CC')
+        self.rol_vendedor = Rol.objects.get(nombre='Vendedor')
+        self.vendedor = Usuario.objects.create(
+            tipo_documento=self.tipo_documento,
+            numero_documento='3001',
+            nombre_completo='Vendedor Throttle',
+            email='vendedor-throttle@example.com',
+            username='vendedor_throttle',
+            password='Secret123!',
+            rol=self.rol_vendedor,
+            fecha_creacion='2026-01-01',
+        )
+
+    def tearDown(self):
+        cache.clear()
+
+    def login(self, password='ClaveEquivocada-2026!'):
+        return self.client.post('/api/auth/login/', {
+            'username': self.vendedor.username,
+            'password': password,
+        }, format='json')
+
+    def test_login_correcto_funciona_dentro_del_limite(self):
+        response = self.login(password='Secret123!')
+        self.assertEqual(response.status_code, 200)
+
+    def test_intentos_fallidos_dentro_del_limite_devuelven_401(self):
+        for _ in range(3):
+            response = self.login()
+            self.assertEqual(response.status_code, 401)
+            self.assertIn('intentos_fallidos', response.data)
+
+    def test_superado_el_limite_devuelve_429(self):
+        for _ in range(3):
+            self.assertEqual(self.login().status_code, 401)
+        response = self.login()
+        self.assertEqual(response.status_code, 429)
+
+    def test_login_correcto_funciona_despues_de_intentos_fallidos_dentro_del_limite(self):
+        for _ in range(2):
+            self.assertEqual(self.login().status_code, 401)
+        response = self.login(password='Secret123!')
+        self.assertEqual(response.status_code, 200)
+
+
+class AutorizacionRolTests(TestCase):
+    """El backend es la fuente de verdad del rol: un Vendedor recibe 403 en
+    endpoints de Administrador aunque el frontend muestre un rol alterado."""
+
+    def setUp(self):
+        self.client = APIClient()
+        self.tipo_documento = TipoDocumento.objects.get(codigo='CC')
+        self.rol_admin = Rol.objects.get(nombre='Administrador')
+        self.rol_vendedor = Rol.objects.get(nombre='Vendedor')
+        self.admin = Usuario.objects.create(
+            tipo_documento=self.tipo_documento,
+            numero_documento='2001',
+            nombre_completo='Admin Autorizacion',
+            email='admin-autorizacion@example.com',
+            username='admin_autorizacion',
+            password='Secret123!',
+            rol=self.rol_admin,
+            fecha_creacion='2026-01-01',
+        )
+        self.vendedor = Usuario.objects.create(
+            tipo_documento=self.tipo_documento,
+            numero_documento='2002',
+            nombre_completo='Vendedor Autorizacion',
+            email='vendedor-autorizacion@example.com',
+            username='vendedor_autorizacion',
+            password='Secret123!',
+            rol=self.rol_vendedor,
+            fecha_creacion='2026-01-01',
+        )
+
+    def autenticar(self, user):
+        response = self.client.post('/api/auth/login/', {
+            'username': user.username,
+            'password': 'Secret123!',
+        }, format='json')
+        self.assertEqual(response.status_code, 200)
+        token = response.data['access_token']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
+    def test_vendedor_recibe_403_en_endpoints_de_administrador(self):
+        self.autenticar(self.vendedor)
+
+        endpoints = [
+            ('post', '/api/usuarios/crear/', {
+                'tipo_documento': self.tipo_documento.id,
+                'numero_documento': '2003',
+                'nombre_completo': 'Bloqueado',
+                'email': 'bloqueado@example.com',
+                'username': 'bloqueado',
+                'password': 'ClaveBloqueada-2026!',
+                'confirm_password': 'ClaveBloqueada-2026!',
+                'rol': self.rol_vendedor.id,
+            }),
+            ('get', '/api/usuarios/listar/', None),
+            ('get', '/api/usuarios/auditoria/', None),
+            ('get', '/api/roles/reporte/', None),
+            ('patch', f'/api/usuarios/estado/{self.admin.id}/', {}),
+            ('post', f'/api/usuarios/desbloquear/{self.admin.id}/', {}),
+            ('put', f'/api/usuarios/editar/{self.admin.id}/', {'email': 'cambiado@example.com'}),
+        ]
+
+        for method, url, data in endpoints:
+            if data is None:
+                response = getattr(self.client, method)(url)
+            else:
+                response = getattr(self.client, method)(url, data=data, format='json')
+            self.assertEqual(
+                response.status_code, 403,
+                f'{method.upper()} {url} debería devolver 403 y devolvió {response.status_code}',
+            )
+
+    def test_vendedor_no_escala_aunque_envie_rol_de_admin(self):
+        self.autenticar(self.vendedor)
+        response = self.client.post('/api/usuarios/crear/', {
+            'tipo_documento': self.tipo_documento.id,
+            'numero_documento': '2004',
+            'nombre_completo': 'Intento Escalada',
+            'email': 'escalada@example.com',
+            'username': 'escalada',
+            'password': 'ClaveEscalada-2026!',
+            'confirm_password': 'ClaveEscalada-2026!',
+            'rol': self.rol_admin.id,
+        }, format='json')
+        self.assertEqual(response.status_code, 403)
+        self.assertFalse(Usuario.objects.filter(username='escalada').exists())
+
+    def test_vendedor_puede_usar_endpoints_de_su_rol(self):
+        self.autenticar(self.vendedor)
+        response = self.client.get('/api/auth/me/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['usuario']['rol'], 'Vendedor')
+
+    def test_admin_puede_usar_endpoints_de_administrador(self):
+        self.autenticar(self.admin)
+        response = self.client.get('/api/usuarios/listar/')
+        self.assertEqual(response.status_code, 200)
+
+
+class ValidacionFortalezaContrasenaTests(TestCase):
+    """Se aplican los validadores oficiales de Django (mensajes en español)
+    al crear y actualizar usuarios, sin tocar contraseñas existentes."""
+
+    def setUp(self):
+        self.client = APIClient()
+        self.tipo_documento = TipoDocumento.objects.get(codigo='CC')
+        self.rol_admin = Rol.objects.get(nombre='Administrador')
+        self.rol_vendedor = Rol.objects.get(nombre='Vendedor')
+        self.admin = Usuario.objects.create(
+            tipo_documento=self.tipo_documento,
+            numero_documento='4001',
+            nombre_completo='Admin Password',
+            email='admin-password@example.com',
+            username='admin_password',
+            password='Secret123!',
+            rol=self.rol_admin,
+            fecha_creacion='2026-01-01',
+        )
+
+    def autenticar(self):
+        response = self.client.post('/api/auth/login/', {
+            'username': 'admin_password',
+            'password': 'Secret123!',
+        }, format='json')
+        self.assertEqual(response.status_code, 200)
+        token = response.data['access_token']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
+    def crear_con_password(self, password):
+        return self.client.post('/api/usuarios/crear/', {
+            'tipo_documento': self.tipo_documento.id,
+            'numero_documento': '40020001',
+            'nombre_completo': 'Usuario Clave',
+            'email': 'clave@example.com',
+            'username': 'usuario_clave',
+            'password': password,
+            'confirm_password': password,
+            'rol': self.rol_vendedor.id,
+        }, format='json')
+
+    def test_contrasena_corta_se_rechaza_con_mensaje_en_espanol(self):
+        self.autenticar()
+        response = self.crear_con_password('abc')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('password', response.data)
+        self.assertIn('corta', str(response.data['password'][0]).lower())
+
+    def test_contrasena_numerica_se_rechaza(self):
+        self.autenticar()
+        response = self.crear_con_password('1928374655')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('numérica', str(response.data['password'][0]).lower())
+
+    def test_contrasena_comun_se_rechaza(self):
+        self.autenticar()
+        response = self.crear_con_password('password')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('común', str(response.data['password'][0]).lower())
+
+    def test_contrasena_fuerte_es_valida(self):
+        self.autenticar()
+        response = self.crear_con_password('ClaveFuerte-Nueva-2026!')
+        self.assertEqual(response.status_code, 201, response.data)
+
+    def test_actualizacion_con_contrasena_similar_al_username_se_rechaza(self):
+        self.autenticar()
+        response = self.client.put(f'/api/usuarios/editar/{self.admin.id}/', {
+            'password': 'admin_password123',
+            'confirm_password': 'admin_password123',
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+        self.assertIn('similar', str(response.data['password'][0]).lower())
+
+    def test_actualizacion_sin_cambiar_password_no_valida_la_existente(self):
+        self.autenticar()
+        response = self.client.put(f'/api/usuarios/editar/{self.admin.id}/', {
+            'email': 'otro-correo@example.com',
+        }, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.admin.refresh_from_db()
+        self.assertTrue(check_password('Secret123!', self.admin.password))

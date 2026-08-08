@@ -54,6 +54,13 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
+  handleUnauthorized(): void {
+    this._clearSession();
+    if (this.router.url !== '/login') {
+      this.router.navigate(['/login']);
+    }
+  }
+
   me(): Observable<{ usuario: UsuarioPublico }> {
     return this.http
       .get<{ usuario: UsuarioPublico }>(`${this.API}/auth/me/`)

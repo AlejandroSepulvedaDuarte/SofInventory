@@ -11,3 +11,6 @@ DATABASES = {
 }
 
 PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
+
+# La suite hace muchos logins; solo los tests de throttling reducen esta tasa.
+LOGIN_THROTTLE_RATE = '10000/min'

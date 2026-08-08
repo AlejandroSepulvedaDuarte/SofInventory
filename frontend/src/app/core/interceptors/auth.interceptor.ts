@@ -6,11 +6,9 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
-  const router = inject(Router);
 
   const token = auth.token;
 
@@ -21,11 +19,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((err: HttpErrorResponse) => {
-      // Si el servidor responde 401, la sesión en memoria ya no es válida
-      if (err.status === 401) {
-        router.navigate(['/login']);
+      // 401 en /auth/login/ y /auth/logout/ no debe disparar la limpieza:
+      // el login lo muestra la vista y logout() ya limpia la sesión localmente.
+      if (err.status === 401 && !isAuthUrl(req.url)) {
+        auth.handleUnauthorized();
       }
       return throwError(() => err);
     })
   );
 };
+
+function isAuthUrl(url: string): boolean {
+  return url.includes('/auth/login') || url.includes('/auth/logout');
+}
