@@ -36,10 +36,6 @@
 | **Negrita** | Nombres de comandos, variables, botones o elementos clave. |
 | `Texto en código` | Nombres técnicos literales (comandos, variables de entorno, endpoints, nombres de tablas). |
 
-!!! info "Fuente de verdad y vigencia"
-    Las rutas, modelos, permisos y procesos descritos en este manual se contrastaron con el código de la rama documentada. Las versiones de Python, Django, PostgreSQL, Node.js, Angular y Nginx corresponden a los **contenedores ejecutados**, no a herramientas instaladas en Windows. Los resultados de calidad corresponden a la última ejecución documentada del 8 de agosto de 2026; una corrección posterior en código requiere reejecutar su caso antes de declararla aprobada.
-
-
 ## 1. Introducción
 
 ### 1.1 Propósito

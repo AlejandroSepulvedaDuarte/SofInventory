@@ -45,10 +45,6 @@ A lo largo del manual se usan los siguientes símbolos para facilitar la lectura
 | **Negrita** | Nombres de botones, campos de formulario o elementos de la interfaz. |
 | `Texto en código` | Valores que deben reconocerse de forma exacta, como una dirección local o un identificador de operación. |
 
-!!! info "Alcance de esta actualización"
-    Esta edición conserva la estructura preparada para **MkDocs Material** y actualiza el uso del sistema conforme a la interfaz vigente. Incluye los formularios con ayuda contextual, los temas Claro, Azul y Oscuro, la adaptación móvil, las validaciones compartidas, la ubicación Colombia/exterior, la configuración de Empresa y los comprobantes actuales.
-
-
 ## 1. Introducción
 
 ### 1.1 Propósito
