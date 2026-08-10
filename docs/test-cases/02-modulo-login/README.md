@@ -1,100 +1,66 @@
-# 🔐 Módulo 02 — Login / Autenticación
+# Módulo 02 — Login y sesiones
 
-> **Versión:** 1.0.0 <br>
-> **Módulo:** Login y Autenticación <br>
-> **Código de módulo:** MOD-LOGIN <br>
-> **Fecha:** 15 de mayo de 2026
+> **Versión documental:** 3.0.0 <br>
+> **Fecha de actualización:** 8 de agosto de 2026 <br>
+> **Estado:** actualizado contra el código y la interfaz actuales
 
----
+## 1. Descripción
 
-## 1. 📌 Descripción del Módulo
+Login autentica por nombre de usuario y contraseña. El backend crea un token Bearer propio asociado a `sesiones_api`, con vigencia de 12 horas, invalida las sesiones activas anteriores del mismo usuario y rechaza cuentas inactivas o bloqueadas. El frontend conserva temporalmente token, expiración y usuario en `localStorage`, protege rutas mediante guards y elimina esa información al cerrar sesión.
 
-El módulo de **Login** es el punto de entrada al sistema SofInventory. Gestiona la autenticación de usuarios mediante **username y contraseña** (no email). Tras una autenticación exitosa, el backend Django genera un **token Bearer propio** (usando `secrets.token_urlsafe(48)`) que se almacena en la tabla `sesiones_api` de PostgreSQL, con una duración de **12 horas**. Este token debe enviarse en el header `Authorization: Bearer <token>` en todas las peticiones subsiguientes.
+La respuesta no debe exponer si un nombre de usuario inexistente o una contraseña incorrecta causaron el rechazo. Tras cinco contraseñas incorrectas para una cuenta existente, el backend bloquea la cuenta. Además, el endpoint tiene limitación de solicitudes configurable; el valor predeterminado es `5/min`.
 
-Este módulo es crítico para la seguridad del sistema: un fallo en la autenticación puede comprometer la confidencialidad e integridad de toda la información gestionada.
+## 2. Acceso y endpoints actuales
 
----
+| Operación | Método y ruta | Acceso |
+|---|---|---|
+| Iniciar sesión | `POST /api/auth/login/` | Público, con limitación de solicitudes |
+| Consultar sesión propia | `GET /api/auth/me/` | Sesión Bearer válida |
+| Cerrar sesión | `POST /api/auth/logout/` | Sesión Bearer válida |
 
-## 2. 🎯 Objetivos del Módulo
+SofInventory no usa JWT. Nunca deben incluirse tokens completos, contraseñas ni encabezados `Authorization` en capturas o documentación.
 
-- Verificar que solo usuarios con credenciales válidas (username + contraseña) pueden ingresar al sistema.
-- Comprobar que el sistema rechaza correctamente credenciales incorrectas o inexistentes.
-- Validar la generación correcta del token Bearer y su registro en la tabla `sesiones_api` de PostgreSQL.
-- Verificar que un usuario inactivo no puede autenticarse aunque sus credenciales sean correctas.
-- Detectar posibles vulnerabilidades en el endpoint de autenticación.
-- Verificar la invalidación correcta del token al cerrar sesión.
+## 3. Ambiente verificado
 
----
+| Capa | Versión o condición |
+|---|---|
+| Backend del contenedor | Python 3.12.13, Django 6.0.4, DRF 3.17.1 |
+| Base de datos operativa | PostgreSQL 15.18 |
+| Frontend servido | Nginx 1.31.3, compilación Angular 19.2.21 |
+| Suite frontend | Node.js 20.20.2 en contenedor temporal `node:20-alpine` |
+| Verificación visual | 1280×720 y 390×844; temas Oscuro y Claro |
+| Fecha | 8 de agosto de 2026 |
 
-## 3. 🔭 Alcance de las Pruebas
+## 4. Resultado actual
 
-| Escenario | ¿En Alcance? |
-|-----------|-------------|
-| Login con credenciales correctas (username + contraseña) | ✅ |
-| Login con contraseña incorrecta | ✅ |
-| Login con username no registrado | ✅ |
-| Login con campos vacíos | ✅ |
-| Login con usuario inactivo | ✅ |
-| Inyección de caracteres especiales | ✅ |
-| Cierre de sesión (Logout) | ✅ |
-| Acceso a ruta protegida sin token | ✅ |
-| Token expirado (sesión invalidada) | ✅ |
-| Múltiples sesiones simultáneas | ✅ |
-| Recuperación de contraseña | ❌ (versión futura) |
-| Autenticación de dos factores (2FA) | ❌ (versión futura) |
+| Verificación | Resultado |
+|---|---|
+| Suite backend completa | 99/99 en SQLite y 99/99 en PostgreSQL 15 aislado |
+| Suite frontend completa | 24/24 pruebas aprobadas con el repositorio montado en solo lectura |
+| Login con cuenta administrativa existente | Aprobado manualmente; redirección al Dashboard |
+| Credenciales ficticias inexistentes | Aprobado manualmente; mensaje genérico y sin datos sensibles |
+| Logout | Aprobado manualmente; regreso a Login |
+| Bloqueo tras cinco fallos y cuenta inactiva | Aprobado por API/DB-R con cuentas ficticias |
+| Reemplazo de sesión | Aprobado: la segunda invalidó la primera y quedó una sola activa |
+| Responsive y temas del Login | Aprobado manualmente en Oscuro/escritorio y Claro/móvil |
+| Expiración gestionada por frontend | Falló: backend invalida, pero devuelve 403 y el interceptor solo gestiona 401 (`BUG-LOGIN-001`) |
+| Resultado del módulo | **6 aprobados, 1 fallido** |
 
----
+La validación de sesiones y bloqueo se realizó también en PostgreSQL 15.18 aislado; no se usó la base operativa.
 
-## 4. 🛠️ Herramientas de Prueba
+## 5. Evidencias vigentes
 
-| Herramienta | Uso en este módulo |
-|-------------|-------------------|
-| **Angular 19** (Chrome) | Prueba del formulario de login en el frontend |
-| **Postman** | Pruebas directas al endpoint `POST /api/auth/login/` |
-| **Chrome DevTools** | Inspección de localStorage y headers HTTP |
-| **pgAdmin 4** | Verificación del estado de sesiones en la tabla `sesiones_api` y de usuarios en la tabla `usuarios` |
+- [Login actual — escritorio, tema Oscuro](./evidencias/frontend/LOGIN-actual-escritorio-oscuro.png)
+- [Error genérico — móvil, tema Claro](./evidencias/frontend/LOGIN-error-movil-claro.png)
+- [Acceso exitoso — Dashboard móvil](./evidencias/frontend/LOGIN-acceso-exitoso-dashboard-movil.png)
+- [Índice de evidencias frontend](./evidencias/frontend/README.md)
 
----
+Las capturas `TC-LOGIN-001` a `TC-LOGIN-010` se conservan como evidencia histórica y no se consideran revalidadas en esta ejecución.
 
-## 5. 🧱 Estructura del Módulo
+## 6. Documentos relacionados
 
-```
-02-modulo-login/
-├── README.md               ← Este archivo
-├── casos-login.md          ← Casos de prueba TC-LOGIN-001 al TC-LOGIN-010
-└── evidencias/
-    ├── frontend/           ← Capturas de pantalla del formulario Angular
-    ├── postman/            ← Capturas de requests/responses en Postman
-    └── database/           ← Capturas de consultas SQL en pgAdmin 4 (tabla sesiones_api)
-```
-
----
-
-## 6. 📊 Resumen de Resultados
-
-| ID | Nombre del Caso | Estado |
-|----|----------------|--------|
-| TC-LOGIN-001 | Login exitoso como administrador | ✅ Pasó |
-| TC-LOGIN-002 | Login exitoso como supervisor (permisos restringidos) | ✅ Pasó |
-| TC-LOGIN-003 | Login con username no registrado | ✅ Pasó |
-| TC-LOGIN-004 | Login con campos vacíos | ✅ Pasó |
-| TC-LOGIN-005 | Login con usuario inactivo | ✅ Pasó |
-| TC-LOGIN-006 | Login con contraseña incorrecta | ✅ Pasó |
-| TC-LOGIN-007 | Inyección de caracteres especiales | ✅ Pasó |
-| TC-LOGIN-008 | Cierre de sesión correcto (Logout) | ✅ Pasó |
-| TC-LOGIN-009 | Acceso a ruta protegida sin token | ✅ Pasó |
-| TC-LOGIN-010 | Comportamiento con sesión expirada | ❌ Falló |
-
-**Resultado:** 9/10 casos aprobados — **90.0% de éxito**
-
----
-
-## 7. 🔗 Documentos Relacionados
-
-- [Casos de Prueba Completos →](./casos-login.md)
-- [Módulo de Usuarios →](../01-modulo-usuarios/README.md)
-- [Índice General →](../../README.md)
-
----
-
-*© 2026 SofInventory — Área de Calidad de Software*
+- [Casos actuales de Login](./casos-login.md)
+- [Usuarios](../01-modulo-usuarios/README.md)
+- [Matriz general](../MATRIZ_COBERTURA.md)
+- [Resultados finales](../RESULTADOS_EJECUCION_2026-08-08.md#login-y-sesiones)
+- [Defectos](../DEFECTOS.md)

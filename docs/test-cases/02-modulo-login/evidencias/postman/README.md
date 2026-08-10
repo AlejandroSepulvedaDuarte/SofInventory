@@ -1,68 +1,25 @@
-# 📮 Evidencias — Postman | Módulo Login
+# Evidencias API — Login y sesiones
 
-> Directorio para capturas de requests y responses realizadas en Postman durante las pruebas del módulo de Login.
+> **Actualizado:** 8 de agosto de 2026
 
-## Convención de nomenclatura
+No se generaron capturas nuevas de Postman. Las pruebas actuales se ejecutaron con el cliente de pruebas de Django dentro del contenedor backend.
 
-```
-TC-LOGIN-{NRO}-postman.png     → Captura del request + response en Postman
-```
+## Contrato actual
 
-## Endpoints — Colección de referencia
+| Operación | Método y ruta | Resultado principal |
+|---|---|---|
+| Login válido | `POST /api/auth/login/` | 200, token propio, expiración y usuario público |
+| Credenciales inválidas | `POST /api/auth/login/` | 401 genérico dentro del límite |
+| Cuenta inactiva o bloqueada | `POST /api/auth/login/` | 403 controlado |
+| Límite de solicitudes | `POST /api/auth/login/` | 429 cuando se supera la tasa |
+| Perfil | `GET /api/auth/me/` | 200 con sesión válida; rechazo sin sesión |
+| Logout | `POST /api/auth/logout/` | 200 e invalidación de la sesión actual |
 
-### Autenticación (Login)
-```
-POST /api/auth/login/
-Content-Type: application/json
+## Reglas para futuras evidencias
 
-{
-  "username": "admin",
-  "password": "<password-de-prueba>"
-}
-```
+- Sustituir cualquier token por `<token-redactado>`.
+- No mostrar contraseñas, cookies, encabezados completos ni datos personales.
+- Para sesión única y logout, preferir aserciones automatizadas y consultas agregadas de solo lectura.
+- Registrar la discrepancia 401/403 de expiración hasta que el contrato frontend/backend quede definido.
 
-### Verificar sesión activa
-```
-GET /api/auth/me/
-Authorization: Bearer {{access_token}}
-```
-
-### Logout
-```
-POST /api/auth/logout/
-Authorization: Bearer {{access_token}}
-```
-
-### Ejemplo de respuesta exitosa (200 OK)
-```json
-{
-  "mensaje": "Bienvenido Carlos Pérez",
-  "access_token": "abc123...xyz",
-  "expires_at": "2026-05-15T03:00:00+00:00",
-  "usuario": {
-    "id": 1,
-    "username": "admin",
-    "nombre": "Carlos Pérez",
-    "rol": "Administrador",
-    "estado": "activo",
-    "email": "admin@sofinventory.com"
-  }
-}
-```
-
-## Archivos esperados
-
-| Archivo | Caso | Código HTTP esperado |
-|---------|------|---------------------|
-| `TC-LOGIN-001-postman.png` | TC-LOGIN-001 | 200 OK + access_token (admin) |
-| `TC-LOGIN-002-postman.png` | TC-LOGIN-002 | 200 OK + access_token (supervisor) + verificación 403 en `/api/usuarios/listar/` |
-| `TC-LOGIN-003-postman.png` | TC-LOGIN-003 | 401 Unauthorized — username no registrado |
-| `TC-LOGIN-004-postman.png` | TC-LOGIN-004 | 400 Bad Request — campos vacíos |
-| `TC-LOGIN-005-postman.png` | TC-LOGIN-005 | 403 Forbidden — usuario inactivo |
-| `TC-LOGIN-006-postman.png` | TC-LOGIN-006 | 401 Unauthorized — contraseña incorrecta |
-| `TC-LOGIN-007-postman.png` | TC-LOGIN-007 | **500 Internal Server Error (BUG — se esperaba 400)** |
-| `TC-LOGIN-008-postman.png` | TC-LOGIN-008 | 401 Unauthorized — token revocado |
-| `TC-LOGIN-009-postman.png` | TC-LOGIN-009 | 401 Unauthorized — sin header Authorization |
-| `TC-LOGIN-010-postman.png` | TC-LOGIN-010 | 401 Unauthorized — sesión expirada (backend correcto) |
-
-> 📌 **Nota:** Incluir en cada captura el body del request, los headers completos y el body del response. Configurar una variable de entorno `{{access_token}}` en Postman para reutilizar el token entre peticiones.
+Los archivos `TC-LOGIN-001-postman.png` a `TC-LOGIN-010-postman.png` son históricos y no prueban el estado actual por sí solos.

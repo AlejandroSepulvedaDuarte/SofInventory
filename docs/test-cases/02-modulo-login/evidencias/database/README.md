@@ -1,63 +1,26 @@
-# 🗄️ Evidencias — Base de Datos | Módulo Login
+# Evidencias de base de datos — Login y sesiones
 
-> Directorio para capturas de consultas SQL ejecutadas en **pgAdmin 4** para verificar el estado de las sesiones y tokens durante las pruebas del módulo de Login.
+> **Actualizado:** 8 de agosto de 2026
 
-## Convención de nomenclatura
+No se realizaron actualizaciones manuales ni capturas nuevas de PostgreSQL. La sesión utilizada para la comprobación visual se creó y cerró mediante la interfaz normal.
 
-```
-TC-LOGIN-{NRO}-db.png     → Captura del Query Tool de pgAdmin con SQL ejecutado + resultado
-```
-
-## Consultas SQL de Referencia
+## Consultas de solo lectura recomendadas
 
 ```sql
--- TC-LOGIN-001: Verificar sesión activa creada tras login exitoso
-SELECT s.id, u.username, s.token, s.creada_en, s.expira_en, s.activa, s.user_agent
+-- Conteo de sesiones por estado, sin mostrar tokens.
+SELECT activa, COUNT(*) AS total
+FROM sesiones_api
+GROUP BY activa;
+
+-- Metadatos de la sesión más reciente para un usuario ficticio.
+SELECT s.creada_en, s.expira_en, s.activa, s.ultima_actividad
 FROM sesiones_api s
-INNER JOIN usuarios u ON s.usuario_id = u.id
-WHERE u.username = 'admin'
+JOIN usuarios u ON u.id = s.usuario_id
+WHERE u.username = '<usuario-ficticio>'
 ORDER BY s.creada_en DESC
 LIMIT 1;
-
--- TC-LOGIN-005: Verificar estado inactivo del usuario
-SELECT username, estado
-FROM usuarios
-WHERE username = 'inactivo';
-
--- TC-LOGIN-008: Verificar token revocado tras logout
-SELECT token, activa, ultima_actividad
-FROM sesiones_api
-WHERE token = '<token_usado_en_la_prueba>';
--- Resultado esperado: activa = false
-
--- TC-LOGIN-010: Forzar expiración de sesión para la prueba
-UPDATE sesiones_api
-SET expira_en = NOW() - INTERVAL '1 hour'
-WHERE activa = true
-AND usuario_id = (SELECT id FROM usuarios WHERE username = 'admin');
-
--- TC-LOGIN-010: Verificar que la sesión quedó inactiva tras expiración
-SELECT token, expira_en, activa
-FROM sesiones_api
-WHERE usuario_id = (SELECT id FROM usuarios WHERE username = 'admin')
-ORDER BY creada_en DESC
-LIMIT 1;
--- Resultado esperado: activa = false
-
--- Ver historial de sesiones de un usuario
-SELECT s.id, u.username, s.creada_en, s.expira_en, s.activa
-FROM sesiones_api s
-INNER JOIN usuarios u ON s.usuario_id = u.id
-ORDER BY s.creada_en DESC
-LIMIT 10;
 ```
 
-## Archivos esperados
+No seleccionar ni capturar la columna `token`. La expiración debe probarse con reloj controlado o una base aislada; no mediante `UPDATE` sobre datos existentes.
 
-| Archivo | Caso | Consulta | Propósito |
-|---------|------|----------|-----------|
-| `TC-LOGIN-001-db.png` | TC-LOGIN-001 | SELECT sesiones_api | Verificar token activo generado tras login |
-| `TC-LOGIN-008-db.png` | TC-LOGIN-008 | SELECT token | Verificar `activa = false` tras logout |
-| `TC-LOGIN-010-db.png` | TC-LOGIN-010 | UPDATE + SELECT | Forzar expiración y verificar `activa = false` |
-
-> 📌 **Nota:** Incluir en la captura tanto el SQL ejecutado (panel superior) como el resultado completo (panel inferior) del Query Tool de pgAdmin 4. Solo agregar capturas cuando la verificación en BD sea relevante para el caso de prueba.
+Los archivos `TC-LOGIN-001-db.png`, `TC-LOGIN-008-db.png` y `TC-LOGIN-010-db.png` son históricos y están pendientes de revalidación.
