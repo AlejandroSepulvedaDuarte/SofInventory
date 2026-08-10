@@ -23,7 +23,7 @@
     
     
       
-        <title>🔐 Módulo 02 — Login / Autenticación - SofInventory ERP</title>
+        <title>Módulo 02 — Login y sesiones - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#modulo-02-login-autenticacion" class="md-skip">
+        <a href="#modulo-02-login-y-sesiones" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              🔐 Módulo 02 — Login / Autenticación
+              Módulo 02 — Login y sesiones
             
           </span>
         </div>
@@ -347,198 +347,146 @@
 
 
 
-<h1 id="modulo-02-login-autenticacion">🔐 Módulo 02 — Login / Autenticación</h1>
+<h1 id="modulo-02-login-y-sesiones">Módulo 02 — Login y sesiones</h1>
 <blockquote>
-<p><strong>Versión:</strong> 1.0.0 <br>
-<strong>Módulo:</strong> Login y Autenticación <br>
-<strong>Código de módulo:</strong> MOD-LOGIN <br>
-<strong>Fecha:</strong> 15 de mayo de 2026</p>
+<p><strong>Versión documental:</strong> 3.0.0 <br>
+<strong>Fecha de actualización:</strong> 8 de agosto de 2026 <br>
+<strong>Estado:</strong> actualizado contra el código y la interfaz actuales</p>
 </blockquote>
-<hr />
-<h2 id="1-descripcion-del-modulo">1. 📌 Descripción del Módulo</h2>
-<p>El módulo de <strong>Login</strong> es el punto de entrada al sistema SofInventory. Gestiona la autenticación de usuarios mediante <strong>username y contraseña</strong> (no email). Tras una autenticación exitosa, el backend Django genera un <strong>token Bearer propio</strong> (usando <code>secrets.token_urlsafe(48)</code>) que se almacena en la tabla <code>sesiones_api</code> de PostgreSQL, con una duración de <strong>12 horas</strong>. Este token debe enviarse en el header <code>Authorization: Bearer &lt;token&gt;</code> en todas las peticiones subsiguientes.</p>
-<p>Este módulo es crítico para la seguridad del sistema: un fallo en la autenticación puede comprometer la confidencialidad e integridad de toda la información gestionada.</p>
-<hr />
-<h2 id="2-objetivos-del-modulo">2. 🎯 Objetivos del Módulo</h2>
+<h2 id="1-descripcion">1. Descripción</h2>
+<p>Login autentica por nombre de usuario y contraseña. El backend crea un token Bearer propio asociado a <code>sesiones_api</code>, con vigencia de 12 horas, invalida las sesiones activas anteriores del mismo usuario y rechaza cuentas inactivas o bloqueadas. El frontend conserva temporalmente token, expiración y usuario en <code>localStorage</code>, protege rutas mediante guards y elimina esa información al cerrar sesión.</p>
+<p>La respuesta no debe exponer si un nombre de usuario inexistente o una contraseña incorrecta causaron el rechazo. Tras cinco contraseñas incorrectas para una cuenta existente, el backend bloquea la cuenta. Además, el endpoint tiene limitación de solicitudes configurable; el valor predeterminado es <code>5/min</code>.</p>
+<h2 id="2-acceso-y-endpoints-actuales">2. Acceso y endpoints actuales</h2>
+<table>
+<thead>
+<tr>
+<th>Operación</th>
+<th>Método y ruta</th>
+<th>Acceso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Iniciar sesión</td>
+<td><code>POST /api/auth/login/</code></td>
+<td>Público, con limitación de solicitudes</td>
+</tr>
+<tr>
+<td>Consultar sesión propia</td>
+<td><code>GET /api/auth/me/</code></td>
+<td>Sesión Bearer válida</td>
+</tr>
+<tr>
+<td>Cerrar sesión</td>
+<td><code>POST /api/auth/logout/</code></td>
+<td>Sesión Bearer válida</td>
+</tr>
+</tbody>
+</table>
+<p>SofInventory no usa JWT. Nunca deben incluirse tokens completos, contraseñas ni encabezados <code>Authorization</code> en capturas o documentación.</p>
+<h2 id="3-ambiente-verificado">3. Ambiente verificado</h2>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Versión o condición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend del contenedor</td>
+<td>Python 3.12.13, Django 6.0.4, DRF 3.17.1</td>
+</tr>
+<tr>
+<td>Base de datos operativa</td>
+<td>PostgreSQL 15.18</td>
+</tr>
+<tr>
+<td>Frontend servido</td>
+<td>Nginx 1.31.3, compilación Angular 19.2.21</td>
+</tr>
+<tr>
+<td>Suite frontend</td>
+<td>Node.js 20.20.2 en contenedor temporal <code>node:20-alpine</code></td>
+</tr>
+<tr>
+<td>Verificación visual</td>
+<td>1280×720 y 390×844; temas Oscuro y Claro</td>
+</tr>
+<tr>
+<td>Fecha</td>
+<td>8 de agosto de 2026</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-resultado-actual">4. Resultado actual</h2>
+<table>
+<thead>
+<tr>
+<th>Verificación</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Suite backend completa</td>
+<td>99/99 en SQLite y 99/99 en PostgreSQL 15 aislado</td>
+</tr>
+<tr>
+<td>Suite frontend completa</td>
+<td>24/24 pruebas aprobadas con el repositorio montado en solo lectura</td>
+</tr>
+<tr>
+<td>Login con cuenta administrativa existente</td>
+<td>Aprobado manualmente; redirección al Dashboard</td>
+</tr>
+<tr>
+<td>Credenciales ficticias inexistentes</td>
+<td>Aprobado manualmente; mensaje genérico y sin datos sensibles</td>
+</tr>
+<tr>
+<td>Logout</td>
+<td>Aprobado manualmente; regreso a Login</td>
+</tr>
+<tr>
+<td>Bloqueo tras cinco fallos y cuenta inactiva</td>
+<td>Aprobado por API/DB-R con cuentas ficticias</td>
+</tr>
+<tr>
+<td>Reemplazo de sesión</td>
+<td>Aprobado: la segunda invalidó la primera y quedó una sola activa</td>
+</tr>
+<tr>
+<td>Responsive y temas del Login</td>
+<td>Aprobado manualmente en Oscuro/escritorio y Claro/móvil</td>
+</tr>
+<tr>
+<td>Expiración gestionada por frontend</td>
+<td>Falló: backend invalida, pero devuelve 403 y el interceptor solo gestiona 401 (<code>BUG-LOGIN-001</code>)</td>
+</tr>
+<tr>
+<td>Resultado del módulo</td>
+<td><strong>6 aprobados, 1 fallido</strong></td>
+</tr>
+</tbody>
+</table>
+<p>La validación de sesiones y bloqueo se realizó también en PostgreSQL 15.18 aislado; no se usó la base operativa.</p>
+<h2 id="5-evidencias-vigentes">5. Evidencias vigentes</h2>
 <ul>
-<li>Verificar que solo usuarios con credenciales válidas (username + contraseña) pueden ingresar al sistema.</li>
-<li>Comprobar que el sistema rechaza correctamente credenciales incorrectas o inexistentes.</li>
-<li>Validar la generación correcta del token Bearer y su registro en la tabla <code>sesiones_api</code> de PostgreSQL.</li>
-<li>Verificar que un usuario inactivo no puede autenticarse aunque sus credenciales sean correctas.</li>
-<li>Detectar posibles vulnerabilidades en el endpoint de autenticación.</li>
-<li>Verificar la invalidación correcta del token al cerrar sesión.</li>
+<li><a href="evidencias/frontend/LOGIN-actual-escritorio-oscuro.png">Login actual — escritorio, tema Oscuro</a></li>
+<li><a href="evidencias/frontend/LOGIN-error-movil-claro.png">Error genérico — móvil, tema Claro</a></li>
+<li><a href="evidencias/frontend/LOGIN-acceso-exitoso-dashboard-movil.png">Acceso exitoso — Dashboard móvil</a></li>
+<li><a href="evidencias/frontend/">Índice de evidencias frontend</a></li>
 </ul>
-<hr />
-<h2 id="3-alcance-de-las-pruebas">3. 🔭 Alcance de las Pruebas</h2>
-<table>
-<thead>
-<tr>
-<th>Escenario</th>
-<th>¿En Alcance?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Login con credenciales correctas (username + contraseña)</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Login con contraseña incorrecta</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Login con username no registrado</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Login con campos vacíos</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Login con usuario inactivo</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Inyección de caracteres especiales</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Cierre de sesión (Logout)</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Acceso a ruta protegida sin token</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Token expirado (sesión invalidada)</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Múltiples sesiones simultáneas</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Recuperación de contraseña</td>
-<td>❌ (versión futura)</td>
-</tr>
-<tr>
-<td>Autenticación de dos factores (2FA)</td>
-<td>❌ (versión futura)</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="4-herramientas-de-prueba">4. 🛠️ Herramientas de Prueba</h2>
-<table>
-<thead>
-<tr>
-<th>Herramienta</th>
-<th>Uso en este módulo</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Angular 19</strong> (Chrome)</td>
-<td>Prueba del formulario de login en el frontend</td>
-</tr>
-<tr>
-<td><strong>Postman</strong></td>
-<td>Pruebas directas al endpoint <code>POST /api/auth/login/</code></td>
-</tr>
-<tr>
-<td><strong>Chrome DevTools</strong></td>
-<td>Inspección de localStorage y headers HTTP</td>
-</tr>
-<tr>
-<td><strong>pgAdmin 4</strong></td>
-<td>Verificación del estado de sesiones en la tabla <code>sesiones_api</code> y de usuarios en la tabla <code>usuarios</code></td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="5-estructura-del-modulo">5. 🧱 Estructura del Módulo</h2>
-<div class="highlight"><pre><span></span><code>02-modulo-login/
-├── README.md               ← Este archivo
-├── casos-login.md          ← Casos de prueba TC-LOGIN-001 al TC-LOGIN-010
-└── evidencias/
-    ├── frontend/           ← Capturas de pantalla del formulario Angular
-    ├── postman/            ← Capturas de requests/responses en Postman
-    └── database/           ← Capturas de consultas SQL en pgAdmin 4 (tabla sesiones_api)
-</code></pre></div>
-<hr />
-<h2 id="6-resumen-de-resultados">6. 📊 Resumen de Resultados</h2>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Nombre del Caso</th>
-<th>Estado</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>TC-LOGIN-001</td>
-<td>Login exitoso como administrador</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-002</td>
-<td>Login exitoso como supervisor (permisos restringidos)</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-003</td>
-<td>Login con username no registrado</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-004</td>
-<td>Login con campos vacíos</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-005</td>
-<td>Login con usuario inactivo</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-006</td>
-<td>Login con contraseña incorrecta</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-007</td>
-<td>Inyección de caracteres especiales</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-008</td>
-<td>Cierre de sesión correcto (Logout)</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-009</td>
-<td>Acceso a ruta protegida sin token</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-010</td>
-<td>Comportamiento con sesión expirada</td>
-<td>❌ Falló</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Resultado:</strong> 9/10 casos aprobados — <strong>90.0% de éxito</strong></p>
-<hr />
-<h2 id="7-documentos-relacionados">7. 🔗 Documentos Relacionados</h2>
+<p>Las capturas <code>TC-LOGIN-001</code> a <code>TC-LOGIN-010</code> se conservan como evidencia histórica y no se consideran revalidadas en esta ejecución.</p>
+<h2 id="6-documentos-relacionados">6. Documentos relacionados</h2>
 <ul>
-<li><a href="casos-login/">Casos de Prueba Completos →</a></li>
-<li><a href="../01-modulo-usuarios/">Módulo de Usuarios →</a></li>
-<li><a href="../../">Índice General →</a></li>
+<li><a href="casos-login/">Casos actuales de Login</a></li>
+<li><a href="../01-modulo-usuarios/">Usuarios</a></li>
+<li><a href="../MATRIZ_COBERTURA/">Matriz general</a></li>
+<li><a href="../RESULTADOS_EJECUCION_2026-08-08/#login-y-sesiones">Resultados finales</a></li>
+<li><a href="../DEFECTOS/">Defectos</a></li>
 </ul>
-<hr />
-<p><em>© 2026 SofInventory — Área de Calidad de Software</em></p>
 
 
 

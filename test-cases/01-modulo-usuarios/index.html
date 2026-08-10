@@ -23,7 +23,7 @@
     
     
       
-        <title>👤 Módulo 01 — Gestión de Usuarios - SofInventory ERP</title>
+        <title>Módulo 01 — Usuarios, roles y permisos - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#modulo-01-gestion-de-usuarios" class="md-skip">
+        <a href="#modulo-01-usuarios-roles-y-permisos" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              👤 Módulo 01 — Gestión de Usuarios
+              Módulo 01 — Usuarios, roles y permisos
             
           </span>
         </div>
@@ -347,180 +347,104 @@
 
 
 
-<h1 id="modulo-01-gestion-de-usuarios">👤 Módulo 01 — Gestión de Usuarios</h1>
+<h1 id="modulo-01-usuarios-roles-y-permisos">Módulo 01 — Usuarios, roles y permisos</h1>
 <blockquote>
-<p><strong>Versión:</strong> 1.0.1 <br>
-<strong>Módulo:</strong> Usuarios <br>
-<strong>Código de módulo:</strong> MOD-USR <br>
-<strong>Fecha:</strong> 16 de mayo de 2026</p>
+<p><strong>Versión documental:</strong> 3.0.0 <br>
+<strong>Fecha de actualización:</strong> 8 de agosto de 2026 <br>
+<strong>Estado:</strong> actualizado contra el código y la interfaz actuales</p>
 </blockquote>
-<hr />
-<h2 id="1-descripcion-del-modulo">1. 📌 Descripción del Módulo</h2>
-<p>El módulo de <strong>Gestión de Usuarios</strong> permite a los administradores del sistema SofInventory crear, editar, visualizar, cambiar el estado y eliminar cuentas de usuario. Cada usuario posee credenciales de acceso (username y contraseña) y un rol asignado que determina los permisos disponibles dentro del sistema.</p>
-<p>La contraseña es almacenada de forma segura mediante el algoritmo <strong>PBKDF2-SHA256</strong> de Django; nunca se persiste en texto plano en la base de datos PostgreSQL.</p>
-<p>Este módulo es la base del sistema de autenticación: <strong>un usuario debe existir y estar activo</strong> para poder iniciar sesión a través del módulo de Login.</p>
-<hr />
-<h2 id="2-objetivos-del-modulo">2. 🎯 Objetivos del Módulo</h2>
-<ul>
-<li>Garantizar que solo usuarios con rol <strong>Administrador</strong> puedan crear nuevas cuentas.</li>
-<li>Validar que los datos ingresados cumplan con los formatos y restricciones definidos en el modelo Django.</li>
-<li>Verificar que las contraseñas sean almacenadas con hash PBKDF2 y nunca en texto plano.</li>
-<li>Comprobar que los usuarios creados puedan autenticarse exitosamente en el módulo de Login.</li>
-<li>Asegurar que la información se persista correctamente en la base de datos PostgreSQL.</li>
-</ul>
-<hr />
-<h2 id="3-alcance-de-las-pruebas">3. 🔭 Alcance de las Pruebas</h2>
+<h2 id="1-descripcion">1. Descripción</h2>
+<p>El módulo permite a un <code>Administrador</code> listar, crear, editar, activar/inactivar, desbloquear y eliminar usuarios, además de consultar reportes de roles y auditoría. Los roles vigentes son <code>Administrador</code>, <code>Supervisor</code>, <code>Bodega</code> y <code>Vendedor</code>. El backend es la fuente de verdad de permisos: ocultar opciones en la interfaz no reemplaza la validación del servidor.</p>
+<p>La contraseña se almacena mediante los hashers configurados por Django y nunca se devuelve en respuestas. Al crear o cambiar una contraseña se aplican los validadores de Django, coincidencia de confirmación y rechazo de una contraseña que ya esté siendo usada por otra cuenta. En edición, dejar ambos campos de contraseña vacíos conserva la credencial actual.</p>
+<h2 id="2-funcionalidades-actuales">2. Funcionalidades actuales</h2>
 <table>
 <thead>
 <tr>
 <th>Funcionalidad</th>
-<th>¿En Alcance?</th>
+<th>Acceso</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Creación de usuario con datos válidos</td>
-<td>✅</td>
+<td>Crear, listar, editar, cambiar estado, desbloquear y eliminar usuarios</td>
+<td>Solo Administrador</td>
 </tr>
 <tr>
-<td>Validación de campos obligatorios</td>
-<td>✅</td>
+<td>Reporte de roles y auditoría</td>
+<td>Solo Administrador</td>
 </tr>
 <tr>
-<td>Validación de unicidad de username y email</td>
-<td>✅</td>
+<td>Listar catálogo de roles y tipos de documento</td>
+<td>Usuario autenticado</td>
 </tr>
 <tr>
-<td>Validación de número de documento</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Validación de contraseña segura</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Verificación de hash de contraseña en BD</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Asignación de rol al usuario</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Impacto sobre el módulo de Login</td>
-<td>✅</td>
-</tr>
-<tr>
-<td>Edición de usuarios</td>
-<td>❌ (versión futura)</td>
-</tr>
-<tr>
-<td>Eliminación de usuarios</td>
-<td>❌ (versión futura)</td>
-</tr>
-<tr>
-<td>Listado/búsqueda de usuarios</td>
-<td>❌ (versión futura)</td>
+<td>Iniciar sesión y consultar perfil propio</td>
+<td>Según reglas del módulo Login</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="4-herramientas-de-prueba">4. 🛠️ Herramientas de Prueba</h2>
+<p>El sistema impide eliminar al único Administrador y registra eventos de creación, edición, cambio de rol, cambio de estado, desbloqueo y eliminación sin incluir contraseñas ni tokens.</p>
+<h2 id="3-formulario-actual">3. Formulario actual</h2>
+<p>El formulario contiene tipo y número de documento, nombre completo, correo, nombre de usuario, contraseña y confirmación, rol, fecha de creación y observaciones. En edición, las contraseñas son opcionales. La ayuda contextual usa títulos distintos para “registrar” y “actualizar”, se adapta a móvil y <code>Esc</code> cierra únicamente el panel de ayuda.</p>
+<h2 id="4-resultado-actual">4. Resultado actual</h2>
 <table>
 <thead>
 <tr>
-<th>Herramienta</th>
-<th>Uso en este módulo</th>
+<th>Verificación</th>
+<th>Resultado</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Angular 19</strong> (Chrome)</td>
-<td>Verificación del formulario de creación en el frontend</td>
+<td>Suite backend completa</td>
+<td>99/99 en SQLite y 99/99 en PostgreSQL 15 aislado</td>
 </tr>
 <tr>
-<td><strong>Postman</strong></td>
-<td>Pruebas directas al endpoint <code>POST /api/usuarios/crear/</code></td>
+<td>Suite frontend completa</td>
+<td>24/24 pruebas aprobadas en Node.js 20 dentro de Docker</td>
 </tr>
 <tr>
-<td><strong>pgAdmin 4</strong></td>
-<td>Verificación de registros en las tablas <code>usuarios</code> y verificación del hash de contraseña</td>
+<td>Alta, duplicados, estado, bloqueo, desbloqueo y eliminación</td>
+<td>Aprobados por API/DB-R con cuentas ficticias E2E</td>
+</tr>
+<tr>
+<td>Formulario de creación/edición y ayuda</td>
+<td>Aprobado manualmente en escritorio/móvil</td>
+</tr>
+<tr>
+<td><code>Esc</code> y retorno de foco</td>
+<td>Aprobado manualmente</td>
+</tr>
+<tr>
+<td>Validaciones obligatorias</td>
+<td>Aprobado manualmente; no se realizó solicitud al backend</td>
+</tr>
+<tr>
+<td>Buscador del listado</td>
+<td>Falló manualmente; el texto cambia, pero la tabla no se filtra (<code>BUG-USR-003</code>)</td>
+</tr>
+<tr>
+<td>Resultado del módulo</td>
+<td><strong>7 aprobados, 1 fallido</strong></td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="5-estructura-del-modulo">5. 🧱 Estructura del Módulo</h2>
-<div class="highlight"><pre><span></span><code>01-modulo-usuarios/
-├── README.md              ← Este archivo
-├── casos-usuarios.md      ← Casos de prueba TC-USR-001 al TC-USR-008
-└── evidencias/
-    ├── frontend/          ← Capturas de pantalla del formulario Angular
-    ├── postman/           ← Capturas de requests/responses en Postman
-    └── database/          ← Capturas de consultas SQL en pgAdmin 4
-</code></pre></div>
-<hr />
-<h2 id="6-resumen-de-resultados">6. 📊 Resumen de Resultados</h2>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Nombre del Caso</th>
-<th>Estado</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>TC-USR-001</td>
-<td>Creación exitosa de usuario administrador</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-USR-002</td>
-<td>Creación exitosa de usuario operador</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-USR-003</td>
-<td>Username duplicado rechazado</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-USR-004</td>
-<td>Contraseña que no cumple política de seguridad</td>
-<td>❌ Falló</td>
-</tr>
-<tr>
-<td>TC-USR-005</td>
-<td>Número de documento con formato inválido</td>
-<td>❌ Falló</td>
-</tr>
-<tr>
-<td>TC-USR-006</td>
-<td>Campos obligatorios vacíos</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-USR-007</td>
-<td>Verificación de contraseña hasheada en BD</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-USR-008</td>
-<td>Usuario creado puede iniciar sesión</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Resultado:</strong> 6/8 casos aprobados — <strong>75.0% de éxito</strong></p>
-<hr />
-<h2 id="7-documentos-relacionados">7. 🔗 Documentos Relacionados</h2>
+<h2 id="5-evidencias-vigentes">5. Evidencias vigentes</h2>
 <ul>
-<li><a href="casos-usuarios/">Casos de Prueba Completos →</a></li>
-<li><a href="../02-modulo-login/">Módulo de Login →</a></li>
-<li><a href="../../">Índice General →</a></li>
+<li><a href="evidencias/frontend/USR-formulario-ayuda-crear.png">Ayuda al registrar Usuario — escritorio</a></li>
+<li><a href="evidencias/frontend/USR-formulario-ayuda-editar-movil.png">Ayuda al actualizar Usuario — móvil</a></li>
+<li><a href="evidencias/frontend/USR-validaciones-obligatorios-movil.png">Validaciones obligatorias — móvil</a></li>
+<li><a href="evidencias/frontend/">Índice de evidencias frontend</a></li>
 </ul>
-<hr />
-<p><em>© 2026 SofInventory — Área de Calidad de Software</em></p>
+<p>Las capturas <code>TC-USR-001</code> a <code>TC-USR-008</code> se conservan como evidencia histórica y no se consideran revalidadas en esta ejecución.</p>
+<h2 id="6-documentos-relacionados">6. Documentos relacionados</h2>
+<ul>
+<li><a href="casos-usuarios/">Casos actuales de Usuarios</a></li>
+<li><a href="../02-modulo-login/">Login y sesiones</a></li>
+<li><a href="../MATRIZ_COBERTURA/">Matriz general</a></li>
+<li><a href="../RESULTADOS_EJECUCION_2026-08-08/#usuarios-roles-y-permisos">Resultados finales</a></li>
+<li><a href="../DEFECTOS/">Defectos</a></li>
+</ul>
 
 
 

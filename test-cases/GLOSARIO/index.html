@@ -23,7 +23,7 @@
     
     
       
-        <title>📖 Glosario y Ambiente de Pruebas — SofInventory - SofInventory ERP</title>
+        <title>Glosario y ambiente de pruebas — SofInventory - SofInventory ERP</title>
       
     
     
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              📖 Glosario y Ambiente de Pruebas — SofInventory
+              Glosario y ambiente de pruebas — SofInventory
             
           </span>
         </div>
@@ -347,231 +347,180 @@
 
 
 
-<h1 id="glosario-y-ambiente-de-pruebas-sofinventory">📖 Glosario y Ambiente de Pruebas — SofInventory</h1>
+<h1 id="glosario-y-ambiente-de-pruebas-sofinventory">Glosario y ambiente de pruebas — SofInventory</h1>
 <blockquote>
-<p><strong>Versión:</strong> 1.0.0 | <strong>Fecha:</strong> 15 de mayo de 2026</p>
+<p><strong>Versión:</strong> 2.0.0 · <strong>Actualizado:</strong> 8 de agosto de 2026</p>
 </blockquote>
-<hr />
-<h2 id="ambiente-de-pruebas">🖥️ Ambiente de Pruebas</h2>
+<h2 id="ambiente-de-referencia">Ambiente de referencia</h2>
+<p>Las versiones siguientes corresponden a los contenedores de SofInventory. Las herramientas instaladas en Windows no definen el runtime del sistema.</p>
 <table>
 <thead>
 <tr>
 <th>Componente</th>
-<th>Detalle</th>
+<th>Runtime verificado</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Sistema Operativo</strong></td>
-<td>Windows 10 / Ubuntu 22.04</td>
+<td>Backend</td>
+<td>Python 3.12.13, Django 6.0.4, Django REST Framework 3.17.1</td>
 </tr>
 <tr>
-<td><strong>Navegador</strong></td>
-<td>Google Chrome 124.x</td>
+<td>Base de datos</td>
+<td>PostgreSQL 15.18</td>
 </tr>
 <tr>
-<td><strong>URL Frontend</strong></td>
-<td><code>http://localhost:4200</code> (desarrollo)</td>
+<td>Frontend servido</td>
+<td>Nginx 1.31.3 sobre Alpine 3.24.1</td>
 </tr>
 <tr>
-<td><strong>URL API Backend</strong></td>
+<td>Compilación frontend</td>
+<td>Node.js 20 Alpine, Angular 19.2.21, TypeScript 5.6.3</td>
+</tr>
+<tr>
+<td>Suite frontend ejecutada</td>
+<td>Node.js 20.20.2 en contenedor temporal</td>
+</tr>
+<tr>
+<td>Suite backend rápida</td>
+<td><code>config.test_settings</code>, SQLite en memoria y hasher MD5 solo para pruebas</td>
+</tr>
+<tr>
+<td>Zona horaria</td>
+<td><code>America/Bogota</code></td>
+</tr>
+<tr>
+<td>URL local integrada</td>
+<td><code>http://localhost/</code></td>
+</tr>
+<tr>
+<td>API local directa</td>
 <td><code>http://localhost:8000/api/</code></td>
-</tr>
-<tr>
-<td><strong>Motor de BD</strong></td>
-<td>PostgreSQL 15+</td>
-</tr>
-<tr>
-<td><strong>Gestor de BD</strong></td>
-<td>pgAdmin 4</td>
-</tr>
-<tr>
-<td><strong>Versión Angular</strong></td>
-<td>19.x</td>
-</tr>
-<tr>
-<td><strong>Versión Django</strong></td>
-<td>6.0.4</td>
-</tr>
-<tr>
-<td><strong>Versión DRF</strong></td>
-<td>3.17.1</td>
-</tr>
-<tr>
-<td><strong>Versión Python</strong></td>
-<td>3.12.x</td>
-</tr>
-<tr>
-<td><strong>Versión Postman</strong></td>
-<td>10.x</td>
-</tr>
-<tr>
-<td><strong>Ambiente</strong></td>
-<td>Desarrollo local / Staging</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="datos-de-prueba">👥 Datos de Prueba</h2>
+<p>Los casos de restricciones, transacciones y concurrencia deben ejecutarse también en PostgreSQL 15.18. SQLite se usa para velocidad, no como sustituto del motor operativo.</p>
+<h2 id="roles-actuales">Roles actuales</h2>
 <table>
 <thead>
 <tr>
 <th>Rol</th>
-<th>Username</th>
-<th>Email</th>
-<th>Contraseña</th>
-<th>Estado</th>
+<th>Alcance general</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Administrador</td>
-<td><code>admin</code></td>
-<td><code>admin@sofinventory.com</code></td>
-<td><code>Admin123</code></td>
-<td>Activo</td>
+<td>Configuración y administración completa, incluida gestión de usuarios</td>
 </tr>
 <tr>
 <td>Supervisor</td>
-<td><code>sebascal</code></td>
-<td><code>sebas@gmail.com</code></td>
-<td><code>sebas123</code></td>
-<td>Activo</td>
+<td>Operaciones de supervisión habilitadas por cada módulo</td>
 </tr>
 <tr>
-<td>Usuario inactivo</td>
-<td><code>sebascal</code></td>
-<td><code>sebas@gmail.com</code></td>
-<td><code>sebas123</code></td>
-<td>Inactivo</td>
+<td>Bodega</td>
+<td>Operaciones de productos, almacenes, inventario y compras autorizadas</td>
+</tr>
+<tr>
+<td>Vendedor</td>
+<td>Operación comercial y módulos permitidos por el backend</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>⚠️ Estos datos son exclusivamente para el ambiente de pruebas. No deben usarse en producción.</p>
-</blockquote>
-<hr />
-<h2 id="estructura-del-token-de-autenticacion">🔑 Estructura del Token de Autenticación</h2>
-<p>SofInventory <strong>no utiliza JWT</strong>. El sistema implementa un <strong>token Bearer propio</strong> almacenado en la tabla <code>sesiones_api</code> de PostgreSQL.</p>
+<p>Los permisos exactos se prueban por endpoint. La visibilidad del menú no es una garantía de autorización.</p>
+<h2 id="sesiones">Sesiones</h2>
+<p>SofInventory usa un token Bearer propio; no usa JWT.</p>
 <table>
 <thead>
 <tr>
 <th>Propiedad</th>
-<th>Detalle</th>
+<th>Comportamiento actual</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Generación</strong></td>
-<td><code>secrets.token_urlsafe(48)</code> — 64 caracteres URL-safe</td>
+<td>Generación</td>
+<td>Token aleatorio mediante <code>secrets.token_urlsafe(48)</code></td>
 </tr>
 <tr>
-<td><strong>Almacenamiento</strong></td>
-<td>Tabla <code>sesiones_api</code> en PostgreSQL</td>
+<td>Persistencia backend</td>
+<td>Tabla <code>sesiones_api</code></td>
 </tr>
 <tr>
-<td><strong>Duración</strong></td>
-<td>12 horas desde la creación (<code>expira_en</code>)</td>
+<td>Vigencia</td>
+<td>12 horas desde la creación</td>
 </tr>
 <tr>
-<td><strong>Header de uso</strong></td>
-<td><code>Authorization: Bearer &lt;token&gt;</code></td>
-</tr>
-<tr>
-<td><strong>Revocación</strong></td>
-<td>Campo <code>activa = False</code> en la sesión</td>
-</tr>
-<tr>
-<td><strong>Renovación</strong></td>
-<td>Al hacer login, todas las sesiones previas activas se invalidan</td>
-</tr>
-</tbody>
-</table>
-<p>Ejemplo de respuesta al autenticarse:
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;mensaje&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Bienvenido Carlos Pérez&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;access_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;abc123...xyz&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;expires_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-15T03:00:00+00:00&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;usuario&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;nombre&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Carlos Pérez&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;rol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Administrador&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;estado&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;activo&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin@sofinventory.com&quot;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></p>
-<hr />
-<h2 id="manejo-de-contrasenas">🔒 Manejo de Contraseñas</h2>
-<p>Las contraseñas son almacenadas usando el algoritmo <strong>PBKDF2-SHA256</strong> a través del hasher de Django. Nunca se persisten en texto plano.</p>
-<p>Formato del hash en la BD:
-<div class="highlight"><pre><span></span><code>pbkdf2_sha256$&lt;iteraciones&gt;$&lt;salt&gt;$&lt;hash&gt;
-</code></pre></div></p>
-<hr />
-<h2 id="endpoints-principales">📡 Endpoints Principales</h2>
-<table>
-<thead>
-<tr>
-<th>Módulo</th>
-<th>Método</th>
-<th>Endpoint</th>
-<th>Acceso</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Login</td>
-<td>POST</td>
-<td><code>/api/auth/login/</code></td>
-<td>Público</td>
-</tr>
-<tr>
-<td>Perfil propio</td>
-<td>GET</td>
-<td><code>/api/auth/me/</code></td>
-<td>Autenticado</td>
+<td>Sesión única</td>
+<td>Un login invalida sesiones activas anteriores del mismo usuario</td>
 </tr>
 <tr>
 <td>Logout</td>
-<td>POST</td>
-<td><code>/api/auth/logout/</code></td>
-<td>Autenticado</td>
+<td>Marca la sesión actual como inactiva</td>
 </tr>
 <tr>
-<td>Crear usuario</td>
-<td>POST</td>
-<td><code>/api/usuarios/crear/</code></td>
-<td>Solo Administrador</td>
+<td>Frontend</td>
+<td>Conserva token, expiración y usuario en <code>localStorage</code>; los elimina al salir o manejar no autorización</td>
 </tr>
 <tr>
-<td>Listar usuarios</td>
-<td>GET</td>
-<td><code>/api/usuarios/listar/</code></td>
-<td>Solo Administrador</td>
+<td>Limitación de Login</td>
+<td><code>5/min</code> por defecto, configurable</td>
 </tr>
 <tr>
-<td>Editar usuario</td>
-<td>PUT</td>
-<td><code>/api/usuarios/editar/&lt;id&gt;/</code></td>
-<td>Solo Administrador</td>
-</tr>
-<tr>
-<td>Cambiar estado</td>
-<td>PATCH</td>
-<td><code>/api/usuarios/estado/&lt;id&gt;/</code></td>
-<td>Solo Administrador</td>
-</tr>
-<tr>
-<td>Eliminar usuario</td>
-<td>DELETE</td>
-<td><code>/api/usuarios/eliminar/&lt;id&gt;/</code></td>
-<td>Solo Administrador</td>
+<td>Bloqueo de cuenta</td>
+<td>Cinco contraseñas incorrectas para una cuenta existente</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="glosario">📚 Glosario</h2>
+<p>Nunca copiar a un documento el valor de un token, contraseña, cookie o encabezado <code>Authorization</code>.</p>
+<h2 id="evidencia">Evidencia</h2>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AUTO</code></td>
+<td>Salida reproducible de una suite automatizada</td>
+</tr>
+<tr>
+<td><code>API</code></td>
+<td>Solicitud/respuesta sanitizada</td>
+</tr>
+<tr>
+<td><code>DB-R</code></td>
+<td>Consulta de solo lectura, preferentemente agregada</td>
+</tr>
+<tr>
+<td><code>MAN</code></td>
+<td>Verificación manual con pasos y resultado</td>
+</tr>
+<tr>
+<td><code>CAPTURA</code></td>
+<td>Imagen real enlazada desde uno o más casos, sanitizada y sin secretos</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td>Cobertura automatizada ejecutada y aprobada en la revisión indicada</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>Cobertura parcial</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>Falta automatización</td>
+</tr>
+<tr>
+<td><code>V</code></td>
+<td>Requiere verificación manual/visual</td>
+</tr>
+</tbody>
+</table>
+<h2 id="terminos">Términos</h2>
 <table>
 <thead>
 <tr>
@@ -581,117 +530,98 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>TC</strong></td>
-<td>Test Case (Caso de Prueba)</td>
+<td>Caso de prueba</td>
+<td>Escenario con precondiciones, datos, acción, resultado y evidencia</td>
 </tr>
 <tr>
-<td><strong>BUG</strong></td>
-<td>Defecto o error encontrado durante las pruebas</td>
+<td>Prueba positiva</td>
+<td>Verifica una operación válida</td>
 </tr>
 <tr>
-<td><strong>Token Bearer</strong></td>
-<td>Token de autenticación propio generado por el servidor y almacenado en la BD</td>
+<td>Prueba negativa</td>
+<td>Verifica rechazo controlado de una entrada inválida</td>
 </tr>
 <tr>
-<td><strong>PBKDF2</strong></td>
-<td>Password-Based Key Derivation Function 2 — algoritmo de hashing de contraseñas usado por Django</td>
+<td>Prueba de permisos</td>
+<td>Comprueba autorización en el backend con roles permitidos y denegados</td>
 </tr>
 <tr>
-<td><strong>Salt</strong></td>
-<td>Valor aleatorio añadido al hash de la contraseña para evitar ataques de tablas arcoíris</td>
+<td>Prueba de integración</td>
+<td>Comprueba la relación entre módulos o capas</td>
 </tr>
 <tr>
-<td><strong>API REST</strong></td>
-<td>Interfaz de Programación de Aplicaciones de arquitectura REST</td>
+<td>Prueba de interfaz</td>
+<td>Comprueba interacción, accesibilidad, temas y responsive</td>
 </tr>
 <tr>
-<td><strong>DRF</strong></td>
-<td>Django REST Framework — librería para construir APIs en Django</td>
+<td>Snapshot</td>
+<td>Copia de datos relevantes guardada con una operación para preservar su historia</td>
 </tr>
 <tr>
-<td><strong>Frontend</strong></td>
-<td>Capa de presentación del sistema (Angular 19)</td>
+<td>Throttling</td>
+<td>Límite temporal de solicitudes para reducir abuso</td>
 </tr>
 <tr>
-<td><strong>Backend</strong></td>
-<td>Capa de lógica de negocio y API (Django 6 + DRF)</td>
+<td>Idempotencia</td>
+<td>Repetir una operación no duplica su efecto</td>
 </tr>
 <tr>
-<td><strong>BD</strong></td>
-<td>Base de Datos (PostgreSQL 15+)</td>
+<td>Atomicidad</td>
+<td>Una operación se completa por entero o no deja cambios parciales</td>
 </tr>
 <tr>
-<td><strong>pgAdmin</strong></td>
-<td>Herramienta gráfica para administrar y consultar bases de datos PostgreSQL</td>
-</tr>
-<tr>
-<td><strong>UAT</strong></td>
-<td>User Acceptance Testing — pruebas de aceptación del usuario</td>
-</tr>
-<tr>
-<td><strong>Guard (Angular)</strong></td>
-<td>Mecanismo de Angular para proteger rutas de navegación</td>
-</tr>
-<tr>
-<td><strong>Interceptor (Angular)</strong></td>
-<td>Mecanismo de Angular para interceptar peticiones/respuestas HTTP</td>
-</tr>
-<tr>
-<td><strong>sesiones_api</strong></td>
-<td>Tabla en PostgreSQL que almacena los tokens activos de cada usuario</td>
-</tr>
-<tr>
-<td><strong>usuarios</strong></td>
-<td>Tabla principal en PostgreSQL con los datos del usuario (modelo <code>Usuario</code>)</td>
-</tr>
-<tr>
-<td><strong>roles</strong></td>
-<td>Tabla en PostgreSQL que almacena los roles disponibles (ej. Administrador, Supervisor)</td>
-</tr>
-<tr>
-<td><strong>HTTP 200</strong></td>
-<td>OK — Petición exitosa</td>
-</tr>
-<tr>
-<td><strong>HTTP 201</strong></td>
-<td>Created — Recurso creado exitosamente</td>
-</tr>
-<tr>
-<td><strong>HTTP 400</strong></td>
-<td>Bad Request — Petición mal formada o datos inválidos</td>
-</tr>
-<tr>
-<td><strong>HTTP 401</strong></td>
-<td>Unauthorized — Sin token o token inválido/expirado</td>
-</tr>
-<tr>
-<td><strong>HTTP 403</strong></td>
-<td>Forbidden — Autenticado pero sin permisos suficientes</td>
-</tr>
-<tr>
-<td><strong>HTTP 404</strong></td>
-<td>Not Found — Recurso no encontrado</td>
-</tr>
-<tr>
-<td><strong>HTTP 500</strong></td>
-<td>Internal Server Error — Error interno del servidor</td>
-</tr>
-<tr>
-<td><strong>P1</strong></td>
-<td>Prioridad 1 — Crítico, debe resolverse antes del despliegue</td>
-</tr>
-<tr>
-<td><strong>P2</strong></td>
-<td>Prioridad 2 — Importante, debe resolverse en el siguiente sprint</td>
-</tr>
-<tr>
-<td><strong>P3</strong></td>
-<td>Prioridad 3 — Bajo, puede planificarse para futura versión</td>
+<td>Evidencia histórica</td>
+<td>Archivo conservado que no demuestra por sí solo el estado actual</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<p><em>© 2026 SofInventory — Área de Calidad de Software</em></p>
+<h2 id="codigos-http-frecuentes">Códigos HTTP frecuentes</h2>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Uso esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Operación exitosa</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Registro creado</td>
+</tr>
+<tr>
+<td>204</td>
+<td>Operación exitosa sin cuerpo</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Datos inválidos o regla funcional incumplida</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Credenciales o autenticación no válidas según el contrato del endpoint</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Sesión sin permiso o estados de cuenta/sesión rechazados según el backend actual</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Recurso inexistente</td>
+</tr>
+<tr>
+<td>409</td>
+<td>Conflicto con historial o dependencia</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Límite de solicitudes excedido</td>
+</tr>
+</tbody>
+</table>
 
 
 

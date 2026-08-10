@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              📋 SofInventory — Documentación de Pruebas de Software
+              SofInventory — Documentación de Pruebas de Software
             
           </span>
         </div>
@@ -347,306 +347,679 @@
 
 
 
-<h1 id="sofinventory-documentacion-de-pruebas-de-software">📋 SofInventory — Documentación de Pruebas de Software</h1>
+<h1 id="sofinventory-documentacion-de-pruebas-de-software">SofInventory — Documentación de Pruebas de Software</h1>
 <blockquote>
-<p><strong>Versión:</strong> 1.0.0 <br>
-<strong>Fecha de elaboración:</strong> 15 de mayo de 2026 <br>
-<strong>Última actualización:</strong> 16 de mayo de 2026 <br>
-<strong>Estado del documento:</strong> ✅ Aprobado para revisión <br>
-<strong>Equipo QA:</strong> Alejandro Sepúlveda Duarte &amp; Lucy Estefany Izquierdo Jaramillo</p>
+<p><strong>Versión documental:</strong> 3.1.0</p>
+<p><strong>Fecha de actualización:</strong> 8 de agosto de 2026</p>
+<p><strong>Estado:</strong> ejecución completa · aprobación condicionada</p>
+<p><strong>Equipo QA:</strong> Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo</p>
 </blockquote>
 <hr />
-<h2 id="indice-general">🧭 Índice General</h2>
+<h2 id="indice-general">Índice general</h2>
 <div class="highlight"><pre><span></span><code>docs/
+├── README.md
 └── test-cases/
-    ├── GLOSARIO.md                        ← Glosario técnico y ambiente de pruebas
-    ├── DEFECTOS.md                        ← Registro consolidado de defectos
+    ├── MATRIZ_COBERTURA.md
+    ├── RESULTADOS_EJECUCION_2026-08-08.md
+    ├── DEFECTOS.md
+    ├── GLOSARIO.md
+    ├── evidencias-ejecucion/
     ├── 01-modulo-usuarios/
-    │   ├── README.md                      ← Descripción del módulo
-    │   ├── casos-usuarios.md              ← Casos de prueba (TC-USR-001 al TC-USR-008)
-    │   └── evidencias/
-    │       ├── frontend/
-    │       ├── postman/
-    │       └── database/
-    │
-    └── 02-modulo-login/
-        ├── README.md                      ← Descripción del módulo
-        ├── casos-login.md                 ← Casos de prueba (TC-LOGIN-001 al TC-LOGIN-010)
-        └── evidencias/
-            ├── frontend/
-            ├── postman/
-            └── database/
+    ├── 02-modulo-login/
+    ├── 03-modulo-categorias/
+    ├── 04-modulo-productos/
+    ├── 05-modulo-proveedores/
+    ├── 06-modulo-clientes/
+    ├── 07-modulo-almacenes/
+    ├── 08-modulo-inventario/
+    ├── 09-modulo-compras/
+    ├── 10-modulo-ventas/
+    ├── 11-modulo-empresa/
+    ├── 12-modulo-dashboard/
+    └── 13-frontend-compartido/
 </code></pre></div>
 <hr />
-<h2 id="1-descripcion-del-sistema">1. 📌 Descripción del Sistema</h2>
-<p><strong>SofInventory</strong> es un sistema de gestión de inventario orientado a pequeñas y medianas empresas (PYMES). Permite administrar productos, controlar el stock, gestionar usuarios con roles diferenciados y mantener un registro de movimientos de entrada y salida de mercancía.</p>
-<p>El sistema está construido sobre una arquitectura cliente-servidor:</p>
+<h2 id="1-descripcion-del-sistema">1. Descripción del sistema</h2>
+<p>SofInventory es un sistema web para administrar usuarios, terceros, productos, almacenes, existencias, compras y ventas. También centraliza la configuración de la empresa, los indicadores operativos del Dashboard y funciones compartidas de interfaz como temas visuales, formularios responsive y ayuda contextual.</p>
+<p>La solución está compuesta por:</p>
 <table>
 <thead>
 <tr>
 <th>Capa</th>
-<th>Tecnología</th>
+<th>Responsabilidad</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Frontend</td>
-<td>Angular 19</td>
+<td>Frontend Angular</td>
+<td>Interfaz, formularios, validaciones inmediatas, navegación por rol, temas y diseño responsive</td>
 </tr>
 <tr>
-<td>Backend / API</td>
-<td>Django 6.0.4 + Django REST Framework 3.17.1</td>
+<td>Backend Django REST Framework</td>
+<td>Reglas de negocio, validación definitiva, permisos, sesiones y servicios de datos</td>
 </tr>
 <tr>
-<td>Base de datos</td>
-<td>PostgreSQL 18+</td>
+<td>PostgreSQL</td>
+<td>Persistencia utilizada por el entorno integrado de Docker</td>
 </tr>
 <tr>
-<td>Autenticación</td>
-<td>Token Bearer propio (tabla <code>sesiones_api</code>), expiración 12 horas</td>
+<td>Nginx</td>
+<td>Publicación del frontend y enrutamiento del entorno contenerizado</td>
 </tr>
 <tr>
-<td>Documentación API</td>
-<td>Postman Collections</td>
-</tr>
-<tr>
-<td>Gestor de BD (QA)</td>
-<td>pgAdmin 4</td>
+<td>Docker Compose</td>
+<td>Ejecución reproducible de los servicios del sistema</td>
 </tr>
 </tbody>
 </table>
+<p>Los perfiles funcionales revisados son <strong>Administrador, Supervisor, Bodega y Vendedor</strong>. La autenticación utiliza sesiones con token y vencimiento controlado; la documentación nunca debe incluir credenciales, tokens ni datos personales reales.</p>
 <hr />
-<h2 id="2-objetivos-del-plan-de-pruebas">2. 🎯 Objetivos del Plan de Pruebas</h2>
-<h3 id="objetivo-general">Objetivo General</h3>
-<p>Verificar y validar el correcto funcionamiento de los módulos de <strong>Login</strong> y <strong>Usuarios</strong> del sistema SofInventory, garantizando que cumplan con los requisitos funcionales, de seguridad y usabilidad establecidos.</p>
-<h3 id="objetivos-especificos">Objetivos Específicos</h3>
+<h2 id="2-objetivos-del-plan-de-pruebas">2. Objetivos del plan de pruebas</h2>
+<h3 id="objetivo-general">Objetivo general</h3>
+<p>Comprobar que SofInventory mantiene un comportamiento funcional, seguro y consistente en sus módulos principales, tanto en la interfaz como en los servicios y la persistencia, antes de autorizar una liberación.</p>
+<h3 id="objetivos-especificos">Objetivos específicos</h3>
 <ul>
-<li>Validar que el módulo de autenticación permita el acceso únicamente a usuarios registrados con credenciales correctas (username + contraseña).</li>
-<li>Verificar que las contraseñas sean almacenadas con hash seguro (PBKDF2-SHA256) y nunca en texto plano.</li>
-<li>Comprobar que el sistema gestione correctamente los roles y permisos de usuarios (Administrador / Supervisor).</li>
-<li>Verificar la integridad de los datos almacenados en PostgreSQL mediante consultas directas en pgAdmin.</li>
-<li>Detectar posibles fallos de seguridad como inyección de caracteres especiales o acceso no autorizado.</li>
-<li>Evaluar la experiencia de usuario (UX) en los flujos de login y administración de usuarios.</li>
+<li>Verificar autenticación, cierre de sesión, expiración y protección frente a intentos fallidos.</li>
+<li>Comprobar roles, permisos y restricciones de acceso en interfaz y servicios.</li>
+<li>Validar operaciones de creación, consulta, actualización, anulación y eliminación según cada módulo.</li>
+<li>Confirmar la integridad del inventario ante compras, ventas, ajustes, movimientos, transferencias y anulaciones.</li>
+<li>Revisar reglas de identificación, contraseñas, estados, duplicados y relaciones entre registros.</li>
+<li>Validar comprobantes, indicadores, periodos y cálculos derivados.</li>
+<li>Comprobar temas visuales, accesibilidad básica, ayuda contextual, formularios compartidos y adaptación responsive.</li>
+<li>Mantener evidencias reproducibles sin modificar datos operativos ni exponer información sensible.</li>
 </ul>
 <hr />
-<h2 id="3-alcance-de-las-pruebas">3. 🔭 Alcance de las Pruebas</h2>
-<h3 id="en-alcance">✅ En Alcance</h3>
+<h2 id="3-alcance-de-las-pruebas">3. Alcance de las pruebas</h2>
+<h3 id="funcionalidades-incluidas">Funcionalidades incluidas</h3>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Cobertura principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login y sesiones</td>
+<td>Acceso, credenciales inválidas, bloqueo, expiración, cierre y protección de rutas</td>
+</tr>
+<tr>
+<td>Usuarios, roles y permisos</td>
+<td>CRUD, validaciones, estado, contraseña y autorización por rol</td>
+</tr>
+<tr>
+<td>Categorías</td>
+<td>Creación, edición, duplicados y relaciones con productos</td>
+</tr>
+<tr>
+<td>Productos</td>
+<td>Datos generales, referencia, categoría, precios, IVA, imagen y estados</td>
+</tr>
+<tr>
+<td>Proveedores</td>
+<td>Registro, edición, validaciones, ubicación y relaciones con compras</td>
+</tr>
+<tr>
+<td>Clientes</td>
+<td>Identidad, contacto, ubicación, edición y relaciones con ventas</td>
+</tr>
+<tr>
+<td>Almacenes</td>
+<td>Registro, actualización, permisos, ubicación y uso operativo</td>
+</tr>
+<tr>
+<td>Inventario</td>
+<td>Existencias, ajustes, movimientos, transferencias y concurrencia</td>
+</tr>
+<tr>
+<td>Compras</td>
+<td>Registro, totales, ingreso de existencias, estados y anulación</td>
+</tr>
+<tr>
+<td>Ventas</td>
+<td>Registro, pagos, descuentos, impuestos, salida de existencias, anulación y comprobante</td>
+</tr>
+<tr>
+<td>Empresa</td>
+<td>Identificación, contacto, ubicación, logo y datos de comprobantes</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>Métricas, periodos, estados contabilizables, zona horaria y presentación</td>
+</tr>
+<tr>
+<td>Frontend compartido</td>
+<td>Temas, ayuda contextual, conservación de formularios, teclado y responsive</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fuera-del-alcance-de-esta-ejecucion">Fuera del alcance de esta ejecución</h3>
+<ul>
+<li>Pruebas con información real de producción.</li>
+<li>Integraciones externas no incluidas en el repositorio.</li>
+<li>Pruebas exhaustivas de carga, estrés o penetración.</li>
+<li>Certificación completa en todas las combinaciones de navegador, sistema operativo y dispositivo.</li>
+<li>Corrección de defectos: esta documentación registra los hallazgos, pero no sustituye su implementación y revalidación.</li>
+</ul>
+<hr />
+<h2 id="4-ambiente-y-herramientas-de-validacion">4. Ambiente y herramientas de validación</h2>
+<p>Las versiones de referencia son las ejecutadas <strong>dentro de los contenedores Docker</strong>. Las herramientas instaladas en Windows se consideran utilidades del equipo anfitrión y no representan el runtime de SofInventory.</p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th style="text-align: right;">Versión verificada</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td style="text-align: right;">3.12.13</td>
+<td>Runtime del backend</td>
+</tr>
+<tr>
+<td>Django</td>
+<td style="text-align: right;">6.0.4</td>
+<td>Aplicación y pruebas del backend</td>
+</tr>
+<tr>
+<td>Django REST Framework</td>
+<td style="text-align: right;">3.17.1</td>
+<td>Servicios y validación de respuestas</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td style="text-align: right;">15.18</td>
+<td>Persistencia de la ejecución integrada</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td style="text-align: right;">20 (Alpine)</td>
+<td>Compilación y pruebas del frontend</td>
+</tr>
+<tr>
+<td>Angular</td>
+<td style="text-align: right;">19.2.21</td>
+<td>Interfaz web</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td style="text-align: right;">5.6.3</td>
+<td>Código y comprobaciones estáticas del frontend</td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td style="text-align: right;">1.31.3 sobre Alpine 3.24.1</td>
+<td>Publicación del frontend</td>
+</tr>
+</tbody>
+</table>
+<p>Herramientas y tipos de evidencia empleados:</p>
+<ul>
+<li>Runner de pruebas de Django con bases aisladas SQLite y PostgreSQL.</li>
+<li>Pruebas automatizadas del frontend ejecutadas con Node.js.</li>
+<li>Compilación de producción de Angular.</li>
+<li>Respuestas de servicios sanitizadas y consultas de solo lectura cuando aportan evidencia.</li>
+<li>Verificación manual en navegador para flujos, temas, teclado y tamaños de pantalla.</li>
+<li>Capturas reutilizables por módulo, sin secretos ni datos personales.</li>
+</ul>
+<hr />
+<h2 id="5-resumen-ejecutivo-de-resultados">5. Resumen ejecutivo de resultados</h2>
+<h3 id="51-casos-funcionales-documentados">5.1 Casos funcionales documentados</h3>
 <table>
 <thead>
 <tr>
 <th>Módulo</th>
-<th>Funcionalidades Cubiertas</th>
+<th style="text-align: right;">Casos</th>
+<th style="text-align: right;">Aprobados</th>
+<th style="text-align: right;">Parciales</th>
+<th style="text-align: right;">Fallidos</th>
+<th style="text-align: right;">Aprobación estricta</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Login</td>
-<td>Autenticación con username y contraseña, manejo de sesiones y tokens Bearer, cierre de sesión, bloqueo de usuario inactivo</td>
+<td>Usuarios</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">87,5 %</td>
 </tr>
 <tr>
-<td>Usuarios</td>
-<td>Creación de usuarios, validación de campos, asignación de roles, verificación de hash de contraseña, efecto sobre el módulo de login</td>
+<td>Login y sesiones</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">85,7 %</td>
+</tr>
+<tr>
+<td>Categorías</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">100 %</td>
+</tr>
+<tr>
+<td>Productos</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">66,7 %</td>
+</tr>
+<tr>
+<td>Proveedores</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">80 %</td>
+</tr>
+<tr>
+<td>Clientes</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">83,3 %</td>
+</tr>
+<tr>
+<td>Almacenes</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">100 %</td>
+</tr>
+<tr>
+<td>Inventario, movimientos y transferencias</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">100 %</td>
+</tr>
+<tr>
+<td>Compras y anulaciones</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">83,3 %</td>
+</tr>
+<tr>
+<td>Ventas, anulaciones y comprobantes</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">85,7 %</td>
+</tr>
+<tr>
+<td>Empresa</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">80 %</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">80 %</td>
+</tr>
+<tr>
+<td>Frontend compartido</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">85,7 %</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align: right;"><strong>78</strong></td>
+<td style="text-align: right;"><strong>67</strong></td>
+<td style="text-align: right;"><strong>1</strong></td>
+<td style="text-align: right;"><strong>10</strong></td>
+<td style="text-align: right;"><strong>85,9 %</strong></td>
 </tr>
 </tbody>
 </table>
-<h3 id="fuera-de-alcance-esta-version">❌ Fuera de Alcance (esta versión)</h3>
-<ul>
-<li>Módulo de Inventario / Productos</li>
-<li>Módulo de Reportes / Dashboard</li>
-<li>Módulo de Proveedores</li>
-<li>Módulo de Compras / Ventas</li>
-<li>Módulo de Clientes</li>
-<li>Integraciones externas</li>
-</ul>
-<hr />
-<h2 id="4-herramientas-tecnologicas">4. 🛠️ Herramientas Tecnológicas</h2>
+<blockquote>
+<p>La aprobación estricta cuenta únicamente los casos aprobados. Un resultado parcial no se considera aprobado ni fallido hasta completar su revalidación.</p>
+</blockquote>
+<h3 id="52-ejecuciones-automatizadas-y-compilacion">5.2 Ejecuciones automatizadas y compilación</h3>
 <table>
 <thead>
 <tr>
-<th>#</th>
-<th>Herramienta</th>
-<th>Versión</th>
+<th>Verificación</th>
+<th>Resultado</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend con base temporal SQLite</td>
+<td>99 de 99 pruebas aprobadas en 3,977 s</td>
+<td>Aprobado</td>
+</tr>
+<tr>
+<td>Backend con PostgreSQL 15 aislado</td>
+<td>99 de 99 pruebas aprobadas en 69,668 s</td>
+<td>Aprobado</td>
+</tr>
+<tr>
+<td>Pruebas automatizadas del frontend</td>
+<td>24 de 24 pruebas aprobadas</td>
+<td>Aprobado</td>
+</tr>
+<tr>
+<td>Compilación de producción Angular</td>
+<td>Compilación completada</td>
+<td>Aprobado con advertencias de presupuesto</td>
+</tr>
+<tr>
+<td>Presupuesto del paquete inicial</td>
+<td>Exceso de 7,02 kB</td>
+<td>Advertencia</td>
+</tr>
+<tr>
+<td>Presupuesto de estilos del Dashboard</td>
+<td>Exceso de 3,05 kB</td>
+<td>Advertencia</td>
+</tr>
+</tbody>
+</table>
+<p>Las <strong>99 pruebas del backend</strong> y las <strong>24 del frontend</strong> son ejecuciones técnicas independientes de los <strong>78 casos funcionales documentados</strong>. La existencia o aprobación de una prueba automatizada no reemplaza la evidencia manual cuando el caso exige inspección visual o interacción real.</p>
+<p>La ejecución integrada utilizó datos ficticios y temporales. Al finalizar se retiraron los contenedores, volúmenes y red creados para la validación, sin intervenir la base operativa.</p>
+<hr />
+<h2 id="6-estado-final-del-sistema">6. Estado final del sistema</h2>
+<table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th>Estado</th>
+<th>Conclusión</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Funcionalidad principal</td>
+<td>Condicionada</td>
+<td>Los flujos centrales operan, pero persisten fallos en productos, terceros, compras, ventas, empresa y Dashboard</td>
+</tr>
+<tr>
+<td>Seguridad, sesiones y permisos</td>
+<td>Condicionada</td>
+<td>La cobertura de roles y bloqueo es favorable; debe corregirse el tratamiento de la sesión expirada</td>
+</tr>
+<tr>
+<td>Integridad de inventario</td>
+<td>Aprobada con observaciones</td>
+<td>Ajustes, movimientos, transferencias y concurrencia fueron satisfactorios; una compra todavía admite un producto inactivo</td>
+</tr>
+<tr>
+<td>Validaciones</td>
+<td>Condicionada</td>
+<td>Se confirmaron mejoras en documento y contraseña; quedan reglas pendientes en empresa y pagos</td>
+</tr>
+<tr>
+<td>Usabilidad y accesibilidad</td>
+<td>Condicionada</td>
+<td>Los temas, la ayuda contextual y la adaptación responsive cuentan con evidencia; quedan problemas de búsqueda y mensajes técnicos</td>
+</tr>
+<tr>
+<td>Arquitectura y compilación</td>
+<td>Aprobada con advertencias</td>
+<td>Backend, frontend y PostgreSQL pasaron las suites; Angular conserva dos advertencias de presupuesto</td>
+</tr>
+</tbody>
+</table>
+<h3 id="decision-de-calidad">Decisión de calidad</h3>
+<p><strong>APROBACIÓN CONDICIONADA.</strong> La versión evaluada puede continuar en un entorno controlado de validación, pero no se recomienda su liberación a producción hasta corregir y reejecutar los defectos abiertos que afectan operaciones y experiencia de usuario.</p>
+<p>Antes de una aprobación definitiva se debe:</p>
+<ol>
+<li>Corregir los defectos abiertos de mayor impacto.</li>
+<li>Añadir pruebas automatizadas de regresión para cada corrección.</li>
+<li>Reejecutar los casos fallidos y el caso parcial.</li>
+<li>Confirmar que las correcciones no alteran inventario, permisos, sesiones ni cálculos.</li>
+<li>Actualizar resultados, matriz, evidencias y estado de defectos con la nueva ejecución.</li>
+</ol>
+<hr />
+<h2 id="7-defectos-relevantes">7. Defectos relevantes</h2>
+<table>
+<thead>
+<tr>
+<th>Identificador</th>
+<th>Módulo</th>
+<th>Hallazgo resumido</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BUG-LOGIN-001</td>
+<td>Login</td>
+<td>La expiración devuelve un estado distinto al gestionado por el interceptor</td>
+<td>Abierto</td>
+</tr>
+<tr>
+<td>BUG-USR-003</td>
+<td>Usuarios</td>
+<td>La búsqueda no reacciona correctamente a la entrada</td>
+<td>Abierto</td>
+</tr>
+<tr>
+<td>BUG-PRD-001</td>
+<td>Productos</td>
+<td>La creación puede fallar al procesar la imagen</td>
+<td>Abierto</td>
+</tr>
+<tr>
+<td>BUG-PRV-001</td>
+<td>Proveedores</td>
+<td>La eliminación de un proveedor relacionado genera error interno</td>
+<td>Abierto</td>
+</tr>
+<tr>
+<td>BUG-CLI-001</td>
+<td>Clientes</td>
+<td>La eliminación de un cliente relacionado genera error interno</td>
+<td>Abierto</td>
+</tr>
+<tr>
+<td>BUG-COM-001</td>
+<td>Compras</td>
+<td>Se acepta un producto inactivo en una compra</td>
+<td>Abierto</td>
+</tr>
+<tr>
+<td>BUG-VTA-001</td>
+<td>Ventas</td>
+<td>El pago con débito admite información condicional incompleta</td>
+<td>Abierto</td>
+</tr>
+<tr>
+<td>BUG-EMP-001</td>
+<td>Empresa</td>
+<td>Se aceptan NIT y teléfono inválidos</td>
+<td>Abierto</td>
+</tr>
+<tr>
+<td>BUG-DSH-001</td>
+<td>Dashboard</td>
+<td>La interfaz expone un mensaje técnico ante un error</td>
+<td>Abierto</td>
+</tr>
+<tr>
+<td>BUG-USR-001</td>
+<td>Usuarios</td>
+<td>Validación del documento</td>
+<td>Resuelto; evidencia histórica desactualizada</td>
+</tr>
+<tr>
+<td>BUG-USR-002</td>
+<td>Usuarios</td>
+<td>Política de contraseña</td>
+<td>Resuelto y verificado</td>
+</tr>
+</tbody>
+</table>
+<p>El detalle, impacto, evidencia y criterio de cierre se mantiene en <a href="test-cases/DEFECTOS/">DEFECTOS.md</a>.</p>
+<hr />
+<h2 id="8-navegacion-rapida">8. Navegación rápida</h2>
+<h3 id="documentos-transversales">Documentos transversales</h3>
+<table>
+<thead>
+<tr>
+<th>Documento</th>
 <th>Propósito</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td><strong>Angular</strong></td>
-<td>19.x</td>
-<td>Pruebas de interfaz de usuario (Frontend)</td>
+<td><a href="test-cases/MATRIZ_COBERTURA/">Matriz de cobertura</a></td>
+<td>Relación consolidada entre casos, automatización, resultados y evidencias</td>
 </tr>
 <tr>
-<td>2</td>
-<td><strong>Postman</strong></td>
-<td>12.x</td>
-<td>Pruebas de API REST (endpoints Django REST Framework)</td>
+<td><a href="test-cases/RESULTADOS_EJECUCION_2026-08-08/">Resultados de ejecución</a></td>
+<td>Ambiente, comandos, resultados y conclusiones de la ejecución final</td>
 </tr>
 <tr>
-<td>3</td>
-<td><strong>pgAdmin 4</strong></td>
-<td>Latest</td>
-<td>Verificación de integridad en base de datos PostgreSQL</td>
+<td><a href="test-cases/DEFECTOS/">Registro de defectos</a></td>
+<td>Hallazgos abiertos, resueltos y criterios de revalidación</td>
 </tr>
 <tr>
-<td>4</td>
-<td><strong>Chrome DevTools</strong></td>
-<td>Latest</td>
-<td>Inspección de red, localStorage y headers HTTP</td>
+<td><a href="test-cases/GLOSARIO/">Glosario</a></td>
+<td>Convenciones y términos empleados en los casos</td>
 </tr>
 <tr>
-<td>5</td>
-<td><strong>Google Chrome</strong></td>
-<td>124.x</td>
-<td>Navegador para pruebas de interfaz</td>
+<td><a href="test-cases/evidencias-ejecucion/">Manifiesto de evidencias</a></td>
+<td>Evidencias automatizadas, manuales y sanitizadas</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="5-resumen-ejecutivo-de-resultados">5. 📊 Resumen Ejecutivo de Resultados</h2>
+<h3 id="casos-por-modulo">Casos por módulo</h3>
 <table>
 <thead>
 <tr>
 <th>Módulo</th>
-<th>Total TC</th>
-<th>✅ Pasaron</th>
-<th>❌ Fallaron</th>
-<th>⚠️ Bloqueados</th>
-<th style="text-align: right;">% Éxito</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>01 - Usuarios</td>
-<td>8</td>
-<td>6</td>
-<td>2</td>
-<td>0</td>
-<td style="text-align: right;">75.0%</td>
-</tr>
-<tr>
-<td>02 - Login</td>
-<td>10</td>
-<td>9</td>
-<td>1</td>
-<td>0</td>
-<td style="text-align: right;">90.0%</td>
-</tr>
-<tr>
-<td><strong>TOTAL</strong></td>
-<td><strong>18</strong></td>
-<td><strong>15</strong></td>
-<td><strong>3</strong></td>
-<td><strong>0</strong></td>
-<td style="text-align: right;"><strong>83.3%</strong></td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="6-estado-final-del-sistema">6. ⭐ Estado Final del Sistema</h2>
-<table>
-<thead>
-<tr>
-<th>Criterio</th>
-<th>Calificación</th>
-<th>Observación</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Funcionalidad</td>
-<td>⭐⭐⭐⭐☆ (4/5)</td>
-<td>Flujos principales operativos; fallos menores en validaciones de entrada</td>
-</tr>
-<tr>
-<td>Seguridad</td>
-<td>⭐⭐⭐☆☆ (3/5)</td>
-<td>Contraseñas hasheadas con PBKDF2; token Bearer con expiración. Sin bloqueo automático por intentos fallidos</td>
-</tr>
-<tr>
-<td>Usabilidad</td>
-<td>⭐⭐⭐⭐☆ (4/5)</td>
-<td>Interfaz intuitiva; mensajes de error mejorables en frontend ante token expirado</td>
-</tr>
-<tr>
-<td>Integridad de Datos</td>
-<td>⭐⭐⭐⭐☆ (4/5)</td>
-<td>Datos persistidos correctamente en PostgreSQL; unicidad garantizada por modelo Django</td>
-</tr>
-</tbody>
-</table>
-<h3 id="decision-final-del-proceso-evaluativo">🏁 Decisión Final del Proceso Evaluativo</h3>
-<blockquote>
-<p><strong>CONDICIONALMENTE APROBADO</strong> para ambiente de pruebas de aceptación (UAT).
-Se recomienda corregir los <strong>3 defectos encontrados</strong> (1 en Login, 2 en Usuarios) antes del despliegue en producción. El sistema demuestra una base funcional sólida con áreas de mejora en seguridad de entradas y manejo de sesiones en el frontend.</p>
-</blockquote>
-<hr />
-<h2 id="7-navegacion-rapida">7. 🔗 Navegación Rápida</h2>
-<table>
-<thead>
-<tr>
 <th>Documento</th>
-<th>Enlace</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>📁 Módulo Usuarios — README</td>
-<td><a href="test-cases/01-modulo-usuarios/">Abrir</a></td>
+<td>Usuarios</td>
+<td><a href="test-cases/01-modulo-usuarios/casos-usuarios/">casos-usuarios.md</a></td>
 </tr>
 <tr>
-<td>🧪 Casos de Prueba — Usuarios</td>
-<td><a href="test-cases/01-modulo-usuarios/casos-usuarios/">Abrir</a></td>
+<td>Login y sesiones</td>
+<td><a href="test-cases/02-modulo-login/casos-login/">casos-login.md</a></td>
 </tr>
 <tr>
-<td>📁 Módulo Login — README</td>
-<td><a href="test-cases/02-modulo-login/">Abrir</a></td>
+<td>Categorías</td>
+<td><a href="test-cases/03-modulo-categorias/casos-categorias/">casos-categorias.md</a></td>
 </tr>
 <tr>
-<td>🧪 Casos de Prueba — Login</td>
-<td><a href="test-cases/02-modulo-login/casos-login/">Abrir</a></td>
+<td>Productos</td>
+<td><a href="test-cases/04-modulo-productos/casos-productos/">casos-productos.md</a></td>
 </tr>
 <tr>
-<td>🐛 Registro de Defectos</td>
-<td><a href="test-cases/DEFECTOS/">Abrir</a></td>
+<td>Proveedores</td>
+<td><a href="test-cases/05-modulo-proveedores/casos-proveedores/">casos-proveedores.md</a></td>
 </tr>
 <tr>
-<td>📖 Glosario y Ambiente</td>
-<td><a href="test-cases/GLOSARIO/">Abrir</a></td>
+<td>Clientes</td>
+<td><a href="test-cases/06-modulo-clientes/casos-clientes/">casos-clientes.md</a></td>
 </tr>
 <tr>
-<td>---</td>
-<td></td>
+<td>Almacenes</td>
+<td><a href="test-cases/07-modulo-almacenes/casos-almacenes/">casos-almacenes.md</a></td>
+</tr>
+<tr>
+<td>Inventario, movimientos y transferencias</td>
+<td><a href="test-cases/08-modulo-inventario/casos-inventario/">casos-inventario.md</a></td>
+</tr>
+<tr>
+<td>Compras y anulaciones</td>
+<td><a href="test-cases/09-modulo-compras/casos-compras/">casos-compras.md</a></td>
+</tr>
+<tr>
+<td>Ventas, anulaciones y comprobantes</td>
+<td><a href="test-cases/10-modulo-ventas/casos-ventas/">casos-ventas.md</a></td>
+</tr>
+<tr>
+<td>Empresa</td>
+<td><a href="test-cases/11-modulo-empresa/casos-empresa/">casos-empresa.md</a></td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td><a href="test-cases/12-modulo-dashboard/casos-dashboard/">casos-dashboard.md</a></td>
+</tr>
+<tr>
+<td>Temas, ayuda contextual y responsive</td>
+<td><a href="test-cases/13-frontend-compartido/casos-frontend-compartido/">casos-frontend-compartido.md</a></td>
 </tr>
 </tbody>
 </table>
-<h2 id="8-control-de-versiones-del-documento">8. 📅 Control de Versiones del Documento</h2>
+<hr />
+<h2 id="9-criterios-de-evidencia">9. Criterios de evidencia</h2>
+<ul>
+<li>Una captura puede respaldar varios casos cuando muestra de forma legible el mismo estado o flujo.</li>
+<li>Los cálculos, permisos y reglas de persistencia se sustentan preferiblemente con resultados automatizados, respuestas sanitizadas o consultas de solo lectura.</li>
+<li>La evidencia visual se reserva para diseño responsive, temas, ayuda contextual, mensajes y estados de interfaz.</li>
+<li>Las capturas no deben contener contraseñas, tokens, encabezados de autorización, secretos ni datos personales.</li>
+<li>Ningún caso se considera aprobado solo porque exista una prueba en el código: debe conservarse el resultado de su ejecución.</li>
+<li>Todo defecto corregido requiere evidencia nueva y una prueba de regresión cuando sea técnicamente viable.</li>
+</ul>
+<hr />
+<h2 id="10-control-de-versiones">10. Control de versiones</h2>
 <table>
 <thead>
 <tr>
 <th>Versión</th>
 <th>Fecha</th>
-<th>Autor</th>
-<th>Cambios</th>
+<th>Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1.0.0</td>
-<td>15/05/2026</td>
-<td>Alejandro Sepúlveda Duarte</td>
-<td>Creación inicial del plan de pruebas</td>
+<td>2 de agosto de 2026</td>
+<td>Documentación inicial de usuarios y login</td>
 </tr>
 <tr>
 <td>1.0.1</td>
-<td>16/05/2026</td>
-<td>Licy Estefany Izquierdo Jaramillo</td>
-<td>Creación inicial del test-cases de usuarios</td>
+<td>6 de agosto de 2026</td>
+<td>Ajustes posteriores a revisión de autenticación y validaciones</td>
+</tr>
+<tr>
+<td>2.0.0</td>
+<td>8 de agosto de 2026</td>
+<td>Ampliación de cobertura a todos los módulos del sistema</td>
+</tr>
+<tr>
+<td>3.0.0</td>
+<td>8 de agosto de 2026</td>
+<td>Consolidación de ejecución, evidencias y defectos</td>
+</tr>
+<tr>
+<td>3.1.0</td>
+<td>8 de agosto de 2026</td>
+<td>Reestructuración del README principal con el alcance y los resultados vigentes</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<p><em>© 2026 SofInventory — Área de Calidad de Software. Documento confidencial de uso interno.</em></p>
+<p>© 2026 SofInventory · Documentación de aseguramiento de calidad</p>
 
 
 

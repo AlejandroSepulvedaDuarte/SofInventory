@@ -23,7 +23,7 @@
     
     
       
-        <title>🗄️ Evidencias — Base de Datos | Módulo Login - SofInventory ERP</title>
+        <title>Evidencias de base de datos — Login y sesiones - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#evidencias-base-de-datos-modulo-login" class="md-skip">
+        <a href="#evidencias-de-base-de-datos-login-y-sesiones" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              🗄️ Evidencias — Base de Datos | Módulo Login
+              Evidencias de base de datos — Login y sesiones
             
           </span>
         </div>
@@ -347,88 +347,27 @@
 
 
 
-<h1 id="evidencias-base-de-datos-modulo-login">🗄️ Evidencias — Base de Datos | Módulo Login</h1>
+<h1 id="evidencias-de-base-de-datos-login-y-sesiones">Evidencias de base de datos — Login y sesiones</h1>
 <blockquote>
-<p>Directorio para capturas de consultas SQL ejecutadas en <strong>pgAdmin 4</strong> para verificar el estado de las sesiones y tokens durante las pruebas del módulo de Login.</p>
+<p><strong>Actualizado:</strong> 8 de agosto de 2026</p>
 </blockquote>
-<h2 id="convencion-de-nomenclatura">Convención de nomenclatura</h2>
-<div class="highlight"><pre><span></span><code>TC-LOGIN-{NRO}-db.png     → Captura del Query Tool de pgAdmin con SQL ejecutado + resultado
-</code></pre></div>
-<h2 id="consultas-sql-de-referencia">Consultas SQL de Referencia</h2>
-<div class="highlight"><pre><span></span><code><span class="c1">-- TC-LOGIN-001: Verificar sesión activa creada tras login exitoso</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">token</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">creada_en</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">expira_en</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">activa</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">user_agent</span>
+<p>No se realizaron actualizaciones manuales ni capturas nuevas de PostgreSQL. La sesión utilizada para la comprobación visual se creó y cerró mediante la interfaz normal.</p>
+<h2 id="consultas-de-solo-lectura-recomendadas">Consultas de solo lectura recomendadas</h2>
+<div class="highlight"><pre><span></span><code><span class="c1">-- Conteo de sesiones por estado, sin mostrar tokens.</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">activa</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">sesiones_api</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">activa</span><span class="p">;</span>
+
+<span class="c1">-- Metadatos de la sesión más reciente para un usuario ficticio.</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">creada_en</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">expira_en</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">activa</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">ultima_actividad</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">sesiones_api</span><span class="w"> </span><span class="n">s</span>
-<span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">usuario_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;admin&#39;</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">usuario_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&lt;usuario-ficticio&gt;&#39;</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">creada_en</span><span class="w"> </span><span class="k">DESC</span>
 <span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-
-<span class="c1">-- TC-LOGIN-005: Verificar estado inactivo del usuario</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">estado</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;inactivo&#39;</span><span class="p">;</span>
-
-<span class="c1">-- TC-LOGIN-008: Verificar token revocado tras logout</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">token</span><span class="p">,</span><span class="w"> </span><span class="n">activa</span><span class="p">,</span><span class="w"> </span><span class="n">ultima_actividad</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">sesiones_api</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&lt;token_usado_en_la_prueba&gt;&#39;</span><span class="p">;</span>
-<span class="c1">-- Resultado esperado: activa = false</span>
-
-<span class="c1">-- TC-LOGIN-010: Forzar expiración de sesión para la prueba</span>
-<span class="k">UPDATE</span><span class="w"> </span><span class="n">sesiones_api</span>
-<span class="k">SET</span><span class="w"> </span><span class="n">expira_en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NOW</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;1 hour&#39;</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">activa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span>
-<span class="k">AND</span><span class="w"> </span><span class="n">usuario_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;admin&#39;</span><span class="p">);</span>
-
-<span class="c1">-- TC-LOGIN-010: Verificar que la sesión quedó inactiva tras expiración</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">token</span><span class="p">,</span><span class="w"> </span><span class="n">expira_en</span><span class="p">,</span><span class="w"> </span><span class="n">activa</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">sesiones_api</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">usuario_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;admin&#39;</span><span class="p">)</span>
-<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">creada_en</span><span class="w"> </span><span class="k">DESC</span>
-<span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="c1">-- Resultado esperado: activa = false</span>
-
-<span class="c1">-- Ver historial de sesiones de un usuario</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">creada_en</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">expira_en</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">activa</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">sesiones_api</span><span class="w"> </span><span class="n">s</span>
-<span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">usuario_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span>
-<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">creada_en</span><span class="w"> </span><span class="k">DESC</span>
-<span class="k">LIMIT</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
 </code></pre></div>
-<h2 id="archivos-esperados">Archivos esperados</h2>
-<table>
-<thead>
-<tr>
-<th>Archivo</th>
-<th>Caso</th>
-<th>Consulta</th>
-<th>Propósito</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>TC-LOGIN-001-db.png</code></td>
-<td>TC-LOGIN-001</td>
-<td>SELECT sesiones_api</td>
-<td>Verificar token activo generado tras login</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-008-db.png</code></td>
-<td>TC-LOGIN-008</td>
-<td>SELECT token</td>
-<td>Verificar <code>activa = false</code> tras logout</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-010-db.png</code></td>
-<td>TC-LOGIN-010</td>
-<td>UPDATE + SELECT</td>
-<td>Forzar expiración y verificar <code>activa = false</code></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>📌 <strong>Nota:</strong> Incluir en la captura tanto el SQL ejecutado (panel superior) como el resultado completo (panel inferior) del Query Tool de pgAdmin 4. Solo agregar capturas cuando la verificación en BD sea relevante para el caso de prueba.</p>
-</blockquote>
+<p>No seleccionar ni capturar la columna <code>token</code>. La expiración debe probarse con reloj controlado o una base aislada; no mediante <code>UPDATE</code> sobre datos existentes.</p>
+<p>Los archivos <code>TC-LOGIN-001-db.png</code>, <code>TC-LOGIN-008-db.png</code> y <code>TC-LOGIN-010-db.png</code> son históricos y están pendientes de revalidación.</p>
 
 
 

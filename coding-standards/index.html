@@ -23,7 +23,7 @@
     
     
       
-        <title>Estándares de Codificación - SofInventory ERP</title>
+        <title>SofInventory — Estándar de codificación - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#estandares-de-codificacion" class="md-skip">
+        <a href="#sofinventory-estandar-de-codificacion" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Estándares de Codificación
+              SofInventory — Estándar de codificación
             
           </span>
         </div>
@@ -347,59 +347,1194 @@
 
 
 
-<h1 id="estandares-de-codificacion">Estándares de Codificación</h1>
-<h2 id="objetivo">Objetivo</h2>
-<p>Mantener una base de código clara, consistente y fácil de extender entre varios desarrolladores.</p>
-<h2 id="reglas-generales">Reglas generales</h2>
+<h1 id="sofinventory-estandar-de-codificacion">SofInventory — Estándar de codificación</h1>
+<blockquote>
+<p><strong>Versión:</strong> 2.0.0</p>
+<p><strong>Actualizado:</strong> 8 de agosto de 2026</p>
+<p><strong>Proyecto:</strong> SofInventory</p>
+<p><strong>Autores:</strong> Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo</p>
+<p><strong>Tecnologías:</strong> Angular 19 · TypeScript 5.6 · Django 6 · Django REST Framework 3.17 · PostgreSQL 15</p>
+<p><strong>Estado:</strong> vigente para código nuevo y modificaciones</p>
+</blockquote>
+<hr />
+<h2 id="1-proposito">1. Propósito</h2>
+<p>Este documento establece las convenciones que permiten mantener SofInventory legible, seguro y consistente. Los ejemplos se adaptaron a la implementación real del repositorio; no describen el frontend HTML/JavaScript antiguo ni versiones instaladas únicamente en Windows.</p>
+<p>El estándar aplica a:</p>
 <ul>
-<li>Usar nombres descriptivos en español o inglés técnico consistente, evitando mezclas ambiguas.</li>
-<li>Preferir funciones pequeñas con una sola responsabilidad.</li>
-<li>Mantener la lógica de adaptación al backend dentro de servicios, no dentro del template.</li>
-<li>No introducir <code>localStorage</code> ni <code>sessionStorage</code> para sesión o datos sensibles.</li>
-<li>Evitar duplicar contratos; reutilizar interfaces desde <code>core/models</code>.</li>
+<li>Backend Django y Django REST Framework.</li>
+<li>Frontend Angular standalone, TypeScript, templates HTML y CSS.</li>
+<li>Contratos entre frontend y backend.</li>
+<li>Pruebas automatizadas.</li>
+<li>Configuración Docker y variables de entorno.</li>
+<li>Documentación técnica y flujo de revisión.</li>
 </ul>
-<h2 id="angular">Angular</h2>
+<p>La arquitectura detallada del frontend está en <a href="../frontend-architecture/">frontend-architecture.md</a> y el sistema visual en <a href="../accessibility-visual-guide/">accessibility-visual-guide.md</a>.</p>
+<hr />
+<h2 id="2-fuentes-de-verdad">2. Fuentes de verdad</h2>
+<p>Cuando exista una diferencia entre un ejemplo histórico y el repositorio, prevalece este orden:</p>
+<ol>
+<li>Reglas de negocio y permisos del backend.</li>
+<li>Migraciones y restricciones de PostgreSQL.</li>
+<li>Serializers, servicios y pruebas automatizadas vigentes.</li>
+<li>Interfaces y servicios TypeScript.</li>
+<li>Templates y estilos actuales.</li>
+<li>Documentación.</li>
+</ol>
+<p>La documentación debe actualizarse en el mismo cambio que modifica un contrato, una convención o un comportamiento visible.</p>
+<hr />
+<h2 id="3-runtime-de-referencia">3. Runtime de referencia</h2>
+<p>Las versiones técnicas deben verificarse dentro de los contenedores Docker. No se debe presentar una instalación local de Windows como runtime del sistema.</p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th style="text-align: right;">Versión de referencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td style="text-align: right;">3.12.13</td>
+</tr>
+<tr>
+<td>Django</td>
+<td style="text-align: right;">6.0.4</td>
+</tr>
+<tr>
+<td>Django REST Framework</td>
+<td style="text-align: right;">3.17.1</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td style="text-align: right;">15.18</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td style="text-align: right;">20 Alpine</td>
+</tr>
+<tr>
+<td>Angular</td>
+<td style="text-align: right;">19.2.21</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td style="text-align: right;">5.6.3</td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td style="text-align: right;">1.31.3 sobre Alpine 3.24.1</td>
+</tr>
+</tbody>
+</table>
+<p>Las versiones fijadas por el código se consultan en <code>backend/requirements.txt</code>, <code>frontend/package-lock.json</code>, los Dockerfiles y <code>docker-compose.yml</code>.</p>
+<hr />
+<h2 id="4-estructura-actual-del-repositorio">4. Estructura actual del repositorio</h2>
+<div class="highlight"><pre><span></span><code>sofinventory/
+├── backend/
+│   ├── config/
+│   ├── catalogos/
+│   ├── usuarios/
+│   ├── productos/
+│   ├── proveedores/
+│   ├── clientes/
+│   ├── inventario/
+│   ├── compras/
+│   ├── ventas/
+│   ├── empresa/
+│   ├── dashboard/
+│   ├── manage.py
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── core/
+│   │   │   ├── pages/
+│   │   │   └── shared/
+│   │   ├── environments/
+│   │   ├── assets/
+│   │   ├── index.html
+│   │   ├── main.ts
+│   │   └── styles.css
+│   ├── tests/
+│   ├── angular.json
+│   └── package.json
+├── docs/
+├── docker-compose.yml
+├── Dockerfile
+└── .env.example
+</code></pre></div>
+<p>No crear un frontend paralelo en archivos HTML/JavaScript estáticos. Las pantallas nuevas pertenecen a <code>frontend/src/app</code>.</p>
+<hr />
+<h2 id="5-principios-generales">5. Principios generales</h2>
+<table>
+<thead>
+<tr>
+<th>Principio</th>
+<th>Aplicación en SofInventory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Legibilidad</td>
+<td>Nombres del dominio completos y estructura predecible</td>
+</tr>
+<tr>
+<td>Responsabilidad única</td>
+<td>La vista coordina, el serializer valida, el servicio ejecuta reglas complejas y el componente presenta</td>
+</tr>
+<tr>
+<td>Tipado</td>
+<td>Contratos TypeScript y validación de entrada en DRF</td>
+</tr>
+<tr>
+<td>Defensa en profundidad</td>
+<td>Frontend orienta; backend y base de datos protegen la regla definitiva</td>
+</tr>
+<tr>
+<td>Atomicidad</td>
+<td>Compras, ventas, anulaciones y movimientos se ejecutan en transacciones</td>
+</tr>
+<tr>
+<td>Trazabilidad</td>
+<td>Operaciones sensibles conservan responsable, fecha, motivo y referencias</td>
+</tr>
+<tr>
+<td>Accesibilidad</td>
+<td>Semántica HTML, teclado, foco, errores asociados y temas legibles</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>Secretos fuera del código; no registrar credenciales, tokens o información personal</td>
+</tr>
+<tr>
+<td>Reutilización</td>
+<td>Validadores, ubicaciones, errores, notificaciones y ayuda se centralizan en <code>shared</code></td>
+</tr>
+<tr>
+<td>Evidencia</td>
+<td>Una prueba se considera aprobada únicamente después de ejecutarse</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-formato-e-idioma">6. Formato e idioma</h2>
+<h3 id="61-indentacion">6.1 Indentación</h3>
+<table>
+<thead>
+<tr>
+<th>Lenguaje</th>
+<th>Regla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>4 espacios</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td>2 espacios</td>
+</tr>
+<tr>
+<td>HTML de Angular</td>
+<td>2 espacios por nivel lógico</td>
+</tr>
+<tr>
+<td>CSS</td>
+<td>2 espacios</td>
+</tr>
+<tr>
+<td>JSON/YAML</td>
+<td>2 espacios, respetando el archivo existente</td>
+</tr>
+</tbody>
+</table>
+<p>No usar tabulaciones. El repositorio no tiene actualmente un formateador o linter configurado como script obligatorio; por ello la revisión de formato y <code>ng build</code> son indispensables.</p>
+<h3 id="62-longitud-y-division-de-lineas">6.2 Longitud y división de líneas</h3>
 <ul>
-<li>Usar componentes standalone como estándar del proyecto.</li>
-<li>Mantener rutas centralizadas en <code>app.routes.ts</code>.</li>
-<li>Los guards deben vivir en <code>core/guards</code>.</li>
-<li>Los interceptores deben vivir en <code>core/interceptors</code>.</li>
-<li>La comunicación HTTP debe centralizarse en <code>core/services/api.services.ts</code>.</li>
-<li>Los templates deben permanecer declarativos; la lógica repetitiva debe ir al componente <code>.ts</code>.</li>
+<li>Objetivo general: hasta 100 caracteres cuando sea práctico.</li>
+<li>Se permiten líneas mayores en URLs, expresiones de template o firmas que pierdan claridad al fragmentarse.</li>
+<li>Dividir argumentos y colecciones con una entrada por línea y coma final donde el lenguaje la admita.</li>
+<li>No alinear manualmente grandes bloques con espacios si aumenta el ruido del diff.</li>
 </ul>
-<h2 id="typescript">TypeScript</h2>
+<div class="highlight"><pre><span></span><code><span class="n">movimientos</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">MovimientoInventario</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">select_for_update</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">compra</span><span class="o">=</span><span class="n">compra</span><span class="p">,</span> <span class="n">tipo</span><span class="o">=</span><span class="s1">&#39;ENTRADA_COMPRA&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;producto_id&#39;</span><span class="p">,</span> <span class="s1">&#39;pk&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">readonly</span><span class="w"> </span><span class="nx">filteredProducts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">computed</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="nx">products</span><span class="p">().</span><span class="nx">filter</span><span class="p">((</span><span class="nx">product</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">productLabel</span><span class="p">(</span><span class="nx">product</span><span class="p">).</span><span class="nx">includes</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">searchTerm</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">()),</span>
+<span class="w">  </span><span class="p">),</span>
+<span class="p">);</span>
+</code></pre></div>
+<h3 id="63-idioma">6.3 Idioma</h3>
 <ul>
-<li>Declarar tipos explícitos cuando aporten claridad.</li>
-<li>Evitar <code>any</code> salvo integraciones muy dinámicas o respuestas externas difíciles de tipar.</li>
-<li>Reutilizar interfaces existentes antes de crear nuevas.</li>
-<li>Validar y transformar payloads antes de enviarlos al backend.</li>
+<li>Entidades, campos del negocio y mensajes al usuario se mantienen en español.</li>
+<li>Nombres propios de Angular, Django, HTTP y librerías conservan su terminología oficial.</li>
+<li>No mezclar dos nombres para el mismo concepto: usar <code>almacen</code>, no alternar con <code>bodega</code> en código.</li>
+<li>Los mensajes visibles deben llevar tildes y redacción natural.</li>
+<li>Los identificadores existentes sin tilde o con nombres históricos no se renombran sin analizar contratos y migraciones.</li>
 </ul>
-<h2 id="html-y-templates">HTML y Templates</h2>
+<h3 id="64-comentarios">6.4 Comentarios</h3>
+<p>Comentar el motivo, la regla o el riesgo, no la sintaxis evidente.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Bloquear las filas en un orden estable evita interbloqueos entre transferencias concurrentes.</span>
+<span class="n">almacenes</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Almacen</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">select_for_update</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">pk__in</span><span class="o">=</span><span class="nb">sorted</span><span class="p">([</span><span class="n">origen_id</span><span class="p">,</span> <span class="n">destino_id</span><span class="p">]))</span>
+    <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;pk&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Evitar:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Cambia loading a true.</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">loading</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</code></pre></div>
+<p>Los encabezados de sección extensos existentes se pueden conservar, pero no son obligatorios en archivos pequeños.</p>
+<hr />
+<h2 id="7-convenciones-de-nombres">7. Convenciones de nombres</h2>
+<h3 id="71-backend-python">7.1 Backend Python</h3>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Convención</th>
+<th>Ejemplo actual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>App y paquete</td>
+<td><code>snake_case</code></td>
+<td><code>inventario</code>, <code>dashboard</code></td>
+</tr>
+<tr>
+<td>Archivo</td>
+<td><code>snake_case.py</code></td>
+<td><code>password_validators.py</code>, <code>test_settings.py</code></td>
+</tr>
+<tr>
+<td>Clase</td>
+<td><code>PascalCase</code></td>
+<td><code>Producto</code>, <code>ServicioInventario</code>, <code>APITokenAuthentication</code></td>
+</tr>
+<tr>
+<td>Función o método</td>
+<td><code>snake_case</code></td>
+<td><code>registrar_compra</code>, <code>validar_disponibilidad</code></td>
+</tr>
+<tr>
+<td>Variable</td>
+<td><code>snake_case</code></td>
+<td><code>stock_anterior</code>, <code>iva_total</code></td>
+</tr>
+<tr>
+<td>Constante</td>
+<td><code>UPPER_SNAKE_CASE</code></td>
+<td><code>LOGIN_THROTTLE_RATE</code>, <code>TIPOS_ENTRADA</code></td>
+</tr>
+<tr>
+<td>Método de prueba</td>
+<td><code>test_&lt;comportamiento&gt;</code></td>
+<td><code>test_anular_venta_restaura_stock</code></td>
+</tr>
+<tr>
+<td>Tabla</td>
+<td>plural en <code>snake_case</code></td>
+<td><code>productos</code>, <code>sesiones_api</code></td>
+</tr>
+<tr>
+<td>Constraint o índice</td>
+<td>descriptivo y estable</td>
+<td><code>productos_stock_no_negativo</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-angular-y-typescript">7.2 Angular y TypeScript</h3>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Convención</th>
+<th>Ejemplo actual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Carpeta</td>
+<td><code>kebab-case</code> o nombre simple de dominio</td>
+<td><code>form-help</code>, <code>productos</code></td>
+</tr>
+<tr>
+<td>Componente</td>
+<td><code>&lt;nombre&gt;.component.ts</code></td>
+<td><code>location-fields.component.ts</code></td>
+</tr>
+<tr>
+<td>Servicio</td>
+<td><code>&lt;nombre&gt;.service.ts</code></td>
+<td><code>auth.service.ts</code>, <code>theme.service.ts</code></td>
+</tr>
+<tr>
+<td>Guard</td>
+<td><code>&lt;nombre&gt;.guard.ts</code></td>
+<td><code>auth.guard.ts</code></td>
+</tr>
+<tr>
+<td>Interceptor</td>
+<td><code>&lt;nombre&gt;.interceptor.ts</code></td>
+<td><code>auth.interceptor.ts</code></td>
+</tr>
+<tr>
+<td>Clase/interfaz/tipo</td>
+<td><code>PascalCase</code></td>
+<td><code>FormHelpContent</code>, <code>DashboardData</code></td>
+</tr>
+<tr>
+<td>Variable/método</td>
+<td><code>camelCase</code></td>
+<td><code>currentUser</code>, <code>closeHelp</code></td>
+</tr>
+<tr>
+<td>Signal privado</td>
+<td><code>_camelCase</code> si expone versión pública</td>
+<td><code>_token</code>, <code>_current</code></td>
+</tr>
+<tr>
+<td>Constante de módulo</td>
+<td><code>UPPER_SNAKE_CASE</code></td>
+<td><code>LS_TOKEN</code>, <code>THEME_OPTIONS</code></td>
+</tr>
+<tr>
+<td>Selector</td>
+<td>prefijo <code>app-</code> y <code>kebab-case</code></td>
+<td><code>app-form-help</code></td>
+</tr>
+<tr>
+<td>Clase e ID HTML</td>
+<td><code>kebab-case</code></td>
+<td><code>form-help-panel</code>, <code>product-name</code></td>
+</tr>
+</tbody>
+</table>
+<p>No usar abreviaturas ambiguas como <code>x</code>, <code>tmp</code>, <code>obj1</code> o <code>data2</code> fuera de un contexto mínimo y evidente.</p>
+<hr />
+<h2 id="8-backend-django">8. Backend Django</h2>
+<h3 id="81-anatomia-de-una-app">8.1 Anatomía de una app</h3>
+<p>Una app de negocio puede contener:</p>
+<table>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Responsabilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>models.py</code></td>
+<td>Entidades, relaciones, constraints e índices</td>
+</tr>
+<tr>
+<td><code>serializers.py</code></td>
+<td>Contratos de entrada/salida y validación</td>
+</tr>
+<tr>
+<td><code>views.py</code></td>
+<td>Coordinación HTTP y permisos</td>
+</tr>
+<tr>
+<td><code>services.py</code></td>
+<td>Reglas transaccionales o cálculos reutilizables</td>
+</tr>
+<tr>
+<td><code>urls.py</code></td>
+<td>Rutas de la app</td>
+</tr>
+<tr>
+<td><code>permissions.py</code> / <code>authentication.py</code></td>
+<td>Infraestructura de seguridad cuando aplica</td>
+</tr>
+<tr>
+<td><code>tests.py</code></td>
+<td>Pruebas unitarias y de integración de la app</td>
+</tr>
+<tr>
+<td><code>migrations/</code></td>
+<td>Evolución versionada del esquema</td>
+</tr>
+<tr>
+<td><code>management/commands/</code></td>
+<td>Operaciones administrativas explícitas</td>
+</tr>
+</tbody>
+</table>
+<p>No todas las apps necesitan todos los archivos. <code>dashboard</code> usa <code>services.py</code>; <code>catalogos</code> no define modelos; <code>usuarios</code> concentra autenticación, permisos, throttling y validadores.</p>
+<h3 id="82-modelos">8.2 Modelos</h3>
 <ul>
-<li>Mantener estructura semántica y legible.</li>
-<li>Evitar lógica compleja dentro de expresiones del template.</li>
-<li>Para listados de productos repetidos, mostrar siempre <code>SKU - Nombre</code>.</li>
-<li>Los textos de error deben ser claros y útiles para el usuario.</li>
+<li>Declarar <code>db_table</code>, nombres legibles y orden cuando aporte valor.</li>
+<li>Elegir <code>PROTECT</code>, <code>CASCADE</code> o <code>SET_NULL</code> según la consecuencia real.</li>
+<li>Proteger reglas críticas con constraints de base de datos cuando sea posible.</li>
+<li>Usar <code>DecimalField</code> para dinero; nunca <code>float</code>.</li>
+<li>Los campos derivados de inventario no se actualizan directamente desde cualquier vista.</li>
+<li>Las relaciones históricas deben conservar snapshots cuando el comprobante lo requiere.</li>
 </ul>
-<h2 id="css">CSS</h2>
+<p>Ejemplo basado en <code>Producto</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Producto</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">nombre</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+    <span class="n">categoria</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span>
+        <span class="n">Categoria</span><span class="p">,</span>
+        <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">PROTECT</span><span class="p">,</span>
+        <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;productos&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">stock</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;productos&#39;</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nombre&#39;</span><span class="p">]</span>
+        <span class="n">constraints</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">models</span><span class="o">.</span><span class="n">CheckConstraint</span><span class="p">(</span>
+                <span class="n">condition</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">Q</span><span class="p">(</span><span class="n">stock__gte</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;productos_stock_no_negativo&#39;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+</code></pre></div>
+<h3 id="83-serializers-y-validacion">8.3 Serializers y validación</h3>
 <ul>
-<li>Mantener el lenguaje visual oscuro-profesional actual.</li>
-<li>Priorizar contraste suficiente en encabezados, labels y textos secundarios.</li>
-<li>Reutilizar variables CSS globales en <code>src/styles.css</code>.</li>
-<li>No introducir estilos aislados que rompan la consistencia del sistema.</li>
+<li>El serializer valida formato, obligatoriedad, unicidad y coherencia de entrada.</li>
+<li>Normalizar texto antes de comparar duplicados.</li>
+<li>Usar mensajes en español y asociados al campo.</li>
+<li>Separar serializer de lectura y escritura cuando los contratos difieran.</li>
+<li>Retirar campos auxiliares <code>write_only</code> antes de crear el modelo.</li>
+<li>Las imágenes pasan por <code>validate_uploaded_image</code> y una ruta segura.</li>
+<li>No confiar en validaciones del frontend.</li>
 </ul>
-<h2 id="comentarios">Comentarios</h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ProductoEscrituraSerializer</span><span class="p">(</span><span class="n">serializers</span><span class="o">.</span><span class="n">ModelSerializer</span><span class="p">):</span>
+    <span class="n">quitar_imagen</span> <span class="o">=</span> <span class="n">serializers</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span>
+        <span class="n">write_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_iva_porcentaje</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span>
+                <span class="s1">&#39;El IVA debe estar entre 0 y 100.&#39;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">validated_data</span><span class="p">):</span>
+        <span class="n">validated_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;quitar_imagen&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">validated_data</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="84-servicios-de-dominio-y-transacciones">8.4 Servicios de dominio y transacciones</h3>
+<p>Las operaciones que modifican varias filas o módulos pertenecen a un servicio de dominio. <code>ServicioInventario</code> es la única puerta de escritura de existencias.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ServicioInventario</span><span class="p">:</span>
+    <span class="nd">@classmethod</span>
+    <span class="nd">@transaction</span><span class="o">.</span><span class="n">atomic</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">salida</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">producto</span><span class="p">,</span> <span class="n">almacen</span><span class="p">,</span> <span class="n">cantidad</span><span class="p">,</span> <span class="n">usuario</span><span class="p">,</span> <span class="n">observacion</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="n">cantidad</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_validar_cantidad</span><span class="p">(</span><span class="n">cantidad</span><span class="p">)</span>
+        <span class="n">producto</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_bloquear_producto</span><span class="p">(</span><span class="n">producto</span><span class="p">)</span>
+        <span class="n">almacen</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_bloquear_almacen</span><span class="p">(</span><span class="n">almacen</span><span class="p">)</span>
+        <span class="n">stock</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_stock_bloqueado</span><span class="p">(</span><span class="n">producto</span><span class="p">,</span> <span class="n">almacen</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">stock</span><span class="o">.</span><span class="n">cantidad</span> <span class="o">&lt;</span> <span class="n">cantidad</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InventarioError</span><span class="p">(</span><span class="s1">&#39;Stock insuficiente.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Registrar stock y movimiento dentro de la misma transacción.</span>
+</code></pre></div>
+<p>Reglas:</p>
 <ul>
-<li>Agregar comentarios de encabezado para explicar la responsabilidad del archivo.</li>
-<li>Agregar comentarios de bloque solo cuando una sección necesite contexto extra.</li>
-<li>Evitar comentarios obvios que repitan literalmente lo que ya expresa el código.</li>
+<li>Usar <code>transaction.atomic</code> en compras, ventas, anulaciones, transferencias y ajustes.</li>
+<li>Usar <code>select_for_update</code> cuando dos solicitudes puedan modificar la misma existencia.</li>
+<li>Adquirir bloqueos en un orden estable.</li>
+<li>Una anulación debe ser auditable e idempotente.</li>
+<li>No duplicar cálculos de stock en vistas diferentes.</li>
+<li>Convertir errores de negocio conocidos en respuestas controladas; no ocultar errores inesperados como si fueran validaciones.</li>
 </ul>
-<h2 id="integracion-con-backend">Integración con backend</h2>
+<h3 id="85-vistas-y-permisos">8.5 Vistas y permisos</h3>
 <ul>
-<li>Confirmar el nombre real de los campos que espera Django antes de cambiar formularios.</li>
-<li>Adaptar diferencias entre frontend y backend dentro de los servicios.</li>
-<li>Cuando el backend use relaciones por ID, el frontend debe enviar el identificador correcto y no inferencias basadas en nombre visible.</li>
+<li>Toda vista DRF declara métodos con <code>@api_view</code>.</li>
+<li>Toda operación sensible declara roles con <code>@require_roles</code> o una clase de permiso equivalente.</li>
+<li>El usuario responsable siempre proviene de <code>request.user</code>; nunca del payload.</li>
+<li>La ocultación de un menú en Angular no reemplaza la autorización del backend.</li>
+<li>Consultas frecuentes deben usar <code>select_related</code>, <code>prefetch_related</code> y agregaciones cuando corresponda.</li>
 </ul>
+<div class="highlight"><pre><span></span><code><span class="nd">@api_view</span><span class="p">([</span><span class="s1">&#39;PATCH&#39;</span><span class="p">])</span>
+<span class="nd">@require_roles</span><span class="p">(</span><span class="s1">&#39;Administrador&#39;</span><span class="p">,</span> <span class="s1">&#39;Supervisor&#39;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">anular_compra</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">entrada</span> <span class="o">=</span> <span class="n">AnularCompraSerializer</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">entrada</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span>
+            <span class="p">{</span><span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="n">_primer_error</span><span class="p">(</span><span class="n">entrada</span><span class="o">.</span><span class="n">errors</span><span class="p">)},</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="c1"># La operación continúa dentro de transaction.atomic().</span>
+</code></pre></div>
+<h3 id="86-rutas-y-http">8.6 Rutas y HTTP</h3>
+<p>Las rutas actuales viven bajo <code>/api/</code> y conservan acciones explícitas:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Patrón actual</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/productos/listar/</code></td>
+<td>Listado</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/api/compras/registrar/</code></td>
+<td>Creación transaccional</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/api/ventas/detalle/&lt;id&gt;/</code></td>
+<td>Detalle</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/api/clientes/editar/&lt;id&gt;/</code></td>
+<td>Actualización completa</td>
+</tr>
+<tr>
+<td><code>PATCH</code></td>
+<td><code>/api/ventas/anular/&lt;id&gt;/</code></td>
+<td>Cambio parcial o acción</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/api/almacenes/eliminar/&lt;id&gt;/</code></td>
+<td>Eliminación autorizada</td>
+</tr>
+</tbody>
+</table>
+<p>No introducir un estilo de URL distinto dentro del mismo módulo sin una decisión de arquitectura y migración de consumidores.</p>
+<h3 id="87-respuestas-y-errores">8.7 Respuestas y errores</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Estado</th>
+<th>Uso esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;"><code>200</code></td>
+<td>Lectura, actualización o acción completada</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>201</code></td>
+<td>Recurso creado</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>400</code></td>
+<td>Entrada inválida o regla de negocio incumplida</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>401</code></td>
+<td>Credenciales ausentes o inválidas</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>403</code></td>
+<td>Usuario autenticado sin permiso</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>404</code></td>
+<td>Recurso inexistente</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>409</code></td>
+<td>Conflicto de relación o estado cuando el contrato lo adopte</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>429</code></td>
+<td>Límite de solicitudes excedido</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>500</code></td>
+<td>Error inesperado, sin exponer traza al cliente</td>
+</tr>
+</tbody>
+</table>
+<p>Los errores pueden llegar como <code>{'error': '...'}</code> o como errores por campo del serializer. El frontend actual normaliza ambas formas mediante <code>FormFeedbackService</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;El almacén de origen y el de destino deben ser diferentes.&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>No devolver al usuario nombres de tablas, SQL, rutas internas, excepciones o trazas.</p>
+<h3 id="88-migraciones">8.8 Migraciones</h3>
+<ul>
+<li>Crear migraciones con <code>python manage.py makemigrations &lt;app&gt;</code>.</li>
+<li>Revisar el SQL y las operaciones antes de aplicarlas.</li>
+<li>No editar una migración ya desplegada; crear una nueva migración correctiva.</li>
+<li>Versionar las migraciones y sus <code>__init__.py</code>.</li>
+<li>Probar restricciones y concurrencia en PostgreSQL, no únicamente en SQLite.</li>
+<li>Toda migración de datos debe ser reversible o documentar por qué no lo es.</li>
+</ul>
+<hr />
+<h2 id="9-seguridad-del-backend">9. Seguridad del backend</h2>
+<h3 id="91-configuracion">9.1 Configuración</h3>
+<ul>
+<li><code>SECRET_KEY</code>, credenciales de PostgreSQL, contraseña administrativa inicial, hosts y orígenes provienen de variables de entorno.</li>
+<li><code>DEBUG=False</code> es el valor seguro predeterminado.</li>
+<li>Con <code>DEBUG=False</code>, <code>ALLOWED_HOSTS</code> no puede quedar vacío.</li>
+<li>CORS y orígenes confiables se configuran de forma explícita.</li>
+<li><code>.env</code> nunca se versiona; <code>.env.example</code> solo contiene marcadores no secretos.</li>
+</ul>
+<h3 id="92-autenticacion-y-autorizacion">9.2 Autenticación y autorización</h3>
+<ul>
+<li><code>APITokenAuthentication</code> procesa <code>Authorization: Bearer &lt;token&gt;</code>.</li>
+<li><code>SesionAPI</code> controla estado, usuario, expiración y actividad.</li>
+<li>El login aplica límite por IP mediante <code>LoginRateThrottle</code>.</li>
+<li>Los intentos fallidos y bloqueos se registran sin guardar contraseñas.</li>
+<li><code>require_roles</code> valida autenticación y rol en el servidor.</li>
+<li>Un cambio de contraseña debe pasar los validadores configurados y almacenarse con hash.</li>
+</ul>
+<p>Nunca escribir el token completo, contraseña, hash, encabezado <code>Authorization</code> o datos personales en logs, respuestas, capturas o pruebas documentales.</p>
+<h3 id="93-archivos">9.3 Archivos</h3>
+<ul>
+<li>Validar contenido real, tamaño y formato; no confiar solo en extensión o MIME declarado.</li>
+<li>Generar rutas seguras con utilidades compartidas.</li>
+<li>No versionar <code>media/</code>.</li>
+<li>No devolver rutas físicas del servidor.</li>
+</ul>
+<hr />
+<h2 id="10-frontend-angular">10. Frontend Angular</h2>
+<h3 id="101-componentes-standalone">10.1 Componentes standalone</h3>
+<p>Todos los componentes actuales son standalone. Una página declara de forma explícita sus dependencias.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">@Component</span><span class="p">({</span>
+<span class="w">  </span><span class="nx">selector</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;app-categorias&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">standalone</span><span class="o">:</span><span class="w"> </span><span class="kt">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">imports</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="nx">CommonModule</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">FormsModule</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">LayoutComponent</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">FormErrorSummaryComponent</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">FieldErrorComponent</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">FieldValidationDirective</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">FormHelpComponent</span><span class="p">,</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nx">templateUrl</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;./categorias.component.html&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">styleUrls</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;./categorias.component.css&#39;</span><span class="p">],</span>
+<span class="p">})</span>
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">CategoriasComponent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">readonly</span><span class="w"> </span><span class="nx">categorias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">signal</span><span class="o">&lt;</span><span class="nx">Categoria</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">([]);</span>
+<span class="w">  </span><span class="k">readonly</span><span class="w"> </span><span class="nx">showModal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">signal</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Reglas:</p>
+<ul>
+<li>No crear <code>NgModule</code> para una pantalla nueva.</li>
+<li>Mantener el componente enfocado en estado de presentación y coordinación.</li>
+<li>Extraer una función pura o componente compartido cuando la regla se repita.</li>
+<li>Usar <code>readonly</code> para signals y referencias que no se reasignan.</li>
+<li>Limpiar suscripciones de larga duración; las solicitudes HTTP completan por sí mismas.</li>
+<li>No usar manipulación directa del DOM salvo foco, integración con librerías o accesibilidad justificada.</li>
+</ul>
+<h3 id="102-estado-con-signals">10.2 Estado con signals</h3>
+<div class="highlight"><pre><span></span><code><span class="k">readonly</span><span class="w"> </span><span class="nx">productos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">signal</span><span class="o">&lt;</span><span class="nx">Producto</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">([]);</span>
+<span class="k">readonly</span><span class="w"> </span><span class="nx">searchTerm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">signal</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+
+<span class="k">readonly</span><span class="w"> </span><span class="nx">filteredProducts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">computed</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">term</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">searchTerm</span><span class="p">().</span><span class="nx">trim</span><span class="p">().</span><span class="nx">toLocaleLowerCase</span><span class="p">(</span><span class="s1">&#39;es-CO&#39;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">productos</span><span class="p">().</span><span class="nx">filter</span><span class="p">((</span><span class="nx">product</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span>
+<span class="w">    </span><span class="sb">`</span><span class="si">${</span><span class="nx">product</span><span class="p">.</span><span class="nx">sku</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">product</span><span class="p">.</span><span class="nx">nombre</span><span class="si">}</span><span class="sb">`</span><span class="p">.</span><span class="nx">toLocaleLowerCase</span><span class="p">(</span><span class="s1">&#39;es-CO&#39;</span><span class="p">).</span><span class="nx">includes</span><span class="p">(</span><span class="nx">term</span><span class="p">),</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<ul>
+<li>Usar <code>signal</code> para estado mutable de interfaz.</li>
+<li>Usar <code>computed</code> para valores derivados sin efectos secundarios.</li>
+<li>No mutar directamente un array alojado en un signal; crear un valor nuevo o usar <code>update</code>.</li>
+<li>No usar una propiedad ordinaria dentro de <code>computed</code>, porque no dispara reactividad.</li>
+<li>Reservar RxJS para HTTP, streams y composición asíncrona.</li>
+<li>No añadir una librería global de estado si signals y servicios cubren el caso.</li>
+</ul>
+<h3 id="103-tipos">10.3 Tipos</h3>
+<p><code>tsconfig.json</code> activa <code>strict</code>, <code>noImplicitOverride</code>, <code>noImplicitReturns</code>, <code>noFallthroughCasesInSwitch</code> y templates estrictos.</p>
+<ul>
+<li>Reutilizar contratos de <code>core/models/index.ts</code>.</li>
+<li>Preferir uniones literales para estados y operaciones.</li>
+<li>Evitar <code>any</code> en código nuevo; usar <code>unknown</code>, genéricos o interfaces pequeñas.</li>
+<li>Representar IDs y relaciones conforme al contrato real.</li>
+<li>No copiar una interfaz en varias páginas.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">FormHelpOperation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;create&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s1">&#39;edit&#39;</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">FormHelpContent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="kt">FormHelpText</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">purpose</span><span class="o">:</span><span class="w"> </span><span class="kt">FormHelpText</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">recommendations</span><span class="o">:</span><span class="w"> </span><span class="kt">readonly</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span>
+<span class="w">  </span><span class="nx">relationships</span><span class="o">:</span><span class="w"> </span><span class="kt">readonly</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span>
+<span class="w">  </span><span class="nx">checklist</span><span class="o">:</span><span class="w"> </span><span class="kt">readonly</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="104-servicios-http-y-adaptacion-de-payloads">10.4 Servicios HTTP y adaptación de payloads</h3>
+<p>La URL base proviene de <code>environment.apiUrl</code>. Los componentes no construyen endpoints ni agregan el token.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">@Injectable</span><span class="p">({</span><span class="w"> </span><span class="nx">providedIn</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;root&#39;</span><span class="w"> </span><span class="p">})</span>
+<span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">ClientesService</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="k">private</span><span class="w"> </span><span class="nx">http</span><span class="o">:</span><span class="w"> </span><span class="kt">HttpClient</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">  </span><span class="nx">listar</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">Cliente</span><span class="p">[]</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="o">&lt;</span><span class="nx">Cliente</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">API</span><span class="si">}</span><span class="sb">/clientes/listar/`</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">crear</span><span class="p">(</span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="kt">Partial</span><span class="o">&lt;</span><span class="nx">Cliente</span><span class="o">&gt;</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">unknown</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span>
+<span class="w">      </span><span class="sb">`</span><span class="si">${</span><span class="nx">API</span><span class="si">}</span><span class="sb">/clientes/crear/`</span><span class="p">,</span>
+<span class="w">      </span><span class="k">this</span><span class="p">.</span><span class="nx">toPayload</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span>
+<span class="w">    </span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>Adaptar nombres, IDs y estructuras en un método privado <code>toPayload</code> o servicio.</li>
+<li>Usar <code>FormData</code> solo para archivos o contratos multipart.</li>
+<li>Tipar la respuesta cuando el componente consume sus campos.</li>
+<li>No calcular la regla definitiva de inventario en Angular.</li>
+<li>El interceptor añade <code>Authorization</code> de forma centralizada.</li>
+<li>Los errores del formulario pasan por <code>FormFeedbackState.fromHttp</code>.</li>
+</ul>
+<h3 id="105-sesion-y-almacenamiento">10.5 Sesión y almacenamiento</h3>
+<p>La implementación vigente encapsula en <code>AuthService</code> las claves <code>auth_token</code>, <code>auth_expires_at</code> y <code>auth_user</code> de <code>localStorage</code>. El tema utiliza <code>sof_inventory_theme</code>.</p>
+<p>Reglas:</p>
+<ul>
+<li>Ningún componente de página debe leer o escribir directamente las claves de autenticación.</li>
+<li>Nunca almacenar contraseñas, datos de formularios, permisos calculados o contenido de ayuda.</li>
+<li>No crear claves nuevas sin definir propietario, finalidad, expiración y limpieza.</li>
+<li>Toda modificación de la estrategia de sesión requiere análisis de seguridad, compatibilidad y pruebas.</li>
+<li>El contenido de ayuda permanece en memoria y en configuración TypeScript estática.</li>
+</ul>
+<h3 id="106-guards-e-interceptor">10.6 Guards e interceptor</h3>
+<ul>
+<li><code>authGuard</code>: exige sesión local vigente.</li>
+<li><code>guestGuard</code>: evita volver a Login con una sesión activa.</li>
+<li><code>adminGuard</code>: restringe las páginas de Usuarios y Empresa.</li>
+<li><code>authInterceptor</code>: adjunta el bearer token y actualmente limpia la sesión ante <code>401</code> fuera de Login/Logout.</li>
+</ul>
+<p>Los guards mejoran navegación, pero los permisos efectivos siempre pertenecen al backend. El contrato de expiración <code>401/403</code> tiene un defecto abierto documentado y no debe ampliarse sin una prueba de regresión.</p>
+<h3 id="107-templates">10.7 Templates</h3>
+<ul>
+<li>Mantener expresiones cortas y declarativas.</li>
+<li>Usar interpolación y bindings; no concatenar HTML.</li>
+<li>Declarar <code>type="button"</code> en acciones que no envían formularios.</li>
+<li>Asociar <code>label</code>, <code>id</code>, <code>aria-describedby</code> y mensajes.</li>
+<li>Usar <code>aria-hidden="true"</code> en iconos decorativos.</li>
+<li>Utilizar texto visible o <code>aria-label</code> en botones de icono.</li>
+<li>No duplicar restricciones del campo dentro de la ayuda general.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">button</span>
+  <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span>
+  <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn-secondary&quot;</span>
+  <span class="err">[</span><span class="na">attr</span><span class="err">.</span><span class="na">aria-expanded</span><span class="err">]=&quot;</span><span class="na">isOpen</span><span class="err">()&quot;</span>
+  <span class="err">[</span><span class="na">attr</span><span class="err">.</span><span class="na">aria-controls</span><span class="err">]=&quot;</span><span class="na">panelId</span><span class="err">&quot;</span>
+  <span class="err">(</span><span class="na">click</span><span class="err">)=&quot;</span><span class="na">openHelp</span><span class="err">()&quot;</span>
+<span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">i</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;fas fa-circle-question&quot;</span> <span class="na">aria-hidden</span><span class="o">=</span><span class="s">&quot;true&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">i</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>Ayuda<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</code></pre></div>
+<h3 id="108-formularios-compartidos">10.8 Formularios compartidos</h3>
+<p>Para formularios nuevos se deben reutilizar:</p>
+<table>
+<thead>
+<tr>
+<th>Recurso</th>
+<th>Responsabilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FormFeedbackService</code></td>
+<td>Normalizar respuestas y mensajes seguros</td>
+</tr>
+<tr>
+<td><code>FormFeedbackState</code></td>
+<td>Resumen, errores por campo y foco</td>
+</tr>
+<tr>
+<td><code>FieldValidationDirective</code></td>
+<td><code>is-invalid</code>, <code>aria-invalid</code> y <code>aria-describedby</code></td>
+</tr>
+<tr>
+<td><code>FieldErrorComponent</code></td>
+<td>Mensaje visual del campo</td>
+</tr>
+<tr>
+<td><code>FormErrorSummaryComponent</code></td>
+<td>Resumen anunciado</td>
+</tr>
+<tr>
+<td><code>semantic-validators.ts</code></td>
+<td>Validación pura de nombres, lugares, usuarios y documentos</td>
+</tr>
+<tr>
+<td><code>LocationFieldsComponent</code></td>
+<td>Colombia/exterior y catálogo territorial</td>
+</tr>
+<tr>
+<td><code>FormHelpComponent</code></td>
+<td>Ayuda general contextual</td>
+</tr>
+<tr>
+<td><code>NotificationService</code></td>
+<td>Avisos globales temporizados</td>
+</tr>
+</tbody>
+</table>
+<p>No copiar su lógica en cada página.</p>
+<h3 id="109-css-y-temas">10.9 CSS y temas</h3>
+<p>Los estilos globales definen tres temas y variables semánticas. Los colores principales son:</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th style="text-align: right;">Oscuro</th>
+<th style="text-align: right;">Claro</th>
+<th style="text-align: right;">Azul</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--bg-page</code></td>
+<td style="text-align: right;"><code>#0c0e14</code></td>
+<td style="text-align: right;"><code>#f3f5fb</code></td>
+<td style="text-align: right;"><code>#0f172a</code></td>
+</tr>
+<tr>
+<td><code>--bg-card</code></td>
+<td style="text-align: right;"><code>#161923</code></td>
+<td style="text-align: right;"><code>#ffffff</code></td>
+<td style="text-align: right;"><code>#16223a</code></td>
+</tr>
+<tr>
+<td><code>--text-primary</code></td>
+<td style="text-align: right;"><code>#eef0f8</code></td>
+<td style="text-align: right;"><code>#1c2333</code></td>
+<td style="text-align: right;"><code>#eaf1ff</code></td>
+</tr>
+<tr>
+<td><code>--text-secondary</code></td>
+<td style="text-align: right;"><code>#8b91b8</code></td>
+<td style="text-align: right;"><code>#4a5572</code></td>
+<td style="text-align: right;"><code>#a8b7d8</code></td>
+</tr>
+<tr>
+<td><code>--accent</code></td>
+<td style="text-align: right;"><code>#22d3c8</code></td>
+<td style="text-align: right;"><code>#2563eb</code></td>
+<td style="text-align: right;"><code>#38bdf8</code></td>
+</tr>
+<tr>
+<td><code>--danger</code></td>
+<td style="text-align: right;"><code>#f87171</code></td>
+<td style="text-align: right;"><code>#dc2626</code></td>
+<td style="text-align: right;"><code>#f87171</code></td>
+</tr>
+<tr>
+<td><code>--warning</code></td>
+<td style="text-align: right;"><code>#fb923c</code></td>
+<td style="text-align: right;"><code>#d97706</code></td>
+<td style="text-align: right;"><code>#fbbf24</code></td>
+</tr>
+<tr>
+<td><code>--success</code></td>
+<td style="text-align: right;"><code>#4ade80</code></td>
+<td style="text-align: right;"><code>#16a34a</code></td>
+<td style="text-align: right;"><code>#4ade80</code></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">form-section</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--text-primary</span><span class="p">);</span>
+<span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--bg-card</span><span class="p">);</span>
+<span class="w">  </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--border</span><span class="p">);</span>
+<span class="w">  </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--radius-lg</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">form-section</span><span class="w"> </span><span class="nt">button</span><span class="p">:</span><span class="nd">focus-visible</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">outline</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--accent</span><span class="p">);</span>
+<span class="w">  </span><span class="k">outline-offset</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Reglas CSS:</p>
+<ul>
+<li>Usar variables de <code>styles.css</code>; no copiar hexadecimales de un tema.</li>
+<li>Estilos reutilizables en global; estilos exclusivos junto al componente.</li>
+<li>Nombres de clase en <code>kebab-case</code>.</li>
+<li>Evitar <code>!important</code>; solo se tolera al interoperar con una regla heredada difícil de superar y debe documentarse.</li>
+<li>No seleccionar por estructura profunda frágil.</li>
+<li>Definir estados <code>hover</code>, <code>focus-visible</code>, <code>disabled</code> y error.</li>
+<li>Revisar los tres temas.</li>
+<li>Añadir media queries donde el contenido, no un dispositivo concreto, lo requiera.</li>
+<li>Respetar <code>prefers-reduced-motion</code> para animaciones no esenciales.</li>
+</ul>
+<p>La paleta completa, contraste y deuda actual se detallan en <a href="../accessibility-visual-guide/">accessibility-visual-guide.md</a>.</p>
+<hr />
+<h2 id="11-pruebas">11. Pruebas</h2>
+<h3 id="111-backend">11.1 Backend</h3>
+<ul>
+<li>Ubicar pruebas en <code>backend/&lt;app&gt;/tests.py</code> mientras el volumen actual no justifique un paquete <code>tests/</code>.</li>
+<li>Nombrar la clase por comportamiento: <code>FlujoInventarioTests</code>.</li>
+<li>Nombrar métodos como una afirmación: <code>test_anular_venta_restaura_stock</code>.</li>
+<li>Verificar estado HTTP, respuesta y efecto persistido.</li>
+<li>Incluir casos positivos, negativos, permisos, seguridad e integración.</li>
+<li>Usar datos ficticios y limpiar cualquier archivo temporal.</li>
+<li>Ejecutar la suite rápida con SQLite y la integración obligatoria con PostgreSQL para constraints, bloqueos y concurrencia.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_vender_mas_que_disponible</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+        <span class="s1">&#39;/api/ventas/crear/&#39;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">payload_con_cantidad_excesiva</span><span class="p">(),</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">stock</span><span class="o">.</span><span class="n">refresh_from_db</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertGreaterEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stock</span><span class="o">.</span><span class="n">cantidad</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="112-frontend">11.2 Frontend</h3>
+<p>La suite actual usa <code>node:test</code> para funciones puras y contratos estáticos de componentes compartidos.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;Escape cierra solo la ayuda y devuelve el foco&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">assert</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">componentSource</span><span class="p">,</span><span class="w"> </span><span class="sr">/event\.key !== &#39;Escape&#39;/</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">assert</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">componentSource</span><span class="p">,</span><span class="w"> </span><span class="sr">/helpButton.*focus/s</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Para lógica nueva:</p>
+<ul>
+<li>Extraer funciones puras cuando sea viable.</li>
+<li>Probar límites, normalización y transiciones de estado.</li>
+<li>Agregar pruebas DOM/E2E para interacción, foco, red y responsive cuando una prueba estática no sea suficiente.</li>
+<li>Ejecutar <code>npm test</code> y <code>npm run build</code>.</li>
+<li>No afirmar que un caso pasó únicamente porque el archivo de prueba existe.</li>
+</ul>
+<h3 id="113-comandos-de-verificacion">11.3 Comandos de verificación</h3>
+<p>Desde los entornos configurados:</p>
+<div class="highlight"><pre><span></span><code>Backend rápido:      python manage.py test --settings=config.test_settings
+Backend integrado:  python manage.py test con PostgreSQL aislado
+Frontend:            npm test
+Build:               npm run build -- --configuration=production
+</code></pre></div>
+<p>No ejecutar suites destructivas contra una base operativa.</p>
+<hr />
+<h2 id="12-docker-y-configuracion">12. Docker y configuración</h2>
+<ul>
+<li><code>docker-compose.yml</code> ejecuta PostgreSQL, backend y frontend Nginx.</li>
+<li><code>frontend/docker-entrypoint.sh</code> genera <code>assets/env.js</code> y publica <code>/api</code> por el mismo origen.</li>
+<li>El Dockerfile raíz también permite compilar Angular e integrarlo en la imagen Django.</li>
+<li>No codificar hosts o URLs de API en componentes.</li>
+<li>Usar <code>environment.apiUrl</code>, que toma <code>window.__env__.apiUrl</code> o <code>${window.location.origin}/api</code>.</li>
+<li>Usar <code>npm ci</code>, no <code>npm install</code>, en builds reproducibles.</li>
+<li>No cambiar imágenes base o versiones sin probar backend, frontend y build.</li>
+</ul>
+<hr />
+<h2 id="13-git-y-revision">13. Git y revisión</h2>
+<h3 id="ramas">Ramas</h3>
+<p>Usar nombres descriptivos en <code>kebab-case</code> con un prefijo que identifique el propósito:</p>
+<div class="highlight"><pre><span></span><code>feature/ayuda-contextual-formularios
+fix/stock-negativo-transferencia
+docs/actualizacion-calidad-seguridad
+</code></pre></div>
+<h3 id="commits">Commits</h3>
+<p>Cuando el flujo autorice commits, se recomienda Conventional Commits:</p>
+<div class="highlight"><pre><span></span><code>feat(inventario): agregar transferencia entre almacenes
+fix(usuarios): hacer reactivo el filtro del listado
+test(ventas): cubrir anulación y restauración de stock
+docs(frontend): documentar temas y accesibilidad
+</code></pre></div>
+<p>Evitar mensajes como <code>cambios</code>, <code>arreglos</code>, <code>update</code> o <code>wip</code> en una rama lista para revisión.</p>
+<h3 id="revision">Revisión</h3>
+<ul>
+<li>Un cambio lógico por commit.</li>
+<li>No mezclar refactorizaciones no relacionadas con una corrección urgente.</li>
+<li>Revisar <code>git diff</code> y <code>git status</code> antes de entregar.</li>
+<li>No sobrescribir cambios ajenos de un worktree sucio.</li>
+<li>No versionar <code>.env</code>, <code>media/</code>, bases locales, tokens, logs, <code>node_modules/</code>, <code>dist/</code> ni <code>staticfiles/</code>.</li>
+</ul>
+<hr />
+<h2 id="14-antipatrones">14. Antipatrones</h2>
+<table>
+<thead>
+<tr>
+<th>Evitar</th>
+<th>Motivo</th>
+<th>Alternativa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Endpoint construido en un componente</td>
+<td>Duplica infraestructura</td>
+<td>Servicio en <code>core/services</code></td>
+</tr>
+<tr>
+<td><code>any</code> por comodidad</td>
+<td>Oculta contratos inválidos</td>
+<td>Interfaz, unión o <code>unknown</code></td>
+</tr>
+<tr>
+<td>Propiedad ordinaria usada por <code>computed</code></td>
+<td>No es reactiva</td>
+<td><code>signal</code></td>
+</tr>
+<tr>
+<td>Actualizar <code>Producto.stock</code> desde una vista</td>
+<td>Rompe trazabilidad</td>
+<td><code>ServicioInventario</code></td>
+</tr>
+<tr>
+<td>Validar permisos solo ocultando el menú</td>
+<td>Permite acceso directo</td>
+<td><code>@require_roles</code> en backend</td>
+</tr>
+<tr>
+<td>Devolver <code>str(exception)</code> al cliente</td>
+<td>Puede exponer detalles internos</td>
+<td>Mensaje controlado y log seguro</td>
+</tr>
+<tr>
+<td>Guardar formularios o ayuda en storage</td>
+<td>Persiste datos innecesarios</td>
+<td>Estado local del componente</td>
+</tr>
+<tr>
+<td>Color hexadecimal en componente</td>
+<td>Rompe temas</td>
+<td>Token semántico</td>
+</tr>
+<tr>
+<td><code>div</code> con evento como botón</td>
+<td>Dificulta teclado y semántica</td>
+<td><code>&lt;button type="button"&gt;</code></td>
+</tr>
+<tr>
+<td>Usar placeholder como label</td>
+<td>Pierde contexto al escribir</td>
+<td><code>label</code> asociado</td>
+</tr>
+<tr>
+<td>Copiar validadores entre páginas</td>
+<td>Divergencia</td>
+<td><code>shared/forms</code></td>
+</tr>
+<tr>
+<td>Ejecutar pruebas sobre datos reales</td>
+<td>Riesgo operativo</td>
+<td>Base aislada y datos ficticios</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="15-lista-de-verificacion-antes-de-entregar-codigo">15. Lista de verificación antes de entregar código</h2>
+<h3 id="backend">Backend</h3>
+<ul>
+<li>[ ] Entradas validadas por serializer o validador compartido.</li>
+<li>[ ] Permisos definidos en el servidor.</li>
+<li>[ ] Operaciones múltiples dentro de una transacción.</li>
+<li>[ ] Bloqueo de filas cuando existe concurrencia.</li>
+<li>[ ] Errores en español sin trazas ni secretos.</li>
+<li>[ ] Migraciones y constraints revisados.</li>
+<li>[ ] Pruebas positivas, negativas y de permisos actualizadas.</li>
+</ul>
+<h3 id="frontend">Frontend</h3>
+<ul>
+<li>[ ] Contratos reutilizados desde <code>core/models</code>.</li>
+<li>[ ] HTTP encapsulado en servicios.</li>
+<li>[ ] Estado reactivo con signals o RxJS según corresponda.</li>
+<li>[ ] Errores gestionados con los componentes compartidos.</li>
+<li>[ ] Botones con tipo y nombre accesible.</li>
+<li>[ ] Colores mediante tokens globales.</li>
+<li>[ ] Claro, Azul, Oscuro, escritorio y móvil revisados.</li>
+<li>[ ] <code>npm test</code> y build ejecutados.</li>
+</ul>
+<h3 id="seguridad-y-repositorio">Seguridad y repositorio</h3>
+<ul>
+<li>[ ] No hay secretos, tokens, contraseñas ni datos personales.</li>
+<li>[ ] No se añadió almacenamiento persistente innecesario.</li>
+<li>[ ] Los archivos modificados coinciden con el alcance.</li>
+<li>[ ] La documentación refleja cualquier contrato cambiado.</li>
+<li>[ ] <code>git status</code> fue revisado antes de la entrega.</li>
+</ul>
+<hr />
+<h2 id="16-glosario-de-nombres-del-dominio">16. Glosario de nombres del dominio</h2>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>StockAlmacen</code></td>
+<td>Existencia de un producto en un almacén específico</td>
+</tr>
+<tr>
+<td><code>MovimientoInventario</code></td>
+<td>Registro auditable de un cambio de existencias</td>
+</tr>
+<tr>
+<td><code>Traslado</code></td>
+<td>Operación que descuenta del origen e incrementa el destino</td>
+</tr>
+<tr>
+<td><code>ServicioInventario</code></td>
+<td>Única puerta de escritura de existencias</td>
+</tr>
+<tr>
+<td><code>Compra</code> / <code>DetalleCompra</code></td>
+<td>Cabecera y líneas de ingreso desde un proveedor</td>
+</tr>
+<tr>
+<td><code>Venta</code> / <code>DetalleVenta</code></td>
+<td>Cabecera y líneas de salida hacia un cliente</td>
+</tr>
+<tr>
+<td><code>empresa_snapshot</code></td>
+<td>Copia histórica de datos de empresa para comprobantes</td>
+</tr>
+<tr>
+<td><code>SesionAPI</code></td>
+<td>Sesión autenticada mediante token bearer</td>
+</tr>
+<tr>
+<td><code>FormFeedbackState</code></td>
+<td>Estado de resumen y errores por campo en Angular</td>
+</tr>
+<tr>
+<td><code>FormHelpContent</code></td>
+<td>Contrato del contenido general de ayuda contextual</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="17-control-de-cambios">17. Control de cambios</h2>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th>Fecha</th>
+<th>Cambio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.0</td>
+<td>15/03/2026</td>
+<td>Estándar inicial basado en Django y frontend estático</td>
+</tr>
+<tr>
+<td>2.0.0</td>
+<td>08/08/2026</td>
+<td>Reescritura conforme a Angular standalone, servicios actuales, temas, accesibilidad, seguridad, Docker y estrategia de pruebas vigente</td>
+</tr>
+</tbody>
+</table>
 
 
 

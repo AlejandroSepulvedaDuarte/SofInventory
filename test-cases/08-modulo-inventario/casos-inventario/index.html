@@ -1,0 +1,547 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Manuales técnico y de usuario del sistema SofInventory.">
+      
+      
+        <meta name="author" content="Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Casos de prueba — Inventario, movimientos y transferencias - SofInventory ERP</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#casos-de-prueba-inventario-movimientos-y-transferencias" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../.." title="SofInventory ERP" class="md-header__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SofInventory ERP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Casos de prueba — Inventario, movimientos y transferencias
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MANUAL_USUARIO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual de Usuario
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MANUAL_TECNICO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual Técnico
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="SofInventory ERP" class="md-nav__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SofInventory ERP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MANUAL_USUARIO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual de Usuario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MANUAL_TECNICO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="casos-de-prueba-inventario-movimientos-y-transferencias">Casos de prueba — Inventario, movimientos y transferencias</h1>
+<blockquote>
+<p><strong>Prefijo:</strong> TC-INV · <strong>Cobertura mínima:</strong> 7 casos · <strong>Ejecución final:</strong> 7 aprobados · <strong>Fecha:</strong> 8 de agosto de 2026</p>
+</blockquote>
+<h2 id="alcance">Alcance</h2>
+<p>Cubre stock por producto y almacén, entradas/salidas manuales, transferencias, trazabilidad, alertas, filtros y exportación. Los movimientos rápidos y la exportación admiten <code>Administrador</code>, <code>Supervisor</code> y <code>Bodega</code>; las consultas requieren autenticación. Las verificaciones transaccionales deben ejecutarse también en PostgreSQL 15.18.</p>
+<h2 id="matriz-de-casos">Matriz de casos</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Funcionalidad que verifica</th>
+<th>Precondiciones y rol</th>
+<th>Datos ficticios</th>
+<th>Resultado esperado</th>
+<th>Automatización existente</th>
+<th>Falta automatización</th>
+<th>Evidencia</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TC-INV-001</td>
+<td>Integrar Compras y Ventas con stock</td>
+<td>Integración</td>
+<td>Entradas por compra, salidas por venta y cálculo acumulado</td>
+<td>Producto configurado, almacén activo, proveedor/cliente válidos; roles autorizados</td>
+<td>Tres compras y una venta con cantidades controladas</td>
+<td>Stock final coincide; movimientos <code>ENTRADA_COMPRA</code>/<code>SALIDA_VENTA</code> trazables</td>
+<td><code>A</code> — prueba aprobada en SQLite/PostgreSQL y flujo E2E ejecutado</td>
+<td>No para flujo base</td>
+<td>AUTO + API + DB-R</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>TC-INV-002</td>
+<td>Rechazar sobreventa y stock negativo</td>
+<td>Negativo / seguridad</td>
+<td>Suma líneas duplicadas, cantidad disponible y restricción de stock no negativo</td>
+<td>Stock conocido; rol Vendedor o autorizado</td>
+<td>Líneas repetidas que superan stock; actualización negativa directa en prueba aislada</td>
+<td>Operación completa se rechaza; stock y movimientos no cambian; PostgreSQL impide negativo</td>
+<td><code>A</code> — <code>test_lineas_duplicadas_no_permiten_sobreventa</code> y <code>test_base_de_datos_rechaza_stock_negativo</code></td>
+<td>Parcial: falta concurrencia y ejecución PostgreSQL</td>
+<td>AUTO + API + DB-R</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>TC-INV-003</td>
+<td>Registrar entrada y salida manual</td>
+<td>Positivo / integración</td>
+<td><code>movimiento_rapido</code> para <code>AJUSTE_POSITIVO</code> y <code>AJUSTE_NEGATIVO</code>, motivo y auditoría</td>
+<td>Producto/almacén válidos; Administrador, Supervisor o Bodega</td>
+<td>Entrada 5, salida 2, observación ficticia</td>
+<td>Respuesta muestra stock anterior/nuevo; movimientos guardan usuario, tipo y observación; salida no excede stock</td>
+<td><code>M</code> — no se localizó prueba automatizada directa</td>
+<td>Sí: ambos tipos, motivo y rollback</td>
+<td>AUTO + API + DB-R</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>TC-INV-004</td>
+<td>Transferir entre almacenes</td>
+<td>Positivo / integración</td>
+<td>Descuento en origen, incremento en destino y conservación total</td>
+<td>Dos almacenes distintos y stock suficiente; rol autorizado</td>
+<td>Traslado de 4 unidades de A a B con observación</td>
+<td>Total global no cambia; se crean traslado-salida y traslado-entrada relacionados</td>
+<td><code>A</code> — prueba aprobada en SQLite/PostgreSQL y transferencia UI E2E ejecutada</td>
+<td>Falta automatizar la interacción UI</td>
+<td>AUTO + API + DB-R + MAN; <a href="../evidencias/frontend/INV-transferencia-ayuda.png">transferencia y ayuda</a></td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>TC-INV-005</td>
+<td>Rechazar transferencia inválida</td>
+<td>Negativo</td>
+<td>Mismo origen/destino, cantidad cero/negativa, faltantes y stock insuficiente</td>
+<td>Rol autorizado; uno o dos almacenes según variante</td>
+<td>Origen=destino; cantidad 0; cantidad superior al stock</td>
+<td>HTTP 400 controlado; ninguna cantidad ni movimiento cambia</td>
+<td><code>M</code> — no se localizó prueba automatizada directa</td>
+<td>Sí: tabla de variantes y atomicidad</td>
+<td>AUTO + API + DB-R</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>TC-INV-006</td>
+<td>Listar, filtrar, alertar y exportar inventario</td>
+<td>Positivo / interfaz</td>
+<td>Búsqueda, categoría, almacén, estado de producto/stock, alertas y CSV</td>
+<td>Datos aislados con stock agotado, bajo, medio y alto; sesión autenticada</td>
+<td>Productos ficticios con umbrales conocidos</td>
+<td>Totales, orden, alertas y filas CSV coinciden; BOM/cabeceras correctos; sin datos ajenos</td>
+<td><code>M</code> — no se localizaron pruebas automatizadas de estos endpoints</td>
+<td>Sí: filtros, estadística, alerta y archivo</td>
+<td>AUTO + API + MAN; <a href="../evidencias/frontend/INV-stock-actual.png">stock actual</a></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>TC-INV-007</td>
+<td>Mantener consistencia ante concurrencia y anulaciones</td>
+<td>Seguridad / integración</td>
+<td>Bloqueo transaccional, idempotencia y prevención de anular compra consumida</td>
+<td>PostgreSQL 15.18 aislado; compra/venta existentes; solicitudes concurrentes controladas</td>
+<td>Dos salidas simultáneas sobre stock limitado; doble anulación</td>
+<td>Nunca hay stock negativo ni doble reversión; una compra consumida no se anula</td>
+<td><code>P</code> — <code>test_anulaciones_son_auditables_e_idempotentes</code> y <code>test_no_anula_compra_si_unidades_fueron_vendidas</code>; no cubren concurrencia real</td>
+<td>Sí: <code>TransactionTestCase</code>/integración concurrente PostgreSQL</td>
+<td>AUTO + DB-R</td>
+<td>Crítica</td>
+</tr>
+</tbody>
+</table>
+<h2 id="evidencia-visual-minima">Evidencia visual mínima</h2>
+<ul>
+<li><a href="../evidencias/frontend/INV-stock-actual.png">INV-stock-actual.png</a>: resumen y tabla de stock en escritorio.</li>
+<li><a href="../evidencias/frontend/INV-transferencia-ayuda.png">INV-transferencia-ayuda.png</a>: formulario de transferencia con origen, destino, producto, cantidad y ayuda contextual.</li>
+</ul>
+<p><img alt="Estado actual del inventario" src="../evidencias/frontend/INV-stock-actual.png" /></p>
+<p><img alt="Formulario de transferencia con ayuda contextual" src="../evidencias/frontend/INV-transferencia-ayuda.png" /></p>
+<p>No se necesitan capturas adicionales para cada cálculo. La evidencia principal debe ser la suite sobre PostgreSQL y consultas de solo lectura antes/después.</p>
+<h2 id="riesgos-pendientes">Riesgos pendientes</h2>
+<ul>
+<li>Entradas y salidas manuales carecen de prueba directa.</li>
+<li>No existe cobertura automatizada de filtros, alertas, estadísticas ni CSV.</li>
+<li>SQLite en memoria no demuestra bloqueo ni concurrencia real; PostgreSQL 15.18 es obligatorio para TC-INV-002, TC-INV-005 y TC-INV-007.</li>
+</ul>
+<h2 id="resultado-final-de-ejecucion">Resultado final de ejecución</h2>
+<p><strong>7/7 aprobados.</strong> Se ejecutaron Compra/Venta, entradas/salidas, Transferencia, negativos, filtros, alertas, CSV, anulaciones y concurrencia real en PostgreSQL 15. Dos salidas simultáneas sobre cinco unidades dejaron un único éxito y stock final uno. Ver <a href="../../RESULTADOS_EJECUCION_2026-08-08/#inventario-movimientos-y-transferencias">resultados trazables</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -23,7 +23,7 @@
     
     
       
-        <title>🗄️ Evidencias — Base de Datos | Módulo Usuarios - SofInventory ERP</title>
+        <title>Evidencias de base de datos — Usuarios - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#evidencias-base-de-datos-modulo-usuarios" class="md-skip">
+        <a href="#evidencias-de-base-de-datos-usuarios" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              🗄️ Evidencias — Base de Datos | Módulo Usuarios
+              Evidencias de base de datos — Usuarios
             
           </span>
         </div>
@@ -347,90 +347,33 @@
 
 
 
-<h1 id="evidencias-base-de-datos-modulo-usuarios">🗄️ Evidencias — Base de Datos | Módulo Usuarios</h1>
+<h1 id="evidencias-de-base-de-datos-usuarios">Evidencias de base de datos — Usuarios</h1>
 <blockquote>
-<p>Directorio para capturas de consultas SQL ejecutadas en <strong>pgAdmin 4</strong> para verificar la integridad de los datos en la base de datos PostgreSQL de SofInventory.</p>
+<p><strong>Actualizado:</strong> 8 de agosto de 2026</p>
 </blockquote>
-<h2 id="convencion-de-nomenclatura">Convención de nomenclatura</h2>
-<div class="highlight"><pre><span></span><code>TC-USR-{NRO}-db.png     → Captura del Query Tool de pgAdmin con SQL ejecutado + resultado
-</code></pre></div>
-<h2 id="consultas-sql-de-referencia">Consultas SQL de Referencia</h2>
-<div class="highlight"><pre><span></span><code><span class="c1">-- TC-USR-001: Verificar usuario administrador creado</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="n">nombre_completo</span><span class="p">,</span><span class="w"> </span><span class="n">estado</span><span class="p">,</span><span class="w"> </span><span class="n">fecha_registro</span>
+<p>No se ejecutaron consultas manuales ni se generaron capturas nuevas de PostgreSQL durante esta actualización. La suite backend utilizó SQLite en memoria y no modificó la base operativa.</p>
+<h2 id="consultas-de-solo-lectura-recomendadas">Consultas de solo lectura recomendadas</h2>
+<div class="highlight"><pre><span></span><code><span class="c1">-- Duplicados por nombre de usuario, sin mostrar datos completos.</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">LOWER</span><span class="p">(</span><span class="n">username</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">clave</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;carlos&#39;</span><span class="p">;</span>
-
-<span class="c1">-- TC-USR-002: Verificar rol del usuario operador</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">nombre</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">rol</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">estado</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="n">u</span>
-<span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">roles</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">rol_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;laura.gomez&#39;</span><span class="p">;</span>
-
-<span class="c1">-- TC-USR-003: Verificar que NO existen dos usuarios con el mismo username</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span>
-<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">username</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">LOWER</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
 <span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 
-<span class="c1">-- TC-USR-005: Verificar número de documento inválido en BD (BUG)</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">numero_documento</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span>
-<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">DESC</span>
-<span class="k">LIMIT</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
-
-<span class="c1">-- TC-USR-007: Verificar hash PBKDF2 de contraseña (NO debe aparecer en texto plano)</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">password</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;carlos.perez&#39;</span><span class="p">;</span>
-<span class="c1">-- Resultado esperado: pbkdf2_sha256$&lt;iteraciones&gt;$&lt;salt&gt;$&lt;hash_base64&gt;</span>
-
-<span class="c1">-- Verificar todos los usuarios activos</span>
-<span class="k">SELECT</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">nombre</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">rol</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">estado</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">fecha_registro</span>
+<span class="c1">-- Distribución agregada por rol y estado.</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">nombre</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">rol</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">estado</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="n">u</span>
-<span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">roles</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">rol_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">id</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">estado</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;activo&#39;</span>
-<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">fecha_registro</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">roles</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">rol_id</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">nombre</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">estado</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">nombre</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">estado</span><span class="p">;</span>
+
+<span class="c1">-- Conteo de eventos por acción, sin detalle potencialmente identificable.</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">accion</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">auditoria_usuarios</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">accion</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">accion</span><span class="p">;</span>
 </code></pre></div>
-<h2 id="archivos-esperados">Archivos esperados</h2>
-<table>
-<thead>
-<tr>
-<th>Archivo</th>
-<th>Caso</th>
-<th>Consulta</th>
-<th>Resultado esperado</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>TC-USR-001-db.png</code></td>
-<td>TC-USR-001</td>
-<td>SELECT por username</td>
-<td>1 registro con datos correctos</td>
-</tr>
-<tr>
-<td><code>TC-USR-002-db.png</code></td>
-<td>TC-USR-002</td>
-<td>SELECT con JOIN a roles</td>
-<td>Rol = Operador</td>
-</tr>
-<tr>
-<td><code>TC-USR-005-db.png</code></td>
-<td>TC-USR-005</td>
-<td>SELECT numero_documento</td>
-<td><strong>Valor <code>ABCDE!!!</code> persistido (BUG)</strong></td>
-</tr>
-<tr>
-<td><code>TC-USR-007-db.png</code></td>
-<td>TC-USR-007</td>
-<td>SELECT password</td>
-<td>Hash <code>pbkdf2_sha256$...</code> — sin texto plano</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>📌 <strong>Nota:</strong> Incluir siempre en la captura el SQL ejecutado (panel superior del Query Tool) y el resultado (panel inferior). Usar pgAdmin 4 conectado a la base de datos de SofInventory.</p>
-</blockquote>
+<p>Nunca seleccionar ni capturar la columna <code>password</code>, tokens de sesión, correos, documentos u otros datos personales salvo que exista una necesidad formal y una salida redactada.</p>
+<p>Los archivos <code>TC-USR-001-db.png</code>, <code>TC-USR-002-db.png</code>, <code>TC-USR-005-db.png</code> y <code>TC-USR-007-db.png</code> son históricos. Las imágenes que muestran un documento inválido o reglas antiguas no representan el comportamiento actual.</p>
 
 
 

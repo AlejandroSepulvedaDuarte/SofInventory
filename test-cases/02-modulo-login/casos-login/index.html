@@ -23,7 +23,7 @@
     
     
       
-        <title>🧪 Casos de Prueba — Módulo Login - SofInventory ERP</title>
+        <title>Casos de prueba — Login y sesiones - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#casos-de-prueba-modulo-login" class="md-skip">
+        <a href="#casos-de-prueba-login-y-sesiones" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              🧪 Casos de Prueba — Módulo Login
+              Casos de prueba — Login y sesiones
             
           </span>
         </div>
@@ -347,1086 +347,202 @@
 
 
 
-<h1 id="casos-de-prueba-modulo-login">🧪 Casos de Prueba — Módulo Login</h1>
+<h1 id="casos-de-prueba-login-y-sesiones">Casos de prueba — Login y sesiones</h1>
 <blockquote>
-<p><strong>Versión:</strong> 1.0.0 <br>
-<strong>Módulo:</strong> Login / Autenticación <br>
-<strong>Prefijo de código:</strong> TC-LOGIN <br>
-<strong>Total de casos:</strong> 10 <br>
-<strong>Fecha:</strong> 15 de mayo de 2026 <br>
-<strong>Autor:</strong> Alejandro Sepúlveda Duarte</p>
+<p><strong>Prefijo:</strong> TC-LOGIN · <strong>Cobertura mínima consolidada:</strong> 7 casos · <strong>Ejecución final:</strong> 6 aprobados, 1 fallido · <strong>Fecha:</strong> 8 de agosto de 2026</p>
 </blockquote>
-<hr />
-<h2 id="plantilla-de-caso-de-prueba">📋 Plantilla de Caso de Prueba</h2>
-<p>Cada caso de prueba sigue esta estructura estándar:</p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>Código único del caso (TC-LOGIN-XXX)</td>
-</tr>
-<tr>
-<td>Descripción</td>
-<td>Qué se está probando</td>
-</tr>
-<tr>
-<td>Precondiciones</td>
-<td>Estado previo requerido del sistema</td>
-</tr>
-<tr>
-<td>Datos de entrada</td>
-<td>Valores utilizados en la prueba</td>
-</tr>
-<tr>
-<td>Pasos a seguir</td>
-<td>Secuencia de acciones a ejecutar</td>
-</tr>
-<tr>
-<td>Resultado esperado</td>
-<td>Comportamiento correcto del sistema</td>
-</tr>
-<tr>
-<td>Resultado obtenido</td>
-<td>Comportamiento real observado</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó / ❌ Falló / ⚠️ Bloqueado</td>
-</tr>
-<tr>
-<td>Evidencias</td>
-<td>Referencias a capturas de pantalla o archivos</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="descripcion-de-la-funcionalidad">📝 Descripción de la Funcionalidad</h2>
-<p>El módulo de Login de SofInventory implementa autenticación basada en <strong>username y contraseña</strong>. Al autenticarse exitosamente, el servidor Django genera un <strong>token Bearer</strong> único (64 caracteres URL-safe) que se persiste en la tabla <code>sesiones_api</code> de PostgreSQL con una duración de 12 horas. Este token debe incluirse en el header <code>Authorization: Bearer &lt;token&gt;</code> de todas las peticiones subsiguientes a recursos protegidos.</p>
-<p>El sistema invalida todas las sesiones activas previas del usuario al hacer login (una sola sesión activa por usuario). Al hacer logout, el campo <code>activa</code> de la sesión en la tabla <code>sesiones_api</code> se establece en <code>false</code>.</p>
-<p><strong>Endpoints involucrados:</strong>
-- <code>POST /api/auth/login/</code> — Autenticación y obtención del token Bearer
-- <code>POST /api/auth/logout/</code> — Cierre de sesión / invalidación del token
-- <code>GET /api/auth/me/</code> — Verificación del token activo y retorno de los datos del usuario autenticado (username, rol, estado)
-- <code>GET /api/usuarios/listar/</code> — Listado de usuarios (solo Administrador, retorna 403 para otros roles)</p>
-<hr />
-<h2 id="casos-de-prueba">🧪 Casos de Prueba</h2>
-<hr />
-<h3 id="tc-login-001-login-exitoso-como-administrador">TC-LOGIN-001: Login exitoso como administrador</h3>
-<p><strong>Descripción</strong>
-Verificar que un usuario con rol Administrador puede autenticarse correctamente usando su username y contraseña, y acceder al dashboard con todos los permisos habilitados.</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-001</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Login exitoso como administrador</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Funcional</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-Existe usuario con <code>username = 'admin'</code>, contraseña <code>Admin123</code>, rol Administrador y estado activo en la tabla <code>usuarios</code>.
-El servidor Django y la base de datos PostgreSQL están en línea.</p>
-<p><strong>Datos de entrada</strong>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Admin123&quot;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div></p>
-<p><strong>Pasos a seguir</strong>
-1. Navegar a la URL del sistema (<code>http://localhost:4200</code>).
-2. Ingresar el username y contraseña del administrador.
-3. Clic en "Iniciar Sesión".
-4. Verificar redirección al dashboard.
-5. En Postman: <code>POST /api/auth/login/</code> con el body indicado:
-   <div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Admin123&quot;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div>
-6. En pgAdmin ejecutar:
-   <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">token</span><span class="p">,</span><span class="w"> </span><span class="n">expira_en</span><span class="p">,</span><span class="w"> </span><span class="n">activa</span>
-<span class="k">FROM</span><span class="w"> </span><span class="n">sesiones_api</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">usuario_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;admin&#39;</span><span class="p">)</span>
-<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">creada_en</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</code></pre></div></p>
-<p><strong>Resultado esperado</strong>
-- El sistema debe retornar código HTTP 200 OK.
-- Debe generarse un token Bearer válido registrado en <code>sesiones_api</code>.
-- El usuario debe ser redirigido al dashboard.
-- El campo <code>activa</code> debe quedar en <code>true</code> en PostgreSQL.
-- El menú administrativo debe visualizarse correctamente.</p>
-<p><strong>Resultado obtenido</strong>
-El sistema redirigió correctamente al dashboard. El token Bearer fue generado y registrado en la tabla <code>sesiones_api</code>. El menú de administración fue visible.</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frontend</td>
-<td><a href="../evidencias/frontend/TC-LOGIN-001-frontend.png"><img alt="Miniatura del formulario" src="../evidencias/frontend/TC-LOGIN-001-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-001-postman.png"><img alt="Miniatura Postman" src="../evidencias/postman/TC-LOGIN-001-postman.png" /></a></td>
-</tr>
-<tr>
-<td>Database</td>
-<td><a href="../evidencias/database/TC-LOGIN-001-db.png"><img alt="Miniatura Base de Datos" src="../evidencias/database/TC-LOGIN-001-db.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
-<p><strong>Resultado final:</strong> ✅ Exitoso</p>
-<p><strong>Observación:</strong> El flujo de autenticación funcionó correctamente en frontend, backend y base de datos.</p>
-<hr />
-<h3 id="tc-login-002-autenticacion-exitosa-de-usuario-supervisor">TC-LOGIN-002: Autenticación exitosa de usuario Supervisor</h3>
-<p><strong>Descripción</strong>
-Verificar que un usuario con rol Supervisor puede autenticarse y acceder al sistema con las restricciones de permisos correspondientes.</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-002</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Autenticación exitosa de usuario Supervisor</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Funcional</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación / Control de acceso</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-Existe usuario con <code>username = 'sebascal'</code>, contraseña <code>sebas123</code>, rol Supervisor y estado activo en la tabla <code>usuarios</code>.</p>
-<p><strong>Datos de entrada</strong>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sebascal&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sebas123&quot;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div></p>
-<p><strong>Pasos a seguir</strong>
-1. Ingresar las credenciales del Supervisor en el formulario de login.
-2. Clic en "Iniciar Sesión".
-3. Verificar redirección al dashboard.
-4. Verificar que el menú NO muestra opciones de administración de usuarios.
-5. En Postman: verificar que <code>GET /api/usuarios/listar/</code> con el token del Supervisor devuelve HTTP 403.</p>
-<p><strong>Resultado esperado</strong>
-- HTTP 200. Acceso exitoso.
-- Objeto <code>usuario</code> retornado con <code>"rol": "Supervisor"</code>.
-- La sección Configuración &gt; Usuarios no debe estar disponible en el menú.
-- El endpoint <code>GET /api/usuarios/listar/</code> retorna HTTP 403 Forbidden con el token del Supervisor.</p>
-<p><strong>Resultado obtenido</strong>
-Acceso exitoso. El menú de administración no fue visible para el Supervisor. La petición a <code>/api/usuarios/listar/</code> con el token de Supervisor retornó HTTP 403.</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frontend</td>
-<td><a href="../evidencias/frontend/TC-LOGIN-002-frontend.png"><img alt="Captura frontend TC-LOGIN-002" src="../evidencias/frontend/TC-LOGIN-002-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-002-postman.png"><img alt="Captura Postman TC-LOGIN-002" src="../evidencias/postman/TC-LOGIN-002-postman.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Resultado final:</strong> ✅ Exitoso</p>
-<p><strong>Observación:</strong> El control de acceso por rol funciona correctamente. El supervisor no puede acceder a endpoints de administración.</p>
-<hr />
-<h3 id="tc-login-003-rechazo-de-username-no-registrado">TC-LOGIN-003: Rechazo de username no registrado</h3>
-<p><strong>Descripción</strong>
-Verificar que el sistema rechaza el intento de login con un username que no existe en la tabla <code>usuarios</code> de PostgreSQL.</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-003</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Rechazo de username no registrado</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Funcional / Seguridad</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-El username <code>usuario.fantasma</code> NO está registrado en la tabla <code>usuarios</code>.</p>
-<p><strong>Datos de entrada</strong>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;usuario.fantasma&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CualquierPass@1&quot;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div></p>
-<p><strong>Pasos a seguir</strong>
-1. Ingresar un username no registrado y cualquier contraseña en el formulario de login.
-2. Clic en "Iniciar Sesión".
-3. Observar el mensaje de respuesta en el frontend.
-4. En Postman: verificar el código HTTP y el mensaje retornado.</p>
-<p><strong>Resultado esperado</strong>
-- HTTP 401 Unauthorized.
-- Mensaje genérico: <code>"Usuario o contrasena incorrectos"</code> (sin revelar que el username no existe, por seguridad).
-- Sin acceso al sistema.
-- No se crea ningún registro en <code>sesiones_api</code>.</p>
-<p><strong>Resultado obtenido</strong>
-Se mostró el mensaje <code>"Usuario o contrasena incorrectos"</code>. El servidor respondió con código 401. No hubo acceso. No se generó ningún token.</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frontend</td>
-<td><a href="../evidencias/frontend/TC-LOGIN-003-frontend.png"><img alt="Captura frontend TC-LOGIN-003" src="../evidencias/frontend/TC-LOGIN-003-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-003-postman.png"><img alt="Captura Postman TC-LOGIN-003" src="../evidencias/postman/TC-LOGIN-003-postman.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Resultado final:</strong> ✅ Exitoso</p>
-<p><strong>Observación:</strong> El sistema no revela si el username existe o no, lo cual es una buena práctica de seguridad.</p>
-<hr />
-<h3 id="tc-login-004-rechazo-con-campos-vacios">TC-LOGIN-004: Rechazo con campos vacíos</h3>
-<p><strong>Descripción</strong>
-Verificar que el sistema no permite enviar el formulario de login con los campos de username y/o contraseña vacíos.</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-004</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Rechazo con campos vacíos</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Validación / Funcional</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-Ninguna sesión activa en el sistema.</p>
-<p><strong>Datos de entrada</strong>
-- Frontend: formulario completamente en blanco.
-- Postman: body 
-   <div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div></p>
-<p><strong>Pasos a seguir</strong>
-1. Acceder al formulario de Login.
-2. No ingresar ningún dato.
-3. Clic en "Iniciar Sesión".
-4. Desde Postman: <code>POST /api/auth/login/</code> con body
- <div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div></p>
-<p><strong>Resultado esperado</strong>
-- Frontend: campos marcados como inválidos con mensajes de validación visibles.
-- Postman: HTTP 400 con mensaje <code>"error": "Datos invalidos"</code> (validación del <code>LoginSerializer</code> de DRF).
-- No se realiza ninguna consulta a la tabla <code>usuarios</code>.</p>
-<p><strong>Resultado obtenido</strong>
-Los mensajes de validación aparecieron en el frontend. Postman respondió HTTP 400 con <code>"error": "Datos invalidos"</code>. No se realizó ninguna consulta a la base de datos.</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frontend</td>
-<td><a href="../evidencias/frontend/TC-LOGIN-004-frontend.png"><img alt="Captura frontend TC-LOGIN-004" src="../evidencias/frontend/TC-LOGIN-004-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-004-postman.png"><img alt="Captura Postman TC-LOGIN-004" src="../evidencias/postman/TC-LOGIN-004-postman.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Resultado final:</strong> ✅ Exitoso</p>
-<p><strong>Observación:</strong> Las validaciones del formulario Angular y del <code>LoginSerializer</code> de DRF funcionan correctamente ante campos vacíos.</p>
-<hr />
-<h3 id="tc-login-005-rechazo-de-usuario-inactivo">TC-LOGIN-005: Rechazo de usuario inactivo</h3>
-<p><strong>Descripción</strong>
-Verificar que el sistema rechaza el intento de login de un usuario cuyo estado sea <code>inactivo</code> en la tabla <code>usuarios</code>, aunque sus credenciales sean correctas.</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-005</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Rechazo de usuario inactivo</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Funcional / Control de acceso</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-Existe usuario con <code>username = 'inactivo'</code>, contraseña <code>Inac@1234</code> y <code>estado = 'inactivo'</code> en la tabla <code>usuarios</code>.
-Verificar estado previo en pgAdmin:
-<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">estado</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;inactivo&#39;</span><span class="p">;</span>
-</code></pre></div></p>
-<p><strong>Datos de entrada</strong>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sebascal&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sebas123&quot;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div></p>
-<p><strong>Pasos a seguir</strong>
-1. Ingresar las credenciales del usuario inactivo en el formulario de login.
-2. Clic en "Iniciar Sesión".
-3. Observar el mensaje de respuesta.
-4. Verificar en pgAdmin que no se generó ningún registro en <code>sesiones_api</code>:
-   <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sesiones_api</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">usuario_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;inactivo&#39;</span><span class="p">)</span>
-<span class="k">AND</span><span class="w"> </span><span class="n">activa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
-</code></pre></div></p>
-<p><strong>Resultado esperado</strong>
-- HTTP 403 Forbidden.
-- Mensaje: <code>"Usuario inactivo. Contacte al administrador."</code>.
-- Sin acceso al sistema.
-- No se genera token ni registro en <code>sesiones_api</code>.</p>
-<p><strong>Resultado obtenido</strong>
-El sistema respondió con HTTP 403 y el mensaje <code>"Usuario inactivo. Contacte al administrador."</code>. El frontend mostró el mensaje de error. No se generó ningún registro en <code>sesiones_api</code>.</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frontend</td>
-<td><a href="../evidencias/frontend/TC-LOGIN-005-frontend.png"><img alt="Captura frontend TC-LOGIN-005" src="../evidencias/frontend/TC-LOGIN-005-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-005-postman.png"><img alt="Captura Postman TC-LOGIN-005" src="../evidencias/postman/TC-LOGIN-005-postman.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Resultado final:</strong> ✅ Exitoso
-<strong>Observación:</strong> El sistema bloquea correctamente el acceso a usuarios inactivos antes de verificar la contraseña.</p>
-<hr />
-<h3 id="tc-login-006-contrasena-incorrecta-usuario-existe-y-esta-activo">TC-LOGIN-006: Contraseña incorrecta (usuario existe y está activo)</h3>
-<p><strong>Descripción</strong>
-Verificar que el sistema rechaza el acceso cuando el username es correcto pero la contraseña es incorrecta, sin revelar información sensible sobre la existencia del usuario.</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-006</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Contraseña incorrecta</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Funcional / Seguridad</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-Existe usuario activo con <code>username = 'admin'</code> en la tabla <code>usuarios</code>.</p>
-<p><strong>Datos de entrada</strong>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ContraseñaWrong99!&quot;</span><span class="w"> </span><span class="p">}</span>
-</code></pre></div></p>
-<p><strong>Pasos a seguir</strong>
-1. Ingresar el username correcto del administrador con una contraseña incorrecta.
-2. Clic en "Iniciar Sesión".
-3. Comparar el mensaje de error con el obtenido en TC-LOGIN-003 (username inexistente).</p>
-<p><strong>Resultado esperado</strong>
-- HTTP 401 Unauthorized.
-- Mensaje genérico idéntico al de username no registrado: <code>"Usuario o contrasena incorrectos"</code>.
-- El mensaje no revela que el username sí existe.
-- No se genera token.</p>
-<p><strong>Resultado obtenido</strong>
-Se mostró el mensaje <code>"Usuario o contrasena incorrectos"</code>. El mensaje fue idéntico al caso de username inexistente. No se generó token.</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frontend</td>
-<td><a href="../evidencias/frontend/TC-LOGIN-006-frontend.png"><img alt="Captura frontend TC-LOGIN-006" src="../evidencias/frontend/TC-LOGIN-006-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-006-postman.png"><img alt="Captura Postman TC-LOGIN-006" src="../evidencias/postman/TC-LOGIN-006-postman.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Resultado final:</strong> ✅ Exitoso</p>
-<p><strong>Observación:</strong> El mensaje unificado para credenciales inválidas es una buena práctica de seguridad que previene la enumeración de usuarios.</p>
-<hr />
-<h3 id="tc-login-007-inyeccion-de-caracteres-especiales">TC-LOGIN-007: Inyección de caracteres especiales</h3>
-<p><strong>Descripción</strong>
-Verificar que el sistema maneja correctamente la inyección de caracteres especiales en los campos de login, sin producir errores de servidor.</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-007</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Inyección de caracteres especiales</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Seguridad</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-Ninguna sesión activa.</p>
-<p><strong>Datos de entrada</strong>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&#39; OR &#39;1&#39;=&#39;1&#39; --&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;&quot;</span>
-<span class="p">}</span>
-</code></pre></div></p>
-<p><strong>Pasos a seguir</strong>
-1. En Postman, enviar <code>POST /api/auth/login/</code> con el body indicado.
-2. Observar el código de respuesta HTTP.
-3. Verificar que no hubo acceso no autorizado.
-4. Revisar los logs del servidor Django.</p>
-<p><strong>Resultado esperado</strong>
-- HTTP 401 Unauthorized.
-- Mensaje: <code>"Usuario o contrasena incorrectos"</code>.
-- No se generó token de acceso.
-- Los logs de Django muestran la petición registrada normalmente sin errores de servidor.</p>
-<p><strong>Resultado obtenido</strong>
-El servidor respondió HTTP 401 con el mensaje <code>"Usuario o contrasena incorrectos"</code>. No se generó token ni hubo acceso al sistema. La terminal de Django registró la petición normalmente:</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frontend</td>
-<td><a href="./evidencias/frontend/TC-LOGIN-007-console.png"><img alt="Captura Frontend TC-LOGIN-007" src="../evidencias/frontend/TC-LOGIN-007-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-007-postman.png"><img alt="Captura Postman TC-LOGIN-007" src="../evidencias/postman/TC-LOGIN-007-postman.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
-<p><strong>Resultado final:</strong> ✅ Exitoso</p>
-<h2 id="observacion-el-sistema-rechaza-correctamente-los-caracteres-especiales-retornando-401-sin-revelar-informacion-sensible-ni-producir-errores-de-servidor-django-orm-previene-sql-injection-mediante-consultas-parametrizadas"><strong>Observación:</strong> El sistema rechaza correctamente los caracteres especiales retornando 401 sin revelar información sensible ni producir errores de servidor. Django ORM previene SQL Injection mediante consultas parametrizadas.</h2>
-<h3 id="tc-login-008-cierre-de-sesion-correcto-logout">TC-LOGIN-008: Cierre de sesión correcto (Logout)</h3>
-<p><strong>Descripción</strong>
-Verificar que al cerrar sesión el token Bearer es invalidado en la tabla <code>sesiones_api</code> de PostgreSQL y el usuario no puede seguir accediendo a recursos protegidos con el token revocado.</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-008</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Cierre de sesión correcto (Logout)</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Funcional / Seguridad</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-El usuario <code>admin</code> está autenticado y tiene un token Bearer activo (<code>activa = true</code> en <code>sesiones_api</code>).</p>
-<p><strong>Datos de entrada</strong>
-Token Bearer activo obtenido en TC-LOGIN-001.</p>
-<p><strong>Pasos a seguir</strong>
-1. Desde el dashboard, clic en "Cerrar Sesión".
-2. Verificar que redirige a la pantalla de Login.
-3. En Postman: intentar <code>GET /api/auth/me/</code> con el token anterior.
-4. En pgAdmin verificar:
-   <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">activa</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sesiones_api</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&lt;token_usado&gt;&#39;</span><span class="p">;</span>
-</code></pre></div></p>
-<p><strong>Resultado esperado</strong>
-- Redirección al formulario de Login.
-- Postman: HTTP 403 con mensaje <code>"Token invalido o sesion cerrada."</code>.
-- En pgAdmin: el campo <code>activa</code> del registro de sesión debe ser <code>false</code>.
-- El token ya no es funcional para ninguna petición protegida.</p>
-<p><strong>Resultado obtenido</strong>
-La sesión se cerró correctamente. La petición con el token anterior retornó HTTP 403. En pgAdmin, el campo <code>activa</code> estaba en <code>false</code>.</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frontend</td>
-<td><a href="../evidencias/frontend/TC-LOGIN-008-frontend.png"><img alt="Captura frontend TC-LOGIN-008" src="../evidencias/frontend/TC-LOGIN-008-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-008-postman.png"><img alt="Captura Postman TC-LOGIN-008" src="../evidencias/postman/TC-LOGIN-008-postman.png" /></a></td>
-</tr>
-<tr>
-<td>Database</td>
-<td><a href="../evidencias/database/TC-LOGIN-008-db.png"><img alt="Captura Base de Datos TC-LOGIN-008" src="../evidencias/database/TC-LOGIN-008-db.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
-<p><strong>Resultado final:</strong> ✅ Exitoso</p>
-<p><strong>Observación:</strong> El token es invalidado correctamente en <code>sesiones_api</code>. La invalidación ocurre en la base de datos, no depende del cliente.</p>
-<hr />
-<h3 id="tc-login-009-acceso-a-ruta-protegida-sin-token">TC-LOGIN-009: Acceso a ruta protegida sin token</h3>
-<p><strong>Descripción</strong>
-Verificar que las rutas protegidas del sistema no son accesibles sin un token Bearer válido, tanto desde el frontend Angular (Guard) como desde el backend Django (DRF).</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-009</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Acceso a ruta protegida sin token</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Seguridad / Funcional</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Alta</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación / Control de acceso</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>✅ Pasó</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-No existe ninguna sesión activa. El servicio de autenticación de Angular no tiene token almacenado.</p>
-<p><strong>Datos de entrada</strong>
-- URL directa: <code>http://localhost:4200/dashboard</code>
-- Postman: <code>GET /api/auth/me/</code> sin header <code>Authorization</code>.</p>
-<p><strong>Pasos a seguir</strong>
-1. Sin estar autenticado, intentar navegar directamente a <code>/dashboard</code>.
-2. En Postman: <code>GET /api/auth/me/</code> sin incluir el header <code>Authorization</code>.
-3. Observar ambas respuestas.</p>
-<p><strong>Resultado esperado</strong>
-- Frontend: Angular Route Guard redirige automáticamente a la pantalla de Login.
-- Backend: HTTP 401 ó 403 Unauthorized desde DRF.</p>
-<p><strong>Resultado obtenido</strong>
-El Angular Guard redirigió a Login. La API respondió con 403. El sistema no permitió ningún acceso sin token.</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Frontend</td>
-<td><a href="../evidencias/frontend/TC-LOGIN-009-frontend.png"><img alt="Captura frontend TC-LOGIN-009" src="../evidencias/frontend/TC-LOGIN-009-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-009-postman.png"><img alt="Captura Postman TC-LOGIN-009" src="../evidencias/postman/TC-LOGIN-009-postman.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
-<p><strong>Resultado final:</strong> ✅ Exitoso</p>
-<p><strong>Observación:</strong> El Angular Route Guard y el middleware de autenticación de DRF protegen correctamente todos los recursos del sistema.</p>
-<hr />
-<h3 id="tc-login-010-comportamiento-con-sesion-expirada">TC-LOGIN-010: Comportamiento con sesión expirada</h3>
-<p><strong>Descripción</strong>
-Verificar que el sistema maneja correctamente una sesión cuyo token ha expirado en la tabla <code>sesiones_api</code>, solicitando al usuario que vuelva a iniciar sesión.</p>
-<p><strong>📌 Información General</strong></p>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identificador</td>
-<td>TC-LOGIN-010</td>
-</tr>
-<tr>
-<td>Nombre</td>
-<td>Comportamiento con sesión expirada</td>
-</tr>
-<tr>
-<td>Tipo de prueba</td>
-<td>Funcional / Seguridad</td>
-</tr>
-<tr>
-<td>Prioridad</td>
-<td>Media</td>
-</tr>
-<tr>
-<td>Módulo</td>
-<td>Autenticación</td>
-</tr>
-<tr>
-<td>Estado</td>
-<td>❌ Falló (parcialmente)</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Precondiciones</strong>
-El usuario <code>admin</code> está autenticado y tiene una sesión activa en <code>sesiones_api</code>.
-Acceso a pgAdmin para forzar la expiración.</p>
-<p><strong>Datos de entrada</strong>
-Forzar expiración ejecutando en pgAdmin:
-<div class="highlight"><pre><span></span><code><span class="k">UPDATE</span><span class="w"> </span><span class="n">sesiones_api</span>
-<span class="k">SET</span><span class="w"> </span><span class="n">expira_en</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">NOW</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="s1">&#39;1 hour&#39;</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">activa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span>
-<span class="k">AND</span><span class="w"> </span><span class="n">usuario_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;admin&#39;</span><span class="p">);</span>
-</code></pre></div></p>
-<p><strong>Pasos a seguir</strong>
-1. Autenticarse como administrador.
-2. Ejecutar la consulta SQL en pgAdmin para adelantar la expiración de la sesión.
-3. Sin cerrar el navegador, navegar a cualquier sección que cargue datos de la API (ej. <code>/dashboard</code>).
-4. En Postman: <code>GET /api/auth/me/</code> con el token expirado.
-5. Verificar en pgAdmin:
-   <div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">activa</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sesiones_api</span>
-<span class="k">WHERE</span><span class="w"> </span><span class="n">usuario_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">usuarios</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;admin&#39;</span><span class="p">)</span>
-<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">creada_en</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</code></pre></div></p>
-<p><strong>Resultado esperado</strong>
-- Backend: HTTP 403 con mensaje <code>"La sesion expiro. Inicie sesion nuevamente."</code> y campo <code>activa</code> en <code>false</code>.
-- Frontend: el <code>HttpInterceptor</code> de Angular captura el 403 y redirige a <code>/login</code> con el mensaje "Tu sesión ha expirado."</p>
-<p><strong>Resultado obtenido</strong>
-✅ <strong>Backend correcto:</strong> Postman recibió HTTP 403 con el mensaje <code>"La sesion expiro. Inicie sesion nuevamente."</code> y en pgAdmin el campo <code>activa</code> pasó a <code>false</code>.
-⚠️ <strong>Frontend fallido:</strong> el Angular frontend no interceptó el 403 devuelto por la API. El usuario permaneció en el dashboard viendo las secciones vacías sin ningún mensaje informativo ni redirección al Login.</p>
-<p><strong>Severidad:</strong> 🟡 Media — El backend maneja correctamente la expiración. El defecto es de UX en el frontend. No representa acceso no autorizado.
-<strong>Defecto registrado:</strong> BUG-LOGIN-002</p>
-<p><strong>Evidencias</strong></p>
-<table>
-<thead>
-<tr>
-<th>Tipo</th>
-<th>Evidencia</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Postman</td>
-<td><a href="../evidencias/postman/TC-LOGIN-010-postman.png"><img alt="Captura Postman TC-LOGIN-010" src="../evidencias/postman/TC-LOGIN-010-postman.png" /></a></td>
-</tr>
-<tr>
-<td>Frontend</td>
-<td><a href="../evidencias/frontend/TC-LOGIN-010-frontend.png"><img alt="Captura frontend TC-LOGIN-010" src="../evidencias/frontend/TC-LOGIN-010-frontend.png" /></a></td>
-</tr>
-<tr>
-<td>Database</td>
-<td><a href="../evidencias/database/TC-LOGIN-010-db.png"><img alt="Captura Base de Datos TC-LOGIN-010" src="../evidencias/database/TC-LOGIN-010-db.png" /></a></td>
-</tr>
-</tbody>
-</table>
-<p><em>📌 Clic en cualquier imagen para ver a pantalla completa</em></p>
-<p><strong>Resultado final:</strong> ❌ Fallido (parcialmente)
-<strong>Observación:</strong> El backend invalida la sesión correctamente. El defecto está en el <code>HttpInterceptor</code> de Angular que no gestiona los 401 por sesión expirada. Ver BUG-LOGIN-002 en DEFECTOS.md.</p>
-<hr />
-<h2 id="resumen-de-resultados">📊 Resumen de Resultados</h2>
+<h2 id="convenciones">Convenciones</h2>
+<ul>
+<li><code>A</code>: prueba automatizada ejecutada y aprobada en esta revisión.</li>
+<li><code>P</code>: cobertura parcial; falta una variante importante.</li>
+<li><code>M</code>: falta automatización.</li>
+<li><code>V</code>: verificación manual o visual ejecutada.</li>
+<li>Las evidencias históricas no se usan para afirmar un resultado actual.</li>
+</ul>
+<h2 id="matriz-actual">Matriz actual</h2>
 <table>
 <thead>
 <tr>
 <th>ID</th>
-<th>Descripción</th>
-<th>Severidad (si falló)</th>
-<th>Estado</th>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Funcionalidad</th>
+<th>Precondiciones y rol</th>
+<th>Datos ficticios</th>
+<th>Resultado esperado</th>
+<th>Automatización ejecutada</th>
+<th>Brecha pendiente</th>
+<th>Evidencia actual</th>
+<th>Prioridad</th>
+<th>Estado 08/08/2026</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>TC-LOGIN-001</td>
-<td>Login exitoso — administrador</td>
-<td>—</td>
-<td>✅ Pasó</td>
+<td>Iniciar sesión correctamente</td>
+<td>Positivo / integración</td>
+<td>Token propio, expiración, usuario público y acceso al Dashboard</td>
+<td>Usuario activo de cualquier rol</td>
+<td>Credencial válida administrada fuera de la documentación</td>
+<td>HTTP 200; sesión de 12 horas; respuesta sin contraseña; redirección a Dashboard</td>
+<td><code>A</code> — <code>AutenticacionAPITests.test_login_retorna_token_y_usuario</code>; <code>LoginThrottlingTests.test_login_correcto_funciona_dentro_del_limite</code></td>
+<td>Falta parametrizar todos los roles</td>
+<td>AUTO + <a href="../evidencias/frontend/LOGIN-acceso-exitoso-dashboard-movil.png">Dashboard móvil</a></td>
+<td>Crítica</td>
+<td>Aprobado en backend y manualmente</td>
 </tr>
 <tr>
 <td>TC-LOGIN-002</td>
-<td>Login exitoso — supervisor (permisos restringidos)</td>
-<td>—</td>
-<td>✅ Pasó</td>
+<td>Rechazar credenciales inválidas sin enumerar usuarios</td>
+<td>Negativo / seguridad</td>
+<td>Mensaje genérico, contador por cuenta existente y limitación por IP</td>
+<td>Sin sesión</td>
+<td>Usuario inexistente o contraseña ficticia inválida</td>
+<td>401 genérico durante el límite; 429 al exceder el throttle; nunca se devuelve información sensible</td>
+<td><code>A</code> — pruebas de intentos/429; quinto intento y bloqueo ejecutados en E2E</td>
+<td>Falta automatizar el bloqueo exacto</td>
+<td>AUTO + <a href="../evidencias/frontend/LOGIN-error-movil-claro.png">Error móvil</a></td>
+<td>Crítica</td>
+<td>Aprobado</td>
 </tr>
 <tr>
 <td>TC-LOGIN-003</td>
-<td>Username no registrado rechazado</td>
-<td>—</td>
-<td>✅ Pasó</td>
+<td>Rechazar cuenta inactiva o bloqueada</td>
+<td>Seguridad</td>
+<td>Estados de cuenta y mensajes controlados</td>
+<td>Usuario inactivo y usuario bloqueado preparados en una base aislada</td>
+<td>Credenciales válidas de cuentas de prueba</td>
+<td>HTTP 403; no crea sesión; bloqueada informa que requiere administrador</td>
+<td><code>M</code> — ambos estados ejecutados por API/DB-R E2E</td>
+<td>Automatizar ambos estados</td>
+<td>AUTO + API sanitizada</td>
+<td>Crítica</td>
+<td>Aprobado</td>
 </tr>
 <tr>
 <td>TC-LOGIN-004</td>
-<td>Campos vacíos rechazados</td>
-<td>—</td>
-<td>✅ Pasó</td>
+<td>Invalidar la sesión anterior al volver a entrar</td>
+<td>Seguridad / integración</td>
+<td>Una sola sesión activa por usuario</td>
+<td>Usuario activo con una sesión vigente</td>
+<td>Dos logins secuenciales</td>
+<td>Segundo login crea token nuevo; el token anterior queda inactivo y ya no autoriza</td>
+<td><code>P</code> — reemplazo ejecutado por API/DB-R E2E</td>
+<td>Agregar prueba automatizada dedicada</td>
+<td>AUTO + DB-R</td>
+<td>Alta</td>
+<td>Aprobado</td>
 </tr>
 <tr>
 <td>TC-LOGIN-005</td>
-<td>Usuario inactivo rechazado</td>
-<td>—</td>
-<td>✅ Pasó</td>
+<td>Proteger rutas y consultar <code>/me</code></td>
+<td>Permisos / seguridad</td>
+<td>Ausencia, formato o validez del Bearer; usuario autenticado</td>
+<td>Con y sin sesión válida</td>
+<td>Sin header, token ficticio y sesión válida</td>
+<td>Sin autenticación se rechaza; sesión válida devuelve solo datos públicos; rol no se confía al cliente</td>
+<td><code>A</code> — <code>/me</code>, permisos y navegación manual ejecutados</td>
+<td>Falta prueba Angular automatizada de guards</td>
+<td>AUTO + API sanitizada</td>
+<td>Crítica</td>
+<td>Aprobado</td>
 </tr>
 <tr>
 <td>TC-LOGIN-006</td>
-<td>Contraseña incorrecta rechazada</td>
-<td>—</td>
-<td>✅ Pasó</td>
+<td>Cerrar sesión e invalidar token</td>
+<td>Positivo / seguridad</td>
+<td>Logout del backend y limpieza local del frontend</td>
+<td>Sesión válida</td>
+<td>Sin datos adicionales</td>
+<td>HTTP 200; sesión queda inactiva; frontend borra datos de sesión y vuelve a Login</td>
+<td><code>A</code> — <code>AutenticacionAPITests.test_logout_invalida_token</code></td>
+<td>Falta test unitario/E2E de <code>AuthService.logout</code></td>
+<td>AUTO + verificación manual</td>
+<td>Crítica</td>
+<td>Aprobado en backend y manualmente</td>
 </tr>
 <tr>
 <td>TC-LOGIN-007</td>
-<td>Inyección de caracteres especiales</td>
-<td>—</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-008</td>
-<td>Cierre de sesión correcto</td>
-<td>—</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-009</td>
-<td>Ruta protegida sin token rechazada</td>
-<td>—</td>
-<td>✅ Pasó</td>
-</tr>
-<tr>
-<td>TC-LOGIN-010</td>
-<td>Sesión expirada — frontend no redirige</td>
-<td>🟡 Media</td>
-<td>❌ Falló</td>
-</tr>
-<tr>
-<td><strong>TOTAL</strong></td>
-<td></td>
-<td></td>
-<td><strong>9/10 (90.0%)</strong></td>
+<td>Gestionar sesión expirada</td>
+<td>Seguridad / interfaz</td>
+<td>Expiración backend, invalidación y redirección frontend</td>
+<td>Sesión con reloj/expiración controlados en ambiente aislado</td>
+<td>Token expirado ficticio</td>
+<td>Backend invalida; frontend limpia sesión, informa y redirige sin dejar vistas vacías</td>
+<td><code>M/P</code> — expiración API E2E ejecutada; sesión se invalida, pero responde 403</td>
+<td>Corregir/definir contrato 401/403 y automatizar interceptor</td>
+<td>AUTO + API sanitizada + MAN</td>
+<td>Crítica</td>
+<td>Falló (<code>BUG-LOGIN-001</code>)</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="analisis-de-resultados">🔍 Análisis de Resultados</h2>
+<h2 id="ejecuciones-realizadas">Ejecuciones realizadas</h2>
+<h3 id="backend">Backend</h3>
+<div class="highlight"><pre><span></span><code>docker exec sofinventory_final_backend python manage.py test usuarios --settings=config.test_settings --verbosity 2
+Resultado: 26 pruebas ejecutadas, 26 aprobadas, 0 fallos.
+Base: SQLite en memoria; no se modificó PostgreSQL operativo.
+</code></pre></div>
+<h3 id="frontend">Frontend</h3>
+<div class="highlight"><pre><span></span><code>docker run --rm --mount type=bind,source=&lt;repositorio&gt;,target=/workspace,readonly \
+  -w /workspace/frontend node:20-alpine npm test
+Resultado: 24 pruebas ejecutadas, 24 aprobadas, 0 fallos.
+</code></pre></div>
+<p>La suite frontend actual no contiene pruebas Angular específicas de Login, guards o interceptor; sus 24 casos cubren ayuda contextual, ubicación y validadores semánticos.</p>
+<h2 id="verificacion-manual-segura">Verificación manual segura</h2>
 <table>
 <thead>
 <tr>
-<th>Aspecto Evaluado</th>
+<th>Comprobación</th>
 <th>Resultado</th>
-<th>Estado</th>
+<th>Observación</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Autenticación con credenciales válidas</td>
-<td>Funciona correctamente para todos los roles</td>
-<td>✅ Correcto</td>
+<td>Login Oscuro a 1280×720</td>
+<td>Aprobado</td>
+<td>Campos, visibilidad de contraseña y selector de tema legibles</td>
 </tr>
 <tr>
-<td>Rechazo de credenciales inválidas</td>
-<td>Mensajes genéricos sin revelar información del usuario</td>
-<td>✅ Correcto</td>
+<td>Error Claro a 390×844</td>
+<td>Aprobado</td>
+<td>Mensaje genérico, contraseña enmascarada y sin desbordamiento horizontal</td>
 </tr>
 <tr>
-<td>Bloqueo de usuario inactivo</td>
-<td>HTTP 403 con mensaje claro</td>
-<td>✅ Correcto</td>
+<td>Acceso administrativo</td>
+<td>Aprobado</td>
+<td>Redirección al Dashboard y navegación administrativa disponible</td>
 </tr>
 <tr>
-<td>Validaciones de formulario (frontend)</td>
-<td>Campos requeridos validados correctamente</td>
-<td>✅ Correcto</td>
-</tr>
-<tr>
-<td>Seguridad ante inyección de caracteres</td>
-<td>HTTP 401 retornado correctamente — Django ORM previene SQL Injection</td>
-<td>✅ Correcto</td>
-</tr>
-<tr>
-<td>Cierre de sesión e invalidación de token</td>
-<td>Campo <code>activa = false</code> en <code>sesiones_api</code> — correcto</td>
-<td>✅ Correcto</td>
-</tr>
-<tr>
-<td>Protección de rutas (Angular Guard)</td>
-<td>Rutas sin token redirigen correctamente al Login</td>
-<td>✅ Correcto</td>
-</tr>
-<tr>
-<td>Manejo de sesión expirada en backend</td>
-<td>DRF invalida y retorna 403 correctamente</td>
-<td>✅ Correcto</td>
-</tr>
-<tr>
-<td>Manejo de sesión expirada en frontend</td>
-<td>Angular no intercepta el 403 ni redirige al Login</td>
-<td>❌ Deficiencia</td>
-</tr>
-<tr>
-<td>Mensaje de error unificado (seguridad)</td>
-<td>Sin distinción entre username inválido y contraseña incorrecta</td>
-<td>✅ Correcto (buena práctica)</td>
+<td>Logout</td>
+<td>Aprobado</td>
+<td>Regreso a Login; no se dejó sesión abierta al terminar</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Hallazgo:</strong>
-- <strong>BUG-LOGIN-001:</strong> El frontend Angular carece de un <code>HttpInterceptor</code> que maneje los 403 por sesión expirada. El backend funciona correctamente; el problema es exclusivamente de UX en el cliente.</p>
-<hr />
-<h2 id="recomendaciones">💡 Recomendaciones</h2>
+<p>La ejecución final posterior preparó cuentas ficticias en un entorno E2E aislado: se comprobaron bloqueo tras cinco fallos, cuenta inactiva, reemplazo de sesión, logout y expiración controlada.</p>
+<h2 id="evidencia-historica">Evidencia histórica</h2>
+<p>Los antiguos casos <code>TC-LOGIN-001</code> a <code>TC-LOGIN-010</code> y sus imágenes permanecen en las carpetas de evidencia para trazabilidad. Sus fechas, versiones y resultados no representan automáticamente el estado actual.</p>
+<h2 id="resultado-final-de-ejecucion">Resultado final de ejecución</h2>
 <table>
 <thead>
 <tr>
-<th>#</th>
-<th>Prioridad</th>
-<th>Categoría</th>
-<th>Recomendación</th>
+<th style="text-align: right;">Total</th>
+<th style="text-align: right;">Aprobados</th>
+<th style="text-align: right;">Fallidos</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td>🟠 Importante</td>
-<td>UX</td>
-<td>Implementar un <code>HttpInterceptor</code> en Angular que capture 403, limpie el token y redirija a <code>/login</code> con el mensaje de sesión expirada.</td>
-</tr>
-<tr>
-<td>2</td>
-<td>🟠 Importante</td>
-<td>Seguridad</td>
-<td>Agregar bloqueo temporal tras N intentos fallidos (ej. 5 min tras 5 intentos) y registrar los intentos en una tabla de auditoría en PostgreSQL.</td>
-</tr>
-<tr>
-<td>3</td>
-<td>🟡 Mejora</td>
-<td>Seguridad</td>
-<td>Registrar en logs todos los intentos fallidos: username, IP, <code>user_agent</code> y timestamp.</td>
-</tr>
-<tr>
-<td>4</td>
-<td>🟡 Mejora</td>
-<td>UX</td>
-<td>Mostrar indicador visual del tiempo restante de sesión y advertencia al quedar menos de 30 minutos.</td>
-</tr>
-<tr>
-<td>5</td>
-<td>🔵 Buenas prácticas</td>
-<td>Seguridad</td>
-<td>Implementar HTTPS en todos los ambientes para proteger el token Bearer y las credenciales en tránsito.</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<p><em>© 2026 SofInventory — Área de Calidad de Software | Versión 1.0.0</em></p>
+<p>TC-LOGIN-001 a TC-LOGIN-006 aprobaron. TC-LOGIN-007 falló porque una sesión expirada devuelve 403 y el interceptor solo gestiona 401 (<code>BUG-LOGIN-001</code>). Ver <a href="../../RESULTADOS_EJECUCION_2026-08-08/#login-y-sesiones">resultados trazables</a>.</p>
 
 
 

@@ -23,7 +23,7 @@
     
     
       
-        <title>Guía de Visibilidad y Accesibilidad Visual - SofInventory ERP</title>
+        <title>SofInventory — Guía de accesibilidad y diseño visual - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#guia-de-visibilidad-y-accesibilidad-visual" class="md-skip">
+        <a href="#sofinventory-guia-de-accesibilidad-y-diseno-visual" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Guía de Visibilidad y Accesibilidad Visual
+              SofInventory — Guía de accesibilidad y diseño visual
             
           </span>
         </div>
@@ -347,31 +347,729 @@
 
 
 
-<h1 id="guia-de-visibilidad-y-accesibilidad-visual">Guía de Visibilidad y Accesibilidad Visual</h1>
-<h2 id="objetivo">Objetivo</h2>
-<p>Mejorar la lectura y operación diaria del sistema para usuarios con baja visión o fatiga visual, manteniendo la estética actual del proyecto.</p>
-<h2 id="reglas-aplicadas">Reglas aplicadas</h2>
+<h1 id="sofinventory-guia-de-accesibilidad-y-diseno-visual">SofInventory — Guía de accesibilidad y diseño visual</h1>
+<blockquote>
+<p><strong>Versión:</strong> 2.0.0</p>
+<p><strong>Actualizado:</strong> 8 de agosto de 2026</p>
+<p><strong>Alcance:</strong> frontend Angular, componentes compartidos y pantallas funcionales</p>
+<p><strong>Nivel objetivo:</strong> WCAG 2.2 AA como criterio de diseño; este documento no constituye una certificación</p>
+</blockquote>
+<hr />
+<h2 id="1-proposito">1. Propósito</h2>
+<p>Esta guía define cómo mantener una interfaz legible, operable por teclado, adaptable y coherente en SofInventory. También registra qué mecanismos existen actualmente y qué aspectos todavía requieren mejora, para evitar presentar como resuelta una condición que no ha sido verificada.</p>
+<p>Aplica a:</p>
 <ul>
-<li>Encabezados de tablas en blanco o tonos de alto contraste.</li>
-<li>Labels de formularios con contraste alto.</li>
-<li>Texto secundario más claro que antes, evitando grises demasiado apagados.</li>
-<li>Placeholders visibles, pero diferenciados del valor real.</li>
-<li>Estados de foco siempre notorios en inputs, selects y textarea.</li>
+<li>Tema Claro, tema Azul y tema Oscuro.</li>
+<li>Layout, encabezado, barra lateral y navegación.</li>
+<li>Tablas, tarjetas, gráficas, formularios, modales y notificaciones.</li>
+<li>Ayuda contextual, campos de ubicación y validaciones compartidas.</li>
+<li>Pantallas de escritorio, portátil, tableta y móvil.</li>
 </ul>
-<h2 id="recomendaciones-para-futuras-pantallas">Recomendaciones para futuras pantallas</h2>
+<p>Los estándares generales de implementación están en <a href="../coding-standards/">coding-standards.md</a> y la distribución de responsabilidades en <a href="../frontend-architecture/">frontend-architecture.md</a>.</p>
+<hr />
+<h2 id="2-principios-obligatorios">2. Principios obligatorios</h2>
+<ol>
+<li><strong>La información no depende solo del color.</strong> Todo estado debe tener texto, icono, forma o contexto adicional.</li>
+<li><strong>El teclado permite completar la operación.</strong> Cualquier acción disponible con puntero debe poder recibir foco y activarse con teclado.</li>
+<li><strong>El foco siempre es visible.</strong> No se elimina el <code>outline</code> sin proporcionar una alternativa de contraste equivalente.</li>
+<li><strong>Los campos tienen nombre accesible.</strong> El <code>placeholder</code> es una ayuda breve, nunca reemplaza al <code>label</code>.</li>
+<li><strong>Los errores explican cómo continuar.</strong> Deben asociarse al control, anunciarse y evitar terminología técnica.</li>
+<li><strong>El contenido conserva su significado al cambiar de tema o tamaño.</strong> No debe depender de una posición fija ni producir desplazamiento horizontal de la página.</li>
+<li><strong>El movimiento no es indispensable para comprender la interfaz.</strong> Las animaciones deben respetar la preferencia de movimiento reducido.</li>
+<li><strong>La interfaz no oculta reglas esenciales.</strong> La ayuda contextual complementa las indicaciones de campo, pero no reemplaza validaciones, etiquetas ni errores.</li>
+</ol>
+<hr />
+<h2 id="3-sistema-visual-vigente">3. Sistema visual vigente</h2>
+<p>La fuente de verdad de los tokens es <code>frontend/src/styles.css</code>. Los componentes deben consumir variables semánticas y no copiar valores hexadecimales, salvo excepciones justificadas como fondos de imágenes o mezclas puntuales.</p>
+<h3 id="31-temas-disponibles">3.1 Temas disponibles</h3>
+<table>
+<thead>
+<tr>
+<th>Tema</th>
+<th>Selector</th>
+<th style="text-align: right;">Fondo principal</th>
+<th style="text-align: right;">Fondo de tarjeta</th>
+<th style="text-align: right;">Campo</th>
+<th style="text-align: right;">Acento</th>
+<th style="text-align: right;">Texto sobre acento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oscuro</td>
+<td><code>:root</code> y <code>:root[data-theme='dark']</code></td>
+<td style="text-align: right;"><code>#0c0e14</code></td>
+<td style="text-align: right;"><code>#161923</code></td>
+<td style="text-align: right;"><code>#1c1f2e</code></td>
+<td style="text-align: right;"><code>#22d3c8</code></td>
+<td style="text-align: right;"><code>#0c0e14</code></td>
+</tr>
+<tr>
+<td>Claro</td>
+<td><code>:root[data-theme='light']</code></td>
+<td style="text-align: right;"><code>#f3f5fb</code></td>
+<td style="text-align: right;"><code>#ffffff</code></td>
+<td style="text-align: right;"><code>#ffffff</code></td>
+<td style="text-align: right;"><code>#2563eb</code></td>
+<td style="text-align: right;"><code>#ffffff</code></td>
+</tr>
+<tr>
+<td>Azul</td>
+<td><code>:root[data-theme='blue']</code></td>
+<td style="text-align: right;"><code>#0f172a</code></td>
+<td style="text-align: right;"><code>#16223a</code></td>
+<td style="text-align: right;"><code>#1c2a47</code></td>
+<td style="text-align: right;"><code>#38bdf8</code></td>
+<td style="text-align: right;"><code>#08203a</code></td>
+</tr>
+</tbody>
+</table>
+<p>El tema predeterminado es Oscuro. <code>ThemeService</code> aplica el atributo <code>data-theme</code> al elemento <code>&lt;html&gt;</code> y conserva la preferencia bajo la clave <code>sof_inventory_theme</code>.</p>
+<h3 id="32-paleta-de-fondos-y-bordes">3.2 Paleta de fondos y bordes</h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th style="text-align: right;">Oscuro</th>
+<th style="text-align: right;">Claro</th>
+<th style="text-align: right;">Azul</th>
+<th>Uso autorizado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--bg-page</code></td>
+<td style="text-align: right;"><code>#0c0e14</code></td>
+<td style="text-align: right;"><code>#f3f5fb</code></td>
+<td style="text-align: right;"><code>#0f172a</code></td>
+<td>Fondo de la aplicación</td>
+</tr>
+<tr>
+<td><code>--bg-sidebar</code></td>
+<td style="text-align: right;"><code>#10121a</code></td>
+<td style="text-align: right;"><code>#ffffff</code></td>
+<td style="text-align: right;"><code>#1b263b</code></td>
+<td>Navegación, encabezados de tabla y pies de modal</td>
+</tr>
+<tr>
+<td><code>--bg-card</code></td>
+<td style="text-align: right;"><code>#161923</code></td>
+<td style="text-align: right;"><code>#ffffff</code></td>
+<td style="text-align: right;"><code>#16223a</code></td>
+<td>Tarjetas, tablas y modales</td>
+</tr>
+<tr>
+<td><code>--bg-input</code></td>
+<td style="text-align: right;"><code>#1c1f2e</code></td>
+<td style="text-align: right;"><code>#ffffff</code></td>
+<td style="text-align: right;"><code>#1c2a47</code></td>
+<td>Entradas, selectores y áreas de texto</td>
+</tr>
+<tr>
+<td><code>--bg-hover</code></td>
+<td style="text-align: right;"><code>#1e2235</code></td>
+<td style="text-align: right;"><code>#eef1f8</code></td>
+<td style="text-align: right;"><code>#22314f</code></td>
+<td>Hover y fondos interactivos secundarios</td>
+</tr>
+<tr>
+<td><code>--bg-elevated</code></td>
+<td style="text-align: right;"><code>#1a1d2c</code></td>
+<td style="text-align: right;"><code>#fafbfe</code></td>
+<td style="text-align: right;"><code>#182741</code></td>
+<td>Superficies elevadas y botones secundarios</td>
+</tr>
+<tr>
+<td><code>--border</code></td>
+<td style="text-align: right;"><code>#242840</code></td>
+<td style="text-align: right;"><code>#dde2ee</code></td>
+<td style="text-align: right;"><code>#2c3e61</code></td>
+<td>Bordes principales</td>
+</tr>
+<tr>
+<td><code>--border-light</code></td>
+<td style="text-align: right;"><code>#1e2138</code></td>
+<td style="text-align: right;"><code>#e8ebf4</code></td>
+<td style="text-align: right;"><code>#23344f</code></td>
+<td>Separadores internos</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-paleta-de-texto">3.3 Paleta de texto</h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th style="text-align: right;">Oscuro</th>
+<th style="text-align: right;">Claro</th>
+<th style="text-align: right;">Azul</th>
+<th>Uso autorizado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--text-primary</code></td>
+<td style="text-align: right;"><code>#eef0f8</code></td>
+<td style="text-align: right;"><code>#1c2333</code></td>
+<td style="text-align: right;"><code>#eaf1ff</code></td>
+<td>Títulos, valores y contenido principal</td>
+</tr>
+<tr>
+<td><code>--text-contrast</code></td>
+<td style="text-align: right;"><code>#f8f9ff</code></td>
+<td style="text-align: right;"><code>#141a29</code></td>
+<td style="text-align: right;"><code>#f8fbff</code></td>
+<td>Labels y encabezados que requieren máxima legibilidad</td>
+</tr>
+<tr>
+<td><code>--text-soft</code></td>
+<td style="text-align: right;"><code>#d8ddf5</code></td>
+<td style="text-align: right;"><code>#3a435c</code></td>
+<td style="text-align: right;"><code>#c9d7f2</code></td>
+<td>Celdas y texto secundario importante</td>
+</tr>
+<tr>
+<td><code>--text-secondary</code></td>
+<td style="text-align: right;"><code>#8b91b8</code></td>
+<td style="text-align: right;"><code>#4a5572</code></td>
+<td style="text-align: right;"><code>#a8b7d8</code></td>
+<td>Descripciones y ayuda complementaria</td>
+</tr>
+<tr>
+<td><code>--text-muted</code></td>
+<td style="text-align: right;"><code>#4a5075</code></td>
+<td style="text-align: right;"><code>#8a94ab</code></td>
+<td style="text-align: right;"><code>#5b6f94</code></td>
+<td>Metadatos no esenciales; no usar para instrucciones críticas</td>
+</tr>
+<tr>
+<td><code>--placeholder</code></td>
+<td style="text-align: right;"><code>#aab1d3</code></td>
+<td style="text-align: right;"><code>#98a1b5</code></td>
+<td style="text-align: right;"><code>#6b7fa3</code></td>
+<td>Ejemplos dentro de controles; nunca como única etiqueta</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34-colores-semanticos">3.4 Colores semánticos</h3>
+<table>
+<thead>
+<tr>
+<th>Significado</th>
+<th>Token</th>
+<th style="text-align: right;">Oscuro</th>
+<th style="text-align: right;">Claro</th>
+<th style="text-align: right;">Azul</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Acción principal / foco</td>
+<td><code>--accent</code></td>
+<td style="text-align: right;"><code>#22d3c8</code></td>
+<td style="text-align: right;"><code>#2563eb</code></td>
+<td style="text-align: right;"><code>#38bdf8</code></td>
+</tr>
+<tr>
+<td>Error / peligro</td>
+<td><code>--danger</code></td>
+<td style="text-align: right;"><code>#f87171</code></td>
+<td style="text-align: right;"><code>#dc2626</code></td>
+<td style="text-align: right;"><code>#f87171</code></td>
+</tr>
+<tr>
+<td>Texto de error</td>
+<td><code>--danger-text</code></td>
+<td style="text-align: right;"><code>#fecaca</code></td>
+<td style="text-align: right;"><code>#991b1b</code></td>
+<td style="text-align: right;"><code>#fecaca</code></td>
+</tr>
+<tr>
+<td>Advertencia</td>
+<td><code>--warning</code></td>
+<td style="text-align: right;"><code>#fb923c</code></td>
+<td style="text-align: right;"><code>#d97706</code></td>
+<td style="text-align: right;"><code>#fbbf24</code></td>
+</tr>
+<tr>
+<td>Éxito</td>
+<td><code>--success</code></td>
+<td style="text-align: right;"><code>#4ade80</code></td>
+<td style="text-align: right;"><code>#16a34a</code></td>
+<td style="text-align: right;"><code>#4ade80</code></td>
+</tr>
+<tr>
+<td>Información</td>
+<td><code>--info</code></td>
+<td style="text-align: right;"><code>#60a5fa</code></td>
+<td style="text-align: right;"><code>#2563eb</code></td>
+<td style="text-align: right;"><code>#60a5fa</code></td>
+</tr>
+</tbody>
+</table>
+<p>Los fondos semánticos <code>--danger-light</code>, <code>--warning-light</code>, <code>--success-light</code> y <code>--info-light</code> deben acompañarse con texto o iconos. Un cambio de tono por sí solo no comunica el estado.</p>
+<h3 id="35-contraste-medido-de-combinaciones-principales">3.5 Contraste medido de combinaciones principales</h3>
+<p>Los siguientes valores se calcularon a partir de los tokens actuales. Sirven como control documental, no como auditoría completa de cada estado, transparencia o gráfico.</p>
+<table>
+<thead>
+<tr>
+<th>Combinación</th>
+<th style="text-align: right;">Oscuro</th>
+<th style="text-align: right;">Claro</th>
+<th style="text-align: right;">Azul</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text-primary</code> sobre <code>bg-card</code></td>
+<td style="text-align: right;">15,41:1</td>
+<td style="text-align: right;">15,70:1</td>
+<td style="text-align: right;">13,99:1</td>
+<td>Apto para texto normal</td>
+</tr>
+<tr>
+<td><code>text-secondary</code> sobre <code>bg-card</code></td>
+<td style="text-align: right;">5,71:1</td>
+<td style="text-align: right;">7,41:1</td>
+<td style="text-align: right;">7,88:1</td>
+<td>Apto para texto normal</td>
+</tr>
+<tr>
+<td><code>text-soft</code> sobre <code>bg-card</code></td>
+<td style="text-align: right;">13,01:1</td>
+<td style="text-align: right;">9,83:1</td>
+<td style="text-align: right;">10,94:1</td>
+<td>Apto para texto normal</td>
+</tr>
+<tr>
+<td><code>text-muted</code> sobre <code>bg-card</code></td>
+<td style="text-align: right;">2,25:1</td>
+<td style="text-align: right;">3,04:1</td>
+<td style="text-align: right;">3,13:1</td>
+<td>No apto para información que deba leerse; requiere mejora</td>
+</tr>
+<tr>
+<td><code>placeholder</code> sobre <code>bg-input</code></td>
+<td style="text-align: right;">7,74:1</td>
+<td style="text-align: right;">2,59:1</td>
+<td style="text-align: right;">3,53:1</td>
+<td>Claro y Azul no alcanzan 4,5:1; no usar para instrucciones esenciales</td>
+</tr>
+<tr>
+<td><code>on-accent</code> sobre <code>accent</code></td>
+<td style="text-align: right;">10,31:1</td>
+<td style="text-align: right;">5,17:1</td>
+<td style="text-align: right;">7,67:1</td>
+<td>Apto para botones y estados activos</td>
+</tr>
+</tbody>
+</table>
+<p>Regla práctica: títulos, labels, valores, ayudas necesarias y acciones deben usar <code>--text-primary</code>, <code>--text-contrast</code>, <code>--text-soft</code> o <code>--text-secondary</code>. <code>--text-muted</code> queda reservado para información prescindible y nunca debe contener el único nombre de una acción.</p>
+<h3 id="36-tipografia">3.6 Tipografía</h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Familia</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--font-display</code></td>
+<td>Fraunces, serif</td>
+<td>Títulos y marca visual</td>
+</tr>
+<tr>
+<td><code>--font-body</code></td>
+<td>DM Sans, sans-serif</td>
+<td>Contenido, formularios y acciones</td>
+</tr>
+<tr>
+<td><code>--font-mono</code></td>
+<td>DM Mono, monospace</td>
+<td>Labels, códigos, badges y metadatos cortos</td>
+</tr>
+</tbody>
+</table>
+<p>Las fuentes se importan actualmente desde Google Fonts. Deben conservarse familias de respaldo para que la interfaz siga siendo utilizable si la fuente remota no carga.</p>
+<p>El cuerpo usa <code>14px</code> y <code>line-height: 1.6</code>. No reducir textos esenciales por debajo de <code>12px</code>. Los tamaños de <code>9px</code> a <code>11px</code> existentes deben limitarse a metadatos no esenciales y revisarse con zoom.</p>
+<h3 id="37-radios-sombras-y-dimensiones">3.7 Radios, sombras y dimensiones</h3>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th style="text-align: right;">Valor</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--radius-sm</code></td>
+<td style="text-align: right;"><code>6px</code></td>
+<td>Iconos, errores y controles compactos</td>
+</tr>
+<tr>
+<td><code>--radius-md</code></td>
+<td style="text-align: right;"><code>10px</code></td>
+<td>Inputs y botones</td>
+</tr>
+<tr>
+<td><code>--radius-lg</code></td>
+<td style="text-align: right;"><code>14px</code></td>
+<td>Tablas y paneles</td>
+</tr>
+<tr>
+<td><code>--radius-xl</code></td>
+<td style="text-align: right;"><code>20px</code></td>
+<td>Modales</td>
+</tr>
+<tr>
+<td><code>--sidebar-width</code></td>
+<td style="text-align: right;"><code>240px</code></td>
+<td>Barra lateral expandida</td>
+</tr>
+<tr>
+<td><code>--sidebar-collapsed-width</code></td>
+<td style="text-align: right;"><code>68px</code></td>
+<td>Barra lateral contraída</td>
+</tr>
+<tr>
+<td><code>--header-height</code></td>
+<td style="text-align: right;"><code>64px</code></td>
+<td>Encabezado principal</td>
+</tr>
+</tbody>
+</table>
+<p>Las sombras <code>--shadow-sm</code>, <code>--shadow-md</code>, <code>--shadow-lg</code> y <code>--shadow-accent</code> indican elevación, pero el borde debe seguir visible porque la sombra no puede ser el único límite perceptible.</p>
+<hr />
+<h2 id="4-uso-correcto-de-variables-css">4. Uso correcto de variables CSS</h2>
+<h3 id="correcto">Correcto</h3>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">summary-card</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--text-primary</span><span class="p">);</span>
+<span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--bg-card</span><span class="p">);</span>
+<span class="w">  </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--border</span><span class="p">);</span>
+<span class="w">  </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--radius-lg</span><span class="p">);</span>
+<span class="w">  </span><span class="k">box-shadow</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--shadow-sm</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">summary-card</span><span class="p">:</span><span class="nd">focus-within</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">border-color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--accent</span><span class="p">);</span>
+<span class="w">  </span><span class="k">box-shadow</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">3</span><span class="kt">px</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--accent-light</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="evitar">Evitar</h3>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">summary-card</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#ffffff</span><span class="p">;</span>
+<span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="mh">#111827</span><span class="p">;</span>
+<span class="w">  </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="mh">#283044</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>El segundo ejemplo rompe el tema Claro y obliga a mantener colores duplicados.</p>
+<hr />
+<h2 id="5-teclado-y-foco">5. Teclado y foco</h2>
+<h3 id="reglas">Reglas</h3>
 <ul>
-<li>No usar gris oscuro en títulos o encabezados clave.</li>
-<li>Evitar bloques de texto extensos en tamaño pequeño.</li>
-<li>Mantener separación suficiente entre columnas de tablas.</li>
-<li>En datos críticos, preferir texto claro y directo antes que elementos decorativos.</li>
-<li>En modales, asegurar que título, acciones y error se distingan rápidamente.</li>
+<li>Utilizar <code>&lt;button&gt;</code> para acciones y <code>&lt;a&gt;</code> con destino para navegación.</li>
+<li>Todo botón dentro de un formulario debe declarar <code>type="button"</code>, salvo el botón que realmente envía el formulario.</li>
+<li>Conservar un orden DOM lógico; no corregir el orden visual mediante valores positivos de <code>tabindex</code>.</li>
+<li>Usar <code>:focus-visible</code> para acciones y <code>:focus</code> en controles de formulario cuando sea necesario.</li>
+<li>El foco debe distinguirse en los tres temas con un contorno o anillo de al menos <code>2px</code>.</li>
+<li>Al cerrar un panel o modal, devolver el foco al control que lo abrió.</li>
+<li><code>Escape</code> debe cerrar únicamente la capa superior activa.</li>
 </ul>
-<h2 id="casos-especiales">Casos especiales</h2>
+<p>Patrón recomendado:</p>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">icon-action</span><span class="p">:</span><span class="nd">focus-visible</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">outline</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--accent</span><span class="p">);</span>
+<span class="w">  </span><span class="k">outline-offset</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>El componente <code>FormHelpComponent</code> ya aplica este patrón, lleva el foco al botón de cierre, intercepta <code>Escape</code> y devuelve el foco al disparador. Los demás modales deben converger al mismo comportamiento.</p>
+<hr />
+<h2 id="6-formularios-y-validaciones">6. Formularios y validaciones</h2>
+<h3 id="61-asociacion-de-etiquetas">6.1 Asociación de etiquetas</h3>
+<p>Cada control necesita un <code>id</code> único y un <code>label</code> asociado mediante <code>for</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;product-name&quot;</span><span class="p">&gt;</span>
+  Nombre <span class="p">&lt;</span><span class="nt">span</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;required-marker&quot;</span><span class="p">&gt;</span>*<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">input</span>
+  <span class="na">id</span><span class="o">=</span><span class="s">&quot;product-name&quot;</span>
+  <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span>
+  <span class="na">required</span>
+  <span class="na">aria-required</span><span class="o">=</span><span class="s">&quot;true&quot;</span>
+  <span class="err">[</span><span class="na">appFieldValidation</span><span class="err">]=&quot;</span><span class="na">validation</span><span class="err">.</span><span class="na">error</span><span class="err">(&#39;</span><span class="na">nombre</span><span class="err">&#39;)&quot;</span>
+  <span class="na">validationMessageId</span><span class="o">=</span><span class="s">&quot;product-name-error&quot;</span>
+<span class="p">/&gt;</span>
+<span class="p">&lt;</span><span class="nt">app-field-error</span>
+  <span class="na">id</span><span class="o">=</span><span class="s">&quot;product-name-error&quot;</span>
+  <span class="err">[</span><span class="na">message</span><span class="err">]=&quot;</span><span class="na">validation</span><span class="err">.</span><span class="na">error</span><span class="err">(&#39;</span><span class="na">nombre</span><span class="err">&#39;)&quot;</span>
+<span class="p">/&gt;</span>
+</code></pre></div>
+<p><code>FieldValidationDirective</code> añade <code>is-invalid</code>, <code>aria-invalid="true"</code> y <code>aria-describedby</code> cuando existe un error. <code>FieldErrorComponent</code> presenta el mensaje específico y <code>FormErrorSummaryComponent</code> anuncia el resumen con <code>role="alert"</code> y <code>aria-live="assertive"</code>.</p>
+<h3 id="62-reglas-de-error">6.2 Reglas de error</h3>
 <ul>
-<li>Si existen productos con nombres repetidos, mostrar siempre <code>SKU - Nombre</code>.</li>
-<li>Si una tabla tiene muchas columnas, priorizar contraste antes que compacidad extrema.</li>
-<li>Si un formulario tiene campos obligatorios, remarcar el label y mostrar errores específicos por campo.</li>
+<li>Conservar el valor escrito; no limpiar el formulario ante un error.</li>
+<li>Mostrar el error junto al campo y un resumen cuando varios controles requieren atención.</li>
+<li>Mover el foco al primer campo inválido solo después de una validación o respuesta fallida.</li>
+<li>Evitar mensajes como “Error 500”, “payload inválido” o trazas del servidor.</li>
+<li>No repetir en el panel general de ayuda todas las restricciones ya explicadas debajo del campo.</li>
+<li>El asterisco obligatorio debe acompañarse de <code>required</code> y <code>aria-required</code>; el color rojo no es suficiente.</li>
 </ul>
+<h3 id="63-campos-dinamicos">6.3 Campos dinámicos</h3>
+<p><code>LocationFieldsComponent</code> cambia entre Colombia y otro país. Al cambiar de modo limpia los valores ocultos, asocia errores a cada selector y anuncia la carga del catálogo con <code>aria-live="polite"</code>. Un error de catálogo usa <code>role="alert"</code> y ofrece un botón real de reintento.</p>
+<hr />
+<h2 id="7-modales-y-ayuda-contextual">7. Modales y ayuda contextual</h2>
+<h3 id="71-modal-de-formulario">7.1 Modal de formulario</h3>
+<p>Un modal debe incluir:</p>
+<ul>
+<li><code>role="dialog"</code>.</li>
+<li><code>aria-modal="true"</code>.</li>
+<li><code>aria-labelledby</code> apuntando a un título visible y único.</li>
+<li>Botón de cierre con <code>type="button"</code> y <code>aria-label</code> descriptivo.</li>
+<li>Foco inicial predecible.</li>
+<li>Contención del foco dentro del modal.</li>
+<li>Cierre por <code>Escape</code> y devolución del foco al disparador.</li>
+<li>Área interna desplazable y acciones accesibles en móvil.</li>
+</ul>
+<h3 id="72-panel-de-ayuda-contextual">7.2 Panel de ayuda contextual</h3>
+<p>La implementación compartida usa:</p>
+<ul>
+<li>Botón real con icono, texto “Ayuda”, <code>aria-label</code>, <code>aria-expanded</code> y <code>aria-controls</code>.</li>
+<li>Panel con <code>role="region"</code> y <code>aria-labelledby</code>.</li>
+<li>Texto visible en escritorio y solo icono —con nombre accesible intacto— hasta <code>640px</code>.</li>
+<li>Panel lateral en escritorio y panel inferior hasta <code>768px</code>.</li>
+<li><code>z-index: 2200</code>, por encima del modal (<code>2000</code>) y por debajo de notificaciones (<code>3000</code>).</li>
+<li>Estado local mediante <code>signal</code>; no usa red, cookies ni almacenamiento.</li>
+<li>Movimiento reducido en <code>prefers-reduced-motion: reduce</code>.</li>
+</ul>
+<p>La ayuda no debe reiniciar controles, enviar el formulario ni marcar campos como tocados.</p>
+<hr />
+<h2 id="8-notificaciones-y-estados">8. Notificaciones y estados</h2>
+<p><code>NotificationContainerComponent</code> utiliza una región global y cada aviso se expone con <code>role="status"</code> y <code>aria-live="polite"</code>. El temporizador se pausa al pasar el puntero o enfocar la notificación.</p>
+<p>Reglas:</p>
+<ul>
+<li>Éxito: icono, texto explícito y token <code>--success</code>.</li>
+<li>Advertencia: icono, texto explícito y token <code>--warning</code>.</li>
+<li>Error: icono, texto explícito y token <code>--danger</code>.</li>
+<li>El botón de cierre necesita <code>aria-label="Cerrar notificación"</code>.</li>
+<li>Un error que requiere intervención inmediata debe evaluarse para <code>role="alert"</code>; no convertir todos los avisos en alertas asertivas.</li>
+<li>Los datos anteriores no deben confundirse con datos vigentes cuando una recarga falla.</li>
+</ul>
+<p>Los badges actuales añaden un punto, borde y texto (<code>Activo</code>, <code>Inactivo</code>, <code>Pendiente</code>, <code>Bloqueado</code>), por lo que no dependen únicamente del color.</p>
+<hr />
+<h2 id="9-tablas-metricas-y-graficas">9. Tablas, métricas y gráficas</h2>
+<h3 id="tablas">Tablas</h3>
+<ul>
+<li>Usar <code>&lt;table&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;th&gt;</code> y <code>&lt;td&gt;</code> reales.</li>
+<li>Incorporar encabezados claros y, cuando la tabla sea compleja, <code>scope="col"</code> y un <code>caption</code> accesible.</li>
+<li>Mantener encabezados con <code>--text-contrast</code>; no usar <code>--text-muted</code> para títulos de columna.</li>
+<li>Permitir desplazamiento dentro de <code>.table-container</code>, no en toda la página.</li>
+<li>No ocultar columnas esenciales sin ofrecer una vista alternativa.</li>
+<li>Mostrar productos como <code>SKU - Nombre</code> cuando exista riesgo de ambigüedad.</li>
+</ul>
+<h3 id="dashboard-y-chartjs">Dashboard y Chart.js</h3>
+<p>Las tarjetas numéricas proporcionan el valor textual principal. Las gráficas no deben ser la única forma de consultar una métrica:</p>
+<ul>
+<li>Mantener títulos y periodos visibles.</li>
+<li>Exponer controles de periodo como botones con <code>aria-pressed</code>.</li>
+<li>Proporcionar resumen, tabla equivalente o texto alternativo para información que solo esté en <code>&lt;canvas&gt;</code>.</li>
+<li>Evitar depender únicamente de dos colores cercanos para distinguir series.</li>
+<li>Comprobar leyendas y tooltips en los tres temas.</li>
+</ul>
+<hr />
+<h2 id="10-iconos-e-imagenes">10. Iconos e imágenes</h2>
+<ul>
+<li>Los iconos decorativos de Font Awesome deben usar <code>aria-hidden="true"</code>.</li>
+<li>Un botón que solo contiene un icono necesita <code>aria-label</code>; <code>title</code> puede complementar, pero no sustituye el nombre accesible.</li>
+<li>Los logos de empresa deben usar un <code>alt</code> derivado del nombre comercial.</li>
+<li>Una imagen de producto necesita texto alternativo que identifique el producto; si es puramente decorativa debe usar <code>alt=""</code>.</li>
+<li>No incluir texto crítico dentro de una imagen.</li>
+<li>El cambio de icono no debe ser la única indicación de estado.</li>
+</ul>
+<hr />
+<h2 id="11-diseno-responsive">11. Diseño responsive</h2>
+<h3 id="puntos-de-adaptacion-existentes">Puntos de adaptación existentes</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Ancho</th>
+<th>Comportamiento relevante</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;"><code>≤ 1000px</code> / <code>≤ 850px</code></td>
+<td>Ajustes específicos de Ventas y Empresa</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>≤ 768px</code></td>
+<td>Sidebar lateral móvil, encabezado compacto, página con menor padding, modal alineado abajo y ayuda como panel inferior</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>≤ 640px</code></td>
+<td>El botón de ayuda conserva solo el icono visible</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>≤ 560px</code> / <code>≤ 520px</code></td>
+<td>Formularios y acciones específicas se reorganizan</td>
+</tr>
+<tr>
+<td style="text-align: right;"><code>≤ 480px</code> / <code>≤ 420px</code></td>
+<td>Dashboard y panel de ayuda reducen dimensiones y ocupan el alto disponible</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reglas_1">Reglas</h3>
+<ul>
+<li>No introducir anchos fijos mayores que el viewport.</li>
+<li>Usar <code>max-width</code>, <code>min()</code>, <code>calc()</code> y <code>dvh</code> para capas móviles.</li>
+<li>Mantener un área táctil objetivo de al menos <code>44 × 44px</code>; el botón móvil de ayuda actual es <code>40 × 40px</code> y debe considerarse el mínimo heredado, no el objetivo para nuevos controles.</li>
+<li>Evitar zoom horizontal a 320px de ancho.</li>
+<li>Conservar visibles las acciones de guardar, cancelar y cerrar.</li>
+<li>Validar zoom de navegador al 200 % sin pérdida de contenido ni funcionalidad.</li>
+<li>No depender de hover en dispositivos táctiles.</li>
+</ul>
+<hr />
+<h2 id="12-movimiento-y-animacion">12. Movimiento y animación</h2>
+<p>La interfaz usa animaciones para entrada de página, modal, notificación, panel de ayuda, Dashboard y spinners.</p>
+<p>Para contenido nuevo:</p>
+<div class="highlight"><pre><span></span><code><span class="p">@</span><span class="k">media</span><span class="w"> </span><span class="o">(</span><span class="nt">prefers-reduced-motion</span><span class="o">:</span><span class="w"> </span><span class="nt">reduce</span><span class="o">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">animated-element</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">animation</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+<span class="w">    </span><span class="k">transition</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>No se debe desactivar el spinner que comunica una carga activa sin reemplazarlo por otro indicador. La preferencia de movimiento reducido ya se aplica al panel de ayuda y a partes del Dashboard; falta extenderla de forma global.</p>
+<hr />
+<h2 id="13-estado-actual-y-deuda-conocida">13. Estado actual y deuda conocida</h2>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Implementación verificada</th>
+<th>Pendiente documental/técnico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Idioma</td>
+<td><code>&lt;html lang="es"&gt;</code> y locale <code>es-CO</code></td>
+<td>Revisar títulos históricos que todavía usan “ERP Pro”</td>
+</tr>
+<tr>
+<td>Formularios</td>
+<td>Labels, errores asociados, <code>aria-invalid</code>, resúmenes y foco al primer inválido</td>
+<td>Auditar que todos los campos de todas las páginas tengan <code>id</code> y asociación explícita</td>
+</tr>
+<tr>
+<td>Ayuda contextual</td>
+<td>Teclado, <code>Escape</code>, foco, títulos dinámicos, responsive y movimiento reducido</td>
+<td>Evaluar contención completa del foco y fondo inerte</td>
+</tr>
+<tr>
+<td>Modales</td>
+<td>Semántica <code>dialog</code> presente en formularios principales</td>
+<td>El manejo de foco y <code>Escape</code> no está unificado en todos los modales</td>
+</tr>
+<tr>
+<td>Botones de icono</td>
+<td>Varios incluyen <code>aria-label</code></td>
+<td>Algunos controles de header, sidebar y detalle dependen solo de <code>title</code> o del icono</td>
+</tr>
+<tr>
+<td>Foco</td>
+<td>Inputs y ayuda muestran anillo visible</td>
+<td>Falta una regla global consistente para todos los botones y enlaces interactivos</td>
+</tr>
+<tr>
+<td>Contraste</td>
+<td>Textos principales y secundarios cumplen en combinaciones base</td>
+<td><code>text-muted</code> y algunos placeholders no alcanzan 4,5:1 para texto normal</td>
+</tr>
+<tr>
+<td>Movimiento</td>
+<td>Ayuda y Dashboard consideran <code>prefers-reduced-motion</code></td>
+<td>Animaciones globales de página, modal y notificación aún no están cubiertas</td>
+</tr>
+<tr>
+<td>Gráficas</td>
+<td>Métricas textuales y controles de periodo accesibles</td>
+<td>Formalizar alternativa textual completa para cada canvas</td>
+</tr>
+<tr>
+<td>Navegación</td>
+<td>Enlaces reales y rutas por rol</td>
+<td>No existe un enlace de salto directo al contenido principal</td>
+</tr>
+</tbody>
+</table>
+<p>Registrar estas condiciones evita aprobar accesibilidad solo por inspección de colores o por la existencia de atributos ARIA aislados.</p>
+<hr />
+<h2 id="14-lista-de-verificacion-para-nuevas-pantallas">14. Lista de verificación para nuevas pantallas</h2>
+<h3 id="semantica-y-teclado">Semántica y teclado</h3>
+<ul>
+<li>[ ] Existe un único título principal claro.</li>
+<li>[ ] Todas las acciones usan botón o enlace real.</li>
+<li>[ ] Los botones de icono tienen nombre accesible.</li>
+<li>[ ] El orden de tabulación coincide con el orden visual y lógico.</li>
+<li>[ ] El foco es visible en Claro, Azul y Oscuro.</li>
+<li>[ ] <code>Escape</code> afecta solo la capa superior.</li>
+<li>[ ] El foco se devuelve al disparador al cerrar una capa.</li>
+</ul>
+<h3 id="formularios">Formularios</h3>
+<ul>
+<li>[ ] Cada control tiene <code>label</code> asociado.</li>
+<li>[ ] Los campos obligatorios usan <code>required</code>, <code>aria-required</code> e indicación textual o contextual.</li>
+<li>[ ] Los errores usan <code>FieldValidationDirective</code> y <code>FieldErrorComponent</code> cuando aplica.</li>
+<li>[ ] El resumen usa <code>FormErrorSummaryComponent</code>.</li>
+<li>[ ] Un error conserva los valores ingresados.</li>
+<li>[ ] El <code>placeholder</code> no contiene la única instrucción.</li>
+<li>[ ] Todos los botones no submit declaran <code>type="button"</code>.</li>
+</ul>
+<h3 id="visual-y-responsive">Visual y responsive</h3>
+<ul>
+<li>[ ] Solo se usan tokens globales para colores semánticos.</li>
+<li>[ ] Ningún estado depende exclusivamente del color.</li>
+<li>[ ] La pantalla funciona a 320px, 768px y escritorio.</li>
+<li>[ ] No existe desplazamiento horizontal de la página.</li>
+<li>[ ] La interfaz conserva funcionalidad con zoom al 200 %.</li>
+<li>[ ] Los objetivos táctiles se acercan o superan <code>44 × 44px</code>.</li>
+<li>[ ] Las animaciones respetan movimiento reducido.</li>
+</ul>
+<h3 id="evidencia-minima">Evidencia mínima</h3>
+<ul>
+<li>[ ] Captura o verificación visual en los tres temas.</li>
+<li>[ ] Verificación de teclado y foco.</li>
+<li>[ ] Verificación responsive en escritorio y móvil.</li>
+<li>[ ] Prueba automatizada para lógica compartida cuando sea viable.</li>
+<li>[ ] Resultado registrado; no se considera aprobado solo porque exista una prueba.</li>
+</ul>
+<p>La matriz vigente para temas, ayuda contextual, formularios compartidos y responsive se encuentra en <a href="../test-cases/13-frontend-compartido/casos-frontend-compartido/">casos-frontend-compartido.md</a>.</p>
+<hr />
+<h2 id="15-control-de-cambios">15. Control de cambios</h2>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th>Fecha</th>
+<th>Cambio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.0</td>
+<td>2026</td>
+<td>Guía visual inicial</td>
+</tr>
+<tr>
+<td>2.0.0</td>
+<td>08/08/2026</td>
+<td>Documentación completa de temas, paleta, contraste, formularios, teclado, responsive, ayuda contextual y deuda accesible real</td>
+</tr>
+</tbody>
+</table>
 
 
 

@@ -23,7 +23,7 @@
     
     
       
-        <title>📸 Evidencias — Frontend (Angular) | Módulo Login - SofInventory ERP</title>
+        <title>Evidencias frontend — Login - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#evidencias-frontend-angular-modulo-login" class="md-skip">
+        <a href="#evidencias-frontend-login" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              📸 Evidencias — Frontend (Angular) | Módulo Login
+              Evidencias frontend — Login
             
           </span>
         </div>
@@ -347,101 +347,46 @@
 
 
 
-<h1 id="evidencias-frontend-angular-modulo-login">📸 Evidencias — Frontend (Angular) | Módulo Login</h1>
+<h1 id="evidencias-frontend-login">Evidencias frontend — Login</h1>
 <blockquote>
-<p>Directorio destinado a capturas de pantalla tomadas durante las pruebas del módulo de Login en la interfaz Angular 19.</p>
+<p><strong>Actualizado:</strong> 8 de agosto de 2026</p>
 </blockquote>
-<h2 id="convencion-de-nomenclatura">Convención de nomenclatura</h2>
-<div class="highlight"><pre><span></span><code>TC-LOGIN-{NRO}-frontend.png     → Captura principal del formulario/pantalla
-TC-LOGIN-{NRO}-devtools.png     → DevTools del navegador (cuando aplique)
-TC-LOGIN-{NRO}-console.png      → Consola de errores (cuando aplique)
-TC-LOGIN-{NRO}-network.png      → Panel de red (cuando aplique)
-</code></pre></div>
-<h2 id="archivos-esperados">Archivos esperados</h2>
+<h2 id="evidencias-vigentes">Evidencias vigentes</h2>
 <table>
 <thead>
 <tr>
 <th>Archivo</th>
-<th>Caso</th>
-<th>Descripción</th>
+<th>Casos relacionados</th>
+<th>Contenido verificado</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>TC-LOGIN-001-frontend.png</code></td>
+<td><code>LOGIN-actual-escritorio-oscuro.png</code></td>
 <td>TC-LOGIN-001</td>
-<td>Dashboard de admin tras login exitoso — menú completo visible</td>
+<td>Pantalla actual de Login a 1280×720 en tema Oscuro</td>
 </tr>
 <tr>
-<td><code>TC-LOGIN-002-frontend.png</code></td>
+<td><code>LOGIN-error-movil-claro.png</code></td>
 <td>TC-LOGIN-002</td>
-<td>Dashboard de supervisor — opciones de administración ocultas</td>
+<td>Mensaje genérico de credenciales inválidas a 390×844 en tema Claro; contraseña enmascarada</td>
 </tr>
 <tr>
-<td><code>TC-LOGIN-003-frontend.png</code></td>
-<td>TC-LOGIN-003</td>
-<td>Mensaje "Usuario o contraseña incorrectos" — username no existe</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-004-frontend.png</code></td>
-<td>TC-LOGIN-004</td>
-<td>Campos vacíos con mensajes de validación</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-005-frontend.png</code></td>
-<td>TC-LOGIN-005</td>
-<td>Mensaje de error "Usuario inactivo. Contacte al administrador."</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-006-frontend.png</code></td>
-<td>TC-LOGIN-006</td>
-<td>Mensaje "Usuario o contraseña incorrectos" — contraseña incorrecta</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-007-frontend.png</code></td>
-<td>TC-LOGIN-007</td>
-<td>Formulario con cadena de inyección ingresada</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-007-console.png</code></td>
-<td>TC-LOGIN-007</td>
-<td>Consola Django mostrando el error 500 (stack trace en logs)</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-008-frontend.png</code></td>
-<td>TC-LOGIN-008</td>
-<td>Pantalla de login tras cerrar sesión correctamente</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-008-devtools.png</code></td>
-<td>TC-LOGIN-008</td>
-<td>DevTools → Application → localStorage vacío tras logout</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-009-frontend.png</code></td>
-<td>TC-LOGIN-009</td>
-<td>Redirección al login al intentar acceder a <code>/dashboard</code> sin token</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-009-network.png</code></td>
-<td>TC-LOGIN-009</td>
-<td>Panel de red mostrando la redirección del Angular Guard</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-010-frontend.png</code></td>
-<td>TC-LOGIN-010</td>
-<td>Dashboard vacío sin mensaje de error tras sesión expirada (BUG)</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-010-console.png</code></td>
-<td>TC-LOGIN-010</td>
-<td>Consola del navegador mostrando errores 401 sin redirección (BUG)</td>
+<td><code>LOGIN-acceso-exitoso-dashboard-movil.png</code></td>
+<td>TC-LOGIN-001, TC-LOGIN-005</td>
+<td>Redirección al Dashboard después de autenticar una cuenta administrativa existente</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>📌 <strong>Nota:</strong> Adjuntar las capturas reales tomadas durante la ejecución de pruebas. Usar Chrome en resolución 1920x1080 para consistencia visual. Para capturas de DevTools, asegurarse de que los datos sensibles (tokens completos) estén oscurecidos si el documento es de distribución amplia.</p>
-</blockquote>
+<p>El cierre de sesión también se comprobó manualmente y devolvió la navegación a Login. Bloqueo, inactivación, reemplazo y expiración se acreditan con resultados API/DB-R sanitizados; la sesión de verificación quedó cerrada al finalizar.</p>
+<h2 id="evidencias-historicas">Evidencias históricas</h2>
+<p>Los archivos <code>TC-LOGIN-001-frontend.png</code> a <code>TC-LOGIN-010-frontend.png</code> se conservan para trazabilidad, pero no se consideran revalidados. Algunas imágenes describen una interfaz, mensajes o defectos anteriores.</p>
+<h2 id="criterios-de-seguridad">Criterios de seguridad</h2>
+<ul>
+<li>No capturar tokens, contraseñas visibles, DevTools con almacenamiento ni encabezados <code>Authorization</code>.</li>
+<li>Usar credenciales ficticias para errores y enmascarar siempre la contraseña.</li>
+<li>Los estados bloqueado/inactivo solo se prueban con cuentas ficticias en un entorno aislado; su evidencia principal es API/DB-R.</li>
+</ul>
 
 
 

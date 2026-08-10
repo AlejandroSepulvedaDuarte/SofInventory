@@ -23,7 +23,7 @@
     
     
       
-        <title>📸 Evidencias — Frontend (Angular) | Módulo Usuarios - SofInventory ERP</title>
+        <title>Evidencias frontend — Usuarios - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#evidencias-frontend-angular-modulo-usuarios" class="md-skip">
+        <a href="#evidencias-frontend-usuarios" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              📸 Evidencias — Frontend (Angular) | Módulo Usuarios
+              Evidencias frontend — Usuarios
             
           </span>
         </div>
@@ -347,64 +347,46 @@
 
 
 
-<h1 id="evidencias-frontend-angular-modulo-usuarios">📸 Evidencias — Frontend (Angular) | Módulo Usuarios</h1>
+<h1 id="evidencias-frontend-usuarios">Evidencias frontend — Usuarios</h1>
 <blockquote>
-<p>Directorio destinado a capturas de pantalla tomadas durante las pruebas del módulo de Usuarios en la interfaz Angular 19.</p>
+<p><strong>Actualizado:</strong> 8 de agosto de 2026</p>
 </blockquote>
-<h2 id="convencion-de-nomenclatura">Convención de nomenclatura</h2>
-<div class="highlight"><pre><span></span><code>TC-USR-{NRO}-frontend.png     → Captura principal del formulario/pantalla
-TC-USR-{NRO}-frontend-2.png   → Captura adicional (si aplica)
-</code></pre></div>
-<h2 id="archivos-esperados">Archivos esperados</h2>
+<h2 id="evidencias-vigentes">Evidencias vigentes</h2>
 <table>
 <thead>
 <tr>
 <th>Archivo</th>
-<th>Caso de Prueba</th>
-<th>Descripción</th>
+<th>Casos relacionados</th>
+<th>Contenido verificado</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>TC-USR-001-frontend.png</code></td>
-<td>TC-USR-001</td>
-<td>Formulario de creación completado + mensaje de éxito "Usuario creado exitosamente"</td>
+<td><code>USR-formulario-ayuda-crear.png</code></td>
+<td>TC-USR-001, TC-USR-008</td>
+<td>Modal Nuevo Usuario en escritorio, botón Ayuda y panel “Ayuda para registrar un usuario”</td>
 </tr>
 <tr>
-<td><code>TC-USR-002-frontend.png</code></td>
-<td>TC-USR-002</td>
-<td>Usuario operador creado — menú de administración restringido</td>
+<td><code>USR-formulario-ayuda-editar-movil.png</code></td>
+<td>TC-USR-001, TC-USR-008</td>
+<td>Panel móvil “Ayuda para actualizar un usuario” usando un registro ficticio existente, sin guardar cambios</td>
 </tr>
 <tr>
-<td><code>TC-USR-003-frontend.png</code></td>
-<td>TC-USR-003</td>
-<td>Error de validación por username duplicado</td>
-</tr>
-<tr>
-<td><code>TC-USR-004-frontend.png</code></td>
-<td>TC-USR-004</td>
-<td>Indicador de contraseña débil en el formulario</td>
-</tr>
-<tr>
-<td><code>TC-USR-005-frontend.png</code></td>
-<td>TC-USR-005</td>
-<td>Formulario con número de documento inválido — sin error visible (BUG)</td>
-</tr>
-<tr>
-<td><code>TC-USR-006-frontend.png</code></td>
-<td>TC-USR-006</td>
-<td>Campos obligatorios vacíos con mensajes de validación</td>
-</tr>
-<tr>
-<td><code>TC-USR-008-frontend.png</code></td>
-<td>TC-USR-008</td>
-<td>Dashboard del operador tras login exitoso con usuario recién creado</td>
+<td><code>USR-validaciones-obligatorios-movil.png</code></td>
+<td>TC-USR-002, TC-USR-008</td>
+<td>Resumen y errores por campo al intentar guardar el formulario vacío; no hubo solicitud al backend</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>📌 <strong>Nota:</strong> Adjuntar las capturas reales tomadas durante la ejecución de las pruebas. Usar Chrome en resolución 1920x1080 para consistencia visual.</p>
-</blockquote>
+<p>Las capturas fueron tomadas sobre la interfaz servida por Docker. Las pruebas posteriores de duplicados, bloqueo, estado, desbloqueo y eliminación se ejecutaron en PostgreSQL E2E con cuentas ficticias y se documentan como <code>API</code>/<code>DB-R</code>, sin añadir capturas redundantes ni credenciales.</p>
+<h2 id="evidencias-historicas">Evidencias históricas</h2>
+<p>Los archivos <code>TC-USR-001-frontend.png</code> a <code>TC-USR-008-frontend.png</code> se conservan para trazabilidad. No se consideran evidencia vigente porque corresponden a una versión anterior y algunos documentan defectos ya corregidos.</p>
+<h2 id="criterios-de-seguridad">Criterios de seguridad</h2>
+<ul>
+<li>No capturar contraseñas, tokens, almacenamiento del navegador ni encabezados de autorización.</li>
+<li>Preferir registros claramente ficticios; no publicar listados con datos personales.</li>
+<li>Reutilizar una captura para varios casos cuando demuestre el mismo comportamiento visual.</li>
+</ul>
 
 
 

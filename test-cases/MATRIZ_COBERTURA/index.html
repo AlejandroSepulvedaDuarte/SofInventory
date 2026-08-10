@@ -1,0 +1,719 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Manuales técnico y de usuario del sistema SofInventory.">
+      
+      
+        <meta name="author" content="Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Matriz mínima de cobertura de pruebas — SofInventory - SofInventory ERP</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#matriz-minima-de-cobertura-de-pruebas-sofinventory" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="SofInventory ERP" class="md-header__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SofInventory ERP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Matriz mínima de cobertura de pruebas — SofInventory
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../MANUAL_USUARIO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual de Usuario
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../MANUAL_TECNICO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual Técnico
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SofInventory ERP" class="md-nav__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SofInventory ERP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MANUAL_USUARIO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual de Usuario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../MANUAL_TECNICO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="matriz-minima-de-cobertura-de-pruebas-sofinventory">Matriz mínima de cobertura de pruebas — SofInventory</h1>
+<blockquote>
+<p><strong>Versión:</strong> 2.0.0 <br>
+<strong>Fecha de diseño:</strong> 8 de agosto de 2026 <br>
+<strong>Estado:</strong> ejecución final completa: 67 aprobados, 1 parcial y 10 fallidos <br>
+<strong>Alcance:</strong> módulos funcionales, seguridad, permisos, integración e interfaz</p>
+</blockquote>
+<h2 id="1-proposito">1. Propósito</h2>
+<p>Esta matriz organiza la cobertura mínima que debe conservar SofInventory antes de una liberación. La presencia de un método de prueba <strong>no significa que el caso esté aprobado</strong>: el 8 de agosto de 2026 se ejecutaron 99/99 pruebas backend tanto en SQLite temporal como en PostgreSQL 15 aislado, 24/24 pruebas Node, el build Angular y verificaciones API/DB-R/manuales para los 78 casos.</p>
+<p>El resultado individual, la evidencia y los defectos se encuentran en <a href="../RESULTADOS_EJECUCION_2026-08-08/">RESULTADOS_EJECUCION_2026-08-08.md</a>. Las capturas antiguas de Login y Usuarios se conservan como evidencia histórica separada.</p>
+<h2 id="2-ambiente-tecnico-de-referencia">2. Ambiente técnico de referencia</h2>
+<p>Las versiones de runtime corresponden a las imágenes de los contenedores inspeccionados, no a herramientas instaladas en Windows.</p>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Runtime de referencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend</td>
+<td>Python 3.12.13, Django 6.0.4 y Django REST Framework 3.17.1</td>
+</tr>
+<tr>
+<td>Base de datos</td>
+<td>PostgreSQL 15.18</td>
+</tr>
+<tr>
+<td>Frontend servido</td>
+<td>Nginx 1.31.3 sobre Alpine 3.24.1</td>
+</tr>
+<tr>
+<td>Compilación frontend</td>
+<td>Node.js 20 Alpine, Angular 19.2.21 y TypeScript 5.6.3</td>
+</tr>
+<tr>
+<td>Suite backend rápida</td>
+<td>Django con <code>config.test_settings</code> y SQLite en memoria</td>
+</tr>
+<tr>
+<td>Suite de integración obligatoria</td>
+<td>PostgreSQL 15.18 en un ambiente aislado</td>
+</tr>
+</tbody>
+</table>
+<p>La suite rápida con SQLite no sustituye las verificaciones de restricciones, transacciones y concurrencia sobre PostgreSQL.</p>
+<h2 id="3-convenciones">3. Convenciones</h2>
+<h3 id="estado-de-cobertura">Estado de cobertura</h3>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>A</code></td>
+<td>Existe prueba automatizada directa; cada documento indica si ya fue ejecutada en esta revisión.</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>Existe cobertura automatizada parcial o indirecta.</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>Falta prueba automatizada.</td>
+</tr>
+<tr>
+<td><code>V</code></td>
+<td>Requiere inspección manual o visual además de cualquier prueba automatizada.</td>
+</tr>
+<tr>
+<td><code>D!</code></td>
+<td>Existe documentación histórica, pero debe actualizarse o revalidarse.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="evidencia">Evidencia</h3>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Evidencia apropiada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AUTO</code></td>
+<td>Salida completa de la suite, con fecha, comando, runtime y resultado.</td>
+</tr>
+<tr>
+<td><code>API</code></td>
+<td>Solicitud y respuesta sanitizadas, sin tokens ni datos personales.</td>
+</tr>
+<tr>
+<td><code>DB-R</code></td>
+<td>Consulta de solo lectura que demuestre integridad o efecto transaccional.</td>
+</tr>
+<tr>
+<td><code>MAN</code></td>
+<td>Lista de pasos y resultado de una verificación manual.</td>
+</tr>
+<tr>
+<td><code>CAPTURA</code></td>
+<td>Imagen real enlazada desde el caso; puede compartirse entre casos y nunca debe mostrar secretos ni datos personales innecesarios.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-resumen-minimo-por-modulo">4. Resumen mínimo por módulo</h2>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Documento</th>
+<th style="text-align: right;">Casos mínimos</th>
+<th>Cobertura actual predominante</th>
+<th>Prioridad principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login y sesiones</td>
+<td><a href="../02-modulo-login/casos-login/">casos-login.md</a></td>
+<td style="text-align: right;">7</td>
+<td><code>A</code>, <code>P</code>, <code>M</code>, <code>V</code></td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Usuarios, roles y permisos</td>
+<td><a href="../01-modulo-usuarios/casos-usuarios/">casos-usuarios.md</a></td>
+<td style="text-align: right;">8</td>
+<td><code>A</code>, <code>P</code>, <code>M</code>, <code>V</code></td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Categorías</td>
+<td><a href="../03-modulo-categorias/casos-categorias/">casos-categorias.md</a></td>
+<td style="text-align: right;">4</td>
+<td><code>P</code>, <code>M</code></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Productos</td>
+<td><a href="../04-modulo-productos/casos-productos/">casos-productos.md</a></td>
+<td style="text-align: right;">6</td>
+<td><code>P</code>, <code>M</code></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Proveedores</td>
+<td><a href="../05-modulo-proveedores/casos-proveedores/">casos-proveedores.md</a></td>
+<td style="text-align: right;">5</td>
+<td><code>A</code>, <code>M</code></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Clientes</td>
+<td><a href="../06-modulo-clientes/casos-clientes/">casos-clientes.md</a></td>
+<td style="text-align: right;">6</td>
+<td><code>A</code>, <code>M</code></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Almacenes</td>
+<td><a href="../07-modulo-almacenes/casos-almacenes/">casos-almacenes.md</a></td>
+<td style="text-align: right;">5</td>
+<td><code>P</code>, <code>M</code></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Inventario, movimientos y transferencias</td>
+<td><a href="../08-modulo-inventario/casos-inventario/">casos-inventario.md</a></td>
+<td style="text-align: right;">7</td>
+<td><code>A</code>, <code>M</code></td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Compras y anulaciones</td>
+<td><a href="../09-modulo-compras/casos-compras/">casos-compras.md</a></td>
+<td style="text-align: right;">6</td>
+<td><code>P</code>, <code>M</code></td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Ventas, anulaciones y comprobantes</td>
+<td><a href="../10-modulo-ventas/casos-ventas/">casos-ventas.md</a></td>
+<td style="text-align: right;">7</td>
+<td><code>A</code>, <code>M</code>, <code>V</code></td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Empresa</td>
+<td><a href="../11-modulo-empresa/casos-empresa/">casos-empresa.md</a></td>
+<td style="text-align: right;">5</td>
+<td><code>A</code>, <code>M</code>, <code>V</code></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td><a href="../12-modulo-dashboard/casos-dashboard/">casos-dashboard.md</a></td>
+<td style="text-align: right;">5</td>
+<td><code>A</code>, <code>M</code>, <code>V</code></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Temas, ayuda y formularios compartidos</td>
+<td><a href="../13-frontend-compartido/casos-frontend-compartido/">casos-frontend-compartido.md</a></td>
+<td style="text-align: right;">7</td>
+<td><code>P</code>, <code>M</code>, <code>V</code></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td style="text-align: right;"><strong>78</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Los valores anteriores cuentan <strong>escenarios mínimos consolidados</strong>, no la cantidad literal de identificadores que ya aparecen en los documentos históricos. Por ejemplo, los 10 casos antiguos de Login se agrupan en 7 familias mínimas de cobertura; no se elimina ninguno hasta actualizar ese documento y establecer su trazabilidad definitiva.</p>
+<h2 id="5-cobertura-automatizada-localizada">5. Cobertura automatizada localizada</h2>
+<table>
+<thead>
+<tr>
+<th>Suite</th>
+<th style="text-align: right;">Pruebas localizadas</th>
+<th>Observación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend Django / SQLite</td>
+<td style="text-align: right;">99 métodos</td>
+<td>99/99 aprobados en 3,977 s; base temporal destruida.</td>
+</tr>
+<tr>
+<td>Backend Django / PostgreSQL 15</td>
+<td style="text-align: right;">99 métodos</td>
+<td>99/99 aprobados en 69,668 s; base de prueba destruida.</td>
+</tr>
+<tr>
+<td>Frontend Node</td>
+<td style="text-align: right;">24 casos</td>
+<td>24/24 aprobados en Node.js 20 dentro de Docker; complementados con DOM/E2E manual.</td>
+</tr>
+<tr>
+<td>Build Angular</td>
+<td style="text-align: right;">1 build de producción</td>
+<td>Aprobado; advertencias de presupuesto de bundle y CSS de Dashboard.</td>
+</tr>
+<tr>
+<td>Evidencia histórica</td>
+<td style="text-align: right;">18 casos antiguos</td>
+<td>10 de Login y 8 de Usuarios conservados para trazabilidad, sin vigencia automática.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-reglas-de-ejecucion-y-evidencia">6. Reglas de ejecución y evidencia</h2>
+<ol>
+<li>Ejecutar primero la suite rápida en un entorno aislado; no usar datos existentes.</li>
+<li>Ejecutar los casos de persistencia, restricciones, transacciones y concurrencia en PostgreSQL 15.18.</li>
+<li>Registrar comando, fecha, imagen o versión del contenedor y resultado; no copiar tokens ni contraseñas.</li>
+<li>Para permisos, probar al menos un rol autorizado y uno no autorizado en el backend, aunque el menú o botón esté oculto en el frontend.</li>
+<li>Para operaciones de stock, acompañar la respuesta con una consulta <code>DB-R</code> o aserciones automatizadas antes y después.</li>
+<li>Reutilizar capturas: una imagen puede evidenciar varios casos visuales si el estado mostrado es inequívoco.</li>
+<li>Mantener los casos con estado “Pendiente” hasta que exista una ejecución reproducible y fechada.</li>
+</ol>
+<h2 id="7-capturas-minimas-compartidas">7. Capturas mínimas compartidas</h2>
+<p>El repositorio contiene evidencias vigentes de Login, Usuarios, Categorías, Productos, Proveedores, Clientes, Almacenes, Inventario, Compra, Venta, Empresa y Dashboard. Se agregaron estados E2E de duplicado de Categoría, error de alta de Producto, detalle/anulación de Compra, registro/detalle/anulación de Venta y Dashboard vacío. Bloqueos, permisos, cálculos, concurrencia y stock se acreditan con <code>AUTO</code>, <code>API</code> y <code>DB-R</code>; no se duplican capturas por cada variante.</p>
+<h2 id="8-orden-recomendado">8. Orden recomendado</h2>
+<ol>
+<li>Infraestructura de pruebas aislada y comando reproducible para SQLite y PostgreSQL.</li>
+<li>Login, sesiones, Usuarios, roles y permisos.</li>
+<li>Categorías, Productos, Almacenes e Inventario, incluida concurrencia.</li>
+<li>Compras, Ventas, anulaciones, comprobantes y Empresa.</li>
+<li>Proveedores, Clientes y ubicación compartida.</li>
+<li>Dashboard.</li>
+<li>Componentes compartidos, interceptor, guards, temas, notificaciones, accesibilidad y responsive.</li>
+<li>Actualización de resultados y evidencias documentales después de ejecutar.</li>
+</ol>
+<h2 id="9-criterio-de-cierre">9. Criterio de cierre</h2>
+<p>Los 78 casos tienen resultado trazable. La documentación de ejecución está completa, pero la liberación funcional queda condicionada a corregir los diez casos fallidos y reejecutar el caso parcial. Los casos aprobados no requieren nuevas capturas salvo que cambie la interfaz o la regla verificada.</p>
+<h2 id="10-resultado-final">10. Resultado final</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Total</th>
+<th style="text-align: right;">Aprobados</th>
+<th style="text-align: right;">Parciales</th>
+<th style="text-align: right;">Fallidos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;"><strong>78</strong></td>
+<td style="text-align: right;"><strong>67</strong></td>
+<td style="text-align: right;"><strong>1</strong></td>
+<td style="text-align: right;"><strong>10</strong></td>
+</tr>
+</tbody>
+</table>
+<p>La distribución por módulo y cada evidencia concreta se mantienen en <a href="../RESULTADOS_EJECUCION_2026-08-08/">Resultados finales</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "toc.integrate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

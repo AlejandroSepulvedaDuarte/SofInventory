@@ -23,7 +23,7 @@
     
     
       
-        <title>Arquitectura del Frontend - SofInventory ERP</title>
+        <title>SofInventory — Arquitectura del frontend - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#arquitectura-del-frontend" class="md-skip">
+        <a href="#sofinventory-arquitectura-del-frontend" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Arquitectura del Frontend
+              SofInventory — Arquitectura del frontend
             
           </span>
         </div>
@@ -347,58 +347,849 @@
 
 
 
-<h1 id="arquitectura-del-frontend">Arquitectura del Frontend</h1>
-<h2 id="vision-general">Visión general</h2>
-<p>El frontend está organizado por capas para separar responsabilidades:</p>
+<h1 id="sofinventory-arquitectura-del-frontend">SofInventory — Arquitectura del frontend</h1>
+<blockquote>
+<p><strong>Versión:</strong> 2.0.0</p>
+<p><strong>Actualizado:</strong> 8 de agosto de 2026</p>
+<p><strong>Runtime:</strong> Angular 19.2.21 · TypeScript 5.6.3 · RxJS 7.8 · Node.js 20 Alpine</p>
+<p><strong>Estado:</strong> arquitectura vigente del repositorio</p>
+</blockquote>
+<hr />
+<h2 id="1-proposito-y-alcance">1. Propósito y alcance</h2>
+<p>Este documento describe cómo está construido el frontend real de SofInventory, cómo fluyen los datos y dónde debe ubicarse cada responsabilidad. No corresponde al frontend HTML/JavaScript estático de versiones anteriores.</p>
+<p>Incluye:</p>
 <ul>
-<li><code>core</code>: infraestructura compartida.</li>
-<li><code>pages</code>: pantallas funcionales del sistema.</li>
-<li><code>shared</code>: layout y componentes reutilizables.</li>
-<li><code>styles.css</code>: sistema visual global.</li>
+<li>Arranque y configuración de Angular.</li>
+<li>Rutas, layout, autenticación y roles.</li>
+<li>Capas <code>core</code>, <code>pages</code> y <code>shared</code>.</li>
+<li>Estado con signals y comunicación con RxJS.</li>
+<li>Formularios, ubicaciones, notificaciones y ayuda contextual.</li>
+<li>Temas visuales y responsive.</li>
+<li>Integración con Django y despliegue Docker.</li>
+<li>Pruebas, límites actuales y evolución recomendada.</li>
 </ul>
-<h2 id="core">Core</h2>
-<h3 id="guards">Guards</h3>
-<p>Controlan acceso a rutas autenticadas, públicas y administrativas.</p>
-<h3 id="interceptors">Interceptors</h3>
-<p>Insertan el token en memoria dentro de las peticiones HTTP y manejan errores globales de autenticación.</p>
-<h3 id="models">Models</h3>
-<p>Definen las interfaces TypeScript usadas en componentes y servicios.</p>
-<h3 id="services">Services</h3>
-<p><code>api.services.ts</code> centraliza la comunicación con el backend y adapta payloads.</p>
-<p><code>auth.service.ts</code> administra la sesión en memoria y el usuario actual.</p>
-<h2 id="pages">Pages</h2>
-<p>Cada módulo funcional expone una pantalla standalone:</p>
+<p>Las reglas de escritura están en <a href="../coding-standards/">coding-standards.md</a> y los criterios visuales en <a href="../accessibility-visual-guide/">accessibility-visual-guide.md</a>.</p>
+<hr />
+<h2 id="2-resumen-ejecutivo">2. Resumen ejecutivo</h2>
+<p>SofInventory es una SPA Angular formada exclusivamente por componentes standalone. Las rutas cargan cada página de forma diferida. No utiliza NgRx ni otro almacén global: el estado local se modela con signals y los estados compartidos viven en servicios singleton.</p>
+<div class="highlight"><pre><span></span><code>Navegador
+   │
+   ├── AppComponent
+   │     ├── RouterOutlet ── carga diferida de páginas
+   │     └── NotificationContainerComponent
+   │
+   ├── Página funcional
+   │     └── LayoutComponent
+   │           ├── SidebarComponent
+   │           ├── HeaderComponent
+   │           └── contenido de la página
+   │
+   └── Core services
+         ├── HttpClient + authInterceptor
+         ├── AuthService
+         ├── servicios de dominio
+         ├── EmpresaService
+         └── ThemeService
+                     │
+                     ▼
+                /api en Django
+</code></pre></div>
+<p>Principios vigentes:</p>
 <ul>
-<li><code>dashboard</code></li>
-<li><code>productos</code></li>
-<li><code>categorias</code></li>
-<li><code>inventario</code></li>
-<li><code>proveedores</code></li>
-<li><code>clientes</code></li>
-<li><code>compras</code></li>
-<li><code>ventas</code></li>
-<li><code>usuarios</code></li>
+<li>Backend como autoridad de permisos y reglas de negocio.</li>
+<li>HTTP encapsulado en servicios.</li>
+<li>Contratos compartidos en <code>core/models</code>.</li>
+<li>Formularios template-driven con infraestructura común de validación.</li>
+<li>Temas mediante custom properties CSS.</li>
+<li>Estado de ayuda estrictamente local.</li>
+<li>Configuración de API en tiempo de ejecución.</li>
 </ul>
-<p>Cada componente de página concentra:</p>
+<hr />
+<h2 id="3-estructura-de-directorios">3. Estructura de directorios</h2>
+<div class="highlight"><pre><span></span><code>frontend/
+├── src/
+│   ├── app/
+│   │   ├── app.component.ts
+│   │   ├── app.config.ts
+│   │   ├── app.routes.ts
+│   │   ├── core/
+│   │   │   ├── guards/
+│   │   │   │   └── auth.guard.ts
+│   │   │   ├── interceptors/
+│   │   │   │   └── auth.interceptor.ts
+│   │   │   ├── models/
+│   │   │   │   └── index.ts
+│   │   │   └── services/
+│   │   │       ├── api.services.ts
+│   │   │       ├── auth.service.ts
+│   │   │       ├── empresa.service.ts
+│   │   │       └── theme.service.ts
+│   │   ├── pages/
+│   │   │   ├── login/
+│   │   │   ├── dashboard/
+│   │   │   ├── usuarios/
+│   │   │   ├── categorias/
+│   │   │   ├── productos/
+│   │   │   ├── proveedores/
+│   │   │   ├── clientes/
+│   │   │   ├── inventario/
+│   │   │   ├── compras/
+│   │   │   ├── ventas/
+│   │   │   └── empresa/
+│   │   └── shared/
+│   │       ├── components/
+│   │       ├── form-help/
+│   │       ├── forms/
+│   │       ├── locations/
+│   │       └── notifications/
+│   ├── assets/
+│   ├── environments/
+│   ├── index.html
+│   ├── main.ts
+│   └── styles.css
+├── tests/
+├── angular.json
+├── package.json
+├── Dockerfile
+├── docker-entrypoint.sh
+└── nginx.conf
+</code></pre></div>
+<p>Cada página mantiene <code>.ts</code>, <code>.html</code> y <code>.css</code> juntos. Los almacenes y movimientos pertenecen actualmente a la página Inventario; no existe una página independiente de Almacenes.</p>
+<hr />
+<h2 id="4-arranque-de-la-aplicacion">4. Arranque de la aplicación</h2>
+<h3 id="41-maints">4.1 <code>main.ts</code></h3>
+<p>El punto de entrada registra el locale colombiano y arranca la aplicación standalone.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">registerLocaleData</span><span class="p">(</span><span class="nx">localeEsCo</span><span class="p">);</span>
+
+<span class="nx">bootstrapApplication</span><span class="p">(</span><span class="nx">AppComponent</span><span class="p">,</span><span class="w"> </span><span class="nx">appConfig</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
+</code></pre></div>
+<h3 id="42-appconfigts">4.2 <code>app.config.ts</code></h3>
+<p>Los providers globales son:</p>
 <ul>
-<li>carga de datos</li>
-<li>estado local del formulario</li>
-<li>validaciones de interfaz</li>
-<li>interacción con servicios</li>
+<li>Router.</li>
+<li><code>HttpClient</code> con <code>authInterceptor</code> funcional.</li>
+<li>Animaciones de Angular.</li>
+<li><code>LOCALE_ID</code> con valor <code>es-CO</code>.</li>
 </ul>
-<h2 id="shared">Shared</h2>
+<p>No existe un <code>AppModule</code>.</p>
+<h3 id="43-appcomponent">4.3 <code>AppComponent</code></h3>
+<p>El componente raíz contiene únicamente:</p>
 <ul>
-<li><code>layout.component.ts</code>: contenedor general de la aplicación.</li>
-<li><code>sidebar</code>: navegación principal por módulos.</li>
-<li><code>header</code>: cabecera contextual.</li>
+<li><code>&lt;router-outlet&gt;</code> para la página activa.</li>
+<li><code>&lt;app-notification-container&gt;</code> para notificaciones globales.</li>
 </ul>
-<h2 id="principios-de-diseno">Principios de diseño</h2>
+<p>Esta decisión evita acoplar las notificaciones a una página o al layout autenticado.</p>
+<hr />
+<h2 id="5-rutas-y-control-de-acceso">5. Rutas y control de acceso</h2>
+<p>Todas las pantallas se cargan con <code>loadComponent</code>, por lo que cada ruta genera un límite de carga diferida.</p>
+<table>
+<thead>
+<tr>
+<th>Ruta</th>
+<th>Página</th>
+<th>Guard de interfaz</th>
+<th>Observación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/login</code></td>
+<td>Login</td>
+<td><code>guestGuard</code></td>
+<td>Solo visitante sin sesión activa</td>
+</tr>
+<tr>
+<td><code>/dashboard</code></td>
+<td>Dashboard</td>
+<td><code>authGuard</code></td>
+<td>Inicio autenticado</td>
+</tr>
+<tr>
+<td><code>/productos</code></td>
+<td>Productos</td>
+<td><code>authGuard</code></td>
+<td>Acciones finales dependen del backend</td>
+</tr>
+<tr>
+<td><code>/categorias</code></td>
+<td>Categorías</td>
+<td><code>authGuard</code></td>
+<td>Acciones finales dependen del backend</td>
+</tr>
+<tr>
+<td><code>/proveedores</code></td>
+<td>Proveedores</td>
+<td><code>authGuard</code></td>
+<td>Acciones finales dependen del backend</td>
+</tr>
+<tr>
+<td><code>/clientes</code></td>
+<td>Clientes</td>
+<td><code>authGuard</code></td>
+<td>Acciones finales dependen del backend</td>
+</tr>
+<tr>
+<td><code>/compras</code></td>
+<td>Compras</td>
+<td><code>authGuard</code></td>
+<td>Registro y anulación tienen permisos distintos</td>
+</tr>
+<tr>
+<td><code>/ventas</code></td>
+<td>Ventas</td>
+<td><code>authGuard</code></td>
+<td>Acciones autorizadas por el backend</td>
+</tr>
+<tr>
+<td><code>/inventario</code></td>
+<td>Inventario y almacenes</td>
+<td><code>authGuard</code></td>
+<td>Ajustes y mantenimiento dependen del rol</td>
+</tr>
+<tr>
+<td><code>/usuarios</code></td>
+<td>Usuarios</td>
+<td><code>authGuard</code>, <code>adminGuard</code></td>
+<td>Solo Administrador</td>
+</tr>
+<tr>
+<td><code>/empresa</code></td>
+<td>Empresa</td>
+<td><code>authGuard</code>, <code>adminGuard</code></td>
+<td>Edición administrativa</td>
+</tr>
+</tbody>
+</table>
+<p>La ruta vacía y cualquier ruta desconocida redirigen al Dashboard.</p>
+<p>Los guards solo controlan navegación. El backend conserva la autoridad mediante <code>@require_roles</code>; ocultar un enlace o bloquear una ruta no es un permiso de seguridad suficiente.</p>
+<hr />
+<h2 id="6-capa-core">6. Capa <code>core</code></h2>
+<p><code>core</code> contiene infraestructura de alcance global y contratos usados por más de un módulo. No debe depender de una página concreta.</p>
+<h3 id="61-models">6.1 Models</h3>
+<p><code>core/models/index.ts</code> define interfaces para:</p>
 <ul>
-<li>Mantener la sesión solo en memoria.</li>
-<li>Hacer explícita la adaptación entre Angular y Django.</li>
-<li>Evitar ambigüedad visual en productos mostrando <code>SKU - Nombre</code>.</li>
-<li>Favorecer contraste alto sin perder la identidad visual profesional.</li>
+<li>Autenticación y usuario público.</li>
+<li>Usuarios, roles y tipos de documento.</li>
+<li>Categorías y productos.</li>
+<li>Proveedores y clientes.</li>
+<li>Compras y detalles.</li>
+<li>Ventas y detalles.</li>
+<li>Empresa.</li>
+<li>Almacenes, stock y movimientos.</li>
+<li>Dashboard, periodos, comparaciones y series.</li>
 </ul>
+<p>Las interfaces reflejan tanto respuestas como formularios. Algunas propiedades son opcionales porque la misma entidad se usa en creación, listado y detalle.</p>
+<p>Regla de evolución: si un contrato crece hasta mezclar demasiados contextos, crear tipos explícitos de lectura, escritura y formulario antes de añadir más <code>any</code> o propiedades opcionales.</p>
+<h3 id="62-servicios-de-dominio-http">6.2 Servicios de dominio HTTP</h3>
+<p><code>api.services.ts</code> funciona hoy como fachada y exporta:</p>
+<ul>
+<li><code>UsuariosService</code>.</li>
+<li><code>ProductosService</code>.</li>
+<li><code>ProveedoresService</code>.</li>
+<li><code>ClientesService</code>.</li>
+<li><code>ComprasService</code>.</li>
+<li><code>VentasService</code>.</li>
+<li><code>InventarioService</code>.</li>
+<li><code>DashboardService</code>.</li>
+</ul>
+<p>Cada clase encapsula endpoints y, cuando el contrato lo requiere, transforma el formulario en un payload del backend.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">listar</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">Cliente</span><span class="p">[]</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="o">&lt;</span><span class="nx">Cliente</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">API</span><span class="si">}</span><span class="sb">/clientes/listar/`</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">crear</span><span class="p">(</span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="kt">Partial</span><span class="o">&lt;</span><span class="nx">Cliente</span><span class="o">&gt;</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">unknown</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span>
+<span class="w">    </span><span class="sb">`</span><span class="si">${</span><span class="nx">API</span><span class="si">}</span><span class="sb">/clientes/crear/`</span><span class="p">,</span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">toPayload</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span>
+<span class="w">  </span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>EmpresaService</code> está separado porque además expone estado compartido mediante signals:</p>
+<ul>
+<li><code>empresa</code>.</li>
+<li><code>configurada</code>.</li>
+<li><code>puedeEditar</code>.</li>
+</ul>
+<p>El sidebar consume ese estado para presentar el nombre y logo de la empresa.</p>
+<h3 id="63-authservice">6.3 <code>AuthService</code></h3>
+<p>Responsabilidades actuales:</p>
+<ul>
+<li>Enviar credenciales a <code>/api/auth/login/</code>.</li>
+<li>Mantener token, expiración, usuario e indicador de login mediante signals.</li>
+<li>Calcular <code>isAuthenticated</code>.</li>
+<li>Consultar <code>/api/auth/me/</code>.</li>
+<li>Invalidar la sesión mediante logout.</li>
+<li>Resolver roles para navegación.</li>
+<li>Restaurar y limpiar la sesión persistida.</li>
+</ul>
+<p>Persistencia vigente:</p>
+<table>
+<thead>
+<tr>
+<th>Clave</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auth_token</code></td>
+<td>Token bearer</td>
+</tr>
+<tr>
+<td><code>auth_expires_at</code></td>
+<td>Fecha de expiración</td>
+</tr>
+<tr>
+<td><code>auth_user</code></td>
+<td>Usuario público serializado</td>
+</tr>
+</tbody>
+</table>
+<p>Solo <code>AuthService</code> debe manipular estas claves. Los componentes no deben acceder directamente a <code>localStorage</code> ni guardar contraseñas o formularios.</p>
+<h3 id="64-interceptor">6.4 Interceptor</h3>
+<p><code>authInterceptor</code>:</p>
+<ol>
+<li>Lee el token mediante <code>AuthService</code>.</li>
+<li>Clona la petición con <code>Authorization: Bearer ...</code>.</li>
+<li>Deja sin token las solicitudes cuando no existe sesión.</li>
+<li>Ante <code>401</code> fuera de Login/Logout, limpia la sesión y redirige a Login.</li>
+<li>Propaga el error para que el consumidor lo gestione.</li>
+</ol>
+<p>Existe un defecto documentado: una sesión expirada puede producir <code>403</code>, mientras el interceptor solo ejecuta la limpieza automática ante <code>401</code>. Esta diferencia no debe documentarse como resuelta hasta corregir el contrato y ejecutar su regresión.</p>
+<h3 id="65-themeservice">6.5 <code>ThemeService</code></h3>
+<p>Maneja los temas:</p>
+<div class="highlight"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="kr">type</span><span class="w"> </span><span class="nx">ThemeKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;light&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s1">&#39;blue&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s1">&#39;dark&#39;</span><span class="p">;</span>
+</code></pre></div>
+<p>El servicio:</p>
+<ul>
+<li>Expone el tema actual como signal de solo lectura.</li>
+<li>Declara etiqueta e icono de cada opción.</li>
+<li>Aplica <code>data-theme</code> sobre <code>&lt;html&gt;</code>.</li>
+<li>Persiste la preferencia en <code>sof_inventory_theme</code>.</li>
+<li>Usa Oscuro como fallback.</li>
+</ul>
+<p><code>index.html</code> aplica el tema guardado antes del arranque de Angular para reducir el destello visual.</p>
+<hr />
+<h2 id="7-capa-shared">7. Capa <code>shared</code></h2>
+<p><code>shared</code> contiene UI, lógica de presentación y utilidades reutilizadas por varios dominios. No contiene reglas definitivas de inventario, permisos o cálculos contables.</p>
+<h3 id="71-layout">7.1 Layout</h3>
+<p><code>LayoutComponent</code> ensambla:</p>
+<ul>
+<li><code>SidebarComponent</code>.</li>
+<li><code>HeaderComponent</code>.</li>
+<li>Contenido proyectado con <code>&lt;ng-content&gt;</code>.</li>
+</ul>
+<p>El layout usa signals para colapso y apertura móvil. La página principal desplaza su contenido verticalmente y oculta desbordamiento horizontal en móvil.</p>
+<h3 id="72-sidebar">7.2 Sidebar</h3>
+<p>Responsabilidades:</p>
+<ul>
+<li>Navegación principal.</li>
+<li>Navegación administrativa condicionada por <code>isAdmin</code>.</li>
+<li>Identidad de empresa y usuario.</li>
+<li>Colapso en escritorio.</li>
+<li>Panel lateral y backdrop en móvil.</li>
+<li>Cierre de sesión.</li>
+</ul>
+<p>La lista principal incluye Dashboard, Productos, Categorías, Inventario, Proveedores, Clientes, Compras y Ventas. Empresa y Usuarios se presentan en la sección administrativa.</p>
+<h3 id="73-header">7.3 Header</h3>
+<p>Responsabilidades:</p>
+<ul>
+<li>Breadcrumb contextual.</li>
+<li>Hora local.</li>
+<li>Selector de tema.</li>
+<li>Identidad resumida del usuario.</li>
+<li>Cierre de sesión.</li>
+<li>Apertura del menú móvil.</li>
+</ul>
+<p><code>PAGE_TITLES</code> traduce la ruta activa. Si se agrega una ruta debe actualizarse el mapa o migrarse esta metadata a la configuración de rutas.</p>
+<h3 id="74-formularios-compartidos">7.4 Formularios compartidos</h3>
+<div class="highlight"><pre><span></span><code>Componente de página
+   │
+   ├── FormFeedbackState
+   │      ├── summary: signal&lt;string&gt;
+   │      └── fields: signal&lt;Record&lt;string, string&gt;&gt;
+   │
+   ├── appFieldValidation
+   │      ├── clase is-invalid
+   │      ├── aria-invalid
+   │      └── aria-describedby
+   │
+   ├── app-field-error
+   └── app-form-error-summary
+</code></pre></div>
+<p><code>FormFeedbackService</code> normaliza:</p>
+<ul>
+<li>Ausencia de conexión.</li>
+<li>Estados <code>401</code> y <code>403</code>.</li>
+<li>Errores <code>5xx</code>.</li>
+<li>Errores por campo de DRF.</li>
+<li>Alias entre nombres del backend y del formulario.</li>
+<li>Mensajes técnicos que no deben exponerse.</li>
+</ul>
+<p>Después de un rechazo con errores por campo, desplaza y enfoca el primer control inválido dentro del selector de alcance configurado.</p>
+<h3 id="75-validadores-semanticos">7.5 Validadores semánticos</h3>
+<p><code>semantic-validators.ts</code> contiene funciones puras para:</p>
+<ul>
+<li>Normalizar espacios.</li>
+<li>Nombres de persona.</li>
+<li>Lugares.</li>
+<li>Cargos de contacto.</li>
+<li>Nombres comerciales.</li>
+<li>Nombre de usuario.</li>
+<li>Documento según tipo.</li>
+</ul>
+<p>Estas funciones complementan la validación inmediata; no reemplazan los serializers.</p>
+<h3 id="76-ubicaciones">7.6 Ubicaciones</h3>
+<p><code>LocationFieldsComponent</code> centraliza el formulario geográfico de Clientes, Proveedores y Empresa.</p>
+<p>Modo Colombia:</p>
+<ul>
+<li>País fijo Colombia.</li>
+<li>Departamento desde catálogo local.</li>
+<li>Municipio filtrado por departamento.</li>
+<li>Reconciliación de variantes antiguas.</li>
+</ul>
+<p>Modo exterior:</p>
+<ul>
+<li>País, estado/provincia/departamento y ciudad manuales.</li>
+<li>Validación semántica y normalización.</li>
+</ul>
+<p>El catálogo fuente se encuentra en <code>backend/catalogos/data/colombia.json</code> y se consume mediante el endpoint de catálogos.</p>
+<h3 id="77-notificaciones">7.7 Notificaciones</h3>
+<p><code>NotificationService</code> conserva una lista de avisos en un signal y administra temporizadores. Admite éxito, advertencia y error; pausa la expiración con hover o foco y permite cierre explícito.</p>
+<p><code>NotificationContainerComponent</code> vive en la raíz para que una navegación o layout no elimine avisos activos.</p>
+<h3 id="78-ayuda-contextual">7.8 Ayuda contextual</h3>
+<p>La solución se divide en:</p>
+<table>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Responsabilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>form-help-content.ts</code></td>
+<td>Contrato, claves y contenido central por formulario</td>
+</tr>
+<tr>
+<td><code>form-help.component.ts</code></td>
+<td>Estado, título dinámico, <code>Escape</code> y foco</td>
+</tr>
+<tr>
+<td><code>form-help.component.html</code></td>
+<td>Botón y estructura semántica del panel</td>
+</tr>
+<tr>
+<td><code>form-help.component.css</code></td>
+<td>Panel lateral/inferior, temas y responsive</td>
+</tr>
+</tbody>
+</table>
+<p><code>FormHelpContent</code> separa objetivo, recomendaciones, relaciones y checklist. Los títulos aceptan variantes <code>create</code> y <code>edit</code>.</p>
+<p>El componente:</p>
+<ul>
+<li>No emite solicitudes.</li>
+<li>No usa almacenamiento.</li>
+<li>No modifica el formulario.</li>
+<li>Mantiene su estado en un signal.</li>
+<li>Cierra solo la ayuda con <code>Escape</code>.</li>
+<li>Devuelve el foco al botón.</li>
+<li>Oculta visualmente “Ayuda” hasta <code>640px</code> sin perder el nombre accesible.</li>
+</ul>
+<p>Los diez formularios de interfaz consumen una configuración central para Productos, Categorías, Clientes, Proveedores, Usuarios, Empresa, Almacenes, Compras, Ventas y movimientos de Inventario.</p>
+<hr />
+<h2 id="8-capa-pages">8. Capa <code>pages</code></h2>
+<p>Una página funcional coordina datos, estado local, presentación y acciones del usuario. No debe duplicar infraestructura global.</p>
+<table>
+<thead>
+<tr>
+<th>Página</th>
+<th>Responsabilidad principal</th>
+<th>Formularios asociados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login</td>
+<td>Autenticación, bloqueo y selección de tema</td>
+<td>Acceso</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>Métricas, periodos, comparaciones y gráficas</td>
+<td>No aplica</td>
+</tr>
+<tr>
+<td>Usuarios</td>
+<td>Gestión de cuentas, roles, estado y desbloqueo</td>
+<td>Crear/editar usuario</td>
+</tr>
+<tr>
+<td>Categorías</td>
+<td>Clasificación de productos</td>
+<td>Crear categoría</td>
+</tr>
+<tr>
+<td>Productos</td>
+<td>Catálogo, imagen, precios, IVA y estado</td>
+<td>Crear/editar producto</td>
+</tr>
+<tr>
+<td>Proveedores</td>
+<td>Identidad, contacto y ubicación</td>
+<td>Crear/editar proveedor</td>
+</tr>
+<tr>
+<td>Clientes</td>
+<td>Persona natural/jurídica y ubicación</td>
+<td>Crear/editar cliente</td>
+</tr>
+<tr>
+<td>Inventario</td>
+<td>Stock, almacenes, ajustes, salidas y transferencias</td>
+<td>Crear/editar almacén y movimiento</td>
+</tr>
+<tr>
+<td>Compras</td>
+<td>Ingreso por proveedor y almacén, detalle y anulación</td>
+<td>Registrar compra</td>
+</tr>
+<tr>
+<td>Ventas</td>
+<td>Venta, stock por almacén, pagos, comprobante y anulación</td>
+<td>Registrar venta</td>
+</tr>
+<tr>
+<td>Empresa</td>
+<td>Configuración, ubicación, logo y comprobantes</td>
+<td>Configurar/actualizar empresa</td>
+</tr>
+</tbody>
+</table>
+<p>Patrón habitual:</p>
+<div class="highlight"><pre><span></span><code>ngOnInit
+   ├── carga catálogos y listados mediante servicios
+   └── actualiza signals
+
+acción de usuario
+   ├── normaliza y valida localmente
+   ├── actualiza FormFeedbackState si falla
+   ├── llama al servicio si pasa
+   └── notifica, refresca datos y cierra o conserva el modal
+</code></pre></div>
+<p>Compras y Ventas calculan una vista previa de totales, pero el backend conserva la validación definitiva y el efecto de inventario.</p>
+<hr />
+<h2 id="9-flujo-de-datos">9. Flujo de datos</h2>
+<h3 id="91-lectura">9.1 Lectura</h3>
+<div class="highlight"><pre><span></span><code>Página
+  → servicio de dominio
+  → HttpClient
+  → authInterceptor añade token
+  → Nginx /api
+  → Django REST Framework
+  → respuesta tipada
+  → signal de la página o servicio
+  → template
+</code></pre></div>
+<h3 id="92-escritura-de-formulario">9.2 Escritura de formulario</h3>
+<div class="highlight"><pre><span></span><code>Entrada del usuario
+  → ngModel
+  → validadores semánticos
+  → FormFeedbackState
+  → adaptador toPayload / FormData
+  → servicio HTTP
+  → serializer + permisos + regla de negocio
+  → respuesta
+      ├── éxito: notificación + refresco
+      └── error: normalización + resumen + campo + foco
+</code></pre></div>
+<h3 id="93-operacion-de-inventario">9.3 Operación de inventario</h3>
+<p>Angular solo envía producto, almacén, tipo, cantidad y observación. Django valida rol y llama a <code>ServicioInventario</code>, que bloquea filas, comprueba disponibilidad o capacidad, modifica stock y registra movimientos dentro de la misma transacción.</p>
+<hr />
+<h2 id="10-temas-y-sistema-visual">10. Temas y sistema visual</h2>
+<p><code>styles.css</code> define el sistema global:</p>
+<ul>
+<li>Fuentes Fraunces, DM Sans y DM Mono.</li>
+<li>Tres temas por <code>data-theme</code>.</li>
+<li>Fondos, bordes, texto y colores semánticos.</li>
+<li>Anchos de sidebar y altura de header.</li>
+<li>Radios y sombras.</li>
+<li>Clases de página, tablas, badges, botones, formularios, modales, notificaciones y carga.</li>
+</ul>
+<p>Los componentes deben usar tokens como:</p>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">panel</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--text-primary</span><span class="p">);</span>
+<span class="w">  </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--bg-card</span><span class="p">);</span>
+<span class="w">  </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">px</span><span class="w"> </span><span class="kc">solid</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--border</span><span class="p">);</span>
+<span class="w">  </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--radius-lg</span><span class="p">);</span>
+<span class="w">  </span><span class="k">box-shadow</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--shadow-sm</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>No debe existir una paleta independiente por módulo. Los estilos locales pueden definir layout y estados propios, pero colores de propósito equivalente deben reutilizar tokens globales.</p>
+<p>La paleta completa y los contrastes se encuentran en <a href="../accessibility-visual-guide/">accessibility-visual-guide.md</a>.</p>
+<hr />
+<h2 id="11-responsive-y-capas">11. Responsive y capas</h2>
+<h3 id="layout">Layout</h3>
+<ul>
+<li>Escritorio: sidebar de <code>240px</code>, contraíble a <code>68px</code>.</li>
+<li>Móvil hasta <code>768px</code>: sidebar fuera del canvas, encabezado compacto y contenido sin overflow horizontal.</li>
+<li>Las páginas globales reducen padding de <code>32px 36px</code> a <code>20px 16px</code>.</li>
+</ul>
+<h3 id="modales">Modales</h3>
+<ul>
+<li>Overlay global: <code>z-index: 2000</code>.</li>
+<li>Alto máximo de escritorio: <code>90vh</code>.</li>
+<li>Móvil: alineación inferior y <code>max-height</code> con <code>dvh</code>.</li>
+<li>El body del modal gestiona desplazamiento interno.</li>
+</ul>
+<h3 id="ayuda-y-notificaciones">Ayuda y notificaciones</h3>
+<ul>
+<li>Panel de ayuda: <code>z-index: 2200</code>.</li>
+<li>Notificaciones: <code>z-index: 3000</code>.</li>
+<li>Sidebar móvil: <code>z-index: 1200</code>.</li>
+<li>Header: <code>z-index: 100</code>.</li>
+</ul>
+<p>Mantener esta jerarquía evita que una ayuda o notificación quede detrás del formulario.</p>
+<hr />
+<h2 id="12-configuracion-de-entornos">12. Configuración de entornos</h2>
+<p><code>environment.ts</code> y <code>environment.prod.ts</code> comparten la misma resolución:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">runtimeEnv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">window</span><span class="p">.</span><span class="nx">__env__</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="p">{};</span>
+
+<span class="k">export</span><span class="w"> </span><span class="kd">const</span><span class="w"> </span><span class="nx">environment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">production</span><span class="o">:</span><span class="w"> </span><span class="kt">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">apiUrl</span><span class="o">:</span><span class="w"> </span><span class="kt">runtimeEnv.apiUrl</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="sb">`</span><span class="si">${</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">origin</span><span class="si">}</span><span class="sb">/api`</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>La propiedad <code>production</code> cambia según el archivo reemplazado por Angular, pero la URL se resuelve en tiempo de ejecución. Ningún componente debe codificar <code>localhost</code>, una IP o un dominio.</p>
+<hr />
+<h2 id="13-integracion-con-django-y-despliegue">13. Integración con Django y despliegue</h2>
+<p>El repositorio soporta dos composiciones reales.</p>
+<h3 id="131-docker-compose-con-frontend-separado">13.1 Docker Compose con frontend separado</h3>
+<div class="highlight"><pre><span></span><code>Navegador :80
+   │
+   ▼
+Nginx frontend
+   ├── /, /assets → build Angular
+   ├── /api       → backend:8000
+   ├── /static    → backend:8000
+   └── /media     → volumen compartido
+                         │
+                         ▼
+                    Django → PostgreSQL 15
+</code></pre></div>
+<p>El entrypoint genera <code>assets/env.js</code> con <code>apiUrl: '/api'</code>. Nginx añade encabezados <code>X-Frame-Options</code>, <code>X-Content-Type-Options</code> y <code>Referrer-Policy</code>, y usa fallback a <code>index.html</code> para rutas Angular.</p>
+<h3 id="132-imagen-combinada-mediante-dockerfile-raiz">13.2 Imagen combinada mediante Dockerfile raíz</h3>
+<ol>
+<li>Una etapa Node compila Angular.</li>
+<li>La etapa Python instala el backend.</li>
+<li>El build se copia a <code>/app/frontend_dist</code>.</li>
+<li>Django sirve archivos y fallback SPA mediante <code>frontend_spa</code>.</li>
+<li>Gunicorn inicia el backend después de migraciones y datos iniciales controlados por el script de arranque.</li>
+</ol>
+<p>Las dos variantes deben conservar la misma ruta <code>/api</code> y el mismo comportamiento de navegación.</p>
+<hr />
+<h2 id="14-seguridad-por-capas">14. Seguridad por capas</h2>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Responsabilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Template</td>
+<td>No exponer secretos; orientar al usuario y ocultar acciones no aplicables</td>
+</tr>
+<tr>
+<td>Guard</td>
+<td>Evitar navegación local no autorizada</td>
+</tr>
+<tr>
+<td>AuthService</td>
+<td>Centralizar token, expiración, usuario y limpieza</td>
+</tr>
+<tr>
+<td>Interceptor</td>
+<td>Adjuntar bearer token y gestionar el contrato de sesión</td>
+</tr>
+<tr>
+<td>Backend</td>
+<td>Autenticar, autorizar roles y validar datos</td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td>Constraints, atomicidad e integridad</td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td>Proxy del mismo origen y encabezados defensivos</td>
+</tr>
+</tbody>
+</table>
+<p>La seguridad no puede depender de datos enviados por Angular. El backend obtiene el responsable desde la sesión y rechaza el rol solicitado por el cliente cuando no corresponde.</p>
+<hr />
+<h2 id="15-pruebas-y-verificaciones">15. Pruebas y verificaciones</h2>
+<h3 id="suite-actual">Suite actual</h3>
+<p><code>frontend/package.json</code> ejecuta 24 pruebas Node distribuidas en:</p>
+<ul>
+<li><code>semantic-validators.test.mjs</code>.</li>
+<li><code>location-form.test.mjs</code>.</li>
+<li><code>form-help.test.mjs</code>.</li>
+</ul>
+<p>Estas pruebas cubren funciones puras y contratos de archivos, pero no sustituyen una prueba Angular con DOM real.</p>
+<h3 id="build">Build</h3>
+<p><code>angular.json</code> configura:</p>
+<ul>
+<li>Build de aplicación Angular.</li>
+<li>Reemplazo de environment en producción.</li>
+<li>Presupuesto inicial de <code>500kB</code> como advertencia y <code>1MB</code> como error.</li>
+<li>Presupuesto por estilo de componente de <code>8kB</code> como advertencia y <code>16kB</code> como error.</li>
+<li>Hash de archivos en producción.</li>
+</ul>
+<p>La última ejecución documentada aprobó el build con advertencias de presupuesto en el bundle inicial y el CSS del Dashboard.</p>
+<h3 id="cobertura-manual-necesaria">Cobertura manual necesaria</h3>
+<ul>
+<li>Interacción completa con modales.</li>
+<li>Foco, teclado y <code>Escape</code>.</li>
+<li>Temas Claro, Azul y Oscuro.</li>
+<li>Escritorio y móvil.</li>
+<li>Gráficas Chart.js.</li>
+<li>Comprobantes e impresión.</li>
+<li>Respuestas de red, expiración y permisos.</li>
+</ul>
+<p>La evidencia vigente se encuentra en <a href="../test-cases/13-frontend-compartido/casos-frontend-compartido/">casos-frontend-compartido.md</a>.</p>
+<hr />
+<h2 id="16-como-agregar-una-pagina-o-formulario">16. Cómo agregar una página o formulario</h2>
+<ol>
+<li>Definir o reutilizar contratos en <code>core/models</code>.</li>
+<li>Agregar el método HTTP al servicio de dominio; no llamar <code>HttpClient</code> desde la página.</li>
+<li>Crear la carpeta en <code>pages/&lt;modulo&gt;/</code> con <code>.ts</code>, <code>.html</code> y <code>.css</code>.</li>
+<li>Declarar el componente standalone y sus imports mínimos.</li>
+<li>Agregar una ruta lazy en <code>app.routes.ts</code> con guards de navegación.</li>
+<li>Agregar navegación y título cuando corresponda.</li>
+<li>Modelar estado con signals y derivados con <code>computed</code>.</li>
+<li>Usar la infraestructura compartida de validación, notificación y ubicación.</li>
+<li>Si existe formulario, agregar contenido específico a <code>FORM_HELP_CONTENT</code> y consumir <code>FormHelpComponent</code>.</li>
+<li>Usar tokens de tema y revisar los tres esquemas visuales.</li>
+<li>Verificar teclado, foco, modal, desktop y móvil.</li>
+<li>Agregar pruebas y ejecutar <code>npm test</code> y el build de producción.</li>
+<li>Actualizar casos de prueba y documentación afectada.</li>
+</ol>
+<p>No agregar la ruta antes de confirmar que el backend aplica permisos equivalentes.</p>
+<hr />
+<h2 id="17-decisiones-que-requieren-revision-de-arquitectura">17. Decisiones que requieren revisión de arquitectura</h2>
+<p>Consultar y documentar antes de:</p>
+<ul>
+<li>Cambiar la persistencia del token o el contrato de autenticación.</li>
+<li>Añadir NgRx u otra librería de estado.</li>
+<li>Cambiar de formularios template-driven a reactivos de forma parcial.</li>
+<li>Dividir o reemplazar la fachada <code>api.services.ts</code>.</li>
+<li>Cambiar el formato de errores del backend.</li>
+<li>Crear un segundo sistema de temas o componentes.</li>
+<li>Introducir una librería externa de modales, tablas o validación.</li>
+<li>Cambiar la ruta base <code>/api</code>.</li>
+<li>Mover cálculos de negocio al frontend.</li>
+<li>Modificar la estrategia de despliegue combinado o separado.</li>
+</ul>
+<hr />
+<h2 id="18-deuda-tecnica-conocida">18. Deuda técnica conocida</h2>
+<p>Esta sección describe el estado actual; no autoriza a corregirlo fuera del alcance de una tarea.</p>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Situación actual</th>
+<th>Evolución recomendada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sesión</td>
+<td>El bearer token persiste en <code>localStorage</code></td>
+<td>Evaluar una estrategia con menor exposición y migración compatible</td>
+</tr>
+<tr>
+<td>Expiración</td>
+<td>El interceptor gestiona <code>401</code>, pero el backend puede devolver <code>403</code> al expirar</td>
+<td>Unificar contrato y añadir prueba E2E</td>
+</tr>
+<tr>
+<td>Servicios</td>
+<td><code>api.services.ts</code> agrupa ocho clases y sigue creciendo</td>
+<td>Separar por dominio cuando se programe un refactor controlado</td>
+</tr>
+<tr>
+<td>Models</td>
+<td>Un único <code>index.ts</code> mezcla lectura, escritura y formularios</td>
+<td>Dividir por dominio y contexto sin romper imports</td>
+</tr>
+<tr>
+<td>Layout</td>
+<td>Cada página autenticada incorpora <code>LayoutComponent</code></td>
+<td>Evaluar ruta shell con children para reducir repetición</td>
+</tr>
+<tr>
+<td>Formularios</td>
+<td>Predomina <code>ngModel</code> y estado manual</td>
+<td>Mantener consistencia o planificar migración completa; no mezclar sin criterio</td>
+</tr>
+<tr>
+<td>Pruebas frontend</td>
+<td><code>node:test</code> valida lógica y archivos, sin TestBed ni runner E2E automatizado</td>
+<td>Añadir pruebas de componentes e interacción real</td>
+</tr>
+<tr>
+<td>Accesibilidad</td>
+<td>Ayuda y algunos flujos gestionan foco; no todos los modales lo hacen</td>
+<td>Crear primitive compartida de modal o directiva de foco</td>
+</tr>
+<tr>
+<td>Temas</td>
+<td>Selector duplicado entre Login y Header</td>
+<td>Extraer componente compartido cuando se intervenga esa UI</td>
+</tr>
+<tr>
+<td>Estilos</td>
+<td>Dashboard supera el presupuesto CSS de advertencia</td>
+<td>Dividir estilos y revisar reglas duplicadas</td>
+</tr>
+<tr>
+<td>Bundle</td>
+<td>El paquete inicial supera el presupuesto de advertencia</td>
+<td>Analizar dependencias, Chart.js e importaciones</td>
+</tr>
+<tr>
+<td>Fuentes</td>
+<td>Google Fonts se importa en CSS</td>
+<td>Evaluar autoalojamiento o política de disponibilidad</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="19-control-de-cambios">19. Control de cambios</h2>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th>Fecha</th>
+<th>Cambio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0.0</td>
+<td>2026</td>
+<td>Resumen inicial de capas del frontend</td>
+</tr>
+<tr>
+<td>2.0.0</td>
+<td>08/08/2026</td>
+<td>Arquitectura completa conforme a Angular standalone, rutas, estado, servicios, formularios, temas, Docker, pruebas y deuda vigente</td>
+</tr>
+</tbody>
+</table>
 
 
 

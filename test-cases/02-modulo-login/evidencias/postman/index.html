@@ -23,7 +23,7 @@
     
     
       
-        <title>📮 Evidencias — Postman | Módulo Login - SofInventory ERP</title>
+        <title>Evidencias API — Login y sesiones - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#evidencias-postman-modulo-login" class="md-skip">
+        <a href="#evidencias-api-login-y-sesiones" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              📮 Evidencias — Postman | Módulo Login
+              Evidencias API — Login y sesiones
             
           </span>
         </div>
@@ -347,111 +347,61 @@
 
 
 
-<h1 id="evidencias-postman-modulo-login">📮 Evidencias — Postman | Módulo Login</h1>
+<h1 id="evidencias-api-login-y-sesiones">Evidencias API — Login y sesiones</h1>
 <blockquote>
-<p>Directorio para capturas de requests y responses realizadas en Postman durante las pruebas del módulo de Login.</p>
+<p><strong>Actualizado:</strong> 8 de agosto de 2026</p>
 </blockquote>
-<h2 id="convencion-de-nomenclatura">Convención de nomenclatura</h2>
-<div class="highlight"><pre><span></span><code>TC-LOGIN-{NRO}-postman.png     → Captura del request + response en Postman
-</code></pre></div>
-<h2 id="endpoints-coleccion-de-referencia">Endpoints — Colección de referencia</h2>
-<h3 id="autenticacion-login">Autenticación (Login)</h3>
-<div class="highlight"><pre><span></span><code>POST /api/auth/login/
-Content-Type: application/json
-
-{
-  &quot;username&quot;: &quot;admin&quot;,
-  &quot;password&quot;: &quot;Admin123&quot;
-}
-</code></pre></div>
-<h3 id="verificar-sesion-activa">Verificar sesión activa</h3>
-<div class="highlight"><pre><span></span><code>GET /api/auth/me/
-Authorization: Bearer {{access_token}}
-</code></pre></div>
-<h3 id="logout">Logout</h3>
-<div class="highlight"><pre><span></span><code>POST /api/auth/logout/
-Authorization: Bearer {{access_token}}
-</code></pre></div>
-<h3 id="ejemplo-de-respuesta-exitosa-200-ok">Ejemplo de respuesta exitosa (200 OK)</h3>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;mensaje&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Bienvenido Carlos Pérez&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;access_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;abc123...xyz&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;expires_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-15T03:00:00+00:00&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;usuario&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;nombre&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Carlos Pérez&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;rol&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Administrador&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;estado&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;activo&quot;</span><span class="p">,</span>
-<span class="w">    </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin@sofinventory.com&quot;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-<h2 id="archivos-esperados">Archivos esperados</h2>
+<p>No se generaron capturas nuevas de Postman. Las pruebas actuales se ejecutaron con el cliente de pruebas de Django dentro del contenedor backend.</p>
+<h2 id="contrato-actual">Contrato actual</h2>
 <table>
 <thead>
 <tr>
-<th>Archivo</th>
-<th>Caso</th>
-<th>Código HTTP esperado</th>
+<th>Operación</th>
+<th>Método y ruta</th>
+<th>Resultado principal</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>TC-LOGIN-001-postman.png</code></td>
-<td>TC-LOGIN-001</td>
-<td>200 OK + access_token (admin)</td>
+<td>Login válido</td>
+<td><code>POST /api/auth/login/</code></td>
+<td>200, token propio, expiración y usuario público</td>
 </tr>
 <tr>
-<td><code>TC-LOGIN-002-postman.png</code></td>
-<td>TC-LOGIN-002</td>
-<td>200 OK + access_token (supervisor) + verificación 403 en <code>/api/usuarios/listar/</code></td>
+<td>Credenciales inválidas</td>
+<td><code>POST /api/auth/login/</code></td>
+<td>401 genérico dentro del límite</td>
 </tr>
 <tr>
-<td><code>TC-LOGIN-003-postman.png</code></td>
-<td>TC-LOGIN-003</td>
-<td>401 Unauthorized — username no registrado</td>
+<td>Cuenta inactiva o bloqueada</td>
+<td><code>POST /api/auth/login/</code></td>
+<td>403 controlado</td>
 </tr>
 <tr>
-<td><code>TC-LOGIN-004-postman.png</code></td>
-<td>TC-LOGIN-004</td>
-<td>400 Bad Request — campos vacíos</td>
+<td>Límite de solicitudes</td>
+<td><code>POST /api/auth/login/</code></td>
+<td>429 cuando se supera la tasa</td>
 </tr>
 <tr>
-<td><code>TC-LOGIN-005-postman.png</code></td>
-<td>TC-LOGIN-005</td>
-<td>403 Forbidden — usuario inactivo</td>
+<td>Perfil</td>
+<td><code>GET /api/auth/me/</code></td>
+<td>200 con sesión válida; rechazo sin sesión</td>
 </tr>
 <tr>
-<td><code>TC-LOGIN-006-postman.png</code></td>
-<td>TC-LOGIN-006</td>
-<td>401 Unauthorized — contraseña incorrecta</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-007-postman.png</code></td>
-<td>TC-LOGIN-007</td>
-<td><strong>500 Internal Server Error (BUG — se esperaba 400)</strong></td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-008-postman.png</code></td>
-<td>TC-LOGIN-008</td>
-<td>401 Unauthorized — token revocado</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-009-postman.png</code></td>
-<td>TC-LOGIN-009</td>
-<td>401 Unauthorized — sin header Authorization</td>
-</tr>
-<tr>
-<td><code>TC-LOGIN-010-postman.png</code></td>
-<td>TC-LOGIN-010</td>
-<td>401 Unauthorized — sesión expirada (backend correcto)</td>
+<td>Logout</td>
+<td><code>POST /api/auth/logout/</code></td>
+<td>200 e invalidación de la sesión actual</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>📌 <strong>Nota:</strong> Incluir en cada captura el body del request, los headers completos y el body del response. Configurar una variable de entorno <code>{{access_token}}</code> en Postman para reutilizar el token entre peticiones.</p>
-</blockquote>
+<h2 id="reglas-para-futuras-evidencias">Reglas para futuras evidencias</h2>
+<ul>
+<li>Sustituir cualquier token por <code>&lt;token-redactado&gt;</code>.</li>
+<li>No mostrar contraseñas, cookies, encabezados completos ni datos personales.</li>
+<li>Para sesión única y logout, preferir aserciones automatizadas y consultas agregadas de solo lectura.</li>
+<li>Registrar la discrepancia 401/403 de expiración hasta que el contrato frontend/backend quede definido.</li>
+</ul>
+<p>Los archivos <code>TC-LOGIN-001-postman.png</code> a <code>TC-LOGIN-010-postman.png</code> son históricos y no prueban el estado actual por sí solos.</p>
 
 
 

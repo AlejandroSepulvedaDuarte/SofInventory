@@ -23,7 +23,7 @@
     
     
       
-        <title>📮 Evidencias — Postman | Módulo Usuarios - SofInventory ERP</title>
+        <title>Evidencias API — Usuarios - SofInventory ERP</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#evidencias-postman-modulo-usuarios" class="md-skip">
+        <a href="#evidencias-api-usuarios" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              📮 Evidencias — Postman | Módulo Usuarios
+              Evidencias API — Usuarios
             
           </span>
         </div>
@@ -347,104 +347,71 @@
 
 
 
-<h1 id="evidencias-postman-modulo-usuarios">📮 Evidencias — Postman | Módulo Usuarios</h1>
+<h1 id="evidencias-api-usuarios">Evidencias API — Usuarios</h1>
 <blockquote>
-<p>Directorio para capturas de requests y responses realizadas en Postman durante las pruebas del módulo de Usuarios.</p>
+<p><strong>Actualizado:</strong> 8 de agosto de 2026</p>
 </blockquote>
-<h2 id="convencion-de-nomenclatura">Convención de nomenclatura</h2>
-<div class="highlight"><pre><span></span><code>TC-USR-{NRO}-postman.png     → Captura del request + response en Postman
-</code></pre></div>
-<h2 id="configuracion-de-autenticacion-en-postman">Configuración de Autenticación en Postman</h2>
-<p>Todos los endpoints de usuarios requieren un token Bearer de administrador. Configurar en Postman:</p>
-<div class="highlight"><pre><span></span><code>Authorization: Bearer &lt;token_obtenido_del_login&gt;
-</code></pre></div>
-<p>O usar una variable de entorno:
-<div class="highlight"><pre><span></span><code>Authorization: Bearer {{access_token}}
-</code></pre></div></p>
-<h2 id="archivos-esperados">Archivos esperados</h2>
+<p>No se generaron capturas nuevas de Postman en esta actualización. La evidencia vigente de automatización es el resultado de 26/26 pruebas del módulo <code>usuarios</code> ejecutadas dentro del contenedor backend con una base SQLite en memoria.</p>
+<h2 id="endpoints-actuales">Endpoints actuales</h2>
 <table>
 <thead>
 <tr>
-<th>Archivo</th>
-<th>Caso</th>
-<th>Método</th>
-<th>Endpoint</th>
-<th>Código esperado</th>
+<th>Operación</th>
+<th>Método y ruta</th>
+<th>Rol</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>TC-USR-001-postman.png</code></td>
-<td>TC-USR-001</td>
-<td>POST</td>
-<td><code>/api/usuarios/crear/</code></td>
-<td>201 Created</td>
+<td>Crear</td>
+<td><code>POST /api/usuarios/crear/</code></td>
+<td>Administrador</td>
 </tr>
 <tr>
-<td><code>TC-USR-002-postman.png</code></td>
-<td>TC-USR-002</td>
-<td>POST</td>
-<td><code>/api/usuarios/crear/</code></td>
-<td>201 Created</td>
+<td>Listar</td>
+<td><code>GET /api/usuarios/listar/</code></td>
+<td>Administrador</td>
 </tr>
 <tr>
-<td><code>TC-USR-003-postman.png</code></td>
-<td>TC-USR-003</td>
-<td>POST</td>
-<td><code>/api/usuarios/crear/</code></td>
-<td>400 Bad Request (username duplicado)</td>
+<td>Editar</td>
+<td><code>PUT /api/usuarios/editar/&lt;id&gt;/</code></td>
+<td>Administrador</td>
 </tr>
 <tr>
-<td><code>TC-USR-004-postman.png</code></td>
-<td>TC-USR-004</td>
-<td>POST</td>
-<td><code>/api/usuarios/crear/</code></td>
-<td>400 Bad Request (contraseña débil)</td>
+<td>Cambiar estado</td>
+<td><code>PATCH /api/usuarios/estado/&lt;id&gt;/</code></td>
+<td>Administrador</td>
 </tr>
 <tr>
-<td><code>TC-USR-005-postman.png</code></td>
-<td>TC-USR-005</td>
-<td>POST</td>
-<td><code>/api/usuarios/crear/</code></td>
-<td><strong>201 sin error — BUG esperado</strong></td>
+<td>Desbloquear</td>
+<td><code>POST /api/usuarios/desbloquear/&lt;id&gt;/</code></td>
+<td>Administrador</td>
 </tr>
 <tr>
-<td><code>TC-USR-006-postman.png</code></td>
-<td>TC-USR-006</td>
-<td>POST</td>
-<td><code>/api/usuarios/crear/</code></td>
-<td>400 Bad Request (campos vacíos)</td>
+<td>Eliminar</td>
+<td><code>DELETE /api/usuarios/eliminar/&lt;id&gt;/</code></td>
+<td>Administrador</td>
 </tr>
 <tr>
-<td><code>TC-USR-008-postman.png</code></td>
-<td>TC-USR-008</td>
-<td>POST</td>
-<td><code>/api/auth/login/</code></td>
-<td>200 OK + access_token</td>
+<td>Auditoría</td>
+<td><code>GET /api/usuarios/auditoria/</code></td>
+<td>Administrador</td>
+</tr>
+<tr>
+<td>Reporte de roles</td>
+<td><code>GET /api/roles/reporte/</code></td>
+<td>Administrador</td>
 </tr>
 </tbody>
 </table>
-<h2 id="body-de-referencia-para-crear-usuario-tc-usr-001">Body de referencia para crear usuario (TC-USR-001)</h2>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;tipo_documento&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;numero_documento&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1234567890&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;nombre_completo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Carlos Pérez&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;email&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;carlos.perez@sofinventory.com&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;carlos.perez&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Admin@1234&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;rol&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;fecha_creacion&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-05-14&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;estado&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;activo&quot;</span>
-<span class="p">}</span>
-</code></pre></div>
-<h2 id="respuesta-esperada-201-created">Respuesta esperada (201 Created)</h2>
-<div class="highlight"><pre><span></span><code><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;mensaje&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Usuario creado exitosamente&quot;</span>
-<span class="p">}</span>
-</code></pre></div>
-<blockquote>
-<p>📌 <strong>Nota:</strong> Incluir en las capturas el body del request, los headers (especialmente <code>Authorization</code>) y el body completo del response. Importar la colección <code>SofInventory-Usuarios.postman_collection.json</code> para reproducir las pruebas.</p>
-</blockquote>
+<h2 id="reglas-para-futuras-evidencias">Reglas para futuras evidencias</h2>
+<ul>
+<li>Mostrar método, ruta, código HTTP y cuerpo sanitizado.</li>
+<li>Ocultar por completo <code>Authorization</code>, tokens, contraseñas, cookies y datos personales.</li>
+<li>No usar capturas para probar unicidad, hash o atomicidad cuando una aserción automatizada sea suficiente.</li>
+<li>Marcar fecha, versión del contenedor y resultado; no reutilizar una imagen histórica como aprobación actual.</li>
+</ul>
+<p>Los archivos <code>TC-USR-001-postman.png</code> a <code>TC-USR-008-postman.png</code> son históricos y están pendientes de reemplazo o retiro después de una reejecución API aislada.</p>
 
 
 

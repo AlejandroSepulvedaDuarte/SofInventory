@@ -1,0 +1,574 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Manuales técnico y de usuario del sistema SofInventory.">
+      
+      
+        <meta name="author" content="Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Casos de prueba — Frontend compartido, temas, ayuda y responsive - SofInventory ERP</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#casos-de-prueba-frontend-compartido-temas-ayuda-y-responsive" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../.." title="SofInventory ERP" class="md-header__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SofInventory ERP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Casos de prueba — Frontend compartido, temas, ayuda y responsive
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MANUAL_USUARIO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual de Usuario
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MANUAL_TECNICO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual Técnico
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="SofInventory ERP" class="md-nav__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SofInventory ERP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MANUAL_USUARIO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual de Usuario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MANUAL_TECNICO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="casos-de-prueba-frontend-compartido-temas-ayuda-y-responsive">Casos de prueba — Frontend compartido, temas, ayuda y responsive</h1>
+<blockquote>
+<p><strong>Prefijo:</strong> TC-FE · <strong>Cobertura mínima:</strong> 7 casos · <strong>Ejecución final:</strong> 6 aprobados, 1 fallido · <strong>Fecha:</strong> 8 de agosto de 2026</p>
+</blockquote>
+<h2 id="alcance">Alcance</h2>
+<p>Cubre Temas Claro, Azul y Oscuro; ayuda contextual; formularios y validaciones compartidas; ubicación; notificaciones; interceptor/guards; teclado, foco y diseño responsive. Las 24 pruebas Node actuales inspeccionan funciones y archivos fuente, pero no ejecutan componentes Angular en un DOM ni un navegador real.</p>
+<h2 id="matriz-de-casos">Matriz de casos</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Funcionalidad que verifica</th>
+<th>Precondiciones y rol</th>
+<th>Datos ficticios</th>
+<th>Resultado esperado</th>
+<th>Automatización existente</th>
+<th>Falta automatización</th>
+<th>Evidencia</th>
+<th>Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TC-FE-001</td>
+<td>Aplicar y persistir los tres temas</td>
+<td>Interfaz</td>
+<td>Selector de tema, <code>data-theme</code>, persistencia permitida de preferencia y fallback</td>
+<td>Navegador con/sin <code>localStorage</code>; cualquier usuario y Login</td>
+<td>Claves <code>light</code>, <code>blue</code>, <code>dark</code>, valor guardado inválido</td>
+<td>Cada tema se aplica y conserva; valor inválido o almacenamiento no disponible cae en Oscuro sin romper la app</td>
+<td><code>M</code> — no se localizó prueba de <code>ThemeService</code></td>
+<td>Sí: unit test Angular y verificación visual</td>
+<td>AUTO + MAN; capturas compartidas Claro/Oscuro/Azul</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>TC-FE-002</td>
+<td>Abrir ayuda con título correcto en crear/editar</td>
+<td>Interfaz</td>
+<td>Botón real, icono+“Ayuda” en escritorio, solo icono en móvil, títulos registrar/actualizar y contenido por formulario</td>
+<td>Formulario de creación y uno de edición abiertos</td>
+<td>Producto o Cliente ficticio escrito parcialmente</td>
+<td>El panel abre sin enviar ni borrar; título y contenido corresponden a operación/formulario</td>
+<td><code>P</code> — 9/9 pruebas de <code>frontend/tests/form-help.test.mjs</code> aprobadas; creación/edición verificadas manualmente en Usuarios</td>
+<td>Sí: DOM Angular automatizado, click/Enter/Space y más formularios</td>
+<td>AUTO + MAN; capturas vigentes de Usuario</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>TC-FE-003</td>
+<td>Cerrar ayuda con Escape y restaurar foco</td>
+<td>Interfaz / accesibilidad</td>
+<td>Escape cierra solo la ayuda, no el modal; foco vuelve al disparador; ARIA y tabulación</td>
+<td>Modal con ayuda abierta y datos ingresados</td>
+<td>Texto ficticio en uno o más campos</td>
+<td>Datos permanecen; modal principal sigue abierto; <code>aria-expanded</code> cambia; foco retorna</td>
+<td><code>P</code> — prueba Node aprobada y verificación manual de <code>document.activeElement</code> aprobada en Usuarios</td>
+<td>Sí: prueba Angular de componente y recorrido completo de tabulación</td>
+<td>AUTO + MAN</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>TC-FE-004</td>
+<td>Aislar la ayuda de red y almacenamiento</td>
+<td>Seguridad / integración</td>
+<td>Abrir/cerrar ayuda no hace HTTP ni guarda contenido/estado en Local o Session Storage</td>
+<td>Espías de <code>HttpClient</code>, <code>localStorage</code> y <code>sessionStorage</code>; formulario abierto</td>
+<td>Contenido de ayuda estático</td>
+<td>Cero solicitudes y cero escrituras atribuibles a ayuda; el formulario conserva valores/touched</td>
+<td><code>P</code> — la prueba correspondiente de <code>form-help.test.mjs</code> fue ejecutada y aprobada, pero inspecciona fuente</td>
+<td>Sí: spies en ejecución Angular real</td>
+<td>AUTO</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>TC-FE-005</td>
+<td>Validar y normalizar formularios compartidos</td>
+<td>Negativo / interfaz</td>
+<td>Mensajes por campo, resumen, foco al primer error y validadores semánticos sin bloquear nombres reales</td>
+<td>Formulario representativo; cualquier rol con acceso</td>
+<td>Tildes, ñ, apóstrofo, guion, espacios, valor numérico inválido, documento por tipo</td>
+<td>Valores reales válidos se aceptan; inválidos muestran mensaje accesible; no hay envío; foco llega al primer error</td>
+<td><code>P</code> — 7/7 pruebas de <code>frontend/tests/semantic-validators.test.mjs</code> aprobadas; obligatorios verificados manualmente en Usuarios</td>
+<td>Sí: <code>FormFeedbackService</code>, <code>FieldValidationDirective</code> y <code>FieldErrorComponent</code> en Angular</td>
+<td>AUTO + MAN; captura vigente de validaciones de Usuario</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>TC-FE-006</td>
+<td>Operar ubicación Colombia/exterior en DOM</td>
+<td>Positivo / negativo</td>
+<td>Departamento habilita municipios, cambios limpian valores ocultos, exterior usa campos manuales y legacy se conserva</td>
+<td>Formularios de Cliente/Proveedor/Empresa</td>
+<td>Antioquia/Medellín, combinación inválida y ubicación exterior ficticia</td>
+<td>Opciones y limpieza correctas; mensajes en español; sin valores ocultos enviados</td>
+<td><code>P</code> — 8/8 pruebas de <code>frontend/tests/location-form.test.mjs</code> aprobadas</td>
+<td>Sí: automatización Angular del componente; ambos modos se verificaron manualmente en formularios reales</td>
+<td>AUTO + MAN; <a href="../../06-modulo-clientes/evidencias/frontend/CLI-ubicacion-colombia.png">Cliente Colombia</a>, <a href="../../06-modulo-clientes/evidencias/frontend/CLI-ubicacion-exterior.png">Cliente exterior</a>, <a href="../../05-modulo-proveedores/evidencias/frontend/PRV-ubicacion-colombia.png">Proveedor Colombia</a> y <a href="../../05-modulo-proveedores/evidencias/frontend/PRV-ubicacion-exterior.png">Proveedor exterior</a></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>TC-FE-007</td>
+<td>Probar guards, interceptor, notificaciones y responsive global</td>
+<td>Seguridad / permisos / interfaz</td>
+<td>Rutas auth/admin, cabecera Bearer, expiración 401/403, contenedor de notificaciones, modales/tablas sin overflow</td>
+<td>Sesiones válida/ausente/expirada; roles Administrador y no administrador; viewports móvil/escritorio</td>
+<td>Respuestas simuladas 401 y 403 sin exponer token</td>
+<td>Guards redirigen según rol; token solo se adjunta donde corresponde; sesión expirada se limpia/redirige según contrato; notificación accesible; UI usable en todos los temas/viewports</td>
+<td><code>M</code> — no se localizaron tests Angular/E2E; el interceptor actual maneja 401 y el backend puede devolver 403 por expiración</td>
+<td>Sí: unit/integration/E2E, incluido el desajuste 401/403</td>
+<td>AUTO + MAN; conjunto visual mínimo compartido</td>
+<td>Crítica</td>
+</tr>
+</tbody>
+</table>
+<h2 id="formularios-que-debe-recorrer-la-validacion-compartida">Formularios que debe recorrer la validación compartida</h2>
+<p>La ayuda contextual está integrada en los formularios reales de Categorías, Productos, Clientes, Proveedores, Usuarios, Empresa, Almacenes, movimientos de Inventario, Compras y Ventas. La matriz debe ejecutar al menos creación y edición donde ambas operaciones existan; Compras y Ventas actualmente son de registro y no deben documentarse como edición.</p>
+<h2 id="evidencia-visual-minima">Evidencia visual mínima</h2>
+<p>No se propone una captura por caso. Se reutilizan las imágenes funcionales de cada módulo para comprobar temas, ayuda y responsive. Como mínimo, el conjunto global debe mostrar:</p>
+<ul>
+<li>un formulario en tema Claro y viewport móvil;</li>
+<li>un formulario con ayuda en tema Oscuro y escritorio;</li>
+<li>Dashboard en tema Azul en <a href="../../12-modulo-dashboard/evidencias/frontend/DSH-escritorio-azul.png">escritorio</a> y <a href="../../12-modulo-dashboard/evidencias/frontend/DSH-movil-azul.png">móvil</a>;</li>
+<li>ubicación Colombia y exterior;</li>
+<li>una notificación de error accesible sin datos sensibles.</li>
+</ul>
+<p>Las evidencias vigentes de Login, Usuarios y los módulos 03–12 cubren ya los viewports y ayudas principales. La verificación visual completa de los tres temas en un mismo formulario sigue siendo manual y no debe declararse automatizada.</p>
+<h2 id="riesgos-pendientes">Riesgos pendientes</h2>
+<ul>
+<li>Los tests Node actuales son valiosos como pruebas estáticas, pero no garantizan interacción, foco, accesibilidad ni renderizado.</li>
+<li>El interceptor solo gestiona 401 fuera de Login/Logout; debe probarse el 403 que puede devolver una sesión expirada antes de declarar resuelto el flujo.</li>
+<li>La preferencia de tema sí usa <code>localStorage</code> de forma intencional; la ayuda contextual no debe usar ningún almacenamiento.</li>
+</ul>
+<h2 id="ejecucion-registrada">Ejecución registrada</h2>
+<div class="highlight"><pre><span></span><code>Runtime: Node.js 20.20.2 en contenedor temporal node:20-alpine
+Montaje: repositorio completo en /workspace, solo lectura
+Comando: npm test desde /workspace/frontend
+Resultado: 24 pruebas aprobadas, 0 fallos
+</code></pre></div>
+<p>La primera tentativa montó solo <code>frontend</code> y no encontró <code>backend/catalogos/data/colombia.json</code>; se descartó como error de preparación. La repetición con el repositorio completo en solo lectura finalizó correctamente.</p>
+<h2 id="resultado-final-de-ejecucion">Resultado final de ejecución</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Total</th>
+<th style="text-align: right;">Aprobados</th>
+<th style="text-align: right;">Fallidos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+<p>Los tres temas, ayuda crear/editar, <code>Esc</code>, retorno de foco, aislamiento, validadores y ubicación aprobaron. TC-FE-007 falló por el contrato de expiración 403/401 y por el mensaje técnico del Dashboard (<code>BUG-LOGIN-001</code>, <code>BUG-DSH-001</code>). El build Angular aprobó con advertencias de presupuesto. Ver <a href="../../RESULTADOS_EJECUCION_2026-08-08/#frontend-compartido">resultados trazables</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

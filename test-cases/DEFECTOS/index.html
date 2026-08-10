@@ -23,7 +23,7 @@
     
     
       
-        <title>🐛 Registro de Defectos — SofInventory - SofInventory ERP</title>
+        <title>Registro de defectos — SofInventory - SofInventory ERP</title>
       
     
     
@@ -108,7 +108,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              🐛 Registro de Defectos — SofInventory
+              Registro de defectos — SofInventory
             
           </span>
         </div>
@@ -347,110 +347,35 @@
 
 
 
-<h1 id="registro-de-defectos-sofinventory">🐛 Registro de Defectos — SofInventory</h1>
+<h1 id="registro-de-defectos-sofinventory">Registro de defectos — SofInventory</h1>
 <blockquote>
-<p><strong>Versión:</strong> 1.0.0 <br>
-<strong>Fecha:</strong> 15 de mayo de 2026 <br>
-<strong>Sistema:</strong> SofInventory <br>
-<strong>Iteración de pruebas:</strong> Sprint QA — v1.0 </p>
+<p><strong>Versión:</strong> 3.0.0 · <strong>Actualizado:</strong> 8 de agosto de 2026</p>
 </blockquote>
-<hr />
-<h2 id="resumen-ejecutivo-de-defectos">📋 Resumen Ejecutivo de Defectos</h2>
+<h2 id="resumen">Resumen</h2>
 <table>
 <thead>
 <tr>
-<th>Total encontrados</th>
-<th>Críticos 🔴</th>
-<th>Medios 🟡</th>
-<th>Bajos 🟢</th>
-<th>Resueltos</th>
-<th>Pendientes</th>
+<th style="text-align: right;">Total registrados</th>
+<th style="text-align: right;">Abiertos</th>
+<th style="text-align: right;">Resueltos/revalidados</th>
+<th style="text-align: right;">Crítica</th>
+<th style="text-align: right;">Alta</th>
+<th style="text-align: right;">Media</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>3</td>
-<td>2</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>3</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">3</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="defectos-de-severidad-alta">🔴 Defectos de Severidad Alta</h2>
-<hr />
-<h3 id="bug-usr-001-ausencia-de-validacion-de-formato-de-numero-de-documento">BUG-USR-001: Ausencia de validación de formato de número de documento</h3>
-<table>
-<thead>
-<tr>
-<th>Campo</th>
-<th>Detalle</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>ID</strong></td>
-<td>BUG-USR-001</td>
-</tr>
-<tr>
-<td><strong>Módulo</strong></td>
-<td>Usuarios</td>
-</tr>
-<tr>
-<td><strong>Caso de prueba</strong></td>
-<td>TC-USR-005</td>
-</tr>
-<tr>
-<td><strong>Severidad</strong></td>
-<td>🔴 Alta</td>
-</tr>
-<tr>
-<td><strong>Prioridad</strong></td>
-<td>P1 — Resolver antes del despliegue</td>
-</tr>
-<tr>
-<td><strong>Estado</strong></td>
-<td>🔴 Abierto</td>
-</tr>
-<tr>
-<td><strong>Descripción</strong></td>
-<td>El sistema permite registrar un usuario ingresando caracteres alfabéticos o especiales en el campo <code>numero_documento</code>. No existe validación de formato ni en el serializer de Django ni en el formulario Angular que garantice que el valor sea numérico o alfanumérico según el tipo de documento.</td>
-</tr>
-<tr>
-<td><strong>Impacto</strong></td>
-<td>Datos inconsistentes en la tabla <code>usuarios</code> de PostgreSQL. Puede provocar errores en módulos que dependan del número de documento para búsquedas o reportes.</td>
-</tr>
-<tr>
-<td><strong>Pasos para reproducir</strong></td>
-<td>1. Autenticarse como administrador. 2. Abrir formulario de Nuevo Usuario. 3. Ingresar <code>ABCDE!!!</code> en el campo número de documento. 4. Guardar. 5. Verificar en pgAdmin: el registro existe con el valor inválido en la columna <code>numero_documento</code>.</td>
-</tr>
-<tr>
-<td><strong>Resultado esperado</strong></td>
-<td>El sistema debe rechazar el formulario con el mensaje "El número de documento solo debe contener dígitos". HTTP 400 desde el backend.</td>
-</tr>
-<tr>
-<td><strong>Resultado obtenido</strong></td>
-<td>El registro fue creado exitosamente en la base de datos con el valor <code>ABCDE!!!</code> en la columna <code>numero_documento</code>.</td>
-</tr>
-<tr>
-<td><strong>Solución propuesta</strong></td>
-<td>Agregar un validator en el <code>UsuarioSerializer</code> de DRF: <code>numero_documento = serializers.RegexField(regex=r'^\d+$')</code>. Agregar validación equivalente en el formulario Angular con <code>Validators.pattern(/^\d+$/)</code>.</td>
-</tr>
-<tr>
-<td><strong>Asignado a</strong></td>
-<td>Equipo Backend / Equipo Frontend</td>
-</tr>
-<tr>
-<td><strong>Fecha reporte</strong></td>
-<td>14/05/2026</td>
-</tr>
-</tbody>
-</table>
-<h2 id="defectos-de-severidad-alta_1">🔴 Defectos de Severidad Alta</h2>
-<hr />
-<h3 id="bug-usr-002-ausencia-de-politica-de-contrasenas-en-registro-de-usuarios">BUG-USR-002: Ausencia de política de contraseñas en registro de usuarios</h3>
+<h2 id="defectos-abiertos">Defectos abiertos</h2>
+<h3 id="bug-login-001-la-expiracion-puede-devolver-403-y-el-interceptor-solo-gestiona-401">BUG-LOGIN-001 — La expiración puede devolver 403 y el interceptor solo gestiona 401</h3>
 <table>
 <thead>
 <tr>
@@ -460,66 +385,44 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>ID</strong></td>
-<td>BUG-USR-002</td>
+<td>Módulo</td>
+<td>Login / frontend compartido</td>
 </tr>
 <tr>
-<td><strong>Módulo</strong></td>
-<td>Usuarios</td>
+<td>Caso relacionado</td>
+<td>TC-LOGIN-007</td>
 </tr>
 <tr>
-<td><strong>Caso de prueba</strong></td>
-<td>TC-USR-004</td>
+<td>Severidad</td>
+<td>Media</td>
 </tr>
 <tr>
-<td><strong>Severidad</strong></td>
-<td>🔴 Alta</td>
+<td>Prioridad</td>
+<td>Alta</td>
 </tr>
 <tr>
-<td><strong>Prioridad</strong></td>
-<td>P1 — Resolver antes del despliegue</td>
+<td>Estado</td>
+<td>Abierto; reproducido con expiración controlada el 8 de agosto de 2026</td>
 </tr>
 <tr>
-<td><strong>Estado</strong></td>
-<td>🔴 Abierto</td>
+<td>Evidencia ejecutada</td>
+<td>Una sesión ficticia se forzó a expirar en PostgreSQL: <code>/api/auth/me/</code> devolvió 403 y marcó la sesión inactiva. <code>authInterceptor</code> llama <code>handleUnauthorized()</code> únicamente para 401 fuera de Login/Logout.</td>
 </tr>
 <tr>
-<td><strong>Descripción</strong></td>
-<td>El sistema permite crear usuarios con contraseñas débiles como <code>123</code> o <code>12345</code>. No existe validación de política de contraseñas ni en el <code>UsuarioSerializer</code> de DRF ni en el formulario Angular.</td>
+<td>Impacto</td>
+<td>El usuario puede permanecer en una vista protegida sin una explicación clara cuando la sesión expira.</td>
 </tr>
 <tr>
-<td><strong>Impacto</strong></td>
-<td>Usuarios con contraseñas triviales son vulnerables a ataques de fuerza bruta y diccionario, comprometiendo la seguridad del sistema completo.</td>
+<td>Resultado esperado</td>
+<td>Backend y frontend comparten un contrato explícito; cualquier expiración limpia la sesión local, informa al usuario y redirige a Login.</td>
 </tr>
 <tr>
-<td><strong>Pasos para reproducir</strong></td>
-<td>1. Autenticarse como administrador. 2. Crear un nuevo usuario con contraseña <code>123</code>. 3. Verificar que el usuario queda registrado sin error.</td>
-</tr>
-<tr>
-<td><strong>Resultado esperado</strong></td>
-<td>HTTP 400 con mensaje indicando que la contraseña no cumple la política de seguridad.</td>
-</tr>
-<tr>
-<td><strong>Resultado obtenido</strong></td>
-<td>Usuario creado exitosamente con contraseña <code>123</code>.</td>
-</tr>
-<tr>
-<td><strong>Solución propuesta</strong></td>
-<td>Activar <code>AUTH_PASSWORD_VALIDATORS</code> en <code>settings.py</code> de Django y conectarlos al serializer. Agregar <code>Validators.pattern</code> en el formulario Angular para exigir mínimo 8 caracteres, una mayúscula, un número y un carácter especial.</td>
-</tr>
-<tr>
-<td><strong>Asignado a</strong></td>
-<td>Equipo Backend / Equipo Frontend</td>
-</tr>
-<tr>
-<td><strong>Fecha reporte</strong></td>
-<td>16/05/2026</td>
+<td>Prueba requerida</td>
+<td>Corregir o formalizar el contrato 401/403 y agregar prueba Angular/E2E del interceptor; repetir TC-LOGIN-007 y TC-FE-007.</td>
 </tr>
 </tbody>
 </table>
-<h2 id="defectos-de-severidad-alta_2">🔴 Defectos de Severidad Alta</h2>
-<hr />
-<h3 id="bug-login-001-el-interceptor-http-no-gestiona-la-redireccion-por-sesion-expirada">BUG-LOGIN-001: El interceptor HTTP no gestiona la redirección por sesión expirada</h3>
+<h3 id="bug-usr-003-el-buscador-de-usuarios-no-filtra-la-tabla">BUG-USR-003 — El buscador de Usuarios no filtra la tabla</h3>
 <table>
 <thead>
 <tr>
@@ -529,66 +432,410 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>ID</strong></td>
-<td>BUG-LOGIN-001</td>
+<td>Módulo</td>
+<td>Usuarios / frontend</td>
 </tr>
 <tr>
-<td><strong>Módulo</strong></td>
-<td>Login (Frontend Angular)</td>
+<td>Caso relacionado</td>
+<td>TC-USR-008</td>
 </tr>
 <tr>
-<td><strong>Caso de prueba</strong></td>
-<td>TC-LOGIN-010</td>
+<td>Severidad</td>
+<td>Media</td>
 </tr>
 <tr>
-<td><strong>Severidad</strong></td>
-<td>🟡 Media</td>
+<td>Prioridad</td>
+<td>Media</td>
 </tr>
 <tr>
-<td><strong>Prioridad</strong></td>
-<td>P2 — Resolver en el siguiente sprint</td>
+<td>Estado</td>
+<td>Abierto; reproducido el 8 de agosto de 2026</td>
 </tr>
 <tr>
-<td><strong>Estado</strong></td>
-<td>🔴 Abierto</td>
+<td>Pasos seguros</td>
+<td>En el entorno E2E, ingresar un texto sin coincidencias en el buscador del listado sin ejecutar otra operación.</td>
 </tr>
 <tr>
-<td><strong>Descripción</strong></td>
-<td>Cuando el token Bearer expira (pasadas las 12 horas), el backend devuelve correctamente HTTP 401 con el mensaje <code>"La sesion expiro. Inicie sesion nuevamente."</code>. Sin embargo, el frontend Angular no intercepta esa respuesta y no redirige al usuario a la pantalla de Login. El usuario permanece en el dashboard viendo las secciones vacías y sin ningún mensaje informativo.</td>
+<td>Resultado obtenido</td>
+<td>El campo conservó el texto, pero las dos filas ficticias continuaron visibles.</td>
 </tr>
 <tr>
-<td><strong>Impacto</strong></td>
-<td>Mala experiencia de usuario. El usuario no sabe que su sesión expiró y puede intentar acciones que fallan silenciosamente.</td>
+<td>Evidencia de código</td>
+<td><code>filteredUsuarios</code> es un <code>computed</code> que lee <code>searchTerm</code>, mientras <code>searchTerm</code> es una propiedad ordinaria y no una señal reactiva.</td>
 </tr>
 <tr>
-<td><strong>Pasos para reproducir</strong></td>
-<td>1. Autenticarse en el sistema. 2. Localizar el token en <code>localStorage</code> (<code>access_token</code>). 3. En pgAdmin, ejecutar: <code>UPDATE sesiones_api SET expira_en = NOW() - INTERVAL '1 hour' WHERE activa = true;</code> para forzar la expiración. 4. Navegar a cualquier sección que cargue datos desde la API. 5. Observar: datos vacíos, sin redirección, sin mensaje de sesión expirada.</td>
+<td>Resultado esperado</td>
+<td>La tabla muestra únicamente usuarios cuyo username, nombre o correo coincida.</td>
 </tr>
 <tr>
-<td><strong>Resultado esperado</strong></td>
-<td>El Angular <code>HttpInterceptor</code> captura el 403, limpia el <code>localStorage</code>, y redirige a <code>/login</code> con el mensaje "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."</td>
-</tr>
-<tr>
-<td><strong>Resultado obtenido</strong></td>
-<td>El frontend no interceptó el 403. El usuario permaneció en el dashboard con datos vacíos. No se mostró ningún mensaje de error.</td>
-</tr>
-<tr>
-<td><strong>Solución propuesta</strong></td>
-<td>Implementar un <code>HttpInterceptor</code> en Angular que capture respuestas con código 403 y ejecute: limpiar el token del <code>localStorage</code>, redirigir a <code>/login</code> mostrando el mensaje correspondiente.</td>
-</tr>
-<tr>
-<td><strong>Asignado a</strong></td>
-<td>Equipo Frontend</td>
-</tr>
-<tr>
-<td><strong>Fecha reporte</strong></td>
-<td>14/05/2026</td>
+<td>Alcance</td>
+<td>Solo interfaz; no modifica permisos ni datos.</td>
 </tr>
 </tbody>
 </table>
-<h2 id="defectos-de-severidad-media">🟡 Defectos de Severidad Media</h2>
-<hr />
-<h2 id="historial-de-cambios">📈 Historial de Cambios</h2>
+<h3 id="bug-prd-001-el-alta-de-producto-devuelve-500-por-quitar_imagen">BUG-PRD-001 — El alta de Producto devuelve 500 por <code>quitar_imagen</code></h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Módulo</td>
+<td>Productos</td>
+</tr>
+<tr>
+<td>Caso relacionado</td>
+<td>TC-PRD-001; bloquea la parte HTTP de TC-PRD-002</td>
+</tr>
+<tr>
+<td>Severidad</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>Abierto; reproducido por interfaz y API el 8 de agosto de 2026</td>
+</tr>
+<tr>
+<td>Resultado obtenido</td>
+<td>Un Producto válido muestra error genérico y <code>/api/productos/crear/</code> devuelve 500.</td>
+</tr>
+<tr>
+<td>Causa localizada</td>
+<td><code>ProductoEscrituraSerializer</code> agrega <code>quitar_imagen</code> a <code>validated_data</code>; <code>crear_producto</code> convierte esos datos a <code>dict</code> y los pasa a <code>Producto.objects.create</code> sin retirar el campo no perteneciente al modelo.</td>
+</tr>
+<tr>
+<td>Evidencia</td>
+<td><a href="../04-modulo-productos/evidencias/frontend/PRD-alta-error-e2e.png">PRD-alta-error-e2e.png</a> y traza sanitizada <code>TypeError: Producto() got unexpected keyword arguments: 'quitar_imagen'</code>.</td>
+</tr>
+<tr>
+<td>Resultado esperado</td>
+<td>Alta 201, stock inicial 0 y ningún campo auxiliar enviado al modelo.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bug-prv-001-eliminar-un-proveedor-relacionado-devuelve-500">BUG-PRV-001 — Eliminar un Proveedor relacionado devuelve 500</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Módulo</td>
+<td>Proveedores</td>
+</tr>
+<tr>
+<td>Caso relacionado</td>
+<td>TC-PRV-005</td>
+</tr>
+<tr>
+<td>Severidad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>Abierto; reproducido por API E2E</td>
+</tr>
+<tr>
+<td>Resultado obtenido</td>
+<td>Proveedor libre: 200; Vendedor: 403; Proveedor con Compras: 500. El registro y sus Compras permanecieron intactos.</td>
+</tr>
+<tr>
+<td>Causa localizada</td>
+<td><code>eliminar_proveedor</code> no captura <code>django.db.models.deletion.ProtectedError</code>.</td>
+</tr>
+<tr>
+<td>Resultado esperado</td>
+<td>Respuesta 400/409 controlada, mensaje en español y conservación de la relación.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bug-cli-001-eliminar-un-cliente-relacionado-devuelve-500">BUG-CLI-001 — Eliminar un Cliente relacionado devuelve 500</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Módulo</td>
+<td>Clientes</td>
+</tr>
+<tr>
+<td>Caso relacionado</td>
+<td>TC-CLI-006</td>
+</tr>
+<tr>
+<td>Severidad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>Abierto; reproducido por API E2E</td>
+</tr>
+<tr>
+<td>Resultado obtenido</td>
+<td>Cliente libre: 200; Vendedor: 403; Cliente con Ventas: 500. El registro y sus Ventas permanecieron intactos.</td>
+</tr>
+<tr>
+<td>Causa localizada</td>
+<td><code>eliminar_cliente</code> no captura <code>ProtectedError</code>.</td>
+</tr>
+<tr>
+<td>Resultado esperado</td>
+<td>Respuesta 400/409 controlada, mensaje en español y conservación de la relación.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bug-com-001-compras-acepta-productos-inactivos">BUG-COM-001 — Compras acepta Productos inactivos</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Módulo</td>
+<td>Compras / Inventario</td>
+</tr>
+<tr>
+<td>Caso relacionado</td>
+<td>TC-COM-004</td>
+</tr>
+<tr>
+<td>Severidad</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Crítica</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>Abierto; reproducido y revertido en E2E</td>
+</tr>
+<tr>
+<td>Resultado obtenido</td>
+<td>Con Proveedor y Almacén activos, una Compra con Producto inactivo devolvió 201 e incrementó stock. La Compra ficticia se anuló inmediatamente y el stock original quedó restaurado.</td>
+</tr>
+<tr>
+<td>Causa localizada</td>
+<td><code>registrar_compra</code> comprueba estado del Proveedor y Almacén, pero no <code>producto.estado</code>.</td>
+</tr>
+<tr>
+<td>Resultado esperado</td>
+<td>Rechazo 400 antes de crear cabecera, detalle o movimiento.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bug-vta-001-metodos-de-pago-no-exigen-datos-condicionales">BUG-VTA-001 — Métodos de pago no exigen datos condicionales</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Módulo</td>
+<td>Ventas</td>
+</tr>
+<tr>
+<td>Caso relacionado</td>
+<td>TC-VTA-004</td>
+</tr>
+<tr>
+<td>Severidad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>Abierto; reproducido y revertido en E2E</td>
+</tr>
+<tr>
+<td>Resultado obtenido</td>
+<td>Efectivo insuficiente se rechazó, pero una Venta con método Débito y sin últimos cuatro dígitos ni aprobación devolvió 201. La Venta ficticia se anuló y el stock quedó restaurado.</td>
+</tr>
+<tr>
+<td>Causa localizada</td>
+<td><code>MetodoPagoSerializer</code> declara campos opcionales, pero no implementa validación cruzada según <code>metodo</code>.</td>
+</tr>
+<tr>
+<td>Resultado esperado</td>
+<td>Cada método exige únicamente sus datos aplicables y rechaza campos obligatorios ausentes.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bug-emp-001-empresa-acepta-nit-y-telefono-semanticamente-invalidos">BUG-EMP-001 — Empresa acepta NIT y teléfono semánticamente inválidos</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Módulo</td>
+<td>Empresa</td>
+</tr>
+<tr>
+<td>Caso relacionado</td>
+<td>TC-EMP-003</td>
+</tr>
+<tr>
+<td>Severidad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>Abierto; reproducido y restaurado en E2E</td>
+</tr>
+<tr>
+<td>Resultado obtenido</td>
+<td>Un PATCH con NIT <code>x</code> y teléfono alfabético devolvió 200. La configuración ficticia original se restauró inmediatamente.</td>
+</tr>
+<tr>
+<td>Causa localizada</td>
+<td><code>validate_nit</code> solo exige un texto no vacío y no existe validador específico de teléfono.</td>
+</tr>
+<tr>
+<td>Resultado esperado</td>
+<td>Rechazo 400 por campo con formatos coherentes con los formularios actuales.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bug-dsh-001-dashboard-expone-un-mensaje-http-tecnico-ante-indisponibilidad">BUG-DSH-001 — Dashboard expone un mensaje HTTP técnico ante indisponibilidad</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Módulo</td>
+<td>Dashboard / notificaciones compartidas</td>
+</tr>
+<tr>
+<td>Caso relacionado</td>
+<td>TC-DSH-005, TC-FE-007</td>
+</tr>
+<tr>
+<td>Severidad</td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>Abierto; reproducido deteniendo solo el backend E2E</td>
+</tr>
+<tr>
+<td>Resultado obtenido</td>
+<td>Después de un 502, la vista mostró literalmente <code>Http failure response for ... 502 Bad Gateway</code>. Los datos previos permanecieron visibles.</td>
+</tr>
+<tr>
+<td>Impacto</td>
+<td>Expone terminología técnica y no ofrece una orientación clara al usuario final.</td>
+</tr>
+<tr>
+<td>Resultado esperado</td>
+<td>Mensaje breve en español, acción de reintento y detalle técnico reservado para logs.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="defectos-resueltos-o-superados">Defectos resueltos o superados</h2>
+<h3 id="bug-usr-001-formato-de-numero-de-documento">BUG-USR-001 — Formato de número de documento</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Estado</td>
+<td>Resuelto en el código actual; evidencia histórica desactualizada</td>
+</tr>
+<tr>
+<td>Corrección observada</td>
+<td><code>UsuarioSerializer.validate_numero_documento</code> usa reglas según tipo de documento y valida unicidad; el frontend comparte validadores semánticos.</td>
+</tr>
+<tr>
+<td>Evidencia</td>
+<td>Suite frontend: 7/7 pruebas semánticas aprobadas. Suite backend <code>usuarios</code>: 26/26 aprobadas.</td>
+</tr>
+<tr>
+<td>Pendiente menor</td>
+<td>Agregar prueba backend dedicada para cada tipo de documento y sus fronteras.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bug-usr-002-ausencia-de-politica-de-contrasenas">BUG-USR-002 — Ausencia de política de contraseñas</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Detalle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Estado</td>
+<td>Resuelto y revalidado automáticamente</td>
+</tr>
+<tr>
+<td>Corrección observada</td>
+<td><code>UsuarioSerializer</code> aplica validadores de Django, confirmación, hash y rechazo de contraseña ya utilizada por otra cuenta.</td>
+</tr>
+<tr>
+<td>Evidencia</td>
+<td>6/6 métodos de <code>ValidacionFortalezaContrasenaTests</code> aprobados dentro del contenedor backend.</td>
+</tr>
+<tr>
+<td>Seguridad documental</td>
+<td>Ninguna evidencia debe mostrar una contraseña ni el hash completo.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="nota-sobre-evidencia-historica">Nota sobre evidencia histórica</h2>
+<p>Las capturas antiguas que muestran documentos inválidos aceptados, contraseñas débiles admitidas o respuestas anteriores se conservan solo para trazabilidad. No deben presentarse como comportamiento vigente.</p>
+<h2 id="historial">Historial</h2>
 <table>
 <thead>
 <tr>
@@ -601,12 +848,20 @@
 <tr>
 <td>1.0.0</td>
 <td>15/05/2026</td>
-<td>Registro inicial de defectos — Sprint QA v1.0</td>
+<td>Registro inicial de tres defectos</td>
+</tr>
+<tr>
+<td>2.0.0</td>
+<td>08/08/2026</td>
+<td>Revalidación de dos defectos de Usuarios, normalización del defecto de expiración y registro del buscador no reactivo</td>
+</tr>
+<tr>
+<td>3.0.0</td>
+<td>08/08/2026</td>
+<td>Ejecución integral de 78 casos y registro de siete defectos funcionales adicionales</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<p><em>© 2026 SofInventory — Área de Calidad de Software</em></p>
 
 
 
