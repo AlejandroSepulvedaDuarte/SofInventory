@@ -5,7 +5,7 @@
 ![SofInventory Logo](assets/logo.png){ width="300" }
 # Manual Técnico y Arquitectura del Software
 **Sistema de Información SofInventory ERP**
-`Versión 1.0` | `Fecha: 26 de julio de 2026`
+`Versión 2.0` | `Actualizado: 8 de agosto de 2026`
 
 </div>
 
@@ -13,9 +13,9 @@
 
 **Autores:** Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo <br>
 **Programa de Formación:** Tecnología en Análisis y Desarrollo de Software <br>
-**Cede:** Centro de Comercio Regional Antioquia–SENA <br>
-**Intructor:** José Ignacio Botero Osorio <br>
-**Fecha:** Julio 25 de 2026 
+**Sede:** Centro de Comercio Regional Antioquia — SENA <br>
+**Instructor:** José Ignacio Botero Osorio <br>
+**Fecha de actualización:** 8 de agosto de 2026
 
 ---
 
@@ -24,6 +24,7 @@
 | Versión | Fecha | Autor(es) | Descripción del cambio |
 |---|---|---|---|
 | 1.0 | Julio 25 de 2026 | Alejandro Sepúlveda D. / Lucy Estefany Izquierdo | Versión inicial: introducción, arquitectura, diccionario de datos, despliegue con Docker, diagrama de componentes y conclusiones. |
+| 2.0 | Agosto 8 de 2026 | Alejandro Sepúlveda D. / Lucy Estefany Izquierdo | Actualización conforme al código vigente: runtimes Docker verificados, módulos Empresa y Catálogos, seguridad de sesiones, validaciones compartidas, inventario transaccional, ayudas contextuales, temas, pruebas, evidencias y diagramas. |
 
 
 ### Convenciones del documento
@@ -34,6 +35,9 @@
 | 📄 / 📊 / 🖼️ / 💻 | Enlace a un documento, hoja de cálculo, imagen o repositorio de código, respectivamente. |
 | **Negrita** | Nombres de comandos, variables, botones o elementos clave. |
 | `Texto en código` | Nombres técnicos literales (comandos, variables de entorno, endpoints, nombres de tablas). |
+
+!!! info "Fuente de verdad y vigencia"
+    Las rutas, modelos, permisos y procesos descritos en este manual se contrastaron con el código de la rama documentada. Las versiones de Python, Django, PostgreSQL, Node.js, Angular y Nginx corresponden a los **contenedores ejecutados**, no a herramientas instaladas en Windows. Los resultados de calidad corresponden a la última ejecución documentada del 8 de agosto de 2026; una corrección posterior en código requiere reejecutar su caso antes de declararla aprobada.
 
 
 ## 1. Introducción
@@ -46,15 +50,15 @@ El presente Manual Técnico documenta de forma exhaustiva la arquitectura, confi
 
 Este manual cubre los siguientes aspectos del sistema:
 
-- Arquitectura técnica completa (backend, frontend, base de datos, contenedores Docker)
+- Arquitectura técnica completa (frontend, API, servicios de dominio, base de datos y contenedores Docker)
 - Prerrequisitos de hardware y software para el despliegue
 - Stack tecnológico y estándares de codificación aplicados
-- Diagramas de casos de uso con descripción detallada de actores y flujos
+- Casos de uso, matriz de permisos y flujos transaccionales principales
 - Modelo entidad-relación de la base de datos PostgreSQL
 - Diccionario de datos completo con tipos, longitudes y restricciones
 - Scripts reales de instalación y despliegue mediante Docker Compose
 - Diagrama de componentes con orquestación Docker
-- Protocolo de pruebas de aceptación
+- Estrategia de validación, seguridad, accesibilidad y protocolo de pruebas de aceptación
 
 ### 1.3 Descripción técnica del sistema
 
@@ -70,8 +74,11 @@ Este manual cubre los siguientes aspectos del sistema:
 | **Ventas** | Punto de venta con múltiples métodos de pago y cálculo de IVA |
 | **Inventario y Almacenes** | Control de stock por almacén, movimientos, traslados y ajustes |
 | **Dashboard** | Panel de indicadores con gráficos y métricas en tiempo real |
+| **Empresa** | Configuración única de identidad, ubicación, logo y datos usados en comprobantes |
+| **Catálogos territoriales** | Catálogo local de departamentos y municipios de Colombia para formularios de ubicación |
+| **Frontend compartido** | Temas Claro, Azul y Oscuro; validaciones semánticas; notificaciones; ubicación reutilizable; ayuda contextual accesible y responsive |
 
-La arquitectura es **desacoplada (decoupled)**: un backend Django REST Framework que expone una API, y un frontend Angular SPA que consume dicha API. Ambos están containerizados con Docker y orquestados mediante Docker Compose.
+La arquitectura es **desacoplada**: una SPA Angular consume una API Django REST Framework; los procesos críticos de inventario y Dashboard se encapsulan en servicios de dominio; PostgreSQL conserva datos, restricciones e históricos; y Nginx sirve el frontend y actúa como proxy inverso. Docker Compose orquesta las tres capas en desarrollo y validación.
 
 ### 1.4 Documentos de referencia integrados
 
@@ -83,6 +90,8 @@ Este manual ha sido elaborado consolidando la información de los siguientes doc
 | Desarrollo Arquitectura de Software (Patrón MVC) | Vista de componentes, vista de despliegue, justificación de herramientas |
 | Informe Técnico de Despliegue v2.0 | Fases de despliegue Docker, variables de entorno, protocolo de pruebas |
 | Diagramas y Plantillas para Casos de Uso | CU-001 a CU-004 con flujos principales, alternativos y de excepción |
+| Arquitectura Frontend y Estándares de Codificación | Componentes standalone, servicios compartidos, tokens de diseño, accesibilidad y convenciones vigentes |
+| Casos de Prueba y Resultados de Ejecución | Matriz de 78 casos, evidencias automatizadas, E2E y defectos abiertos |
 
 ---
 
@@ -103,13 +112,25 @@ Este manual ha sido elaborado consolidando la información de los siguientes doc
 
 | Herramienta | Versión Requerida | Propósito | ¿Obligatorio? |
 |---|---|---|---|
-| **Docker Desktop** | Última versión estable (incluye Docker Engine + Docker Compose) | Construcción y ejecución de contenedores | **Sí** |
-| **Git** | Última versión estable | Obtención del código fuente del repositorio | **Sí** |
+| **Docker Desktop** | Versión estable compatible con Docker Compose v2 | Construcción y ejecución de contenedores | **Sí** |
+| **Git** | 2.x o compatible | Obtención y control local del código fuente | **Sí** |
 | **Navegador web** | Chrome, Edge o Firefox (actualizado) | Acceso a la interfaz de usuario | **Sí** |
 
-> **No es necesario instalar** Python, Node.js, PostgreSQL, npm, entornos virtuales de Python, ni configurar bases de datos manualmente. Todo se ejecuta dentro de los contenedores Docker, lo que elimina problemas de compatibilidad entre versiones y garantiza un entorno idéntico en cualquier máquina.
+> **No es necesario instalar** Python, Node.js, PostgreSQL ni npm en Windows para ejecutar SofInventory con Docker. Esas instalaciones del host pueden servir para tareas auxiliares, pero **no representan el runtime del sistema** ni deben usarse como evidencia de compatibilidad.
 
-### 2.3 Herramientas recomendadas (Opcional)
+### 2.3 Runtime real verificado en Docker
+
+| Contenedor o fase | Runtime verificado | Fuente |
+|---|---|---|
+| Backend | Python 3.12.13 · Django 6.0.4 · Django REST Framework 3.17.1 | Ejecución `AUTO-SQLITE` y `AUTO-PG` |
+| Base de datos | PostgreSQL 15.18 | Contenedor PostgreSQL aislado |
+| Frontend servido | Nginx 1.31.3 sobre Alpine 3.24.1 | Contenedor frontend |
+| Compilación frontend | Node.js 20 Alpine · Angular 19.2.21 · TypeScript 5.6.3 | Build Linux limpio |
+
+!!! warning "Windows no es el runtime de referencia"
+    Los comandos `python --version`, `node --version` o `psql --version` ejecutados directamente en PowerShell describen el equipo anfitrión. Para documentación técnica y diagnóstico de SofInventory se deben usar las versiones reportadas desde `docker compose exec` o desde las imágenes de construcción.
+
+### 2.4 Herramientas recomendadas (opcional)
 
 | Herramienta | Propósito |
 |---|---|
@@ -118,22 +139,22 @@ Este manual ha sido elaborado consolidando la información de los siguientes doc
 | **pgAdmin 4 / DBeaver** | Administración de PostgreSQL (solo si se necesita inspeccionar la BD directamente) |
 | **Docker Desktop** | Panel visual de contenedores, logs y redes |
 
-### 2.4 Verificación de prerrequisitos
+### 2.5 Verificación de prerrequisitos
 
 Antes de proceder con la instalación, verifique que Docker y Git estén correctamente instalados:
 
 ```bash
 # Verificar Docker Engine
 docker --version
-# Resultado esperado: Docker version 24.x.x o superior
+# El número exacto depende del equipo anfitrión; debe responder sin error
 
 # Verificar Docker Compose
 docker compose version
-# Resultado esperado: Docker Compose version v2.x.x o superior
+# Debe informar Docker Compose v2
 
 # Verificar Git
 git --version
-# Resultado esperado: git version 2.x.x
+# Debe informar Git 2.x o compatible
 ```
 
 ---
@@ -147,61 +168,65 @@ block-beta
     columns 3
     block:FRONTEND:1
         columns 1
-        F1["Angular 19+ (SPA)"]
-        F2["TypeScript"]
+        F1["Angular 19.2.21 (SPA)"]
+        F2["TypeScript 5.6.3"]
         F3["HTML / CSS"]
         F4["Font Awesome 7"]
         F5["Chart.js 4"]
     end
     block:BACKEND:1
         columns 1
-        B1["Django 6.0"]
-        B2["Django REST Framework"]
-        B3["Python 3.12"]
-        B4["Gunicorn"]
-        B5["Whitenoise"]
+        B1["Django 6.0.4"]
+        B2["Django REST Framework 3.17.1"]
+        B3["Python 3.12.13"]
+        B4["Gunicorn 23.0.0"]
+        B5["WhiteNoise 6.12.0"]
     end
     block:DATABASE:1
         columns 1
-        D1["PostgreSQL 15"]
-        D2["psycopg2"]
-        D3["dj-database-url"]
-        D4["Pillow (imágenes)"]
+        D1["PostgreSQL 15.18"]
+        D2["psycopg2-binary 2.9.11"]
+        D3["dj-database-url 3.1.2"]
+        D4["Pillow 12.2.0"]
     end
     INFRA["Docker / Docker Compose / Nginx / Git"]
 ```
 
 | Capa | Tecnología | Versión | Función |
 |---|---|---|---|
-| **Frontend** | Angular | 19+ | Interfaz de usuario SPA (Single Page Application) |
-| **Frontend — Lenguaje** | TypeScript | 5.6 | Lenguaje tipado basado en JavaScript |
+| **Frontend** | Angular | 19.2.21 | Interfaz SPA con componentes standalone, rutas lazy y signals |
+| **Frontend — Lenguaje** | TypeScript | 5.6.3 | Lenguaje tipado del frontend |
 | **Frontend — Íconos** | Font Awesome | 7.2 | Librería de íconos vectoriales |
 | **Frontend — Gráficos** | Chart.js | 4.5 | Librería de visualización de datos |
-| **Backend — Framework** | Django | 6.0 | Framework web Python de alto nivel |
-| **Backend — API** | Django REST Framework | 3.17 | Toolkit para construir APIs RESTful |
-| **Backend — Servidor** | Gunicorn | 23.0 | Servidor WSGI para producción |
-| **Backend — Estáticos** | Whitenoise | 6.12 | Servir archivos estáticos en producción |
-| **Base de datos** | PostgreSQL | 15 | Sistema de gestión de BD relacional |
-| **Contenedorización** | Docker | 24+ | Empaquetado y ejecución de servicios |
+| **Backend — Runtime** | Python | 3.12.13 | Runtime verificado del contenedor backend |
+| **Backend — Framework** | Django | 6.0.4 | Framework web y ORM |
+| **Backend — API** | Django REST Framework | 3.17.1 | Autenticación, permisos, serialización y respuestas HTTP |
+| **Backend — Servidor** | Gunicorn | 23.0.0 | Servidor WSGI del contenedor backend |
+| **Backend — Estáticos** | WhiteNoise | 6.12.0 | Archivos estáticos en el despliegue unificado |
+| **Base de datos** | PostgreSQL | 15.18 | Runtime relacional verificado en contenedor |
+| **Build frontend** | Node.js | 20 Alpine | Compilación reproducible; no permanece en la imagen Nginx final |
+| **Contenedorización** | Docker | Host compatible | Empaquetado y ejecución de servicios |
 | **Orquestación** | Docker Compose | v2 | Definición y levantamiento multi-contenedor |
-| **Servidor web (frontend)** | Nginx | Alpine | Servidor de archivos estáticos + proxy reverso |
+| **Servidor web (frontend)** | Nginx | 1.31.3 / Alpine 3.24.1 | Archivos estáticos, media y proxy inverso `/api/` |
 | **Control de versiones** | Git + GitHub | — | Repositorio remoto privado |
 
 ### 3.2 Patrón de arquitectura: MVC con API REST desacoplada
 
-El sistema implementa el patrón **Modelo-Vista-Controlador (MVC)** adaptado a una arquitectura **cliente-servidor desacoplada** mediante API REST:
+El sistema parte del patrón **Modelo-Vista-Controlador (MVC)**, adaptado a una arquitectura cliente-servidor desacoplada y complementado con servicios de aplicación, componentes compartidos y persistencia relacional:
 
 | Capa MVC | Implementación en SofInventory | Ubicación |
 |---|---|---|
-| **Modelo** | Modelos de Django (usuarios, productos, inventario, proveedores, clientes, compras, ventas) que gestionan datos, reglas de negocio e interacción con PostgreSQL | `backend/*/models.py` |
-| **Vista** | Aplicación Angular (SPA) que renderiza la interfaz gráfica (formularios, tablas, dashboards) en el navegador del usuario | `frontend/src/app/pages/` |
-| **Controlador** | Vistas de Django REST Framework (`views.py` de cada app) que reciben peticiones HTTP de Angular, aplican permisos por rol y devuelven respuestas JSON | `backend/*/views.py` |
+| **Presentación** | Páginas Angular standalone cargadas bajo demanda; formularios reactivos, tablas, Dashboard y modales responsive | `frontend/src/app/pages/` |
+| **Frontend compartido** | Guards, interceptor, servicios API, notificaciones, temas, ubicación, validación y ayuda contextual | `frontend/src/app/core/`, `frontend/src/app/shared/` |
+| **Control HTTP** | Vistas DRF que reciben solicitudes, aplican autenticación/permisos y componen respuestas | `backend/*/views.py` |
+| **Dominio** | Servicios transaccionales de inventario, snapshots de empresa y agregación del Dashboard | `backend/inventario/services.py`, `backend/empresa/services.py`, `backend/dashboard/services.py` |
+| **Persistencia** | Modelos, restricciones, claves foráneas, índices y transacciones PostgreSQL | `backend/*/models.py`, `backend/*/migrations/` |
 
-> **Justificación:** El patrón MVC, adaptado a esta arquitectura desacoplada, permite escalar el frontend y el backend por separado, y habilita que otros clientes (app móvil, sistema externo) reutilicen la misma API REST sin duplicar lógica de negocio.
+> **Decisión arquitectónica:** las vistas no deben convertirse en la única ubicación de las reglas críticas. Las escrituras de existencias pasan por `ServicioInventario`, que usa transacciones y bloqueos de fila; Angular concentra comportamientos transversales en elementos compartidos para evitar duplicación entre formularios.
 
 ### 3.3 Aplicaciones (Apps) del backend
 
-El backend Django se organiza en **8 aplicaciones modulares**, cada una responsable de un dominio del negocio:
+El backend se organiza en **nueve aplicaciones instaladas de dominio** y un módulo de catálogos locales incluido en el enrutamiento. `config` concentra la configuración transversal:
 
 | # | App Django | Modelo(s) | Tabla(s) PostgreSQL | Función |
 |---|---|---|---|---|
@@ -213,12 +238,16 @@ El backend Django se organiza en **8 aplicaciones modulares**, cada una responsa
 | 6 | `ventas` | Venta, DetalleVenta | `ventas`, `detalle_ventas` | Punto de venta y detalle |
 | 7 | `inventario` | Almacen, StockAlmacen, MovimientoInventario, Traslado, TrasladoDetalle, ConfiguracionRangosStock | `almacenes`, `stock_almacen`, `movimientos_inventario`, `traslados`, `traslados_detalle`, `configuracion_rangos_stock` | Control de inventario, almacenes y movimientos |
 | 8 | `dashboard` | — | — | Agrega datos de los módulos para indicadores |
+| 9 | `empresa` | Empresa | `configuracion_empresa` | Configuración singleton y snapshots para comprobantes |
+| — | `catalogos` | — | — | Catálogo territorial local y validación segura de archivos; no define tablas propias |
+
+El frontend se estructura por páginas standalone (`pages`), elementos transversales (`shared`) y servicios de infraestructura (`core`). Los detalles y ejemplos de código se mantienen en [Arquitectura Frontend](./frontend-architecture.md) y [Estándares de Codificación](./coding-standards.md).
 
 ### 3.4 Variables de entorno
 
 El sistema utiliza archivos `.env` para la configuración de cada componente. Las variables están documentadas en la sección de despliegue. Los archivos `.env` **nunca se suben al repositorio** (excluidos por `.gitignore`).
 
-> 📄 **Documentación Complementaria:** Para profundizar en el análisis arquitectónico, los principios de diseño aplicados y la justificación del patrón seleccionado para **SofInventory**, consulte el documento anexo [Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf](./Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf) o diríjase a la sección de [13.2 Documentos Internos y externos del Proyecto](#122-documentos-internos-y-externos-del-proyecto).
+> 📄 **Documentación complementaria:** consulte [Arquitectura Frontend](./frontend-architecture.md), [Estándares de Codificación](./coding-standards.md) y el anexo [Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf](./Arquitectura_Software_Patrón_Diseño_Seleccionado.pdf). Los documentos históricos deben interpretarse junto con el código y este manual actualizado.
 
 ### 3.5 Principales Endpoints de la API REST
 
@@ -228,23 +257,70 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 |---|---|---|
 | `POST` | `/api/auth/login/` | Autentica un usuario y devuelve el token de sesión |
 | `POST` | `/api/auth/logout/` | Invalida el token de sesión activo |
-| `GET / POST` | `/api/usuarios/` | Lista o crea usuarios del sistema |
-| `GET / PUT / DELETE` | `/api/usuarios/{id}/` | Consulta, actualiza o desactiva un usuario específico |
-| `GET / POST` | `/api/productos/` | Lista o crea productos del catálogo |
-| `GET / PUT / DELETE` | `/api/productos/{id}/` | Consulta, actualiza o cambia el estado de un producto |
-| `GET / POST` | `/api/categorias/` | Lista o crea categorías de producto |
-| `GET / POST` | `/api/proveedores/` | Lista o crea proveedores |
-| `GET / POST` | `/api/clientes/` | Lista o crea clientes |
-| `GET / POST` | `/api/compras/` | Lista o registra compras a proveedores |
-| `POST` | `/api/compras/{id}/anular/` | Anula una compra registrada |
-| `GET / POST` | `/api/ventas/` | Lista o registra ventas |
-| `POST` | `/api/ventas/{id}/anular/` | Anula una venta y restaura el stock afectado |
-| `GET` | `/api/inventario/almacenes/` | Lista los almacenes registrados |
-| `GET` | `/api/inventario/stock/` | Consulta el stock actual por producto y almacén |
-| `GET` | `/api/inventario/movimientos/` | Consulta el historial de movimientos de inventario |
-| `GET` | `/api/dashboard/resumen/` | Devuelve los indicadores agregados del panel principal |
+| `GET` | `/api/auth/me/` | Devuelve la identidad pública de la sesión actual |
+| `POST / GET` | `/api/usuarios/crear/` · `/api/usuarios/listar/` | Crea o lista usuarios |
+| `PUT / DELETE / PATCH` | `/api/usuarios/editar/{id}/` · `/api/usuarios/eliminar/{id}/` · `/api/usuarios/estado/{id}/` | Administra una cuenta según permisos |
+| `PATCH / GET` | `/api/usuarios/desbloquear/{id}/` · `/api/usuarios/auditoria/` | Desbloquea cuentas y consulta auditoría |
+| `GET` | `/api/roles/listar/` · `/api/tipos-documento/listar/` · `/api/roles/reporte/` | Catálogos y reporte de roles |
+| `POST / GET / DELETE` | `/api/categorias/crear/` · `/api/categorias/listar/` · `/api/categorias/eliminar/{id}/` | Gestiona categorías |
+| `POST / GET` | `/api/productos/crear/` · `/api/productos/listar/` | Crea y lista productos |
+| `PUT|PATCH / PATCH` | `/api/productos/editar/{id}/` · `/api/productos/cambiar-estado/{id}/` | Edita o activa/inactiva productos |
+| `PUT|PATCH` | `/api/productos/configurar/{id}/` | Completa la configuración de un producto pendiente |
+| `POST / GET / PUT / DELETE / PATCH` | `/api/proveedores/crear/` · `/listar/` · `/editar/{id}/` · `/eliminar/{id}/` · `/estado/{id}/` | Gestiona proveedores |
+| `POST / GET / PUT / DELETE / PATCH` | `/api/clientes/crear/` · `/listar/` · `/editar/{id}/` · `/eliminar/{id}/` · `/estado/{id}/` | Gestiona clientes |
+| `POST / GET / GET / PATCH` | `/api/compras/registrar/` · `/api/compras/listar/` · `/api/compras/detalle/{id}/` · `/api/compras/anular/{id}/` | Registra, consulta y anula compras |
+| `POST / GET / GET / PATCH` | `/api/ventas/crear/` · `/api/ventas/listar/` · `/api/ventas/detalle/{id}/` · `/api/ventas/anular/{id}/` | Registra, consulta y anula ventas |
+| `POST / GET / PUT / DELETE` | `/api/inventario/almacenes/crear/` · `/api/inventario/almacenes/listar/` · `/api/inventario/almacenes/editar/{id}/` · `/api/inventario/almacenes/eliminar/{id}/` | Gestiona almacenes |
+| `GET / POST` | `/api/inventario/stock/listar/` · `/stock/movimiento/` | Consulta stock y registra entrada, salida o transferencia |
+| `GET` | `/api/inventario/movimientos/listar/` · `/api/inventario/stock/estadisticas/` · `/api/inventario/stock/alertas/` · `/api/inventario/stock/por-almacen/` · `/api/inventario/stock/exportar/` | Historial, métricas, alertas, consulta por almacén y CSV |
+| `GET` | `/api/catalogos/ubicaciones/colombia/` | Entrega el catálogo territorial local autenticado |
+| `GET / POST / PUT / PATCH` | `/api/empresa/` | Consulta o administra la única configuración de empresa |
+| `GET` | `/api/dashboard/` | Devuelve métricas, periodos, series y reglas de cálculo del Dashboard |
 
-> **Nota.** Esta tabla resume los endpoints de mayor uso con fines de orientación técnica; no reemplaza una colección de pruebas (Postman/Insomnia) ni la documentación autogenerada de la API, que se recomienda mantener como complemento para el equipo de desarrollo.
+> **Nota.** Las rutas anteriores reflejan los archivos `urls.py` actuales; SofInventory no utiliza un router REST convencional para estos módulos. La tabla es una referencia, no sustituye la [matriz de cobertura](./test-cases/MATRIZ_COBERTURA.md).
+
+### 3.6 Autenticación, sesiones y permisos
+
+- `APITokenAuthentication` recibe `Authorization: Bearer <token>` y valida que la sesión esté activa, vigente y asociada a un usuario activo.
+- Cada inicio de sesión correcto invalida las sesiones activas anteriores del mismo usuario; la sesión nueva expira a las **12 horas**.
+- Cinco credenciales inválidas acumuladas bloquean la cuenta; el endpoint de Login tiene limitación configurable por IP (`LOGIN_THROTTLE_RATE`, por defecto `5/min`).
+- `require_roles(...)` aplica autorización en el backend. Los guards y la visibilidad del menú mejoran la experiencia, pero no sustituyen ese control.
+- Los roles operativos vigentes son **Administrador, Supervisor, Vendedor y Bodega**. Usuarios y Empresa son áreas administrativas; Compras e Inventario habilitan operaciones específicas para Bodega; Ventas habilita Vendedor.
+- Creación, edición, cambios de rol/estado, desbloqueo y eliminación de usuarios generan registros en `auditoria_usuarios` sin guardar contraseñas ni tokens.
+
+!!! danger "Manejo de secretos"
+    Nunca copie tokens, contraseñas, `SECRET_KEY`, encabezados `Authorization` ni valores reales de `.env` en capturas, incidencias o documentación. Las evidencias del repositorio usan datos ficticios y salidas sanitizadas.
+
+### 3.7 Validación, integridad y experiencia compartida
+
+| Área | Implementación vigente |
+|---|---|
+| Texto semántico | Normalización de espacios y validadores para nombres de personas, lugares, cargos, nombres comerciales y usernames |
+| Documentos | Reglas por tipo (`CC`, `CE`, `TI`, `NIT`, `PA`) y unicidad en módulos aplicables |
+| Contraseñas | Validadores de Django, longitud mínima, rechazo de contraseñas comunes/numéricas/similares, confirmación y hash |
+| Imágenes | Inspección de contenido, formato, tamaño y dimensiones; rutas seguras para Producto y Empresa |
+| Ubicación | Componente Angular reutilizable y catálogo local de 33 territorios y 1.122 municipios de Colombia; modo manual para exterior |
+| Formularios | Resumen de errores, errores por campo, notificaciones y validaciones compartidas sin sustituir la validación del backend |
+| Ayuda contextual | Configuración central para 12 operaciones en 10 formularios; panel lateral/inferior, `Esc`, retorno de foco y estado efímero |
+| Temas | Claro, Azul y Oscuro mediante variables CSS; selección persistida como preferencia visual |
+
+### 3.8 Sistema visual, accesibilidad y responsive
+
+La interfaz usa tokens semánticos en `frontend/src/styles.css`; los componentes deben consumir variables y no repetir colores fijos:
+
+| Tema | Fondo principal | Superficie | Acento | Texto principal |
+|---|---|---|---|---|
+| Oscuro | `#0c0e14` | `#161923` | `#22d3c8` | `#eef0f8` |
+| Claro | `#f3f5fb` | `#ffffff` | `#2563eb` | `#1c2333` |
+| Azul | `#0f172a` | `#16223a` | `#38bdf8` | `#eaf1ff` |
+
+- Los controles interactivos usan elementos nativos, estados `:focus-visible`, etiquetas accesibles y mensajes que no dependen solo del color.
+- Los modales limitan su altura y mantienen scroll interno; a `768px` o menos se alinean al borde inferior y reducen espaciados.
+- El botón de ayuda muestra icono y texto en escritorio y conserva etiqueta accesible cuando el texto se oculta en móvil.
+- `Esc` cierra primero la ayuda abierta, detiene la propagación y evita cerrar por accidente el formulario principal.
+- La preferencia de tema se guarda bajo `sof_inventory_theme`; la ayuda y los datos del formulario no se guardan en almacenamiento del navegador.
+
+Consulte [Guía visual de accesibilidad](./accessibility-visual-guide.md) para criterios de contraste, teclado, lectores de pantalla, zoom y comprobación manual.
 
 ---
 
@@ -253,6 +329,8 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 ### 4.1 Diagrama de casos de uso general
 
 ![Diagrama general de casos de uso - SofInventory](./img/diagrama-casos-de-uso.png)
+
+El diagrama resume los flujos principales. La autorización efectiva se define por endpoint en el backend; que una opción no aparezca en el menú no concede ni revoca por sí sola un permiso.
 
 ### 4.2 Descripción de casos de uso principales
 
@@ -264,9 +342,9 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **ID** | CU-001 |
 | **Actor** | Todos los usuarios del sistema |
 | **Precondiciones** | El usuario tiene credenciales válidas registradas en la base de datos |
-| **Flujo Principal** | 1. El usuario ingresa al sistema desde el navegador → 2. Se muestra el formulario de autenticación → 3. El usuario ingresa username y contraseña → 4. El backend valida las credenciales (hash PBKDF2-SHA256) → 5. Se genera un token de acceso → 6. El usuario es redirigido al Dashboard principal |
+| **Flujo Principal** | 1. El usuario abre Login → 2. Envía username y contraseña → 3. El backend valida cuenta, hash y límite de intentos → 4. Invalida cualquier sesión activa anterior → 5. Crea una sesión de 12 horas → 6. Angular conserva la sesión y redirige al Dashboard |
 | **Flujo Alternativo** | Si la cuenta está bloqueada: el sistema muestra un mensaje de bloqueo y no permite el intento |
-| **Flujo de Excepción** | Si las credenciales son incorrectas: se registra el intento fallido; tras 3 intentos fallidos consecutivos, la cuenta se bloquea automáticamente |
+| **Flujo de Excepción** | Las credenciales inválidas devuelven un mensaje genérico; al quinto intento acumulado la cuenta se bloquea. El throttle por IP puede responder 429 cuando se supera la tasa configurada. |
 | **Postcondiciones** | El usuario queda autenticado con un token activo; se inicia sesión en la tabla `sesiones_api` |
 
 #### CU-002: Gestionar usuarios
@@ -277,10 +355,10 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **ID** | CU-002 |
 | **Actor** | Administrador |
 | **Precondiciones** | El administrador está autenticado con token activo |
-| **Flujo Principal** | 1. El administrador accede al módulo de usuarios → 2. Visualiza la lista de usuarios registrados → 3. Puede crear, editar, activar/desactivar usuarios → 4. Al crear: selección de tipo documento, número de documento, nombre completo, email, username, contraseña, rol y estado → 5. El sistema valida unicidad de documento, email y username → 6. Se guarda el usuario con contraseña hasheada (PBKDF2) → 7. Se actualiza la tabla `usuarios` |
+| **Flujo Principal** | 1. Administración abre Usuarios → 2. Crea o edita identidad, documento, correo, username y rol → 3. En alta valida contraseña y confirmación → 4. El backend valida semántica, unicidad y política de contraseña → 5. Guarda el hash → 6. Registra el evento de auditoría |
 | **Flujo Alternativo** | Edición: se carga el formulario con los datos existentes del usuario |
-| **Flujo de Excepción** | Si el número de documento o email ya existe: el sistema muestra error de duplicado |
-| **Postcondiciones** | La tabla `usuarios` se actualiza con la información del nuevo o modificado usuario |
+| **Flujo de Excepción** | Documento, email o username duplicados; contraseña débil; rol inexistente; intento de eliminar el último Administrador o de operar sin rol Administrador |
+| **Postcondiciones** | Se actualizan `usuarios` y `auditoria_usuarios`; un cambio de estado o contraseña revoca las sesiones activas cuando corresponde |
 
 #### CU-003: Registrar productos
 
@@ -290,10 +368,10 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **ID** | CU-003 |
 | **Actor** | Administrador, Supervisor |
 | **Precondiciones** | El usuario tiene permisos; existen categorías registradas |
-| **Flujo Principal** | 1. El usuario accede al módulo de productos → 2. Crea un nuevo producto con: SKU, nombre, marca, referencia, unidad de medida, categoría, precio compra, precio venta, IVA, stock mínimo → 3. El sistema valida unicidad del SKU → 4. Se guarda el producto → 5. Se actualiza la tabla `productos` |
-| **Flujo Alternativo** | Subir imagen del producto (upload a `media/productos/`) |
-| **Flujo de Excepción** | Si el SKU ya existe: el sistema muestra error de duplicado |
-| **Postcondiciones** | El producto queda disponible para compras, ventas y movimiento de inventario |
+| **Flujo Principal** | 1. El usuario prepara nombre, marca, referencia, unidad, categoría y valores comerciales → 2. El backend normaliza y valida → 3. Genera el SKU a partir de nombre, marca y referencia → 4. Crea el producto con stock 0 y estado `pendiente` → 5. Una configuración posterior puede activarlo |
+| **Flujo Alternativo** | Adjuntar una imagen PNG, JPG, JPEG o WebP válida; reemplazarla o retirarla durante una edición |
+| **Flujo de Excepción** | Combinación que produce SKU duplicado; valores negativos; IVA fuera de 0–100; imagen inválida o categoría inexistente |
+| **Postcondiciones** | El producto queda en catálogo; las existencias solo cambian mediante Compra, Venta o Movimiento de inventario |
 
 #### CU-004: Registrar compras
 
@@ -302,10 +380,10 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **Nombre** | Registrar Compras |
 | **ID** | CU-004 |
 | **Actor** | Administrador, Supervisor, Operador de Bodega |
-| **Precondiciones** | El usuario está autenticado; existen proveedores y productos registrados |
-| **Flujo Principal** | 1. El usuario selecciona el proveedor → 2. Ingresa número de factura y fecha de compra → 3. Agrega productos al detalle de la compra (producto, cantidad, costo unitario, IVA) → 4. El sistema calcula subtotal, IVA y total → 5. Se guarda la compra y su detalle → 6. Se actualiza el stock del producto en el almacén correspondiente → 7. Se registra el movimiento de inventario (tipo: ENTRADA_COMPRA) |
+| **Precondiciones** | Sesión con rol Administrador, Supervisor o Bodega; proveedor y almacén activos; productos registrados |
+| **Flujo Principal** | 1. Selecciona proveedor y almacén receptor → 2. Registra factura, fecha y tipo → 3. Agrega productos, cantidades, costos e IVA → 4. El servidor recalcula totales → 5. En una transacción crea cabecera, snapshots y detalles → 6. Incrementa stock y registra `ENTRADA_COMPRA` → 7. Actualiza costo e IVA del producto |
 | **Flujo de Excepción** | Si la factura ya existe: el sistema muestra error de duplicado |
-| **Postcondiciones** | Las tablas `compras`, `detalle_compras`, `stock_almacen` y `movimientos_inventario` se actualizan |
+| **Postcondiciones** | Compra, detalles, stock y movimientos se confirman juntos; una anulación autorizada crea movimientos de reversión si aún existe stock suficiente |
 
 #### CU-005: Registrar ventas
 
@@ -315,7 +393,7 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **ID** | CU-005 |
 | **Actor** | Administrador, Supervisor, Vendedor |
 | **Precondiciones** | El usuario está autenticado; existen productos con stock > 0 |
-| **Flujo Principal** | 1. El vendedor selecciona los productos a vender → 2. El sistema valida stock disponible → 3. Se calcula subtotal, descuento, IVA y total → 4. Se selecciona método de pago (efectivo, débito, crédito, transferencia, Nequi, DaviPlata) → 5. Se registra la venta y su detalle → 6. Se descuenta las cantidades del stock → 7. Se genera el movimiento de inventario (tipo: SALIDA_VENTA) → 8. Se genera el número de venta automático (VTA-XXXXX) |
+| **Flujo Principal** | 1. Selecciona almacén y cliente o Cliente General → 2. Agrega productos y cantidades → 3. El servidor toma precio e IVA vigentes y valida stock → 4. Recalcula subtotal, descuento, IVA y total → 5. Valida efectivo cuando aplica → 6. Crea venta, snapshots y detalles → 7. Descuenta stock y registra `SALIDA_VENTA` → 8. Genera `VTA-XXXXX` y comprobante |
 | **Flujo Alternativo** | Si el cliente es "General" (sin identificación): el campo `cliente` queda en null |
 | **Flujo de Excepción** | Si el stock es insuficiente: el sistema muestra alerta y previene la venta |
 | **Postcondiciones** | Las tablas `ventas`, `detalle_ventas`, `stock_almacen` y `movimientos_inventario` se actualizan; se genera el comprobante de venta |
@@ -328,7 +406,7 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 | **ID** | CU-006 |
 | **Actor** | Todos los usuarios autenticados |
 | **Precondiciones** | El usuario está autenticado |
-| **Flujo Principal** | 1. El usuario accede al módulo de inventario → 2. Consulta el stock por almacén → 3. Visualiza movimientos de inventario (entradas, salidas, ajustes, traslados) → 4. Puede filtrar por producto, tipo de movimiento o rango de fechas → 5. El sistema muestra alertas de stock bajo según la configuración de rangos |
+| **Flujo Principal** | 1. Consulta stock consolidado o por almacén → 2. Filtra por producto, categoría, estado o nivel → 3. Consulta movimientos → 4. Registra entrada, salida o transferencia si su rol lo permite → 5. Puede exportar CSV con rol Administrador, Supervisor o Bodega |
 | **Postcondiciones** | Se obtiene información actualizada del inventario sin modificaciones |
 
 #### CU-007: Gestionar almacenes
@@ -337,12 +415,32 @@ A modo de referencia rápida, los siguientes son los endpoints principales expue
 |---|---|
 | **Nombre** | Gestionar Almacenes |
 | **ID** | CU-007 |
-| **Actor** | Administrador, Supervisor |
+| **Actor** | Administrador, Supervisor, Bodega para crear/editar; Administrador o Supervisor para eliminar |
 | **Precondiciones** | El usuario tiene permisos |
-| **Flujo Principal** | 1. El usuario accede al módulo de almacenes → 2. Crea o edita almacenes con: nombre, código, dirección, responsable, teléfono, capacidad, estado → 3. El sistema valida unicidad del código → 4. Se guarda el almacén → 5. Se actualiza la tabla `almacenes` |
+| **Flujo Principal** | 1. El usuario accede a Inventario → 2. Crea o edita nombre, código, dirección, responsable, teléfono, capacidad, estado y notas → 3. El backend valida nombre/código únicos y capacidad no negativa → 4. Guarda el almacén |
 | **Postcondiciones** | El almacén queda disponible para recibir stock y registrar movimientos |
 
-📌 **Nota:** Para consultar los diagramas de casos de uso extendidos, plantillas por módulo y la documentación funcional detallada del sistema, puede acceder al anexo [Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf](./Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf) o ir a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
+#### CU-008: Transferir inventario
+
+| Campo | Descripción |
+|---|---|
+| **Actor** | Administrador, Supervisor, Bodega |
+| **Precondiciones** | Producto y ambos almacenes activos; origen y destino diferentes; stock suficiente en origen |
+| **Flujo Principal** | El servicio bloquea producto, almacenes y stocks en orden estable; descuenta origen, incrementa destino, crea el traslado completado y dos movimientos vinculados dentro de la misma transacción |
+| **Flujo de Excepción** | Cantidad no positiva, almacén inactivo/inexistente, capacidad excedida, mismo origen/destino o stock insuficiente |
+| **Postcondiciones** | La suma total del producto no cambia; sí cambia su distribución por almacén y queda trazabilidad completa |
+
+#### CU-009: Configurar empresa
+
+| Campo | Descripción |
+|---|---|
+| **Actor** | Administrador |
+| **Precondiciones** | Sesión administrativa válida |
+| **Flujo Principal** | Consulta o crea la única configuración; actualiza identidad, ubicación, contacto, logo, moneda, prefijo y mensaje; los documentos nuevos guardan un snapshot de los datos vigentes |
+| **Flujo de Excepción** | Segundo `POST`, edición sin configuración previa, rol no autorizado o imagen inválida |
+| **Postcondiciones** | Los comprobantes nuevos reflejan la configuración actual y los históricos conservan su snapshot |
+
+📌 **Nota:** El anexo [Diagramas y plantillas de casos de uso](./Diagramas_Plantillas_casos_de_uso_del_proyecto.pdf) conserva el diseño histórico. Para validar el comportamiento vigente utilice este manual y la [matriz de cobertura](./test-cases/MATRIZ_COBERTURA.md).
 ---
 
 ## 5. Modelo Entidad-Relación (Base de Datos)
@@ -356,10 +454,13 @@ El modelo entidad-relación de SofInventory está diseñado bajo los principios 
 - **Restricciones de dominio:** Validaciones a nivel de base de datos
 - **Índices optimizados:** Para consultas frecuentes y relaciones principales
 
-### 5.2 Estructura del modelo por módulos
+### 5.2 Modelo de dominio vigente
+
 Figura 1.
 Diagrama MER
-![Modelo Entidad-Relación SofInventory](./img/MER.png)
+![Modelo Entidad-Relación SofInventory](./img/diagrama_ERD.png)
+
+El diagrama representa relaciones de dominio. `empresa_snapshot` es un valor JSON histórico dentro de Compra y Venta, no una clave foránea: se dibuja como relación conceptual para explicar su procedencia. Las tablas internas de Django (`django_migrations`, permisos, sesiones administrativas y contenido) no forman parte del dominio funcional y se omiten para facilitar la lectura.
 
 ### 5.3 Relaciones principales del modelo
 
@@ -380,8 +481,13 @@ Diagrama MER
 | Producto → DetalleVenta | 1:N | Un producto se vende en múltiples ventas |
 | Traslado → TrasladoDetalle | 1:N | Un traslado contiene múltiples productos |
 | Usuario → SesionAPI | 1:N | Un usuario genera múltiples sesiones |
+| Usuario → EventoAuditoriaUsuario | 1:N | Un usuario puede recibir o ejecutar eventos administrativos auditados |
+| Almacén → Compra / Venta | 1:N | Define el destino de la entrada o el origen de la salida |
+| Compra / Venta / Traslado → MovimientoInventario | 1:N | Cada operación deja movimientos vinculados y reversibles de forma auditable |
+| MovimientoInventario → MovimientoInventario | 0..1:0..1 | Una devolución referencia exactamente el movimiento original que revierte |
+| Empresa → Compra / Venta | Conceptual 1:N | Los datos vigentes se copian como snapshot JSON para preservar comprobantes históricos |
 
-📊 **Especificación de Base de Datos:** Para revisar el diagrama completo generado desde la base de datos y la definición detallada de tablas, campos y restricciones, consulte el [Modelo Entidad-Relación en PDF](./Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf) y el [Diccionario de Datos en Excel](https://drive.google.com/file/d/1UzqMEZIm0xpVfJMkq-4Cwno6ymZs9C7R/view?usp=sharing), ambos referenciados en la sección [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
+📊 **Especificación de base de datos:** el [MER en PDF](./Modelo_Entidad_Relacion_SofInventory_PostgreSQL.pdf) y el diccionario externo siguen disponibles como anexos históricos. Antes de usarlos para migraciones o integración, contrástelos con `backend/*/models.py` y `backend/*/migrations/`, que son la fuente vigente.
 ---
 
 ## 6. Diccionario de datos
@@ -397,7 +503,7 @@ Diagrama MER
 | email | Varchar | 255 | UK | Sí | Correo electrónico único |
 | username | Varchar | 50 | UK | Sí | Nombre de usuario para autenticación |
 | password | Varchar | 255 | — | Sí | Contraseña cifrada con PBKDF2-SHA256 |
-| rol_id | Integer | — | FK → `roles.id` | Sí | Rol asignado (Administrador, Vendedor) |
+| rol_id | Integer | — | FK → `roles.id` | Sí | Rol asignado (Administrador, Supervisor, Vendedor o Bodega) |
 | estado | Varchar | 10 | — | Sí | Estado: `activo` o `inactivo` (default: `activo`) |
 | fecha_creacion | Date | — | — | Sí | Fecha de creación (auto_now_add) |
 | observaciones | Text | — | — | No | Observaciones adicionales del usuario |
@@ -418,7 +524,7 @@ Diagrama MER
 | Campo | Tipo de Dato | Longitud | Llave | Requerido | Descripción |
 |---|---|---:|---|---|---|
 | id | Integer (SERIAL) | — | PK | Sí | Identificador único del rol |
-| nombre | Varchar | 50 | UK | Sí | Nombre del rol (Administrador, Vendedor) |
+| nombre | Varchar | 50 | UK | Sí | Nombre del rol (Administrador, Supervisor, Vendedor o Bodega) |
 | descripcion | Text | — | — | No | Descripción detallada del rol |
 
 ### 6.4 Tabla: `productos`
@@ -445,6 +551,8 @@ Diagrama MER
 | fecha_creacion | Datetime | — | — | Sí | Fecha de creación (auto_now_add) |
 | fecha_actualizacion | Datetime | — | — | Sí | Última actualización (auto_now) |
 | imagen | ImageField | 255 | — | No | Ruta de imagen del producto (`productos/`) |
+
+> `productos.stock` es una caché sincronizada. La fuente operativa por ubicación es `stock_almacen`; las escrituras deben realizarse mediante `ServicioInventario`.
 
 ### 6.5 Tabla: `categorias`
 
@@ -519,8 +627,14 @@ Diagrama MER
 | iva_total | Decimal | 12,2 | — | No | Total de IVA (default: 0) |
 | total | Decimal | 12,2 | — | No | Total de la compra (default: 0) |
 | estado | Varchar | 15 | — | Sí | Estado: pendiente, completada, anulada |
+| almacen_id | Integer | — | FK → `almacenes.id` | No a nivel de esquema; requerido por el flujo actual | Almacén receptor de la compra |
 | registrado_por_id | Integer | — | FK → `usuarios.id` | Sí | Usuario que registró la compra |
 | fecha_registro | Datetime | — | — | Sí | Fecha de registro (auto_now_add) |
+| fecha_anulacion | Datetime | — | — | No | Momento de la anulación |
+| anulado_por_id | Integer | — | FK → `usuarios.id` | No | Usuario que anuló la compra |
+| motivo_anulacion | Text | — | — | No | Justificación de anulación |
+| observaciones | Text | — | — | No | Notas de la compra |
+| empresa_snapshot | JSONField | — | — | Sí | Copia histórica de identidad y contacto de la empresa |
 
 ### 6.9 Tabla: `detalle_compras`
 
@@ -529,6 +643,8 @@ Diagrama MER
 | id | Integer (SERIAL) | — | PK | Sí | Identificador único del detalle |
 | compra_id | Integer | — | FK → `compras.id` | Sí | Compra a la que pertenece |
 | producto_id | Integer | — | FK → `productos.id` | Sí | Producto comprado |
+| nombre_producto | Varchar | 150 | — | Sí | Nombre histórico del producto |
+| sku_producto | Varchar | 200 | — | Sí | SKU histórico del producto |
 | cantidad | Integer | — | — | Sí | Cantidad adquirida |
 | costo_unitario | Decimal | 12,2 | — | Sí | Costo por unidad |
 | iva_porcentaje | Decimal | 5,2 | — | No | Porcentaje de IVA (default: 0) |
@@ -543,6 +659,7 @@ Diagrama MER
 | numero_venta | Varchar | 20 | UK | Sí | Número de venta (auto: VTA-XXXXX) |
 | cliente_id | Integer | — | FK → `clientes.id` | No | Cliente (null = Cliente General) |
 | vendedor_id | Integer | — | FK → `usuarios.id` | Sí | Vendedor que realizó la venta |
+| almacen_id | Integer | — | FK → `almacenes.id` | No a nivel de esquema; requerido por el flujo actual | Almacén del que se descuenta el stock |
 | subtotal | Decimal | 14,2 | — | No | Subtotal (default: 0) |
 | descuento | Decimal | 14,2 | — | No | Descuento aplicado (default: 0) |
 | tipo_iva | Varchar | 10 | — | No | Tipo: automatico, manual (default: automatico) |
@@ -562,6 +679,7 @@ Diagrama MER
 | fecha_anulacion | Datetime | — | — | No | Fecha de anulación |
 | anulado_por_id | Integer | — | FK → `usuarios.id` | No | Usuario que anuló la venta |
 | motivo_anulacion | Text | — | — | No | Motivo de la anulación |
+| empresa_snapshot | JSONField | — | — | Sí | Copia histórica de la empresa usada en el comprobante |
 
 ### 6.11 Tabla: `detalle_ventas`
 
@@ -573,6 +691,9 @@ Diagrama MER
 | precio_unitario | Decimal | 12,2 | — | Sí | Precio de venta por unidad |
 | cantidad | Integer | — | — | Sí | Cantidad vendida |
 | subtotal | Decimal | 14,2 | — | Sí | Subtotal (precio × cantidad) |
+| iva_porcentaje | Decimal | 5,2 | — | Sí | IVA histórico aplicado a la línea |
+| iva_monto | Decimal | 14,2 | — | Sí | Valor de IVA calculado para la línea |
+| total | Decimal | 14,2 | — | Sí | Total histórico de la línea |
 | nombre_producto | Varchar | 150 | — | Sí | Nombre del producto al momento de la venta |
 | sku_producto | Varchar | 200 | — | Sí | SKU del producto al momento de la venta |
 
@@ -618,6 +739,10 @@ Diagrama MER
 | costo_unitario | Decimal | 12,2 | — | No | Costo unitario al momento del movimiento (default: 0) |
 | referencia_tipo | Varchar | 50 | — | No | Tipo de referencia (Compra, Venta, Traslado) |
 | referencia_id | PositiveInteger | — | — | No | ID del registro referenciado |
+| compra_id | Integer | — | FK → `compras.id` | No | Compra asociada cuando el movimiento proviene de una compra |
+| venta_id | Integer | — | FK → `ventas.id` | No | Venta asociada cuando el movimiento proviene de una venta |
+| traslado_id | Integer | — | FK → `traslados.id` | No | Traslado asociado a los movimientos de salida/entrada |
+| movimiento_revertido_id | Integer | — | FK única → `movimientos_inventario.id` | No | Movimiento original que una devolución revierte |
 | observacion | Text | — | — | No | Observación del movimiento |
 | fecha | Datetime | — | — | Sí | Fecha del movimiento (auto_now_add) |
 | creado_por_id | Integer | — | FK → `usuarios.id` | Sí | Usuario que registró el movimiento |
@@ -644,6 +769,69 @@ Diagrama MER
 | producto_id | Integer | — | FK → `productos.id` | Sí | Producto trasladado |
 | cantidad | Integer | — | — | Sí | Cantidad a trasladar |
 
+### 6.17 Tabla: `sesiones_api`
+
+| Campo | Tipo de Dato | Llave | Descripción |
+|---|---|---|---|
+| id | Integer | PK | Identificador de la sesión |
+| usuario_id | Integer | FK → `usuarios.id` | Cuenta autenticada |
+| token | Varchar(80) | UK | Token aleatorio; nunca debe registrarse en evidencias |
+| creada_en / expira_en | Datetime | — | Inicio y expiración de la sesión; vigencia por defecto de 12 horas |
+| ultima_actividad | Datetime | — | Última actualización de actividad |
+| activa | Boolean | — | Indica si la sesión puede autenticarse |
+| user_agent | Varchar(255) | — | Agente de usuario truncado para trazabilidad |
+
+### 6.18 Tabla: `intentos_fallidos_login`
+
+| Campo | Tipo de Dato | Llave | Descripción |
+|---|---|---|---|
+| id | Integer | PK | Identificador del intento |
+| usuario_id | Integer | FK → `usuarios.id` | Cuenta objetivo |
+| fecha_intento | Datetime | — | Momento del fallo |
+| ip_address | IP | — | IP observada, si está disponible |
+| user_agent | Varchar(255) | — | Agente de usuario truncado |
+
+### 6.19 Tabla: `auditoria_usuarios`
+
+| Campo | Tipo de Dato | Llave | Descripción |
+|---|---|---|---|
+| id | Integer | PK | Identificador del evento |
+| usuario_id | Integer | FK nullable → `usuarios.id` | Cuenta afectada |
+| usuario_nombre | Varchar(150) | — | Snapshot legible de la cuenta afectada |
+| realizado_por_id | Integer | FK nullable → `usuarios.id` | Actor administrativo |
+| realizado_por_nombre | Varchar(150) | — | Snapshot legible del actor |
+| accion | Varchar(20) | — | Creación, edición, rol, estado, desbloqueo o eliminación |
+| detalle | JSONField | — | Cambios auditables sin contraseñas ni tokens |
+| fecha | Datetime | — | Momento del evento, indexado junto con la acción |
+
+### 6.20 Tabla: `configuracion_empresa`
+
+| Grupo de campos | Campos principales | Regla |
+|---|---|---|
+| Singleton | `id`, `singleton` | Solo puede existir una configuración |
+| Identidad | `nombre_comercial`, `razon_social`, `nit`, `digito_verificacion` | Datos usados en comprobantes y snapshots |
+| Presentación | `logo`, `mensaje_comprobante`, `prefijo_ventas`, `moneda` | Logo opcional; moneda por defecto `COP` |
+| Ubicación/contacto | `direccion`, `pais`, `departamento`, `ciudad`, `telefono`, `email`, `sitio_web` | Información corporativa vigente |
+| Auditoría | `creado_por_id`, `actualizado_por_id`, `fecha_creacion`, `fecha_actualizacion` | Registra responsables y fechas |
+
+### 6.21 Tabla: `configuracion_rangos_stock`
+
+| Campo | Tipo de Dato | Llave | Descripción |
+|---|---|---|---|
+| id | Integer | PK | Identificador de la configuración |
+| stock_bajo / stock_medio / stock_alto | Integer | — | Umbrales configurables conservados por el modelo |
+| actualizado_por_id | Integer | FK → `usuarios.id` | Responsable del último cambio |
+| fecha_actualizacion | Datetime | — | Momento de actualización |
+
+### 6.22 Restricciones operativas relevantes
+
+- `stock_almacen` impone unicidad por producto y almacén y cantidad no negativa.
+- Detalles de Compra, Venta, movimientos y traslados exigen cantidades positivas; porcentajes y totales tienen límites no negativos.
+- Cada movimiento puede vincular como máximo un documento de negocio entre Compra, Venta o Traslado.
+- Las anulaciones no borran documentos: crean movimientos compensatorios enlazados al original y cambian el estado de la operación.
+- Las transacciones con `select_for_update()` evitan que dos escrituras concurrentes produzcan stock negativo o actualizaciones perdidas en PostgreSQL.
+- Las relaciones comerciales protegidas no deben eliminarse si existen históricos; el tratamiento HTTP de esas excepciones debe probarse explícitamente.
+
 ---
 
 ## 7. Scripts de instalación y despliegue con Docker
@@ -666,14 +854,15 @@ code .
 ```
 SofInventory/
 ├── docker-compose.yml          # Orquestación de los 3 servicios
-├── Dockerfile                  # Build multi-stage (frontend + backend)
+├── Dockerfile                  # Imagen unificada para despliegue cloud
+├── .env.example               # Plantilla de variables para Compose
 ├── .dockerignore               # Archivos excluidos del contexto Docker
 ├── .gitattributes              # Configuración de line endings (LF)
 │
 ├── backend/
-│   ├── Dockerfile              # Dockerfile del backend (microservicio)
-│   ├── docker-entrypoint.sh    # Migraciones + collectstatic
-│   ├── start.sh                # Script de inicio (Railway/Render)
+│   ├── Dockerfile              # Imagen Python/Gunicorn usada por Compose
+│   ├── docker-entrypoint.sh    # migrate + seed_data + collectstatic
+│   ├── start.sh                # Inicio de la imagen unificada/cloud
 │   ├── .env                    # Variables de entorno (NO se sube a Git)
 │   ├── .env.example            # Plantilla de variables de entorno
 │   ├── requirements.txt        # Dependencias Python
@@ -686,7 +875,9 @@ SofInventory/
 │   ├── compras/                # App: Compras, Detalle Compras
 │   ├── ventas/                 # App: Ventas, Detalle Ventas
 │   ├── inventario/             # App: Almacenes, Stock, Movimientos, Traslados
-│   └── dashboard/              # App: Dashboard, Reportes
+│   ├── dashboard/              # App: Métricas y series
+│   ├── empresa/                # App: Configuración singleton y snapshots
+│   └── catalogos/              # Ubicaciones y utilidades de imágenes
 │
 ├── frontend/
 │   ├── Dockerfile              # Build multi-stage Angular + Nginx
@@ -698,79 +889,62 @@ SofInventory/
 │   └── src/
 │       └── app/
 │           ├── core/           # Guards, Interceptors, Models, Services
-│           ├── pages/          # Componentes por módulo
-│           └── shared/         # Componentes compartidos
+│           ├── pages/          # Páginas standalone cargadas bajo demanda
+│           └── shared/         # Ayuda, validación, ubicación y notificaciones
 │
 └── docs/                       # Documentación técnica del proyecto
 ```
 
 ### 7.3 Configuración de variables de entorno
 
-#### 7.3.1 Archivo `backend/.env`
+#### 7.3.1 Archivos de variables para Docker Compose
 
-Cree el archivo `.env` dentro de la carpeta `backend/` con el siguiente contenido:
+Docker Compose usa dos plantillas versionadas. No documente ni comparta sus valores reales:
+
+1. Copie `/.env.example` como `/.env`; Compose lo usa para sustituir `${POSTGRES_*}`, `${SECRET_KEY}`, hosts y credenciales de bootstrap.
+2. Copie `/backend/.env.example` como `/backend/.env`; el servicio backend lo carga mediante `env_file`. Las variables declaradas en `environment:` dentro de `docker-compose.yml` tienen precedencia.
 
 ```env
-# ========================================
-# VARIABLES DE ENTORNO - Backend SofInventory
-# ========================================
+POSTGRES_DB=db_backend_sofinventory
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=<secreto-postgresql>
 
-# Clave secreta de Django (generar una única por entorno)
-SECRET_KEY=generar-con-python-secrets
+SECRET_KEY=<clave-aleatoria-unica>
+DEBUG=False
+TIME_ZONE=America/Bogota
+ALLOWED_HOSTS=localhost,127.0.0.1
+CSRF_TRUSTED_ORIGINS=
 
-# Configuración de la base de datos PostgreSQL
-DB_NAME=db_sofinventory
-DB_USER=postgres
-DB_PASSWORD=generar-contrasena-segura
-DB_HOST=db
-DB_PORT=5432
-
-# Modo de depuración (0 = producción, 1 = desarrollo)
-DEBUG=0
-
-# Hosts permitidos por Django
-ALLOWED_HOSTS=*
-
-# Orígenes permitidos para CORS
-CORS_ALLOW_ALL_ORIGINS=True
-
-# Credenciales del usuario administrador inicial
-INITIAL_ADMIN_USERNAME=admin
-INITIAL_ADMIN_PASSWORD=definir-contrasena-segura
-INITIAL_ADMIN_EMAIL=admin@sofinventory.com
-INITIAL_ADMIN_NOMBRE_COMPLETO=Administrador Principal
+# Bootstrap; defina valores privados para el entorno
+INITIAL_ADMIN_USERNAME=<usuario-inicial>
+INITIAL_ADMIN_PASSWORD=<secreto-inicial-o-vacio>
+INITIAL_ADMIN_EMAIL=<correo-autorizado>
+INITIAL_ADMIN_NOMBRE_COMPLETO=<nombre-del-responsable>
 INITIAL_ADMIN_TIPO_DOCUMENTO=CC
-INITIAL_ADMIN_NUMERO_DOCUMENTO=1000000000
+INITIAL_ADMIN_NUMERO_DOCUMENTO=<documento-autorizado>
 ```
 
-**IMPORTANTE:** El valor de `DB_HOST` debe ser `db` (el nombre del servicio en `docker-compose.yml`), NO `localhost`. Los contenedores se comunican entre sí a través de la red Docker interna usando los nombres de servicio.
+Dentro del contenedor backend, Compose completa la conexión con `DB_HOST=db`, no `localhost`. Los servicios se resuelven por nombre dentro de la red interna.
 
-⚠️ **ADVERTENCIA DE SEGURIDAD:** Los valores de `SECRET_KEY`, `DB_PASSWORD` e `INITIAL_ADMIN_PASSWORD` del ejemplo anterior son **solo ilustrativos** y no deben usarse en ningún despliegue real. Genere secretos únicos para cada entorno con:
-
-```powershell
-python -c "import secrets; print(secrets.token_urlsafe(50))"
-```
-
-Si `INITIAL_ADMIN_PASSWORD` se deja vacío, el comando `seed_data` genera una contraseña aleatoria segura y la imprime una sola vez en los logs del contenedor al primer arranque.
-
-**Descripción de las variables principales:**
+!!! warning "Secretos y bootstrap"
+    Genere valores únicos para `SECRET_KEY`, `POSTGRES_PASSWORD` e `INITIAL_ADMIN_PASSWORD`. Si la contraseña inicial queda vacía, `seed_data` crea una aleatoria y la muestra una sola vez en los logs del primer arranque; no capture ni publique ese log.
 
 | Variable | Obligatoria | Descripción |
 |---|---|---|
-| `SECRET_KEY` | Sí | Clave criptográfica interna de Django (firma de sesiones y tokens). Debe ser única por entorno y nunca compartirse públicamente. |
-| `DB_NAME` | Sí | Nombre de la base de datos PostgreSQL utilizada por el backend. |
-| `DB_USER` | Sí | Usuario de conexión a PostgreSQL. |
-| `DB_PASSWORD` | Sí | Contraseña de conexión a PostgreSQL. Debe reemplazarse por una contraseña propia en cualquier entorno distinto al de prueba. |
-| `DB_HOST` | Sí | Nombre del servicio de base de datos dentro de la red de Docker Compose (`db`). |
-| `DB_PORT` | Sí | Puerto de PostgreSQL (por defecto `5432`). |
-| `DEBUG` | Sí | Modo de depuración de Django. Debe permanecer en `0` fuera del entorno de desarrollo. |
-| `ALLOWED_HOSTS` | Sí | Dominios u hosts autorizados a servir el backend. |
-| `CORS_ALLOW_ALL_ORIGINS` | No | Permite solicitudes desde cualquier origen. Se recomienda restringir en un entorno de producción real. |
-| `INITIAL_ADMIN_USERNAME` / `PASSWORD` / `EMAIL` | Sí | Credenciales del usuario administrador que se crea automáticamente al iniciar el contenedor backend por primera vez. |
+| `SECRET_KEY` | Sí | Clave interna de Django; falta de valor impide iniciar el backend. |
+| `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | Sí | Creación y acceso al servicio PostgreSQL de Compose. |
+| `DB_HOST`, `DB_PORT` | Sí en conexión separada | Servicio interno `db` y puerto `5432`. |
+| `DATABASE_URL` | Alternativa | Conexión completa usada principalmente por la imagen unificada/cloud. |
+| `DEBUG` | Sí | `False` fuera de desarrollo. Con `DEBUG=False`, `ALLOWED_HOSTS` no puede quedar vacío. |
+| `TIME_ZONE` | Sí | Zona de negocio; por defecto `America/Bogota`, usada también por periodos del Dashboard. |
+| `ALLOWED_HOSTS` | Sí en producción | Hosts atendidos por Django. No use `*` en producción. |
+| `CORS_ALLOWED_ORIGINS`, `CSRF_TRUSTED_ORIGINS` | Según despliegue | Orígenes explícitamente autorizados. |
+| `LOGIN_THROTTLE_RATE` | No | Tasa del endpoint Login; por defecto `5/min`. |
+| `INITIAL_ADMIN_*` | Bootstrap | Datos iniciales consumidos por `seed_data`; no se deben registrar en documentación. |
 
 #### 7.3.2 Variables del frontend
 
-El frontend **NO requiere** un archivo `.env` manual para el despliegue con Docker. El script `docker-entrypoint.sh` del frontend genera automáticamente el archivo `env.js` en tiempo de ejecución utilizando la variable `BACKEND_URL` definida en `docker-compose.yml`.
+El frontend no requiere un `.env` manual en Compose. Su entrypoint sustituye `BACKEND_URL` en la configuración de Nginx y genera `assets/env.js` con `apiUrl: "/api"`; el navegador usa mismo origen y Nginx reenvía `/api/` al backend.
 
 ### 7.4 Despliegue con Docker Compose
 
@@ -792,13 +966,13 @@ docker compose up --build -d
 
 Este comando realiza las siguientes acciones:
 
-1. **Construye la imagen del frontend:** Ejecuta el build multi-stage (compilación Angular con Node.js 20 + configuración Nginx)
-2. **Construye la imagen del backend:** Instala dependencias Python 3.12, copia el código Django, ejecuta `collectstatic`
+1. **Construye la imagen del frontend:** compila Angular con Node.js 20 Alpine y copia el resultado a la imagen final Nginx.
+2. **Construye la imagen del backend:** instala dependencias en Python 3.12 slim y prepara Gunicorn.
 3. **Descarga la imagen de PostgreSQL 15 Alpine** desde Docker Hub
 4. **Crea los contenedores** y los conecta a una red Docker interna
-5. **Expone los puertos:** 80 (frontend), 8000 (backend), 5432 (base de datos)
-6. **Crea el volumen persistente** `sofinventory_postgres_data` para la base de datos
-7. **Ejecuta los entrypoints** que aplican migraciones automáticas y cargan datos iniciales
+5. **Expone al host:** 80 (frontend) y 8000 (backend). PostgreSQL permanece en la red interna y no publica `ports`.
+6. **Crea volúmenes persistentes:** `sofinventory_postgres_data` y `sofinventory_media_data`.
+7. **Ejecuta los entrypoints:** el backend aplica migraciones, `seed_data` y `collectstatic`; el frontend configura el proxy e inicia Nginx.
 
 #### 7.4.3 Verificar el estado de los contenedores
 
@@ -811,9 +985,9 @@ Resultado esperado:
 
 ```
 NAME                    STATUS          PORTS
-sofinventory_db         Up (healthy)    0.0.0.0:5432->5432/tcp
-sofinventory_backend    Up              0.0.0.0:8000->8000/tcp
-sofinventory_frontend   Up              0.0.0.0:80->80/tcp
+sofinventory_final_db         Up (healthy)    5432/tcp
+sofinventory_final_backend    Up              0.0.0.0:8000->8000/tcp
+sofinventory_final_frontend   Up              0.0.0.0:80->80/tcp
 ```
 
 #### 7.4.4 Verificar los logs
@@ -839,16 +1013,13 @@ Las migraciones se ejecutan automáticamente al iniciar el contenedor backend. S
 # Ejecutar migraciones de Django
 docker compose exec backend python manage.py migrate --noinput
 
-# Crear superusuario (si no se creó automáticamente)
-docker compose exec backend python manage.py createsuperuser
-
 # Cargar datos iniciales (roles, tipos de documento, admin)
 docker compose exec backend python manage.py seed_data
 
 # Recolectar archivos estáticos
 docker compose exec backend python manage.py collectstatic --noinput
 
-# Acceder al shell de Django para inspección
+# Acceder al shell de Django para inspección de solo lectura
 docker compose exec backend python manage.py shell
 
 # Verificar el conteo de registros en todas las tablas
@@ -886,9 +1057,9 @@ docker compose logs db
 #### Paso 3: Verificar el backend (API)
 
 ```bash
-# Verificar que la API responde
-curl http://localhost:8000/api/
-# Debe retornar respuesta JSON (no error de conexión)
+# Verificar una ruta protegida sin exponer credenciales
+curl -i http://localhost:8000/api/auth/me/
+# Sin token debe responder 401 o 403; ambos demuestran que la API es accesible
 ```
 
 #### Paso 4: Verificar el frontend (interfaz web)
@@ -903,14 +1074,11 @@ Resultado esperado: Se carga la pantalla de inicio de sesión de SofInventory.
 
 #### Paso 5: Iniciar sesión
 
-| Campo | Valor |
-|---|---|
-| **Usuario** | `admin` (o el valor de `INITIAL_ADMIN_USERNAME`) |
-| **Contraseña** | La definida en `INITIAL_ADMIN_PASSWORD` (o la generada por `seed_data` y mostrada en los logs del contenedor) |
+Use únicamente las credenciales definidas de forma privada para el entorno. No las copie en el manual, en capturas ni en comandos almacenados en el historial.
 
-Figura 2.
-Pantalla de inicio de sesión 
-![Modelo Entidad-Relación SofInventory](./img/Login.png)
+**Figura 1. Login vigente en tema Oscuro, sin credenciales expuestas.**
+
+![Pantalla actual de inicio de sesión con campos vacíos](./test-cases/02-modulo-login/evidencias/frontend/LOGIN-actual-escritorio-oscuro.png)
 
 Si las credenciales son correctas, el usuario será redirigido al Dashboard principal.
 
@@ -924,9 +1092,21 @@ Si las credenciales son correctas, el usuario será redirigido al Dashboard prin
 | 4 | Acceder a Usuarios | Se lista los usuarios registrados |
 | 5 | Registrar una venta | Se descuenta stock y se genera el movimiento |
 
-Figura 3.
-Dashboard principal del sistema 
-![Modelo Entidad-Relación SofInventory](./img/Dashboard.png)
+**Figura 2. Dashboard vigente en tema Claro con datos ficticios.**
+
+![Dashboard actual en escritorio y tema Claro](./test-cases/12-modulo-dashboard/evidencias/frontend/DSH-escritorio-azul.png)
+
+**Figura 3. Ayuda contextual reutilizable dentro del formulario de Producto.**
+
+![Formulario de Producto con panel de ayuda contextual](./test-cases/04-modulo-productos/evidencias/frontend/PRD-formulario-ayuda.png)
+
+**Figura 4. Transferencia de inventario con orientación contextual.**
+
+![Formulario de transferencia de inventario con ayuda abierta](./test-cases/08-modulo-inventario/evidencias/frontend/INV-transferencia-ayuda.png)
+
+**Figura 5. Comprobante de Venta con snapshot ficticio de Empresa.**
+
+![Comprobante de venta con datos ficticios e históricos](./test-cases/10-modulo-ventas/evidencias/frontend/VTA-detalle-comprobante-e2e.png)
 ### 7.6 Comandos útiles de Docker Compose
 
 | Comando | Descripción |
@@ -934,12 +1114,15 @@ Dashboard principal del sistema
 | `docker compose up -d` | Levantar servicios en segundo plano |
 | `docker compose up --build -d` | Reconstruir imágenes y levantar |
 | `docker compose down` | Detener y eliminar contenedores |
-| `docker compose down -v` | Detener, eliminar contenedores Y volúmenes (borra la BD) |
+| `docker compose down -v` | **Destructivo:** elimina contenedores y volúmenes de datos/media |
 | `docker compose ps` | Ver estado de contenedores |
 | `docker compose logs -f` | Ver logs en tiempo real |
 | `docker compose restart backend` | Reiniciar solo el backend |
 | `docker compose exec backend bash` | Acceder al terminal del contenedor backend |
-| `docker system prune` | Limpiar imágenes y contenedores no utilizados |
+| `docker system prune` | **Operación global:** elimina recursos Docker no utilizados; revisar alcance antes de aprobar |
+
+!!! danger "Comandos destructivos"
+    No ejecute `docker compose down -v` ni `docker system prune` como parte de una comprobación rutinaria. El primero elimina los volúmenes de SofInventory; el segundo puede afectar recursos de otros proyectos del host. Exija respaldo verificado y autorización explícita.
 
 ### 7.7 Solución de problemas comunes
 
@@ -954,12 +1137,12 @@ Dashboard principal del sistema
 | Página no carga en localhost | Contenedor frontend falló | Revise `docker compose logs frontend` |
 | Error de conexión a BD | `DB_HOST` configurado como `localhost` en vez de `db` | Verifique que `DB_HOST=db` en `backend/.env` |
 | OOM (exit code 137) | Memoria insuficiente para build de Node.js | Verifique que `NODE_OPTIONS=--max-old-space-size=512` está en el Dockerfile |
-| Error 401 (No autorizado) en la API | Token de sesión ausente, expirado o mal enviado en la cabecera | Verifique que el frontend envíe el token en la cabecera `Authorization`; solicite un nuevo inicio de sesión |
-| Error 403 (Prohibido) en la API | El usuario autenticado no tiene el rol/permiso requerido para esa acción | Verifique la matriz de permisos por rol; use un usuario con el rol adecuado |
+| Error 401 (No autorizado) en la API | Token ausente, inválido o revocado | Inicie una sesión nueva; no copie el token en incidencias ni documentación |
+| Error 403 (Prohibido) en la API | Rol insuficiente, cuenta inactiva/bloqueada o sesión expirada según el contrato actual | Revise estado, rol y expiración; consulte `BUG-LOGIN-001` si la interfaz no redirige |
 | Error 500 en un endpoint específico | Excepción no controlada en el backend (dato inválido, relación rota, etc.) | Revise `docker compose logs backend` para el stack trace exacto; valide los datos enviados en la solicitud |
 | Las migraciones no se aplican al iniciar | El contenedor backend no esperó a que la base de datos estuviera lista, o hay un conflicto de migraciones | Revise `docker compose logs backend`; si hay conflicto, ejecute `docker compose exec backend python manage.py showmigrations` para identificar la migración pendiente o en conflicto |
 | No se crea el usuario administrador inicial | Las variables `INITIAL_ADMIN_*` no están definidas en `backend/.env`, o el usuario ya existía de un arranque previo | Verifique el archivo `.env`; el script de datos semilla (`seed_data`) no sobrescribe un usuario ya existente |
-| La cuenta de administrador queda bloqueada en pruebas | Se superaron los 5 intentos fallidos de inicio de sesión configurados en `IntentoFallidoLogin` | Desbloquee el usuario directamente en la base de datos o desde otro usuario con rol Administrador |
+| La cuenta queda bloqueada en pruebas | Se alcanzaron 5 intentos fallidos | Use el flujo administrativo de desbloqueo con otra cuenta Administrador; evite modificar la BD salvo procedimiento autorizado |
 
 ### 7.8 Despliegue en producción (Cloud)
 
@@ -967,16 +1150,17 @@ El sistema está desplegado en las siguiente plataforma:
 
 | Plataforma | URL | Descripción |
 |---|---|---|
-| **Render** | `sofinventory-app.onrender.com` | Despliegue completo con PostgreSQL administrado |
+| **Render** | `sofinventory-app.onrender.com` | Despliegue unificado con PostgreSQL administrado; validar URL y estado antes de cada liberación |
 
-Esta Plataforma utiliza `Dockerfile` raíz (multi-stage) que compila el frontend Angular y lo sirve desde Django con Whitenoise.
+Esta modalidad usa el `Dockerfile` raíz: Node compila Angular y la imagen final Python copia `frontend_dist`; Django sirve la SPA y los estáticos mediante WhiteNoise/Gunicorn. Es diferente de Compose local, donde Nginx y Django son contenedores separados.
 
-🚀 **Manual Completo de Despliegue:** Para consultar la guía ilustrada paso a paso de instalación, la configuración de variables de entorno, la inicialización del contenedor de PostgreSQL y los comandos de troubleshooting, consulte el documento anexo [Informe_Tecnico_Despliegue_SofInventory_v2.pdf](./Informe_Tecnico_Despliegue_SofInventory_v2.pdf) o diríjase a la sección de [10.2 Documentos Internos y externos del Proyecto](#102-documentos-internos-y-externos-del-proyecto).
+🚀 **Manual completo de despliegue:** consulte [Informe_Tecnico_Despliegue_SofInventory_v2.pdf](./Informe_Tecnico_Despliegue_SofInventory_v2.pdf) y la sección [12.2 Documentos internos y externos](#122-documentos-internos-y-externos-del-proyecto). Si existe una diferencia, prevalecen los Dockerfiles, Compose y variables descritos en este manual actualizado.
 ---
 
 ## 8. Diagrama de componentes
 
 ### 8.1 Arquitectura general del sistema
+
 
 ```mermaid
 graph TB
@@ -986,25 +1170,25 @@ graph TB
 
     subgraph "🐳 Docker - Red Interna"
         subgraph "Contenedor Frontend"
-            Nginx["⚡ Nginx<br/>Puerto: 80"]
-            AngularApp["📦 Angular 19 SPA<br/>(archivos estáticos)"]
+            Nginx["⚡ Nginx 1.31.3<br/>Puerto: 80"]
+            AngularApp["📦 Angular 19.2.21 SPA<br/>(archivos estáticos)"]
             EntryFE["🔧 docker-entrypoint.sh<br/>(inyecta BACKEND_URL)"]
         end
 
         subgraph "Contenedor Backend"
             Gunicorn["⚙️ Gunicorn<br/>Puerto: 8000"]
-            DjangoApp["🐍 Django 6.0<br/>+ Django REST Framework"]
-            EntryBE["🔧 docker-entrypoint.sh<br/>(migrate + seed_data)"]
+            DjangoApp["🐍 Django 6.0.4<br/>+ DRF 3.17.1"]
+            EntryBE["🔧 docker-entrypoint.sh<br/>(migrate + seed_data + collectstatic)"]
         end
 
         subgraph "Contenedor Database"
-            PostgreSQL["🐘 PostgreSQL 15<br/>Puerto: 5432"]
-            Volume["💾 Volume: postgres_data"]
+            PostgreSQL["🐘 PostgreSQL 15.18<br/>Puerto interno: 5432"]
+            Volume["💾 sofinventory_postgres_data"]
         end
     end
 
     subgraph "📁 Almacenamiento"
-        MediaFiles["📂 media/productos/<br/>(imágenes)"]
+        MediaFiles["📂 Volumen media compartido<br/>(productos y logos)"]
         StaticFiles["📂 staticfiles/<br/>(CSS, JS, font)"]
     end
 
@@ -1046,51 +1230,58 @@ sequenceDiagram
     N-->>U: Respuesta JSON
 ```
 
-### 8.3 Vista de componentes — patrón MVC
+### 8.3 Vista de componentes
 
 ```mermaid
-graph LR
-    subgraph "VISTA (Frontend Angular)"
+flowchart LR
+    subgraph FE["PRESENTACIÓN — Frontend Angular"]
+        direction TB
         V1["Dashboard"]
-        V2["Productos"]
+        V2["Productos y categorías"]
         V3["Ventas"]
-        V4["Inventario"]
+        V4["Inventario y almacenes"]
         V5["Usuarios"]
         V6["Proveedores"]
         V7["Clientes"]
         V8["Compras"]
+        V9["Configuración de empresa"]
     end
 
-    subgraph "CONTROLADOR (Backend Django REST)"
-        C1["views.py — dashboard"]
-        C2["views.py — productos"]
-        C3["views.py — ventas"]
-        C4["views.py — inventario"]
-        C5["views.py — usuarios"]
-        C6["views.py — proveedores"]
-        C7["views.py — clientes"]
-        C8["views.py — compras"]
+    subgraph API["API Y LÓGICA — Django REST"]
+        direction TB
+        C1["Endpoints y servicios de dashboard"]
+        C2["Endpoints de productos y categorías"]
+        C3["Endpoints y servicios de ventas"]
+        C4["Endpoints y servicios de inventario"]
+        C5["Autenticación, usuarios y auditoría"]
+        C6["Endpoints de proveedores"]
+        C7["Endpoints de clientes"]
+        C8["Endpoints y servicios de compras"]
+        C9["Endpoints de configuración empresarial"]
     end
 
-    subgraph "MODELO (PostgreSQL)"
-        M1["tablas dashboard"]
-        M2["productos, categorías"]
-        M3["ventas, detalle_ventas"]
-        M4["almacenes, stock, movimientos"]
-        M5["usuarios, roles, sesiones"]
-        M6["proveedores"]
-        M7["clientes"]
-        M8["compras, detalle_compras"]
+    subgraph DATA["MODELO Y PERSISTENCIA — Django ORM y PostgreSQL"]
+        direction TB
+        M1["Consultas agregadas de múltiples tablas"]
+        M2["productos · categorías"]
+        M3["ventas · detalle_ventas"]
+        M4["almacenes · stock_almacen<br/>movimientos · traslados"]
+        M5["usuarios · roles · sesiones<br/>auditoría e intentos de acceso"]
+        M6["proveedores · tipos_documento"]
+        M7["clientes · tipos_documento"]
+        M8["compras · detalle_compras"]
+        M9["configuracion_empresa"]
     end
 
-    V1 <-->|API REST JSON| C1
-    V2 <-->|API REST JSON| C2
-    V3 <-->|API REST JSON| C3
-    V4 <-->|API REST JSON| C4
-    V5 <-->|API REST JSON| C5
-    V6 <-->|API REST JSON| C6
-    V7 <-->|API REST JSON| C7
-    V8 <-->|API REST JSON| C8
+    V1 <-->|"API REST · JSON"| C1
+    V2 <-->|"API REST · JSON y multipart"| C2
+    V3 <-->|"API REST · JSON"| C3
+    V4 <-->|"API REST · JSON"| C4
+    V5 <-->|"API REST · JSON"| C5
+    V6 <-->|"API REST · JSON"| C6
+    V7 <-->|"API REST · JSON"| C7
+    V8 <-->|"API REST · JSON"| C8
+    V9 <-->|"API REST · JSON y multipart"| C9
 
     C1 <--> M1
     C2 <--> M2
@@ -1100,7 +1291,18 @@ graph LR
     C6 <--> M6
     C7 <--> M7
     C8 <--> M8
+    C9 <--> M9
+
+    classDef frontend fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a
+    classDef backend fill:#f0fdf4,stroke:#22c55e,color:#14532d
+    classDef data fill:#fff7ed,stroke:#f97316,color:#7c2d12
+
+    class V1,V2,V3,V4,V5,V6,V7,V8,V9 frontend
+    class C1,C2,C3,C4,C5,C6,C7,C8,C9 backend
+    class M1,M2,M3,M4,M5,M6,M7,M8,M9 data
 ```
+
+El Dashboard no posee una tabla propia: agrega consultas de Ventas, Compras, Inventario, Clientes, Proveedores y Productos. `catalogos` tampoco persiste tablas; lee el catálogo territorial local y comparte validación segura de imágenes.
 
 ### 8.4 Vista de despliegue — Docker Compose
 
@@ -1124,11 +1326,108 @@ graph TB
 
 ---
 
+### 8.5 Transacción de Compra, Venta y anulación
+
+```mermaid
+sequenceDiagram
+    participant UI as Angular
+    participant API as Vista DRF
+    participant S as ServicioInventario
+    participant PG as PostgreSQL
+
+    UI->>API: Solicitud validada
+    API->>PG: BEGIN + bloqueo de documentos/productos
+    API->>API: Recalcular totales y crear snapshots
+    API->>S: entrada(), salida() o reversión
+    S->>PG: SELECT FOR UPDATE sobre stock
+    S->>PG: Actualizar stock + crear movimiento vinculado
+    alt todas las reglas se cumplen
+        API->>PG: COMMIT
+        API-->>UI: 200/201 y resultado público
+    else regla, integridad o stock inválido
+        API->>PG: ROLLBACK
+        API-->>UI: 400/404/409 controlado
+    end
+```
+
+### 8.6 Estado del formulario y ayuda contextual
+
+```mermaid
+stateDiagram-v2
+    direction LR
+
+    [*] --> Edicion
+
+    state "Formulario en edición" as Edicion
+    state "Ayuda contextual" as Ayuda
+    state "Validación de campos" as Validacion
+    state "Envío al backend" as Envio
+    state "Corrección de errores" as Errores
+    state "Operación confirmada" as Confirmado
+
+    Edicion --> Ayuda: Abrir ayuda
+    Ayuda --> Ayuda: Consultar contenido y desplazarse
+    Ayuda --> Edicion: Cerrar ayuda o presionar Esc
+
+    Edicion --> Validacion: Guardar formulario
+    Validacion --> Errores: Datos inválidos
+    Errores --> Edicion: Corregir campos
+
+    Validacion --> Envio: Validación superada
+    Envio --> Errores: Error de validación o del servidor
+    Envio --> Confirmado: Respuesta exitosa
+
+    Confirmado --> [*]: Cerrar y actualizar listado
+    Edicion --> [*]: Cancelar operación
+
+    note right of Ayuda
+        Se presenta sin abandonar
+        ni reiniciar el formulario.
+    end note
+
+    note right of Errores
+        Se marcan los campos y se muestra
+        un resumen visible del problema.
+    end note
+```
+
+Abrir la ayuda no dispara peticiones, no toca controles, no reinicia valores y no usa almacenamiento. Al cerrar, el foco regresa al botón. En escritorio aparece como panel lateral; en móvil se adapta sin desbordamiento horizontal. El texto central se resuelve por formulario y operación (`registrar` o `actualizar`).
+
+### 8.7 Verificación y estado de calidad
+
+La última ejecución consolidada documentada utilizó contenedores y datos ficticios efímeros:
+
+| Evidencia | Resultado ejecutado |
+|---|---|
+| Backend con SQLite en memoria | 99/99 pruebas aprobadas |
+| Backend con PostgreSQL 15 aislado | 99/99 pruebas aprobadas |
+| Pruebas Node del frontend compartido | 24/24 aprobadas |
+| Build Angular de producción | Aprobado con advertencias de presupuesto: bundle inicial +7,02 kB y CSS de Dashboard +3,05 kB |
+| Matriz funcional/E2E | 78 casos: 67 aprobados, 1 parcial y 10 fallidos |
+
+!!! warning "No confundir suite verde con liberación completa"
+    Las suites automatizadas aprobaron, pero los casos E2E detectaron defectos de contrato, interfaz y reglas de negocio. La liberación no debe declararse totalmente aprobada hasta corregir y reejecutar los casos fallidos. Consulte [Resultados de ejecución](./test-cases/RESULTADOS_EJECUCION_2026-08-08.md) y [Registro de defectos](./test-cases/DEFECTOS.md).
+
+| Área pendiente en la última ejecución | Riesgo técnico |
+|---|---|
+| Expiración de sesión 403 frente a interceptor 401 | La interfaz puede permanecer en una vista protegida sin redirigir correctamente |
+| Búsqueda de Usuarios no reactiva | El texto cambia, pero la tabla no se filtra |
+| Alta de Producto | El resultado E2E registró un 500; el código actual ya retira `quitar_imagen` en `create()`, pero exige reejecución antes de cerrar el defecto |
+| Eliminación de Proveedor/Cliente relacionados | `ProtectedError` no está controlado por esas vistas y puede producir 500 |
+| Compra de Producto inactivo | El flujo no comprueba actualmente el estado del producto |
+| Datos condicionales de pago | Débito/crédito pueden aceptar campos aplicables ausentes |
+| Empresa | NIT y teléfono requieren validación semántica adicional |
+| Dashboard ante 502 | La interfaz puede mostrar el texto técnico de la respuesta |
+
+Las evidencias visuales demuestran presentación y estados visibles; permisos, stock, concurrencia, auditoría y cálculos se sustentan con pruebas automatizadas, respuestas sanitizadas y consultas de solo lectura.
+
+---
+
 ## 9. Conclusiones
 
 ### 9.1 Mantenibilidad
 
-La arquitectura modular de SofInventory, basada en 8 aplicaciones Django independientes y un frontend Angular desacoplado, facilita significativamente el mantenimiento del sistema. Cada módulo puede ser modificado, actualizado o extendido sin afectar a los demás, siempre que se respeten los contratos de la API REST. El uso de serializers proporciona una capa de transformación de datos que protege la API de cambios internos en los modelos.
+La arquitectura modular de SofInventory, basada en nueve aplicaciones Django de dominio, un módulo auxiliar de catálogos y un frontend Angular desacoplado, facilita el mantenimiento. Los contratos HTTP, servicios transaccionales, serializers, validadores y componentes compartidos reducen el acoplamiento, siempre que cualquier cambio se acompañe de pruebas en PostgreSQL y frontend.
 
 ### 9.2 Aislamiento de entorno mediante Docker
 
@@ -1136,15 +1435,15 @@ La adopción de Docker como plataforma de despliegue elimina los problemas de co
 
 ### 9.3 Escalabilidad
 
-La separación entre frontend, backend y base de datos permite escalar cada componente de forma independiente. En un escenario de alta demanda, se podrían ejecutar múltiples instancias del backend (Gunicorn workers) detrás de un balanceador de carga, mientras que la base de datos podría migrarse a un servicio administrado en la nube (Amazon RDS, Google Cloud SQL) con replicación y respaldo automático. El frontend, al ser un conjunto de archivos estáticos servidos por Nginx, puede escalarse mediante CDN sin modificaciones al código.
+La separación entre frontend, backend y base de datos permite evolucionar cada capa de forma independiente. Un escalado horizontal del backend exigiría revisar la semántica de sesión única, almacenamiento compartido de media, migraciones y afinidad; no debe asumirse como transparente solo por usar Gunicorn o contenedores.
 
 ### 9.4 Seguridad
 
-El sistema implementa múltiples capas de seguridad: autenticación por tokens con expiración, hash de contraseñas con PBKDF2-SHA256, control de acceso basado en roles (RBAC), validación de entradas a nivel de serializer y ORM, protección CSRF, y exclusión de archivos sensibles (.env, venv) del repositorio mediante .gitignore. En producción, las contraseñas nunca se almacenan en texto plano, y los secretos se gestionan a través de variables de entorno inyectadas por Docker Compose.
+El sistema implementa sesiones API de 12 horas, invalidación de la sesión anterior, bloqueo tras cinco fallos, throttle por IP, hash de contraseñas, RBAC en backend, validación semántica, auditoría de Usuarios, archivos de imagen inspeccionados y cabeceras defensivas en Nginx. Los secretos se inyectan por variables de entorno y no deben entrar al repositorio ni a las evidencias. La existencia de estas capas no sustituye la corrección de los defectos abiertos ni una revisión de seguridad previa a producción.
 
 ### 9.5 Portabilidad
 
-Gracias a la contenedorización con Docker, el sistema puede desplegarse en cualquier entorno (desarrollo, staging, producción) con un solo comando: `docker compose up --build -d`. Las plataformas cloud como Railway y Render permiten el despliegue continuo directamente desde el repositorio Git, eliminando la necesidad de configuración manual del servidor.
+Docker aporta reproducibilidad, pero Compose local y la imagen unificada cloud son topologías diferentes. Cada entorno necesita secretos, hosts, CORS/CSRF, persistencia de PostgreSQL/media, respaldo, observabilidad y prueba de restauración propios; `docker compose up --build -d` no reemplaza esas decisiones operativas.
 
 ---
 
@@ -1170,6 +1469,11 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 | **Nginx** | Servidor web utilizado en el contenedor frontend para servir los archivos compilados de Angular y actuar como proxy hacia el backend. |
 | **SPA (Single Page Application)** | Aplicación web que carga una sola página HTML y actualiza su contenido dinámicamente sin recargar el navegador; así opera el frontend Angular. |
 | **RTO / RPO** | Tiempo objetivo de recuperación y punto objetivo de recuperación; métricas que definen cuánto tiempo y cuántos datos se pueden perder ante un incidente (ver Plan de Migración y Respaldo). |
+| **Signal** | Primitiva reactiva de Angular usada para estado local y derivado en servicios y componentes. |
+| **Snapshot histórico** | Copia de valores relevantes —empresa, producto, SKU, precio, IVA o costo— guardada al crear una operación para que el histórico no cambie al editar maestros. |
+| **`select_for_update()`** | Bloqueo de filas de PostgreSQL dentro de una transacción para serializar escrituras críticas y evitar carreras de stock. |
+| **Reversión idempotente** | Operación compensatoria que solo puede aplicarse una vez al movimiento original. |
+| **Ayuda contextual** | Panel accesible asociado al formulario y a la operación actual que orienta sin modificar ni enviar sus datos. |
 
 ---
 
@@ -1179,7 +1483,7 @@ Gracias a la contenedorización con Docker, el sistema puede desplegarse en cual
 
 | Canal | Detalle |
 |---|---|
-| **Repositorio (issues técnicos)** | https://github.com/AlejandroSepulvedaDuarte/SofInventory.git — registrar el error o solicitud de cambio con pasos para reproducirlo |
+| **Repositorio (issues técnicos)** | [SofInventory en GitHub](https://github.com/AlejandroSepulvedaDuarte/SofInventory) — registrar el error o solicitud con pasos reproducibles y evidencia sanitizada |
 | **Correo Electrónico Técnico** | alejosepulveda981@gmail.com |
 | **Responsables del mantenimiento** | Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo |
 | **Horario de atención** | Lunes a Viernes de 8:00 a.m. a 6:00 p.m. |
@@ -1205,16 +1509,16 @@ Estos tiempos corresponden a los definidos en el **Plan de Mantenimiento y Sopor
 
 | Tecnología | URL |
 |---|---|
-| Django 6.0 | https://docs.djangoproject.com/ |
-| Django REST Framework | https://www.django-rest-framework.org/ |
-| Angular 19 | https://angular.dev/ |
-| PostgreSQL 15 | https://www.postgresql.org/docs/15/ |
-| Docker | https://docs.docker.com/ |
-| Docker Compose | https://docs.docker.com/compose/ |
-| Nginx | https://nginx.org/en/docs/ |
-| Gunicorn | https://docs.gunicorn.org/ |
-| Node.js | https://nodejs.org/ |
-| Python | https://docs.python.org/3/ |
+| Django 6.0 | [Documentación oficial](https://docs.djangoproject.com/en/6.0/) |
+| Django REST Framework | [Documentación oficial](https://www.django-rest-framework.org/) |
+| Angular 19 | [Documentación oficial](https://v19.angular.dev/) |
+| PostgreSQL 15 | [Documentación oficial](https://www.postgresql.org/docs/15/) |
+| Docker | [Documentación oficial](https://docs.docker.com/) |
+| Docker Compose | [Documentación oficial](https://docs.docker.com/compose/) |
+| Nginx | [Documentación oficial](https://nginx.org/en/docs/) |
+| Gunicorn | [Documentación oficial](https://docs.gunicorn.org/) |
+| Node.js 20 | [Documentación oficial](https://nodejs.org/docs/latest-v20.x/api/) |
+| Python 3.12 | [Documentación oficial](https://docs.python.org/3.12/) |
 
 ### 12.2 Documentos internos y externos del proyecto
 
@@ -1230,6 +1534,10 @@ Para consultar la información complementaria y profundizar en el diseño, arqui
 | **Plan de Mantenimiento y Soporte del Software** | Plan de mantenimiento preventivo y correctivo con base en ISO/IEC 14764, incluyendo tiempos de respuesta por severidad | [📄 Ver Plan de Mantenimiento](./Plan_de_Mantenimiento_y_Soporte_del_Software.pdf)  |
 | **Plan de Migración y Respaldo de Datos** | Plan de copias de seguridad, restauración y gestión del riesgo con base en ISO/IEC 27001 | [Ver Plan de Migración y Respaldo](./Plan_Migracion_Respaldo_SofInventory.pdf) |
 | **Repositorio GitHub** | Código fuente del proyecto y configuración de contenedores Docker | [💻 Ver Repositorio](https://github.com/AlejandroSepulvedaDuarte/SofInventory.git) |
+| **Arquitectura Frontend** | Estructura Angular, rutas, componentes standalone y servicios compartidos | [📄 Ver arquitectura frontend](./frontend-architecture.md) |
+| **Estándares de Codificación** | Convenciones Python, TypeScript, HTML/CSS, seguridad y ejemplos | [📄 Ver estándares](./coding-standards.md) |
+| **Guía visual de accesibilidad** | Teclado, foco, contraste, temas y responsive | [📄 Ver guía](./accessibility-visual-guide.md) |
+| **Documentación de pruebas** | Matriz por módulo, evidencias, resultados y defectos | [🧪 Ver matriz de cobertura](./test-cases/MATRIZ_COBERTURA.md) |
 
 ### 12.3 Guías de referencia
 

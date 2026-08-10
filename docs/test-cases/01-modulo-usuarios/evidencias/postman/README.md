@@ -1,60 +1,27 @@
-# 📮 Evidencias — Postman | Módulo Usuarios
+# Evidencias API — Usuarios
 
-> Directorio para capturas de requests y responses realizadas en Postman durante las pruebas del módulo de Usuarios.
+> **Actualizado:** 8 de agosto de 2026
 
-## Convención de nomenclatura
+No se generaron capturas nuevas de Postman en esta actualización. La evidencia vigente de automatización es el resultado de 26/26 pruebas del módulo `usuarios` ejecutadas dentro del contenedor backend con una base SQLite en memoria.
 
-```
-TC-USR-{NRO}-postman.png     → Captura del request + response en Postman
-```
+## Endpoints actuales
 
-## Configuración de Autenticación en Postman
+| Operación | Método y ruta | Rol |
+|---|---|---|
+| Crear | `POST /api/usuarios/crear/` | Administrador |
+| Listar | `GET /api/usuarios/listar/` | Administrador |
+| Editar | `PUT /api/usuarios/editar/<id>/` | Administrador |
+| Cambiar estado | `PATCH /api/usuarios/estado/<id>/` | Administrador |
+| Desbloquear | `POST /api/usuarios/desbloquear/<id>/` | Administrador |
+| Eliminar | `DELETE /api/usuarios/eliminar/<id>/` | Administrador |
+| Auditoría | `GET /api/usuarios/auditoria/` | Administrador |
+| Reporte de roles | `GET /api/roles/reporte/` | Administrador |
 
-Todos los endpoints de usuarios requieren un token Bearer de administrador. Configurar en Postman:
+## Reglas para futuras evidencias
 
-```
-Authorization: Bearer <token_obtenido_del_login>
-```
+- Mostrar método, ruta, código HTTP y cuerpo sanitizado.
+- Ocultar por completo `Authorization`, tokens, contraseñas, cookies y datos personales.
+- No usar capturas para probar unicidad, hash o atomicidad cuando una aserción automatizada sea suficiente.
+- Marcar fecha, versión del contenedor y resultado; no reutilizar una imagen histórica como aprobación actual.
 
-O usar una variable de entorno:
-```
-Authorization: Bearer {{access_token}}
-```
-
-## Archivos esperados
-
-| Archivo | Caso | Método | Endpoint | Código esperado |
-|---------|------|--------|----------|----------------|
-| `TC-USR-001-postman.png` | TC-USR-001 | POST | `/api/usuarios/crear/` | 201 Created |
-| `TC-USR-002-postman.png` | TC-USR-002 | POST | `/api/usuarios/crear/` | 201 Created |
-| `TC-USR-003-postman.png` | TC-USR-003 | POST | `/api/usuarios/crear/` | 400 Bad Request (username duplicado) |
-| `TC-USR-004-postman.png` | TC-USR-004 | POST | `/api/usuarios/crear/` | 400 Bad Request (contraseña débil) |
-| `TC-USR-005-postman.png` | TC-USR-005 | POST | `/api/usuarios/crear/` | **201 sin error — BUG esperado** |
-| `TC-USR-006-postman.png` | TC-USR-006 | POST | `/api/usuarios/crear/` | 400 Bad Request (campos vacíos) |
-| `TC-USR-008-postman.png` | TC-USR-008 | POST | `/api/auth/login/` | 200 OK + access_token |
-
-## Body de referencia para crear usuario (TC-USR-001)
-
-```json
-{
-  "tipo_documento": 1,
-  "numero_documento": "1234567890",
-  "nombre_completo": "Carlos Pérez",
-  "email": "carlos.perez@sofinventory.com",
-  "username": "carlos.perez",
-  "password": "<password-de-prueba>",
-  "rol": 1,
-  "fecha_creacion": "2026-05-14",
-  "estado": "activo"
-}
-```
-
-## Respuesta esperada (201 Created)
-
-```json
-{
-  "mensaje": "Usuario creado exitosamente"
-}
-```
-
-> 📌 **Nota:** Incluir en las capturas el body del request, los headers (especialmente `Authorization`) y el body completo del response. Importar la colección `SofInventory-Usuarios.postman_collection.json` para reproducir las pruebas.
+Los archivos `TC-USR-001-postman.png` a `TC-USR-008-postman.png` son históricos y están pendientes de reemplazo o retiro después de una reejecución API aislada.

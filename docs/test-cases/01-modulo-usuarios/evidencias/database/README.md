@@ -1,60 +1,32 @@
-# 🗄️ Evidencias — Base de Datos | Módulo Usuarios
+# Evidencias de base de datos — Usuarios
 
-> Directorio para capturas de consultas SQL ejecutadas en **pgAdmin 4** para verificar la integridad de los datos en la base de datos PostgreSQL de SofInventory.
+> **Actualizado:** 8 de agosto de 2026
 
-## Convención de nomenclatura
+No se ejecutaron consultas manuales ni se generaron capturas nuevas de PostgreSQL durante esta actualización. La suite backend utilizó SQLite en memoria y no modificó la base operativa.
 
-```
-TC-USR-{NRO}-db.png     → Captura del Query Tool de pgAdmin con SQL ejecutado + resultado
-```
-
-## Consultas SQL de Referencia
+## Consultas de solo lectura recomendadas
 
 ```sql
--- TC-USR-001: Verificar usuario administrador creado
-SELECT id, username, email, nombre_completo, estado, fecha_registro
+-- Duplicados por nombre de usuario, sin mostrar datos completos.
+SELECT LOWER(username) AS clave, COUNT(*) AS total
 FROM usuarios
-WHERE username = 'carlos';
-
--- TC-USR-002: Verificar rol del usuario operador
-SELECT u.username, u.email, r.nombre AS rol, u.estado
-FROM usuarios u
-INNER JOIN roles r ON u.rol_id = r.id
-WHERE u.username = 'laura.gomez';
-
--- TC-USR-003: Verificar que NO existen dos usuarios con el mismo username
-SELECT username, COUNT(*) AS total
-FROM usuarios
-GROUP BY username
+GROUP BY LOWER(username)
 HAVING COUNT(*) > 1;
 
--- TC-USR-005: Verificar número de documento inválido en BD (BUG)
-SELECT id, username, numero_documento
-FROM usuarios
-ORDER BY id DESC
-LIMIT 5;
-
--- TC-USR-007: Verificar hash PBKDF2 de contraseña (NO debe aparecer en texto plano)
-SELECT username, password
-FROM usuarios
-WHERE username = 'carlos.perez';
--- Resultado esperado: pbkdf2_sha256$<iteraciones>$<salt>$<hash_base64>
-
--- Verificar todos los usuarios activos
-SELECT u.id, u.username, u.email, r.nombre AS rol, u.estado, u.fecha_registro
+-- Distribución agregada por rol y estado.
+SELECT r.nombre AS rol, u.estado, COUNT(*) AS total
 FROM usuarios u
-INNER JOIN roles r ON u.rol_id = r.id
-WHERE u.estado = 'activo'
-ORDER BY u.fecha_registro DESC;
+JOIN roles r ON r.id = u.rol_id
+GROUP BY r.nombre, u.estado
+ORDER BY r.nombre, u.estado;
+
+-- Conteo de eventos por acción, sin detalle potencialmente identificable.
+SELECT accion, COUNT(*) AS total
+FROM auditoria_usuarios
+GROUP BY accion
+ORDER BY accion;
 ```
 
-## Archivos esperados
+Nunca seleccionar ni capturar la columna `password`, tokens de sesión, correos, documentos u otros datos personales salvo que exista una necesidad formal y una salida redactada.
 
-| Archivo | Caso | Consulta | Resultado esperado |
-|---------|------|----------|--------------------|
-| `TC-USR-001-db.png` | TC-USR-001 | SELECT por username | 1 registro con datos correctos |
-| `TC-USR-002-db.png` | TC-USR-002 | SELECT con JOIN a roles | Rol = Operador |
-| `TC-USR-005-db.png` | TC-USR-005 | SELECT numero_documento | **Valor `ABCDE!!!` persistido (BUG)** |
-| `TC-USR-007-db.png` | TC-USR-007 | SELECT password | Hash `pbkdf2_sha256$...` — sin texto plano |
-
-> 📌 **Nota:** Incluir siempre en la captura el SQL ejecutado (panel superior del Query Tool) y el resultado (panel inferior). Usar pgAdmin 4 conectado a la base de datos de SofInventory.
+Los archivos `TC-USR-001-db.png`, `TC-USR-002-db.png`, `TC-USR-005-db.png` y `TC-USR-007-db.png` son históricos. Las imágenes que muestran un documento inválido o reglas antiguas no representan el comportamiento actual.

@@ -1,97 +1,56 @@
-# 👤 Módulo 01 — Gestión de Usuarios
+# Módulo 01 — Usuarios, roles y permisos
 
-> **Versión:** 1.0.1 <br>
-> **Módulo:** Usuarios <br>
-> **Código de módulo:** MOD-USR <br>
-> **Fecha:** 16 de mayo de 2026
+> **Versión documental:** 3.0.0 <br>
+> **Fecha de actualización:** 8 de agosto de 2026 <br>
+> **Estado:** actualizado contra el código y la interfaz actuales
 
----
+## 1. Descripción
 
-## 1. 📌 Descripción del Módulo
+El módulo permite a un `Administrador` listar, crear, editar, activar/inactivar, desbloquear y eliminar usuarios, además de consultar reportes de roles y auditoría. Los roles vigentes son `Administrador`, `Supervisor`, `Bodega` y `Vendedor`. El backend es la fuente de verdad de permisos: ocultar opciones en la interfaz no reemplaza la validación del servidor.
 
-El módulo de **Gestión de Usuarios** permite a los administradores del sistema SofInventory crear, editar, visualizar, cambiar el estado y eliminar cuentas de usuario. Cada usuario posee credenciales de acceso (username y contraseña) y un rol asignado que determina los permisos disponibles dentro del sistema.
+La contraseña se almacena mediante los hashers configurados por Django y nunca se devuelve en respuestas. Al crear o cambiar una contraseña se aplican los validadores de Django, coincidencia de confirmación y rechazo de una contraseña que ya esté siendo usada por otra cuenta. En edición, dejar ambos campos de contraseña vacíos conserva la credencial actual.
 
-La contraseña es almacenada de forma segura mediante el algoritmo **PBKDF2-SHA256** de Django; nunca se persiste en texto plano en la base de datos PostgreSQL.
+## 2. Funcionalidades actuales
 
-Este módulo es la base del sistema de autenticación: **un usuario debe existir y estar activo** para poder iniciar sesión a través del módulo de Login.
+| Funcionalidad | Acceso |
+|---|---|
+| Crear, listar, editar, cambiar estado, desbloquear y eliminar usuarios | Solo Administrador |
+| Reporte de roles y auditoría | Solo Administrador |
+| Listar catálogo de roles y tipos de documento | Usuario autenticado |
+| Iniciar sesión y consultar perfil propio | Según reglas del módulo Login |
 
----
+El sistema impide eliminar al único Administrador y registra eventos de creación, edición, cambio de rol, cambio de estado, desbloqueo y eliminación sin incluir contraseñas ni tokens.
 
-## 2. 🎯 Objetivos del Módulo
+## 3. Formulario actual
 
-- Garantizar que solo usuarios con rol **Administrador** puedan crear nuevas cuentas.
-- Validar que los datos ingresados cumplan con los formatos y restricciones definidos en el modelo Django.
-- Verificar que las contraseñas sean almacenadas con hash PBKDF2 y nunca en texto plano.
-- Comprobar que los usuarios creados puedan autenticarse exitosamente en el módulo de Login.
-- Asegurar que la información se persista correctamente en la base de datos PostgreSQL.
+El formulario contiene tipo y número de documento, nombre completo, correo, nombre de usuario, contraseña y confirmación, rol, fecha de creación y observaciones. En edición, las contraseñas son opcionales. La ayuda contextual usa títulos distintos para “registrar” y “actualizar”, se adapta a móvil y `Esc` cierra únicamente el panel de ayuda.
 
----
+## 4. Resultado actual
 
-## 3. 🔭 Alcance de las Pruebas
+| Verificación | Resultado |
+|---|---|
+| Suite backend completa | 99/99 en SQLite y 99/99 en PostgreSQL 15 aislado |
+| Suite frontend completa | 24/24 pruebas aprobadas en Node.js 20 dentro de Docker |
+| Alta, duplicados, estado, bloqueo, desbloqueo y eliminación | Aprobados por API/DB-R con cuentas ficticias E2E |
+| Formulario de creación/edición y ayuda | Aprobado manualmente en escritorio/móvil |
+| `Esc` y retorno de foco | Aprobado manualmente |
+| Validaciones obligatorias | Aprobado manualmente; no se realizó solicitud al backend |
+| Buscador del listado | Falló manualmente; el texto cambia, pero la tabla no se filtra (`BUG-USR-003`) |
+| Resultado del módulo | **7 aprobados, 1 fallido** |
 
-| Funcionalidad | ¿En Alcance? |
-|---------------|-------------|
-| Creación de usuario con datos válidos | ✅ |
-| Validación de campos obligatorios | ✅ |
-| Validación de unicidad de username y email | ✅ |
-| Validación de número de documento | ✅ |
-| Validación de contraseña segura | ✅ |
-| Verificación de hash de contraseña en BD | ✅ |
-| Asignación de rol al usuario | ✅ |
-| Impacto sobre el módulo de Login | ✅ |
-| Edición de usuarios | ❌ (versión futura) |
-| Eliminación de usuarios | ❌ (versión futura) |
-| Listado/búsqueda de usuarios | ❌ (versión futura) |
+## 5. Evidencias vigentes
 
----
+- [Ayuda al registrar Usuario — escritorio](./evidencias/frontend/USR-formulario-ayuda-crear.png)
+- [Ayuda al actualizar Usuario — móvil](./evidencias/frontend/USR-formulario-ayuda-editar-movil.png)
+- [Validaciones obligatorias — móvil](./evidencias/frontend/USR-validaciones-obligatorios-movil.png)
+- [Índice de evidencias frontend](./evidencias/frontend/README.md)
 
-## 4. 🛠️ Herramientas de Prueba
+Las capturas `TC-USR-001` a `TC-USR-008` se conservan como evidencia histórica y no se consideran revalidadas en esta ejecución.
 
-| Herramienta | Uso en este módulo |
-|-------------|-------------------|
-| **Angular 19** (Chrome) | Verificación del formulario de creación en el frontend |
-| **Postman** | Pruebas directas al endpoint `POST /api/usuarios/crear/` |
-| **pgAdmin 4** | Verificación de registros en las tablas `usuarios` y verificación del hash de contraseña |
+## 6. Documentos relacionados
 
----
-
-## 5. 🧱 Estructura del Módulo
-
-```
-01-modulo-usuarios/
-├── README.md              ← Este archivo
-├── casos-usuarios.md      ← Casos de prueba TC-USR-001 al TC-USR-008
-└── evidencias/
-    ├── frontend/          ← Capturas de pantalla del formulario Angular
-    ├── postman/           ← Capturas de requests/responses en Postman
-    └── database/          ← Capturas de consultas SQL en pgAdmin 4
-```
-
----
-
-## 6. 📊 Resumen de Resultados
-
-| ID | Nombre del Caso | Estado |
-|----|----------------|--------|
-| TC-USR-001 | Creación exitosa de usuario administrador | ✅ Pasó |
-| TC-USR-002 | Creación exitosa de usuario operador | ✅ Pasó |
-| TC-USR-003 | Username duplicado rechazado | ✅ Pasó |
-| TC-USR-004 | Contraseña que no cumple política de seguridad | ❌ Falló |
-| TC-USR-005 | Número de documento con formato inválido | ❌ Falló |
-| TC-USR-006 | Campos obligatorios vacíos | ✅ Pasó |
-| TC-USR-007 | Verificación de contraseña hasheada en BD | ✅ Pasó |
-| TC-USR-008 | Usuario creado puede iniciar sesión | ✅ Pasó |
-
-**Resultado:** 6/8 casos aprobados — **75.0% de éxito**
-
----
-
-## 7. 🔗 Documentos Relacionados
-
-- [Casos de Prueba Completos →](./casos-usuarios.md)
-- [Módulo de Login →](../02-modulo-login/README.md)
-- [Índice General →](../../README.md)
-
----
-
-*© 2026 SofInventory — Área de Calidad de Software*
+- [Casos actuales de Usuarios](./casos-usuarios.md)
+- [Login y sesiones](../02-modulo-login/README.md)
+- [Matriz general](../MATRIZ_COBERTURA.md)
+- [Resultados finales](../RESULTADOS_EJECUCION_2026-08-08.md#usuarios-roles-y-permisos)
+- [Defectos](../DEFECTOS.md)

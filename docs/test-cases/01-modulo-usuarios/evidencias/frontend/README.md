@@ -1,24 +1,23 @@
-# 📸 Evidencias — Frontend (Angular) | Módulo Usuarios
+# Evidencias frontend — Usuarios
 
-> Directorio destinado a capturas de pantalla tomadas durante las pruebas del módulo de Usuarios en la interfaz Angular 19.
+> **Actualizado:** 8 de agosto de 2026
 
-## Convención de nomenclatura
+## Evidencias vigentes
 
-```
-TC-USR-{NRO}-frontend.png     → Captura principal del formulario/pantalla
-TC-USR-{NRO}-frontend-2.png   → Captura adicional (si aplica)
-```
+| Archivo | Casos relacionados | Contenido verificado |
+|---|---|---|
+| `USR-formulario-ayuda-crear.png` | TC-USR-001, TC-USR-008 | Modal Nuevo Usuario en escritorio, botón Ayuda y panel “Ayuda para registrar un usuario” |
+| `USR-formulario-ayuda-editar-movil.png` | TC-USR-001, TC-USR-008 | Panel móvil “Ayuda para actualizar un usuario” usando un registro ficticio existente, sin guardar cambios |
+| `USR-validaciones-obligatorios-movil.png` | TC-USR-002, TC-USR-008 | Resumen y errores por campo al intentar guardar el formulario vacío; no hubo solicitud al backend |
 
-## Archivos esperados
+Las capturas fueron tomadas sobre la interfaz servida por Docker. Las pruebas posteriores de duplicados, bloqueo, estado, desbloqueo y eliminación se ejecutaron en PostgreSQL E2E con cuentas ficticias y se documentan como `API`/`DB-R`, sin añadir capturas redundantes ni credenciales.
 
-| Archivo | Caso de Prueba | Descripción |
-|---------|---------------|-------------|
-| `TC-USR-001-frontend.png` | TC-USR-001 | Formulario de creación completado + mensaje de éxito "Usuario creado exitosamente" |
-| `TC-USR-002-frontend.png` | TC-USR-002 | Usuario operador creado — menú de administración restringido |
-| `TC-USR-003-frontend.png` | TC-USR-003 | Error de validación por username duplicado |
-| `TC-USR-004-frontend.png` | TC-USR-004 | Indicador de contraseña débil en el formulario |
-| `TC-USR-005-frontend.png` | TC-USR-005 | Formulario con número de documento inválido — sin error visible (BUG) |
-| `TC-USR-006-frontend.png` | TC-USR-006 | Campos obligatorios vacíos con mensajes de validación |
-| `TC-USR-008-frontend.png` | TC-USR-008 | Dashboard del operador tras login exitoso con usuario recién creado |
+## Evidencias históricas
 
-> 📌 **Nota:** Adjuntar las capturas reales tomadas durante la ejecución de las pruebas. Usar Chrome en resolución 1920x1080 para consistencia visual.
+Los archivos `TC-USR-001-frontend.png` a `TC-USR-008-frontend.png` se conservan para trazabilidad. No se consideran evidencia vigente porque corresponden a una versión anterior y algunos documentan defectos ya corregidos.
+
+## Criterios de seguridad
+
+- No capturar contraseñas, tokens, almacenamiento del navegador ni encabezados de autorización.
+- Preferir registros claramente ficticios; no publicar listados con datos personales.
+- Reutilizar una captura para varios casos cuando demuestre el mismo comportamiento visual.

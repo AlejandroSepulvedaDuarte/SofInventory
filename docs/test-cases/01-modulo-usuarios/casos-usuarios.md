@@ -1,582 +1,68 @@
-# 🧪 Casos de Prueba — Módulo Usuarios
+# Casos de prueba — Usuarios, roles y permisos
 
-> **Versión:** 1.0.1 <br>
-> **Módulo:** Gestión de Usuarios <br>
-> **Prefijo de código:** TC-USR <br>
-> **Total de casos:** 8 <br>
-> **Fecha:** 16 de mayo de 2026 <br>
-> **Autor:** Lucy Estefany Izquierdo Jaramillo
+> **Prefijo:** TC-USR · **Cobertura mínima:** 8 casos · **Ejecución final:** 7 aprobados, 1 fallido · **Fecha:** 8 de agosto de 2026
 
----
+## Convenciones
 
-## 📋 Plantilla de Caso de Prueba
+- `A`: prueba automatizada ejecutada y aprobada en esta revisión.
+- `P`: cobertura parcial; falta una variante importante.
+- `M`: falta automatización.
+- `V`: verificación manual o visual ejecutada.
+- Ninguna captura sustituye una prueba de permisos o persistencia.
 
-Cada caso de prueba sigue esta estructura estándar:
+## Matriz actual
 
-| Campo | Descripción |
-|---|---|
-| Identificador | Código único del caso (TC-USR-XXX) |
-| Descripción | Qué se está probando |
-| Precondiciones | Estado previo requerido del sistema |
-| Datos de entrada | Valores utilizados en la prueba |
-| Pasos a seguir | Secuencia de acciones a ejecutar |
-| Resultado esperado | Comportamiento correcto del sistema |
-| Resultado obtenido | Comportamiento real observado |
-| Estado | ✅ Pasó / ❌ Falló / ⚠️ Bloqueado |
-| Evidencias | Referencias a capturas de pantalla o archivos |
+| ID | Nombre | Tipo | Funcionalidad | Precondiciones y rol | Datos ficticios | Resultado esperado | Automatización ejecutada | Brecha pendiente | Evidencia actual | Prioridad | Estado 08/08/2026 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| TC-USR-001 | Crear y editar usuario válido | Positivo / integración | Alta y actualización con catálogos reales; contraseña opcional al editar | Administrador autenticado; roles y tipos cargados | Persona, documento, correo y username reservados para prueba | Crear: 201; editar: 200; datos normalizados; contraseña nunca se devuelve; edición sin contraseña conserva la existente | `A/P` — pruebas backend y flujo E2E aislado ejecutados | Falta consolidar CRUD completo en una sola prueba automatizada | AUTO + API sanitizada + ayuda visual | Crítica | Aprobado |
+| TC-USR-002 | Validar obligatorios y semántica | Negativo / interfaz | Documento por tipo, nombre humano, username sin espacios y mensajes por campo | Administrador; formulario nuevo | Vacíos, espacios, nombre con números, username con espacios y pasaporte alfanumérico válido | La interfaz bloquea envío inválido; backend devuelve 400 por campo; valores legítimos con tildes/apóstrofos/guiones se aceptan | `A` — pruebas semánticas de `AutenticacionAPITests`; 7/7 casos de `semantic-validators.test.mjs` aprobados | Falta test Angular de directivas/foco al primer error | AUTO + [Validaciones móvil](./evidencias/frontend/USR-validaciones-obligatorios-movil.png) | Alta | Aprobado en backend y manualmente para vacíos |
+| TC-USR-003 | Rechazar duplicados | Negativo / integración | Unicidad de username, correo y número de documento | Registros equivalentes en base aislada; Administrador | Variantes duplicadas de los tres identificadores | HTTP 400 por el campo correcto; no se crea ni altera otro usuario | `M/P` — sin método dedicado; tres variantes ejecutadas por API E2E | Automatizar los tres duplicados | AUTO + API + DB-R | Crítica | Aprobado |
+| TC-USR-004 | Aplicar política de contraseña | Seguridad | Requerida al crear, confirmación, validadores Django, no reutilización y cambio opcional | Administrador; otra cuenta existente para reutilización | Corta, numérica, común, similar al username, reutilizada y fuerte | Débiles/reutilizadas se rechazan; fuerte se acepta; el hash no se expone; edición vacía conserva contraseña | `A` — 6/6 pruebas de `ValidacionFortalezaContrasenaTests` aprobadas | Falta prueba dedicada de reutilización entre cuentas y confirmación desigual | AUTO + API sanitizada; nunca capturar contraseña | Crítica | Aprobado para reglas automatizadas actuales |
+| TC-USR-005 | Aplicar roles y evitar escalación | Permisos / seguridad | Endpoints administrativos, operaciones de Vendedor y manipulación de `rol_solicitante` | Administrador y Vendedor en base aislada | Solicitud del Vendedor declarando rol Administrador | Vendedor recibe 403 en administración y no escala; Administrador opera; permisos se deciden en backend | `A` — 4/4 pruebas de `AutorizacionRolTests` y `test_permiso_admin_bloquea_vendedor_en_creacion_usuarios` aprobadas | Ampliar matriz a Supervisor y Bodega por módulo | AUTO + API sanitizada | Crítica | Aprobado para Administrador/Vendedor |
+| TC-USR-006 | Cambiar estado, bloquear y desbloquear | Seguridad / integración | Inactivación revoca sesiones; bloqueo por cinco fallos; desbloqueo limpia intentos y audita | Administrador y cuenta objetivo aislada | Cinco contraseñas incorrectas, cambio activo/inactivo y desbloqueo | Cuenta bloqueada/inactiva no entra; sesiones activas se invalidan; desbloqueo solo Administrador | `M/P` — ciclo completo ejecutado por API/DB-R E2E | Automatizar el ciclo completo | AUTO + API + DB-R | Crítica | Aprobado |
+| TC-USR-007 | Auditar y eliminar de forma segura | Seguridad / integración | Eventos sin secretos, eliminación, sesiones y protección del único Administrador | Administrador; usuario eliminable y único Administrador en base aislada | Usuario ficticio sin dependencias y acciones administrativas | Auditoría registra actor/objetivo/acción sin password/token; único Administrador no se elimina; relaciones protegidas producen error controlado | `A/P` — auditoría automatizada; eliminación libre y protección del único Administrador ejecutadas en E2E | Automatizar todas las variantes | AUTO + API + DB-R | Crítica | Aprobado |
+| TC-USR-008 | Usar listado y formulario accesibles/responsive | Interfaz | Listado, búsqueda, crear/editar, ayuda, teclado, foco, temas y móvil | Administrador; usuario ficticio existente `codex_ui_test` para abrir edición | Texto de búsqueda y campos no enviados | Ayuda muestra “registrar”/“actualizar”; móvil solo icono en encabezado; `Esc` cierra ayuda y conserva modal/datos; búsqueda filtra filas | `A/P` — 9/9 pruebas de `form-help.test.mjs` aprobadas; verificación manual de ayuda y foco aprobada | Falta test Angular/E2E; búsqueda falla actualmente | AUTO + [Crear](./evidencias/frontend/USR-formulario-ayuda-crear.png) + [Editar móvil](./evidencias/frontend/USR-formulario-ayuda-editar-movil.png) | Alta | Ayuda aprobada; búsqueda fallida (`BUG-USR-003`) |
 
----
+## Ejecuciones realizadas
 
-## 📝 Descripción de la Funcionalidad
+### Backend
 
-El módulo de Usuarios permite al administrador registrar nuevas cuentas en el sistema. El formulario de creación solicita: tipo de documento, número de documento, nombre completo, email, username, contraseña, rol y fecha de creación. Al completar el registro, el sistema almacena el usuario en la tabla `usuarios` de PostgreSQL con la contraseña hasheada mediante PBKDF2-SHA256, habilitando su acceso al módulo de Login.
-
-**Endpoint principal:** `POST /api/usuarios/crear/`
-**Acceso requerido:** Token Bearer con rol `Administrador`
-
----
-
-## 🖥️ Ambiente de Pruebas
-
-| Componente | Detalle |
-|---|---|
-| Backend | Django 4.x + Django REST Framework |
-| Base de datos | PostgreSQL 18+ |
-| Frontend | Angular 19 |
-| Herramienta API | Postman v12 |
-| Herramienta BD | pgAdmin 4 |
-| Ambiente | Local (desarrollo) |
-
----
-
-## 🧪 Casos de Prueba
-
----
-
-### TC-USR-001: Creación exitosa de usuario administrador
-
-**Descripción**
-Verificar que un administrador puede crear un nuevo usuario con rol Administrador ingresando todos los datos requeridos correctamente.
-
-**📌 Información General**
-
-| Campo | Detalle |
-|---|---|
-| Identificador | TC-USR-001 |
-| Nombre | Creación exitosa de usuario administrador |
-| Tipo de prueba | Funcional |
-| Prioridad | Alta |
-| Módulo | Gestión de Usuarios |
-| Estado | ✅ Pasó |
-
-**Precondiciones**
-El tester está autenticado como administrador con un token Bearer válido.
-El servidor Django y la base de datos PostgreSQL están en línea.
-
-**Datos de entrada**
-```json
-{
-  "tipo_documento": 1,
-  "numero_documento": "1234567890",
-  "nombre_completo": "Carlos Pérez",
-  "email": "carlos1p@gmail.com",
-  "username": "carlos",
-  "password": "<password-de-prueba>",
-  "rol": 1,
-  "fecha_creacion": "2026-05-16",
-  "estado": "activo"
-}
+```text
+docker exec sofinventory_final_backend python manage.py test usuarios --settings=config.test_settings --verbosity 2
+Resultado: 26 pruebas ejecutadas, 26 aprobadas, 0 fallos.
+Base: SQLite en memoria; PostgreSQL operativo no fue alterado por la suite.
 ```
 
-**Pasos a seguir**
-1. Iniciar sesión como administrador.
-2. Navegar a Configuración > Usuarios.
-3. Clic en "Nuevo Usuario".
-4. Completar el formulario con los datos indicados.
-5. Clic en "Guardar".
-6. En pgAdmin verificar:
-   ```sql
-   SELECT id, username, email, rol_id, estado
-   FROM usuarios
-   WHERE username = 'carlos';
-   ```
+### Frontend
 
-**Resultado esperado**
-- HTTP 201 Created con mensaje `"Usuario creado exitosamente"`.
-- El usuario aparece en el listado del sistema.
-- El registro existe en la tabla `usuarios` con los datos correctos.
-
-**Resultado obtenido**
-El sistema mostró el mensaje de éxito y el usuario quedó registrado en la tabla `usuarios` de PostgreSQL con los datos correctos.
-
-**Evidencias**
-
-| Tipo | Evidencia |
-|---|---|
-| Frontend | [![Captura Frontend TC-USR-001](./evidencias/frontend/TC-USR-001-frontend.png)](./evidencias/frontend/TC-USR-001-frontend.png) |
-| Postman | [![Captura Postman TC-USR-001](./evidencias/postman/TC-USR-001-postman.png)](./evidencias/postman/TC-USR-001-postman.png) |
-| Database | [![Captura Database TC-USR-001](./evidencias/database/TC-USR-001-db.png)](./evidencias/database/TC-USR-001-db.png) |
-
-*📌 Clic en cualquier imagen para ver a pantalla completa*
-
-**Resultado final:** ✅ Exitoso
-
-**Observación:** El usuario fue creado correctamente y el registro persiste en PostgreSQL con todos los campos esperados.
-
----
-
-### TC-USR-002: Creación exitosa de usuario supervisor
-
-**Descripción**
-Verificar que se puede crear un usuario con rol Supervisor y que sus permisos quedan correctamente restringidos en el sistema.
-
-**📌 Información General**
-
-| Campo | Detalle |
-|---|---|
-| Identificador | TC-USR-002 |
-| Nombre | Creación exitosa de usuario supervisor |
-| Tipo de prueba | Funcional / Control de acceso |
-| Prioridad | Alta |
-| Módulo | Gestión de Usuarios |
-| Estado | ✅ Pasó |
-
-**Precondiciones**
-El tester está autenticado como administrador con un token Bearer válido.
-
-**Datos de entrada**
-```json
-{
-  "tipo_documento": 1,
-  "numero_documento": "9876543210",
-  "nombre_completo": "Laura Gómez",
-  "email": "laura1g@gmail.com",
-  "username": "lauraG",
-  "password": "<password-de-prueba>",
-  "rol": 2,
-  "fecha_creacion": "2026-05-14",
-  "estado": "activo"
-}
+```text
+docker run --rm --mount type=bind,source=<repositorio>,target=/workspace,readonly \
+  -w /workspace/frontend node:20-alpine npm test
+Resultado: 24 pruebas ejecutadas, 24 aprobadas, 0 fallos.
 ```
 
-**Pasos a seguir**
-1. Iniciar sesión como administrador.
-2. Navegar a Configuración > Usuarios > Nuevo Usuario.
-3. Completar los datos con rol "Supervisor".
-4. Guardar.
-5. Cerrar sesión e iniciar sesión con `lauraG` / `<password-de-prueba>`.
-6. Verificar que el módulo de administración de usuarios no es accesible.
-7. En pgAdmin verificar:
-   ```sql
-   SELECT u.username, r.nombre AS rol, u.estado
-   FROM usuarios u
-   INNER JOIN roles r ON u.rol_id = r.id
-   WHERE u.username = 'lauraG';
-   ```
+Los tests frontend son pruebas Node de funciones y fuente; la interacción DOM se verificó manualmente, pero todavía necesita una suite Angular/E2E.
 
-**Resultado esperado**
-- HTTP 201. Usuario creado con rol Supervisor.
-- Al iniciar sesión, la respuesta de `/api/auth/me/` refleja `"rol": "Supervisor"`.
-- El menú de administración no es visible.
+## Verificación manual sin cambios de datos
 
-**Resultado obtenido**
-El usuario fue creado exitosamente. Al autenticarse, el menú de administración no estaba visible y el campo `rol` confirmó el rol Supervisor.
-
-**Evidencias**
-
-| Tipo | Evidencia |
+| Comprobación | Resultado |
 |---|---|
-| Frontend | [![Captura Frontend TC-USR-002](./evidencias/frontend/TC-USR-002-frontend.png)](./evidencias/frontend/TC-USR-002-frontend.png) |
-| Database | [![Captura Database TC-USR-002](./evidencias/database/TC-USR-002-db.png)](./evidencias/database/TC-USR-002-db.png) |
+| Abrir Nuevo Usuario y ayuda “registrar” en escritorio | Aprobado |
+| Abrir edición del usuario ficticio existente y ayuda “actualizar” en móvil | Aprobado |
+| Pulsar `Esc` con la ayuda abierta | Aprobado: ayuda cerrada, modal abierto y foco devuelto al botón |
+| Guardar formulario vacío | Aprobado: resumen y mensajes por campo; no hubo solicitud de creación |
+| Buscar `codex_ui_test` | Falló: el campo cambia, pero permanecen las nueve filas |
 
-*📌 Clic en cualquier imagen para ver a pantalla completa*
+Esa primera comprobación visual no hizo escrituras. La ejecución final posterior sí cubrió alta/duplicados, cambio de estado, bloqueo, desbloqueo y eliminación sobre cuentas exclusivamente ficticias en PostgreSQL E2E aislado.
 
-**Resultado final:** ✅ Exitoso
+## Evidencia histórica
 
-**Observación:** El rol Supervisor fue asignado correctamente y las restricciones de acceso funcionan como se espera.
+Los antiguos casos `TC-USR-001` a `TC-USR-008` y sus imágenes permanecen disponibles para trazabilidad. Sus afirmaciones sobre contraseñas débiles y documentos inválidos quedaron superadas por el código y la suite actual; consultar `DEFECTOS.md`.
 
----
+## Resultado final de ejecución
 
-### TC-USR-003: Rechazo por username duplicado
+| Total | Aprobados | Fallidos |
+|---:|---:|---:|
+| 8 | 7 | 1 |
 
-**Descripción**
-Verificar que el sistema no permite registrar dos usuarios con el mismo username, ya que el campo tiene restricción `UNIQUE` en la tabla `usuarios` de PostgreSQL.
-
-**📌 Información General**
-
-| Campo | Detalle |
-|---|---|
-| Identificador | TC-USR-003 |
-| Nombre | Rechazo por username duplicado |
-| Tipo de prueba | Validación / Integridad de datos |
-| Prioridad | Alta |
-| Módulo | Gestión de Usuarios |
-| Estado | ✅ Pasó |
-
-**Precondiciones**
-Existe un usuario con `username = 'carlos'` (creado en TC-USR-001).
-
-**Datos de entrada**
-```json
-{
-  "username": "carlos",
-  "email": "CarlosG@gmail.com"
-}
-```
-*(demás campos con valores válidos)*
-
-**Pasos a seguir**
-1. Abrir formulario de Nuevo Usuario.
-2. Ingresar el mismo username `carlos` ya registrado.
-3. Clic en "Guardar".
-4. Verificar la respuesta en Postman y el frontend.
-
-**Resultado esperado**
-- HTTP 400 Bad Request con mensaje indicando que el username ya está en uso.
-- No se crea el registro duplicado en la tabla `usuarios`.
-
-**Resultado obtenido**
-El servidor Django respondió con HTTP 400 y el error `{"username": ["Ya existe usuario con este username."]}`. El frontend mostró el mensaje de validación.
-
-**Evidencias**
-
-| Tipo | Evidencia |
-|---|---|
-| Frontend | [![Captura Frontend TC-USR-003](./evidencias/frontend/TC-USR-003-frontend.png)](./evidencias/frontend/TC-USR-003-frontend.png) |
-| Postman | [![Captura Postman TC-USR-003](./evidencias/postman/TC-USR-003-postman.png)](./evidencias/postman/TC-USR-003-postman.png) |
-
-*📌 Clic en cualquier imagen para ver a pantalla completa*
-
-**Resultado final:** ✅ Exitoso
-
-**Observación:** La restricción UNIQUE del campo `username` en PostgreSQL y la validación de DRF funcionan correctamente.
-
----
-
-### TC-USR-004: Rechazo por contraseña débil
-
-**Descripción**
-Verificar que el sistema rechaza contraseñas que no cumplen la política de seguridad (mínimo 8 caracteres, al menos una mayúscula, un número y un carácter especial).
-
-**📌 Información General**
-
-| Campo | Detalle |
-|---|---|
-| Identificador | TC-USR-004 |
-| Nombre | Rechazo por contraseña débil |
-| Tipo de prueba | Validación / Seguridad |
-| Prioridad | Alta |
-| Módulo | Gestión de Usuarios |
-| Estado | ❌ Falló |
-
-**Precondiciones**
-El tester está autenticado como administrador.
-
-**Datos de entrada**
-```json
-{ "username": "test.seguridad", "password": "123" }
-```
-*(demás campos con valores válidos)*
-
-**Pasos a seguir**
-1. Abrir formulario de Nuevo Usuario.
-2. Ingresar contraseñas débiles (`123`, `12345`, contraseña sin mayúsculas ni caracteres especiales).
-3. Intentar guardar desde el formulario.
-4. Desde Postman: enviar el mismo body para verificar la validación del backend.
-
-**Resultado esperado**
-- Frontend: indicador de contraseña débil visible, formulario bloqueado sin permitir el envío.
-- Postman: HTTP 400 Bad Request con detalle del error de validación de contraseña.
-- En ningún caso el usuario debe quedar registrado en la base de datos.
-
-**Resultado obtenido**
-El sistema permitió crear el usuario con contraseñas débiles (`123`, `12345`) tanto desde el formulario Angular como desde Postman. No hubo ninguna validación en el backend — el `UsuarioSerializer` no aplica políticas de contraseña. El frontend tampoco bloqueó el envío.
-
-**Severidad:** 🔴 Alta — Usuarios con contraseñas débiles representan un riesgo de seguridad directo en producción.
-**Defecto registrado:** BUG-USR-002
-
-**Evidencias**
-
-| Tipo | Evidencia |
-|---|---|
-| Frontend | [![Captura Frontend TC-USR-004](./evidencias/frontend/TC-USR-004-frontend.png)](./evidencias/frontend/TC-USR-004-frontend.png) |
-| Postman | [![Captura Postman TC-USR-004](./evidencias/postman/TC-USR-004-postman.png)](./evidencias/postman/TC-USR-004-postman.png) |
-
-*📌 Clic en cualquier imagen para ver a pantalla completa*
-
-**Resultado final:** ❌ Fallido
-
-**Observación:** La política de contraseñas no está implementada ni en el frontend ni en el backend. Se debe agregar validación en el `UsuarioSerializer` con los validadores de contraseña de Django (`AUTH_PASSWORD_VALIDATORS`) y en el formulario Angular con `Validators.pattern`. Ver BUG-USR-002 en DEFECTOS.md.
-
----
-
-### TC-USR-005: Rechazo por número de documento con formato inválido
-
-**Descripción**
-Verificar que el sistema rechaza la creación de un usuario cuando el campo `numero_documento` contiene caracteres no numéricos.
-
-**📌 Información General**
-
-| Campo | Detalle |
-|---|---|
-| Identificador | TC-USR-005 |
-| Nombre | Documento con formato inválido |
-| Tipo de prueba | Validación / Integridad de datos |
-| Prioridad | Alta |
-| Módulo | Gestión de Usuarios |
-| Estado | ❌ Falló |
-
-**Precondiciones**
-El tester está autenticado como administrador.
-
-**Datos de entrada**
-```json
-{ "numero_documento": "ABCDE!!!" }
-```
-*(demás campos con valores válidos)*
-
-**Pasos a seguir**
-1. Abrir formulario de Nuevo Usuario.
-2. Ingresar `ABCDE!!!` en el campo número de documento.
-3. Completar el resto de campos con datos válidos.
-4. Clic en "Guardar".
-5. Verificar en pgAdmin:
-   ```sql
-   SELECT numero_documento FROM usuarios
-   ORDER BY id DESC LIMIT 1;
-   ```
-
-**Resultado esperado**
-- HTTP 400 Bad Request.
-- Mensaje: `"El número de documento solo debe contener dígitos"`.
-- El registro no se crea en la base de datos.
-
-**Resultado obtenido**
-⚠️ El sistema creó el registro con el valor `ABCDE!!!` en la columna `numero_documento` sin mostrar ningún error. No existe validación de formato en el `UsuarioSerializer` ni en el formulario Angular.
-
-**Severidad:** 🔴 Alta — Compromete la integridad de los datos en PostgreSQL.
-**Defecto registrado:** BUG-USR-001
-
-**Evidencias**
-
-| Tipo | Evidencia |
-|---|---|
-| Postman | [![Captura Postman TC-USR-005](./evidencias/postman/TC-USR-005-postman.png)](./evidencias/postman/TC-USR-005-postman.png) |
-| Database | [![Captura Database TC-USR-005](./evidencias/database/TC-USR-005-db.png)](./evidencias/database/TC-USR-005-db.png) |
-
-*📌 Clic en cualquier imagen para ver a pantalla completa*
-
-**Resultado final:** ❌ Fallido
-
-**Observación:** Se debe agregar un `RegexValidator` en el `UsuarioSerializer` y validación equivalente en Angular. Ver BUG-USR-001 en DEFECTOS.md.
-
----
-
-### TC-USR-006: Rechazo por campos obligatorios vacíos
-
-**Descripción**
-Verificar que el sistema no permite crear un usuario si se omiten los campos obligatorios del formulario.
-
-**📌 Información General**
-
-| Campo | Detalle |
-|---|---|
-| Identificador | TC-USR-006 |
-| Nombre | Rechazo por campos obligatorios vacíos |
-| Tipo de prueba | Validación / Funcional |
-| Prioridad | Media |
-| Módulo | Gestión de Usuarios |
-| Estado | ✅ Pasó |
-
-**Precondiciones**
-El tester está autenticado como administrador.
-
-**Datos de entrada**
-- Frontend: formulario completamente en blanco.
-- Postman: body `{}`
-
-**Pasos a seguir**
-1. Abrir formulario de Nuevo Usuario.
-2. No llenar ningún campo.
-3. Clic en "Guardar".
-4. Desde Postman: `POST /api/usuarios/crear/` con body `{}` y token de administrador.
-
-**Resultado esperado**
-- Frontend: mensajes de validación visibles en todos los campos requeridos (`username`, `password`, `email`, `nombre_completo`, `tipo_documento`, `numero_documento`, `rol`, `fecha_creacion`).
-- Postman: HTTP 400 con lista de errores por campo faltante (DRF los enumera automáticamente).
-
-**Resultado obtenido**
-Los mensajes de validación aparecieron en el frontend para todos los campos requeridos. Postman respondió HTTP 400 con el detalle de cada campo obligatorio faltante.
-
-**Evidencias**
-
-| Tipo | Evidencia |
-|---|---|
-| Frontend | [![Captura Frontend TC-USR-006](./evidencias/frontend/TC-USR-006-frontend.png)](./evidencias/frontend/TC-USR-006-frontend.png) |
-| Postman | [![Captura Postman TC-USR-006](./evidencias/postman/TC-USR-006-postman.png)](./evidencias/postman/TC-USR-006-postman.png) |
-
-*📌 Clic en cualquier imagen para ver a pantalla completa*
-
-**Resultado final:** ✅ Exitoso
-
-**Observación:** Las validaciones de campos obligatorios funcionan correctamente tanto en el frontend Angular como en el `UsuarioSerializer` de DRF.
-
----
-
-### TC-USR-007: Verificación de contraseña hasheada en base de datos
-
-**Descripción**
-Verificar que la contraseña del usuario es almacenada en PostgreSQL utilizando el algoritmo PBKDF2-SHA256 de Django y nunca en texto plano.
-
-**📌 Información General**
-
-| Campo | Detalle |
-|---|---|
-| Identificador | TC-USR-007 |
-| Nombre | Contraseña hasheada en base de datos |
-| Tipo de prueba | Seguridad / Integridad de datos |
-| Prioridad | Alta |
-| Módulo | Gestión de Usuarios |
-| Estado | ✅ Pasó |
-
-**Precondiciones**
-El usuario `carlos` fue creado en TC-USR-001 con contraseña `<password-de-prueba>`.
-Acceso a pgAdmin 4 con conexión a la base de datos de SofInventory.
-
-**Datos de entrada**
-```sql
-SELECT username, password
-FROM usuarios
-WHERE username = 'carlos';
-```
-
-**Pasos a seguir**
-1. Abrir pgAdmin 4 y conectarse a la base de datos de SofInventory.
-2. Abrir el Query Tool.
-3. Ejecutar la consulta SQL indicada.
-4. Observar el valor de la columna `password`.
-
-**Resultado esperado**
-- El campo `password` muestra un hash con el formato Django: `pbkdf2_sha256$<iteraciones>$<salt>$<hash_base64>`.
-- La cadena `<password-de-prueba>` **no debe aparecer** en ninguna columna.
-
-**Resultado obtenido**
-El campo `password` contenía el hash completo en formato PBKDF2-SHA256. La contraseña en texto plano no era visible en ninguna columna.
-
-**Evidencias**
-
-| Tipo | Evidencia |
-|---|---|
-| Database | [![Captura Database TC-USR-007](./evidencias/database/TC-USR-007-db.png)](./evidencias/database/TC-USR-007-db.png) |
-
-*📌 Clic en cualquier imagen para ver a pantalla completa*
-
-**Resultado final:** ✅ Exitoso
-
-**Observación:** Django aplica automáticamente PBKDF2-SHA256 al campo password. Ningún dato sensible queda expuesto en la base de datos.
-
----
-
-### TC-USR-008: Usuario creado puede iniciar sesión
-
-**Descripción**
-Verificar que un usuario recién creado puede autenticarse exitosamente en el módulo de Login usando su username y contraseña. (Caso de integración: Usuarios → Login)
-
-**📌 Información General**
-
-| Campo | Detalle |
-|---|---|
-| Identificador | TC-USR-008 |
-| Nombre | Usuario creado puede iniciar sesión |
-| Tipo de prueba | Integración |
-| Prioridad | Alta |
-| Módulo | Usuarios → Login |
-| Estado | ✅ Pasó |
-
-**Precondiciones**
-Usuario `lauraG` fue creado en TC-USR-002 con contraseña `<password-de-prueba>` y estado activo.
-
-**Datos de entrada**
-```json
-{ "username": "lauraG", "password": "<password-de-prueba>" }
-```
-
-**Pasos a seguir**
-1. Cerrar toda sesión activa.
-2. En Postman: `POST /api/auth/login/` con el body indicado.
-3. Verificar que la respuesta incluye `access_token`, `expires_at` y el objeto `usuario`.
-4. En el frontend, navegar a la pantalla de Login e ingresar las credenciales.
-5. Verificar redirección al dashboard con el menú de supervisor.
-
-**Resultado esperado**
-- HTTP 200.
-- Respuesta contiene `access_token`, `expires_at` y `"rol": "Supervisor"`.
-- El frontend redirige correctamente al dashboard.
-- La sesión queda registrada en `sesiones_api` con `activa = true`.
-
-**Resultado obtenido**
-El usuario accedió correctamente. Se generó un token Bearer válido almacenado en la tabla `sesiones_api`. La redirección al dashboard fue exitosa con el menú de supervisor.
-
-**Evidencias**
-
-| Tipo | Evidencia |
-|---|---|
-| Frontend | [![Captura Frontend TC-USR-008](./evidencias/frontend/TC-USR-008-frontend.png)](./evidencias/frontend/TC-USR-008-frontend.png) |
-| Postman | [![Captura Postman TC-USR-008](./evidencias/postman/TC-USR-008-postman.png)](./evidencias/postman/TC-USR-008-postman.png) |
-
-*📌 Clic en cualquier imagen para ver a pantalla completa*
-
-**Resultado final:** ✅ Exitoso
-
-**Observación:** La integración entre el módulo de Usuarios y el módulo de Login funciona correctamente. El usuario creado puede autenticarse de inmediato.
-
----
-
-## 📊 Resumen de Resultados
-
-| ID | Descripción | Severidad (si falló) | Estado |
-|----|-------------|---------------------|--------|
-| TC-USR-001 | Crear usuario administrador | — | ✅ Pasó |
-| TC-USR-002 | Crear usuario supervisor | — | ✅ Pasó |
-| TC-USR-003 | Username duplicado rechazado | — | ✅ Pasó |
-| TC-USR-004 | Contraseña débil rechazada | 🔴 Alta| ❌ Falló|
-| TC-USR-005 | Número de documento inválido | 🔴 Alta | ❌ Falló |
-| TC-USR-006 | Campos obligatorios vacíos rechazados | — | ✅ Pasó |
-| TC-USR-007 | Contraseña almacenada como hash PBKDF2 | — | ✅ Pasó |
-| TC-USR-008 | Usuario creado puede hacer login | — | ✅ Pasó |
-| **TOTAL** | | | **6/8 (75.0%)** |
-
----
-
-## 🔍 Análisis de Resultados
-
-| Aspecto | Resultado | Evaluación |
-|---------|-----------|-----------|
-| Validaciones de formulario (frontend) | Campos requeridos validados; política de contraseña ausente | ❌ Deficiencia |
-| Unicidad de username en PostgreSQL | Restricción UNIQUE aplicada correctamente | ✅ Correcto |
-| Persistencia de datos en BD | Datos guardados correctamente en tabla `usuarios` | ✅ Correcto |
-| Seguridad de contraseñas (hashing) | PBKDF2-SHA256 aplicado en todos los casos | ✅ Correcto |
-| Política de contraseñas (frontend y backend) | Sin validación — contraseñas débiles como `123` aceptadas | ❌ Deficiencia crítica |
-| Validación de número de documento | Sin validación de formato — datos inválidos aceptados | ❌ Deficiencia crítica |
-| Roles y permisos | Restricciones de acceso por rol funcionan correctamente | ✅ Correcto |
-| Integración con Login | Usuario creado accede correctamente con su username | ✅ Correcto |
-
-**Hallazgos principales:**
-- **BUG-USR-001:** Ausencia de validación de formato en `numero_documento` — permite ingreso de caracteres inválidos en PostgreSQL, comprometiendo la integridad de los datos y los reportes que dependan de ese campo.
-- **BUG-USR-002:** Ausencia de política de contraseñas en frontend y backend — el sistema acepta contraseñas débiles como `123`, exponiendo las cuentas a ataques de fuerza bruta.
-
----
-
-## 💡 Recomendaciones
-
-| # | Prioridad | Categoría | Recomendación |
-|---|-----------|-----------|---------------|
-| 1 | 🔴 Crítico | Seguridad | Agregar un `RegexValidator` en el campo `numero_documento` del `UsuarioSerializer` para aceptar solo dígitos (`^\d+$`). Complementar con validación equivalente en el formulario Angular. |
-| 2 | 🔴 Crítico | Seguridad | Activar `AUTH_PASSWORD_VALIDATORS` en `settings.py` de Django y conectarlos al `UsuarioSerializer`. Agregar `Validators.pattern` en Angular para exigir mínimo 8 caracteres, una mayúscula, un número y un carácter especial. |
-| 3 | 🟠 Importante | Validación | Agregar restricción de longitud mínima y máxima al campo `numero_documento` según el tipo de documento (ej. CC: 7-10 dígitos). |
-| 4 | 🟡 Mejora | Auditoría | Registrar la creación de usuarios incluyendo el administrador que realizó la acción, IP de origen y fecha/hora. |
-| 5 | 🔵 Buenas prácticas | UX | Implementar confirmación de contraseña en el formulario Angular para evitar errores tipográficos al crear el usuario. |
-
----
-
-*© 2026 SofInventory — Área de Calidad de Software | Versión 1.0.1*
+TC-USR-001 a TC-USR-007 aprobaron. TC-USR-008 falló únicamente en la búsqueda no reactiva (`BUG-USR-003`); ayuda, accesibilidad y responsive aprobaron. Ver [resultados trazables](../RESULTADOS_EJECUCION_2026-08-08.md#usuarios-roles-y-permisos).
