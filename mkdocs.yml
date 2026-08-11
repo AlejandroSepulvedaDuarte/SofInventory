@@ -1,5 +1,5 @@
 site_name: SofInventory ERP
-site_description: Manuales técnico y de usuario del sistema SofInventory.
+site_description: Manuales y documentación de calidad del sistema SofInventory.
 site_author: Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo
 
 
@@ -42,7 +42,14 @@ markdown_extensions:
 extra_javascript:
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
 
+extra_css:
+  - docs/extra.css
+
 nav:
   - Manual de Usuario: MANUAL_USUARIO.md
   - Manual Técnico: MANUAL_TECNICO.md
+  - Evidencias de calidad:
+      - Aplicación de buenas prácticas: Aplicacion_buenas_practicas_calidad_SofInventory.md
+      - Instrumentos diligenciados: Diligenciamiento_instrumentos_calidad_SofInventory.md
+      - Bitácora de procesos: Bitacora_procesos_documentados_SofInventory.md
 

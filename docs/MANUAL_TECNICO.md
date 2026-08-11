@@ -922,7 +922,7 @@ INITIAL_ADMIN_NUMERO_DOCUMENTO=<documento-autorizado>
 
 Dentro del contenedor backend, Compose completa la conexión con `DB_HOST=db`, no `localhost`. Los servicios se resuelven por nombre dentro de la red interna.
 
-!!! warning "Secretos y bootstrap"
+!!! Advertencia "Secretos y bootstrap"
     Genere valores únicos para `SECRET_KEY`, `POSTGRES_PASSWORD` e `INITIAL_ADMIN_PASSWORD`. Si la contraseña inicial queda vacía, `seed_data` crea una aleatoria y la muestra una sola vez en los logs del primer arranque; no capture ni publique ese log.
 
 | Variable | Obligatoria | Descripción |
@@ -1401,8 +1401,8 @@ La última ejecución consolidada documentada utilizó contenedores y datos fict
 | Build Angular de producción | Aprobado con advertencias de presupuesto: bundle inicial +7,02 kB y CSS de Dashboard +3,05 kB |
 | Matriz funcional/E2E | 78 casos: 67 aprobados, 1 parcial y 10 fallidos |
 
-!!! warning "No confundir suite verde con liberación completa"
-    Las suites automatizadas aprobaron, pero los casos E2E detectaron defectos de contrato, interfaz y reglas de negocio. La liberación no debe declararse totalmente aprobada hasta corregir y reejecutar los casos fallidos. Consulte [Resultados de ejecución](./test-cases/RESULTADOS_EJECUCION_2026-08-08.md) y [Registro de defectos](./test-cases/DEFECTOS.md).
+!!! Advertencia "No confundir suite verde con liberación completa"
+    Los casos E2E detectaron defectos de contrato, interfaz y reglas de negocio. La liberación no debe declararse totalmente aprobada hasta corregir y reejecutar los casos fallidos. Consulte [Resultados de ejecución](./test-cases/RESULTADOS_EJECUCION_2026-08-08.md) y [Registro de defectos](./test-cases/DEFECTOS.md).
 
 | Área pendiente en la última ejecución | Riesgo técnico |
 |---|---|

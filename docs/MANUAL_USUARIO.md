@@ -16,8 +16,8 @@
 | **Proyecto** | SofInventory — Sistema ERP de Gestión de Inventarios y Ventas |
 | **Autores / Aprendices** | Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo |
 | **Instructor Evaluador** | José Ignacio Botero Osorio |
-| **Centro de Formación** | Centro de Comercio — Regional Antioquia (SENA) |
-| **Programa de Formación** | Tecnología en Análisis y Desarrollo de Software (TADS) |
+| **Centro de Formación** | Centro de Comercio — Regional Antioquia — SENA|
+| **Programa de Formación** | Tecnología en Análisis y Desarrollo de Software |
 | **Ficha** | 3118526 |
 | **Estado del Documento** | Vigente — actualizado para la versión funcional evaluada |
 
@@ -163,7 +163,7 @@ graph LR
 | Gestionar Usuarios | ✅ | ❌ | ❌ | ❌ |
 | Desbloquear Usuarios | ✅ | ❌ | ❌ | ❌ |
 
-!!! note "Visibilidad y permisos"
+!!! nota "Visibilidad y permisos"
     El menú principal facilita la navegación de las personas autenticadas, pero la autorización definitiva depende del rol. Que una pantalla o un botón sea visible no reemplaza el permiso necesario para ejecutar una operación.
 
 ---
@@ -198,7 +198,7 @@ graph LR
 - El sistema bloquea la cuenta después de **5 intentos fallidos** de inicio de sesión. Además, limita la frecuencia de intentos desde una misma conexión.
 - Las contraseñas se conservan mediante un resumen criptográfico irreversible; nadie puede consultarlas en texto plano.
 
-!!! warning "No pruebe contraseñas repetidamente"
+!!! Advertencia "No pruebe contraseñas repetidamente"
     Si duda de sus credenciales, deténgase antes de agotar los intentos disponibles y solicite apoyo. Un administrador debe desbloquear una cuenta bloqueada.
 
 ---
@@ -308,7 +308,7 @@ Para cambiar el tema:
 2. Seleccione **Claro**, **Azul** u **Oscuro**.
 3. Continúe trabajando; el sistema recuerda únicamente esta preferencia visual en el navegador.
 
-!!! note
+!!! nota
     El tema no altera roles, datos, cálculos ni permisos. Si un texto pierde legibilidad, actualice el navegador y comunique el tema, la pantalla y el módulo al equipo de soporte.
 
 ### 5.5 Ayuda contextual de formularios
@@ -1080,7 +1080,7 @@ sequenceDiagram
 8. Haga clic en **"Registrar Movimiento"**.
 9. El sistema actualizará el stock y conservará el movimiento para consulta.
 
-!!! warning
+!!! Advertencia
     Una compra debe registrarse desde el módulo Compras. Use la entrada manual solo cuando el ajuste tenga una justificación operativa diferente y autorizada.
 
 El formulario actual y la relación entre almacenes se ilustran en la sección 6.4.4.
