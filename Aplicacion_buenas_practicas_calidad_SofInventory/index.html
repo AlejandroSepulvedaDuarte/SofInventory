@@ -1,0 +1,3587 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Manuales y documentación de calidad del sistema SofInventory.">
+      
+      
+        <meta name="author" content="Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo">
+      
+      
+      
+        <link rel="prev" href="../MANUAL_TECNICO/">
+      
+      
+        <link rel="next" href="../Diligenciamiento_instrumentos_calidad_SofInventory/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Aplicación de buenas prácticas - SofInventory ERP</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../docs/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#aplicacion-de-buenas-practicas-de-calidad-de-software" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="SofInventory ERP" class="md-header__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SofInventory ERP
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Aplicación de buenas prácticas
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../MANUAL_USUARIO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual de Usuario
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../MANUAL_TECNICO/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Manual Técnico
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Evidencias de calidad
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SofInventory ERP" class="md-nav__button md-logo" aria-label="SofInventory ERP" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SofInventory ERP
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MANUAL_USUARIO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual de Usuario
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MANUAL_TECNICO/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual Técnico
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evidencias de calidad
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Evidencias de calidad
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aplicación de buenas prácticas
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aplicación de buenas prácticas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#control-del-documento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Control del documento
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convenciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convenciones
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumen
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-objetivos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Objetivos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Objetivos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-objetivo-general" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Objetivo general
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-objetivos-especificos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Objetivos específicos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-alcance-exclusiones-y-metodo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Alcance, exclusiones y método
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Alcance, exclusiones y método">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-alcance-funcional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Alcance funcional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-exclusiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Exclusiones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-metodo-de-analisis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Método de análisis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-caracterizacion-actual-de-sofinventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Caracterización actual de SofInventory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Caracterización actual de SofInventory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-arquitectura-y-entorno-de-ejecucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Arquitectura y entorno de ejecución
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-actores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Actores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-activos-criticos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Activos críticos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-referentes-y-caracteristicas-de-calidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Referentes y características de calidad
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Referentes y características de calidad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-referentes-aplicados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Referentes aplicados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-caracteristicas-prioritarias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Características prioritarias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-principios-operativos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Principios operativos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-linea-base-de-calidad-vigente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Línea base de calidad vigente
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Línea base de calidad vigente">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-resultado-por-modulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Resultado por módulo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-cobertura-automatizada-ejecutada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Cobertura automatizada ejecutada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-advertencias-de-compilacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Advertencias de compilación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-evidencia-visual-representativa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Evidencia visual representativa
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-mejoras-incorporadas-al-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Mejoras incorporadas al proyecto
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Mejoras incorporadas al proyecto">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-validaciones-y-mensajes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Validaciones y mensajes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-ubicacion-compartida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Ubicación compartida
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-inventario-compras-y-ventas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Inventario, compras y ventas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-empresa-e-imagenes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Empresa e imágenes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-experiencia-y-documentacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 Experiencia y documentación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-riesgos-y-defectos-vigentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Riesgos y defectos vigentes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Riesgos y defectos vigentes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-defectos-abiertos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Defectos abiertos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-defectos-resueltos-y-revalidados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Defectos resueltos y revalidados
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-mapa-de-riesgo-actualizado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Mapa de riesgo actualizado
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-proceso-de-calidad-aplicado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Proceso de calidad aplicado
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Proceso de calidad aplicado">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-procedimiento-sqa-sof-01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 Procedimiento SQA-SOF-01
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-responsabilidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 Responsabilidades
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-criterios-de-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 Criterios de control
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-instrumentos-de-calidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Instrumentos de calidad
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Instrumentos de calidad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101-instrumento-1-plan-de-pruebas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 Instrumento 1 — Plan de pruebas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.1 Instrumento 1 — Plan de pruebas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tipos-de-prueba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipos de prueba
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calendario-por-ciclo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calendario por ciclo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-instrumento-2-matriz-de-trazabilidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Instrumento 2 — Matriz de trazabilidad
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.2 Instrumento 2 — Matriz de trazabilidad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reglas-de-mantenimiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reglas de mantenimiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#103-instrumento-3-casos-de-prueba-representativos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.3 Instrumento 3 — Casos de prueba representativos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.3 Instrumento 3 — Casos de prueba representativos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caso-a-tc-inv-007-concurrencia-sin-stock-negativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso A: TC-INV-007 — Concurrencia sin stock negativo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-b-tc-prd-001-alta-de-producto-con-imagen-opcional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso B: TC-PRD-001 — Alta de producto con imagen opcional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-c-tc-emp-004-seguridad-del-logo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso C: TC-EMP-004 — Seguridad del logo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#caso-d-tc-vta-007-detalle-y-comprobante-historico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Caso D: TC-VTA-007 — Detalle y comprobante histórico
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#104-instrumento-4-scripts-y-comandos-reproducibles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.4 Instrumento 4 — Scripts y comandos reproducibles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.4 Instrumento 4 — Scripts y comandos reproducibles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#suite-backend-rapida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suite backend rápida
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comprobacion-de-django-y-migraciones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comprobación de Django y migraciones
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suite-frontend-y-compilacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suite frontend y compilación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publicacion-documental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Publicación documental
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#105-instrumento-5-resultados-y-defectos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.5 Instrumento 5 — Resultados y defectos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.5 Instrumento 5 — Resultados y defectos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ciclo-obligatorio-de-un-defecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ciclo obligatorio de un defecto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#106-instrumento-6-psp-y-tsp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.6 Instrumento 6 — PSP y TSP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10.6 Instrumento 6 — PSP y TSP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#formato-de-tiempo-psp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formato de tiempo PSP
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formato-de-defecto-psp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formato de defecto PSP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-metricas-y-puertas-de-calidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Métricas y puertas de calidad
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Métricas y puertas de calidad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-metricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Métricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-puerta-de-liberacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Puerta de liberación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-plan-priorizado-de-mejora" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Plan priorizado de mejora
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="12. Plan priorizado de mejora">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121-secuencia-recomendada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 Secuencia recomendada
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-seguridad-privacidad-y-gestion-de-evidencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Seguridad, privacidad y gestión de evidencia
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Seguridad, privacidad y gestión de evidencia">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-controles-vigentes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 Controles vigentes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-reglas-para-evidencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 Reglas para evidencias
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-conclusiones" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Conclusiones
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-glosario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Glosario
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-referencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Referencias
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17-anexos-y-navegacion-documental" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Anexos y navegación documental
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17. Anexos y navegación documental">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#171-documentos-transversales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.1 Documentos transversales
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#172-casos-por-modulo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2 Casos por módulo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#173-registro-de-aprobacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3 Registro de aprobación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Diligenciamiento_instrumentos_calidad_SofInventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instrumentos diligenciados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Bitacora_procesos_documentados_SofInventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bitácora de procesos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div style="text-align: center">
+<p><img alt="SofInventory Logo" src="../assets/logo.png" width="300" /></p>
+<h1 id="aplicacion-de-buenas-practicas-de-calidad-de-software">Aplicación de Buenas Prácticas de Calidad de Software</h1>
+<p><strong>Instrumentos, trazabilidad y mejora continua aplicados a SofInventory</strong></p>
+<p><code>Versión v1.0</code> | <code>10 de agosto de 2026</code></p>
+</div>
+<hr />
+<h3 id="control-del-documento">Control del documento</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Información</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Título</strong></td>
+<td>Aplicación de buenas prácticas de calidad de software en el proyecto SofInventory</td>
+</tr>
+<tr>
+<td><strong>Código</strong></td>
+<td><code>SQA-SOF-EVD-001</code></td>
+</tr>
+<tr>
+<td><strong>Versión</strong></td>
+<td><strong>v1.0</strong></td>
+</tr>
+<tr>
+<td><strong>Fecha de actualización</strong></td>
+<td>10 de agosto de 2026</td>
+</tr>
+<tr>
+<td><strong>Autores / Aprendices</strong></td>
+<td>Alejandro Sepúlveda Duarte / Lucy Estefany Izquierdo Jaramillo</td>
+</tr>
+<tr>
+<td><strong>Instructor evaluador</strong></td>
+<td>José Ignacio Botero Osorio</td>
+</tr>
+<tr>
+<td><strong>Centro de formación</strong></td>
+<td>Centro de Comercio Regional Antioquia — SENA</td>
+</tr>
+<tr>
+<td><strong>Programa</strong></td>
+<td>Tecnología en Análisis y Desarrollo de Software</td>
+</tr>
+<tr>
+<td><strong>Ficha</strong></td>
+<td>3118526</td>
+</tr>
+<tr>
+<td><strong>Alcance</strong></td>
+<td>Proceso de calidad, instrumentos de prueba, trazabilidad, resultados, defectos, métricas y mejora continua</td>
+</tr>
+<tr>
+<td><strong>Estado</strong></td>
+<td>Línea base ejecutada; aprobación funcional condicionada al cierre y re-prueba de defectos abiertos</td>
+</tr>
+</tbody>
+</table>
+<h3 id="convenciones">Convenciones</h3>
+<table>
+<thead>
+<tr>
+<th>Convención</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Aprobado</strong></td>
+<td>El comportamiento fue demostrado con evidencia reproducible.</td>
+</tr>
+<tr>
+<td><strong>Parcial</strong></td>
+<td>Una parte del criterio fue demostrada y otra requiere corrección o re-prueba.</td>
+</tr>
+<tr>
+<td><strong>Falló</strong></td>
+<td>El resultado real no coincide con el esperado.</td>
+</tr>
+<tr>
+<td><code>AUTO</code></td>
+<td>Suite automatizada ejecutada.</td>
+</tr>
+<tr>
+<td><code>API</code></td>
+<td>Solicitud y respuesta sanitizadas.</td>
+</tr>
+<tr>
+<td><code>DB-R</code></td>
+<td>Consulta de solo lectura o aserción de persistencia.</td>
+</tr>
+<tr>
+<td><code>MAN</code></td>
+<td>Verificación manual documentada.</td>
+</tr>
+<tr>
+<td><code>CAPTURA</code></td>
+<td>Evidencia visual sin credenciales, tokens ni datos sensibles.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="resumen">Resumen</h2>
+<p>En este documento presentamos la aplicación de buenas prácticas de calidad de software durante el desarrollo y la revisión de SofInventory. Para ello, reunimos y organizamos los instrumentos utilizados para planificar las pruebas, verificar las funcionalidades, registrar los resultados, identificar defectos y establecer acciones de mejora.</p>
+<p>El informe comprende el alcance del proceso de calidad, los referentes que orientaron nuestro trabajo, la caracterización del sistema, la matriz de trazabilidad, los casos de prueba, los resultados de ejecución, el registro de defectos, las métricas y el plan de mejora. También documentamos las prácticas aplicadas para proteger la información utilizada como evidencia y evitar la exposición de credenciales, datos personales o información sensible.</p>
+<p>Como resultado de este proceso, consolidamos 78 casos funcionales, de los cuales 67 fueron aprobados, uno obtuvo un resultado parcial y 10 presentaron fallos. Además, registramos la ejecución satisfactoria de 99 pruebas del backend en SQLite, 99 en PostgreSQL y 24 pruebas del frontend, junto con la compilación del proyecto Angular. Estos resultados nos permitieron reconocer los avances alcanzados y, al mismo tiempo, identificar los aspectos que todavía requieren corrección y una nueva verificación.</p>
+<p>De acuerdo con la evidencia recopilada, determinamos una aprobación condicionada para continuar utilizando el sistema en un entorno controlado. Antes de considerar una liberación definitiva, será necesario corregir los defectos críticos y altos, ejecutar nuevamente los casos afectados y comprobar que las soluciones no generen fallos en otras funcionalidades.</p>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th style="text-align: right;">Resultado vigente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Casos funcionales consolidados</td>
+<td style="text-align: right;"><strong>78</strong></td>
+</tr>
+<tr>
+<td>Casos aprobados</td>
+<td style="text-align: right;"><strong>67</strong></td>
+</tr>
+<tr>
+<td>Casos parciales</td>
+<td style="text-align: right;"><strong>1</strong></td>
+</tr>
+<tr>
+<td>Casos fallidos</td>
+<td style="text-align: right;"><strong>10</strong></td>
+</tr>
+<tr>
+<td>Aprobación estricta</td>
+<td style="text-align: right;"><strong>85,9 %</strong></td>
+</tr>
+<tr>
+<td>Pruebas backend en SQLite temporal</td>
+<td style="text-align: right;"><strong>99/99 aprobadas</strong></td>
+</tr>
+<tr>
+<td>Pruebas backend en PostgreSQL 15 aislado</td>
+<td style="text-align: right;"><strong>99/99 aprobadas</strong></td>
+</tr>
+<tr>
+<td>Pruebas frontend Node</td>
+<td style="text-align: right;"><strong>24/24 aprobadas</strong></td>
+</tr>
+<tr>
+<td>Build Angular de producción</td>
+<td style="text-align: right;"><strong>Aprobado con dos advertencias de presupuesto</strong></td>
+</tr>
+<tr>
+<td>Defectos registrados</td>
+<td style="text-align: right;"><strong>11: 9 abiertos y 2 resueltos/revalidados</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-introduccion">1. Introducción</h2>
+<p>Durante el desarrollo de SofInventory comprendimos que la calidad de un software no depende solamente de que sus pantallas funcionen o de que permita registrar información. También es necesario revisar sus reglas, comprobar los resultados, identificar los errores y conservar evidencias que permitan demostrar lo que se evaluó.</p>
+<p>Por esta razón, en este documento presentamos el proceso que seguimos para aplicar buenas prácticas de calidad en nuestro proyecto. Reunimos el plan de pruebas, la matriz de trazabilidad, los casos definidos para cada módulo, los resultados obtenidos, los defectos encontrados y las acciones de mejora que consideramos necesarias. De esta manera, buscamos que la documentación refleje tanto los avances alcanzados como los aspectos que todavía se encuentran pendientes.</p>
+<p>Para realizar esta revisión tuvimos en cuenta las principales funcionalidades de SofInventory, entre ellas el inicio de sesión, la administración de usuarios, productos, categorías, proveedores, clientes, almacenes, inventario, compras, ventas, empresa y panel de control. También revisamos elementos compartidos del frontend, como las validaciones, los mensajes, los temas visuales, la adaptación a diferentes tamaños de pantalla y la ayuda contextual.</p>
+<p>El proceso combinó pruebas automatizadas, verificaciones de la API y la base de datos, revisiones manuales y evidencias visuales obtenidas con información ficticia. Esto nos permitió conocer con mayor claridad el estado actual del proyecto, reconocer las mejoras incorporadas y establecer una ruta de trabajo para corregir los defectos encontrados.</p>
+<p>Con la elaboración de esta evidencia no buscamos presentar el sistema como un producto terminado o libre de errores. Nuestro propósito es demostrar cómo aplicamos un proceso organizado de calidad, cómo respaldamos nuestras conclusiones con resultados verificables y cómo utilizamos los hallazgos para continuar mejorando SofInventory.</p>
+<h2 id="2-objetivos">2. Objetivos</h2>
+<h3 id="21-objetivo-general">2.1 Objetivo general</h3>
+<p>Aplicar y documentar un proceso de calidad para SofInventory que permita planificar, ejecutar, registrar, evaluar y mejorar las actividades de desarrollo y prueba con criterios verificables y evidencia reproducible.</p>
+<h3 id="22-objetivos-especificos">2.2 Objetivos específicos</h3>
+<ul>
+<li>Caracterizar el sistema, su arquitectura, sus actores y activos críticos.</li>
+<li>Relacionar requisitos, riesgos, casos, automatización, resultados y defectos.</li>
+<li>Consolidar el plan, la matriz, los casos, los scripts y los registros de prueba.</li>
+<li>Presentar las mejoras incorporadas al proyecto desde la línea base inicial.</li>
+<li>Diferenciar los comportamientos aprobados de los defectos que aún requieren corrección.</li>
+<li>Establecer métricas y puertas de calidad proporcionales al riesgo.</li>
+<li>Mantener una ruta de mejora priorizada, con responsables y criterios de terminado.</li>
+<li>Evitar que la documentación exponga contraseñas, tokens, datos personales o secretos.</li>
+</ul>
+<h2 id="3-alcance-exclusiones-y-metodo">3. Alcance, exclusiones y método</h2>
+<h3 id="31-alcance-funcional">3.1 Alcance funcional</h3>
+<p>La revisión cubre los módulos y capacidades vigentes:</p>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Cobertura principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login y sesiones</td>
+<td>Acceso, bloqueo, sesión única, expiración, logout y rutas protegidas</td>
+</tr>
+<tr>
+<td>Usuarios y roles</td>
+<td>CRUD, permisos, contraseña, estado, desbloqueo y auditoría</td>
+</tr>
+<tr>
+<td>Categorías y productos</td>
+<td>Validación semántica, precios, IVA, imagen, estado y relaciones</td>
+</tr>
+<tr>
+<td>Proveedores y clientes</td>
+<td>Identidad, contacto, ubicación Colombia/exterior y relaciones históricas</td>
+</tr>
+<tr>
+<td>Almacenes e inventario</td>
+<td>Stock por almacén, entradas, salidas, transferencias, concurrencia e idempotencia</td>
+</tr>
+<tr>
+<td>Compras</td>
+<td>Registro, impuestos, responsable, datos históricos de la operación, stock y anulación</td>
+</tr>
+<tr>
+<td>Ventas</td>
+<td>POS, pago, descuento, impuestos, responsable, comprobante y anulación</td>
+</tr>
+<tr>
+<td>Empresa</td>
+<td>Configuración singleton, identidad, ubicación, logo y comprobantes</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>Indicadores, periodos, gráficos, roles y estados vacíos/error</td>
+</tr>
+<tr>
+<td>Frontend compartido</td>
+<td>Temas, mensajes, validaciones, ayuda contextual, teclado y responsive</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-exclusiones">3.2 Exclusiones</h3>
+<ul>
+<li>Certificación formal ISO o auditoría externa.</li>
+<li>Pruebas exhaustivas de carga, estrés o recuperación ante desastre.</li>
+<li>Certificación en todas las combinaciones de navegador, sistema operativo y dispositivo.</li>
+<li>Uso de información real de producción.</li>
+<li>Presentación de una prueba como aprobada por el solo hecho de existir en el código.</li>
+<li>Cierre documental de un defecto sin corrección, re-prueba y regresión.</li>
+</ul>
+<h3 id="33-metodo-de-analisis">3.3 Método de análisis</h3>
+<ol>
+<li>Revisión del código, modelos, serializers, servicios, componentes y configuración.</li>
+<li>Revisión de las suites automatizadas y su ejecución registrada.</li>
+<li>Trazabilidad con los 78 casos por módulo.</li>
+<li>Verificación API, base de datos y navegador en entornos aislados.</li>
+<li>Revisión de evidencias sanitizadas.</li>
+<li>Clasificación de resultados y defectos.</li>
+<li>Definición de puertas, métricas y plan de mejora.</li>
+</ol>
+<h2 id="4-caracterizacion-actual-de-sofinventory">4. Caracterización actual de SofInventory</h2>
+<h3 id="41-arquitectura-y-entorno-de-ejecucion">4.1 Arquitectura y entorno de ejecución</h3>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Implementación verificada</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td>Angular 19.2.21, TypeScript 5.6.3, componentes standalone, signals, Router, HttpClient, RxJS y Chart.js</td>
+</tr>
+<tr>
+<td>Backend</td>
+<td>Python 3.12.13, Django 6.0.4 y Django REST Framework 3.17.1</td>
+</tr>
+<tr>
+<td>Persistencia</td>
+<td>PostgreSQL 15.18 en el entorno integrado; SQLite en memoria para la suite rápida aislada</td>
+</tr>
+<tr>
+<td>Publicación</td>
+<td>Nginx 1.31.3 sobre Alpine 3.24.1</td>
+</tr>
+<tr>
+<td>Contenedores</td>
+<td>Docker Compose con frontend, backend, PostgreSQL y volúmenes persistentes</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td>Token Bearer propio con tabla de sesiones, vigencia de 12 horas y sesión única</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Diagrama Características del proyecto" src="../img/diagrama-caracteristicas-proyecto.png" />
+<em>Figura 1. Arquitectura y entorno de ejecución de SofInventory.</em></p>
+<h3 id="42-actores">4.2 Actores</h3>
+<table>
+<thead>
+<tr>
+<th>Rol</th>
+<th>Responsabilidad general</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Administrador</td>
+<td>Configuración completa, empresa, usuarios y operaciones autorizadas</td>
+</tr>
+<tr>
+<td>Supervisor</td>
+<td>Supervisión de catálogos, terceros, inventario, compras y ventas según endpoint</td>
+</tr>
+<tr>
+<td>Bodega</td>
+<td>Almacenes, inventario, productos y compras autorizadas</td>
+</tr>
+<tr>
+<td>Vendedor</td>
+<td>Operación comercial, clientes, productos y ventas autorizadas</td>
+</tr>
+</tbody>
+</table>
+<p>La visibilidad de un botón o módulo no constituye autorización. Los permisos se validan en el backend para impedir evasión mediante solicitudes directas.</p>
+<h3 id="43-activos-criticos">4.3 Activos críticos</h3>
+<ul>
+<li>Credenciales, hashes de contraseña, tokens y sesiones.</li>
+<li>Identidad, rol, estado y auditoría de usuarios.</li>
+<li>Existencias por producto y almacén.</li>
+<li>Movimientos, transferencias y reversiones.</li>
+<li>Compras, ventas, responsables y anulaciones.</li>
+<li>Snapshots históricos de empresa, productos, precios, costos e impuestos.</li>
+<li>Imágenes de empresa y productos almacenadas en medios persistentes.</li>
+<li>Datos personales y comerciales de clientes y proveedores.</li>
+</ul>
+<h2 id="5-referentes-y-caracteristicas-de-calidad">5. Referentes y características de calidad</h2>
+<h3 id="51-referentes-aplicados">5.1 Referentes aplicados</h3>
+<table>
+<thead>
+<tr>
+<th>Referente</th>
+<th>Aplicación en SofInventory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ISO/IEC/IEEE 29119-3:2021</td>
+<td>Estructura del plan, casos, procedimientos, resultados, incidentes y trazabilidad</td>
+</tr>
+<tr>
+<td>ISO/IEC 25010</td>
+<td>Evaluación de adecuación funcional, fiabilidad, seguridad, usabilidad, mantenibilidad y portabilidad</td>
+</tr>
+<tr>
+<td>CMMI</td>
+<td>Planificación, seguimiento, medición, prevención y mejora del proceso</td>
+</tr>
+<tr>
+<td>PSP</td>
+<td>Registro individual de tiempo, defectos y postmortem sin inventar datos históricos</td>
+</tr>
+<tr>
+<td>TSP</td>
+<td>Distribución de responsabilidades y seguimiento con métricas de equipo</td>
+</tr>
+<tr>
+<td>Ágil/Scrum</td>
+<td>Actualización de artefactos y riesgos en cada iteración</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-caracteristicas-prioritarias">5.2 Características prioritarias</h3>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>Interpretación</th>
+<th>Ejemplo verificable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adecuación funcional</td>
+<td>Las reglas del negocio se cumplen en todas las capas.</td>
+<td>Una venta descuenta stock exactamente una vez.</td>
+</tr>
+<tr>
+<td>Fiabilidad</td>
+<td>Los errores y reintentos no dejan estados parciales.</td>
+<td>Una operación inválida hace rollback completo.</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>Sesiones, roles, archivos y secretos están protegidos.</td>
+<td>Un vendedor no crea usuarios ni suplanta responsables.</td>
+</tr>
+<tr>
+<td>Usabilidad</td>
+<td>La interfaz guía, conserva datos válidos y muestra errores accionables.</td>
+<td>El resumen enfoca el primer campo inválido.</td>
+</tr>
+<tr>
+<td>Compatibilidad</td>
+<td>Los datos y documentos históricos siguen siendo legibles.</td>
+<td>Una operación antigua sin responsable muestra “No disponible”.</td>
+</tr>
+<tr>
+<td>Mantenibilidad</td>
+<td>La lógica común se centraliza y se prueba.</td>
+<td>Ubicación, validación y notificaciones no se duplican por módulo.</td>
+</tr>
+<tr>
+<td>Portabilidad</td>
+<td>El entorno se reproduce con versiones controladas.</td>
+<td>Docker levanta los servicios y conserva datos en volúmenes.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="53-principios-operativos">5.3 Principios operativos</h3>
+<ul>
+<li><strong>Prevenir antes que corregir:</strong> revisar criterios, riesgos y validaciones antes de implementar.</li>
+<li><strong>Validar en profundidad:</strong> frontend para experiencia; backend y base de datos para integridad.</li>
+<li><strong>Trazar de extremo a extremo:</strong> requisito → riesgo → caso → ejecución → evidencia → defecto.</li>
+<li><strong>Conservar la historia:</strong> no reescribir responsables, precios o impuestos antiguos.</li>
+<li><strong>Usar evidencia reproducible:</strong> registrar ambiente, datos ficticios, comando, resultado y fecha.</li>
+<li><strong>Cerrar el ciclo:</strong> todo defecto necesita corrección, re-prueba, regresión y actualización documental.</li>
+</ul>
+<h2 id="6-linea-base-de-calidad-vigente">6. Línea base de calidad vigente</h2>
+<h3 id="61-resultado-por-modulo">6.1 Resultado por módulo</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th style="text-align: right;">Casos</th>
+<th style="text-align: right;">Aprobados</th>
+<th style="text-align: right;">Parciales</th>
+<th style="text-align: right;">Fallidos</th>
+<th style="text-align: right;">Aprobación estricta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Usuarios</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">87,5 %</td>
+</tr>
+<tr>
+<td>Login y sesiones</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">85,7 %</td>
+</tr>
+<tr>
+<td>Categorías</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">100 %</td>
+</tr>
+<tr>
+<td>Productos</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">66,7 %</td>
+</tr>
+<tr>
+<td>Proveedores</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">80 %</td>
+</tr>
+<tr>
+<td>Clientes</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">83,3 %</td>
+</tr>
+<tr>
+<td>Almacenes</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">100 %</td>
+</tr>
+<tr>
+<td>Inventario</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">100 %</td>
+</tr>
+<tr>
+<td>Compras</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">83,3 %</td>
+</tr>
+<tr>
+<td>Ventas</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">85,7 %</td>
+</tr>
+<tr>
+<td>Empresa</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">80 %</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">80 %</td>
+</tr>
+<tr>
+<td>Frontend compartido</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">85,7 %</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align: right;"><strong>78</strong></td>
+<td style="text-align: right;"><strong>67</strong></td>
+<td style="text-align: right;"><strong>1</strong></td>
+<td style="text-align: right;"><strong>10</strong></td>
+<td style="text-align: right;"><strong>85,9 %</strong></td>
+</tr>
+</tbody>
+</table>
+<p>La distribución detallada se mantiene en la <a href="../test-cases/MATRIZ_COBERTURA/">matriz de cobertura</a>, que enlaza cada módulo con sus casos y evidencias.</p>
+<h3 id="62-cobertura-automatizada-ejecutada">6.2 Cobertura automatizada ejecutada</h3>
+<table>
+<thead>
+<tr>
+<th>Suite</th>
+<th>Resultado</th>
+<th>Finalidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend <code>AUTO-SQLITE</code></td>
+<td>99/99 aprobadas en 3,977 s</td>
+<td>Retroalimentación rápida y aislada</td>
+</tr>
+<tr>
+<td>Backend <code>AUTO-PG</code></td>
+<td>99/99 aprobadas en 69,668 s</td>
+<td>Restricciones, transacciones y comportamiento PostgreSQL</td>
+</tr>
+<tr>
+<td>Frontend <code>AUTO-FE</code></td>
+<td>24/24 aprobadas</td>
+<td>Validadores semánticos, ubicación y ayuda contextual</td>
+</tr>
+<tr>
+<td>Angular <code>BUILD-FE</code></td>
+<td>Build aprobado</td>
+<td>TypeScript, plantillas, estilos y empaquetado</td>
+</tr>
+</tbody>
+</table>
+<p>Las suites automatizadas no equivalen a los 78 casos funcionales. Un caso puede necesitar API, consulta de persistencia, evidencia visual o combinación de varias fuentes.</p>
+<h3 id="63-advertencias-de-compilacion">6.3 Advertencias de compilación</h3>
+<table>
+<thead>
+<tr>
+<th>Presupuesto</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bundle inicial</td>
+<td>Exceso documentado de 7,02 kB</td>
+</tr>
+<tr>
+<td>CSS del Dashboard</td>
+<td>Exceso documentado de 3,05 kB</td>
+</tr>
+</tbody>
+</table>
+<p>Estas advertencias no impidieron compilar, pero deben medirse para evitar crecimiento acumulativo.</p>
+<h3 id="64-evidencia-visual-representativa">6.4 Evidencia visual representativa</h3>
+<p><img alt="Dashboard actual de SofInventory en tema Claro" loading="lazy" src="../test-cases/12-modulo-dashboard/evidencias/frontend/DSH-escritorio-azul.png" /></p>
+<p><em>Figura 2. Interfaz integrada usada en la validación visual de tema, navegación y Dashboard.</em></p>
+<h2 id="7-mejoras-incorporadas-al-proyecto">7. Mejoras incorporadas al proyecto</h2>
+<p>La línea base original identificaba ausencia de pruebas frontend, módulos sin pruebas backend y validaciones incompletas. El proyecto actual ya incorpora mejoras sustanciales:</p>
+<h3 id="71-validaciones-y-mensajes">7.1 Validaciones y mensajes</h3>
+<ul>
+<li>Validadores semánticos compartidos para nombres de personas, lugares y nombres comerciales.</li>
+<li>Validación documental según tipo, sin bloquear pasaportes alfanuméricos o NIT con dígito de verificación.</li>
+<li>Normalización segura de espacios, sin eliminar tildes, <code>ñ</code>, apóstrofos o guiones válidos.</li>
+<li>Resumen general, borde rojo, mensaje por campo, desplazamiento y foco del primer error.</li>
+<li>Notificaciones globales en español y conservación de valores válidos.</li>
+<li>Política de contraseña aplicada en backend y formularios, con hash y confirmación.</li>
+</ul>
+<h3 id="72-ubicacion-compartida">7.2 Ubicación compartida</h3>
+<ul>
+<li>Catálogo local único con los 32 departamentos y Bogotá D. C., asociado a municipios.</li>
+<li>Selectores dependientes para Colombia y modo manual para otro país.</li>
+<li>Validación backend de pertenencia municipio–departamento.</li>
+<li>Compatibilidad con datos históricos y limpieza de campos ocultos al cambiar de modalidad.</li>
+</ul>
+<h3 id="73-inventario-compras-y-ventas">7.3 Inventario, compras y ventas</h3>
+<ul>
+<li>Servicios transaccionales con bloqueos y reversiones idempotentes.</li>
+<li>Stock por almacén, movimientos auditables y pruebas de concurrencia PostgreSQL.</li>
+<li>Responsable obtenido de la sesión autenticada, sin aceptar suplantación desde el cliente.</li>
+<li>Snapshots de empresa y producto para preservar históricos.</li>
+<li>POS de venta con búsqueda, totales, IVA, efectivo y cambio.</li>
+<li>Comprobante térmico de venta y comprobante interno de compra.</li>
+</ul>
+<h3 id="74-empresa-e-imagenes">7.4 Empresa e imágenes</h3>
+<ul>
+<li>Configuración empresarial singleton, editable solo por Administrador y no eliminable por API.</li>
+<li>Logo e imágenes de producto con PNG/JPG/JPEG/WebP, validación real, límite de tamaño y nombres UUID.</li>
+<li>Volumen <code>sofinventory_media_data</code> compartido entre backend y Nginx.</li>
+<li>Conservación de la imagen anterior cuando una actualización falla.</li>
+</ul>
+<h3 id="75-experiencia-y-documentacion">7.5 Experiencia y documentación</h3>
+<ul>
+<li>Temas Claro, Azul y Oscuro.</li>
+<li>Interfaz responsive, teclado, foco contenido en modales y ayuda contextual.</li>
+<li>Manual de usuario, manual técnico, arquitectura, estándares, guía visual y documentación QA por módulo.</li>
+<li>Evidencias E2E sanitizadas y matriz transversal de cobertura.</li>
+</ul>
+<h2 id="8-riesgos-y-defectos-vigentes">8. Riesgos y defectos vigentes</h2>
+<h3 id="81-defectos-abiertos">8.1 Defectos abiertos</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Módulo</th>
+<th>Severidad</th>
+<th>Hallazgo</th>
+<th>Caso relacionado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BUG-PRD-001</code></td>
+<td>Productos</td>
+<td>Crítica</td>
+<td>El alta puede enviar <code>quitar_imagen</code> a <code>Producto.objects.create</code> y producir 500.</td>
+<td><code>TC-PRD-001</code></td>
+</tr>
+<tr>
+<td><code>BUG-COM-001</code></td>
+<td>Compras</td>
+<td>Crítica</td>
+<td>Una compra admite un producto inactivo.</td>
+<td><code>TC-COM-004</code></td>
+</tr>
+<tr>
+<td><code>BUG-PRV-001</code></td>
+<td>Proveedores</td>
+<td>Alta</td>
+<td>Una eliminación con compras relacionadas no controla <code>ProtectedError</code>.</td>
+<td><code>TC-PRV-005</code></td>
+</tr>
+<tr>
+<td><code>BUG-CLI-001</code></td>
+<td>Clientes</td>
+<td>Alta</td>
+<td>Una eliminación con ventas relacionadas no controla <code>ProtectedError</code>.</td>
+<td><code>TC-CLI-006</code></td>
+</tr>
+<tr>
+<td><code>BUG-VTA-001</code></td>
+<td>Ventas</td>
+<td>Alta</td>
+<td>Débito y otros pagos no exigen todos sus datos condicionales.</td>
+<td><code>TC-VTA-004</code></td>
+</tr>
+<tr>
+<td><code>BUG-EMP-001</code></td>
+<td>Empresa</td>
+<td>Alta</td>
+<td>NIT y teléfono admiten valores semánticamente inválidos.</td>
+<td><code>TC-EMP-003</code></td>
+</tr>
+<tr>
+<td><code>BUG-LOGIN-001</code></td>
+<td>Login</td>
+<td>Media</td>
+<td>La expiración puede devolver 403 y el interceptor solo gestiona 401.</td>
+<td><code>TC-LOGIN-007</code>, <code>TC-FE-007</code></td>
+</tr>
+<tr>
+<td><code>BUG-USR-003</code></td>
+<td>Usuarios</td>
+<td>Media</td>
+<td>El buscador depende de una propiedad no reactiva.</td>
+<td><code>TC-USR-008</code></td>
+</tr>
+<tr>
+<td><code>BUG-DSH-001</code></td>
+<td>Dashboard</td>
+<td>Media</td>
+<td>La interfaz expone el texto técnico de un error HTTP.</td>
+<td><code>TC-DSH-005</code>, <code>TC-FE-007</code></td>
+</tr>
+</tbody>
+</table>
+<p>El impacto, la causa localizada y el criterio de cierre están en el <a href="../test-cases/DEFECTOS/">registro de defectos</a>.</p>
+<h3 id="82-defectos-resueltos-y-revalidados">8.2 Defectos resueltos y revalidados</h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Mejora confirmada</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BUG-USR-001</code></td>
+<td>Documento validado según tipo y de forma coherente en frontend/backend.</td>
+<td>Suites de usuarios y validadores semánticos</td>
+</tr>
+<tr>
+<td><code>BUG-USR-002</code></td>
+<td>Política de contraseña, confirmación, hash y rechazo de reutilización.</td>
+<td><code>ValidacionFortalezaContrasenaTests</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="83-mapa-de-riesgo-actualizado">8.3 Mapa de riesgo actualizado</h3>
+<table>
+<thead>
+<tr>
+<th>Riesgo</th>
+<th style="text-align: center;">Probabilidad</th>
+<th style="text-align: center;">Impacto</th>
+<th>Control prioritario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Creación de producto bloqueada</td>
+<td style="text-align: center;">Alta</td>
+<td style="text-align: center;">5 — Crítico</td>
+<td>Corregir datos auxiliares y agregar regresión API/UI</td>
+</tr>
+<tr>
+<td>Compra con producto inactivo</td>
+<td style="text-align: center;">Alta</td>
+<td style="text-align: center;">5 — Crítico</td>
+<td>Validar estado antes de cabecera, detalle o movimiento</td>
+</tr>
+<tr>
+<td>Eliminación de terceros relacionados</td>
+<td style="text-align: center;">Alta</td>
+<td style="text-align: center;">4 — Alto</td>
+<td>Capturar dependencia y responder 400/409 en español</td>
+</tr>
+<tr>
+<td>Pago condicional incompleto</td>
+<td style="text-align: center;">Media</td>
+<td style="text-align: center;">4 — Alto</td>
+<td>Validación cruzada por método en backend y frontend</td>
+</tr>
+<tr>
+<td>Identidad empresarial inválida</td>
+<td style="text-align: center;">Media</td>
+<td style="text-align: center;">4 — Alto</td>
+<td>Validadores específicos de NIT y teléfono</td>
+</tr>
+<tr>
+<td>Sesión expirada sin recuperación uniforme</td>
+<td style="text-align: center;">Media</td>
+<td style="text-align: center;">4 — Alto</td>
+<td>Contrato 401/403, limpieza y redirección</td>
+</tr>
+<tr>
+<td>Mensajes técnicos o búsqueda no reactiva</td>
+<td style="text-align: center;">Media</td>
+<td style="text-align: center;">3 — Medio</td>
+<td>Mensajes seguros y estado reactivo probado</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-proceso-de-calidad-aplicado">9. Proceso de calidad aplicado</h2>
+<pre class="mermaid"><code>flowchart LR
+    A["1. Planificar&lt;br/&gt;alcance y riesgo"] --&gt; B["2. Trazar&lt;br/&gt;requisito y prueba"]
+    B --&gt; C["3. Construir&lt;br/&gt;estándares y revisión"]
+    C --&gt; D["4. Verificar&lt;br/&gt;AUTO, API, DB-R y MAN"]
+    D --&gt; E["5. Registrar&lt;br/&gt;resultado y defecto"]
+    E --&gt; F["6. Corregir&lt;br/&gt;causa y regresión"]
+    F --&gt; G["7. Mejorar&lt;br/&gt;métricas y postmortem"]
+    G --&gt; A</code></pre>
+<h3 id="91-procedimiento-sqa-sof-01">9.1 Procedimiento <code>SQA-SOF-01</code></h3>
+<table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Entrada</th>
+<th>Actividad</th>
+<th>Salida / evidencia</th>
+<th>Puerta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Planificar</td>
+<td>Backlog priorizado</td>
+<td>Definir alcance, riesgos, ambiente, esfuerzo y criterios.</td>
+<td>Plan versionado</td>
+<td>G0: requisito verificable</td>
+</tr>
+<tr>
+<td>Trazar</td>
+<td>Requisitos y diseño</td>
+<td>Relacionar requisito, riesgo, caso, automatización y responsable.</td>
+<td>Matriz</td>
+<td>G1: críticos trazados</td>
+</tr>
+<tr>
+<td>Construir</td>
+<td>Diseño aprobado</td>
+<td>Aplicar estándares, validaciones y revisión.</td>
+<td>Código + checklist</td>
+<td>G2: cambio revisado</td>
+</tr>
+<tr>
+<td>Verificar</td>
+<td>Versión candidata</td>
+<td>Ejecutar pruebas funcionales, integración, seguridad y regresión.</td>
+<td>Log y evidencias</td>
+<td>G3: criterios de salida</td>
+</tr>
+<tr>
+<td>Registrar</td>
+<td>Resultados reales</td>
+<td>Documentar esperado, real, severidad y reproducción.</td>
+<td>Informe + defecto</td>
+<td>G4: evidencia completa</td>
+</tr>
+<tr>
+<td>Corregir</td>
+<td>Defecto priorizado</td>
+<td>Analizar causa, corregir, re-probar y ejecutar regresión.</td>
+<td>Evidencia de cierre</td>
+<td>G5: sin críticos/altos abiertos</td>
+</tr>
+<tr>
+<td>Mejorar</td>
+<td>Métricas del ciclo</td>
+<td>Realizar retrospectiva PSP/TSP y ajustar el proceso.</td>
+<td>Acciones con responsable</td>
+<td>G6: aprendizaje incorporado</td>
+</tr>
+</tbody>
+</table>
+<h3 id="92-responsabilidades">9.2 Responsabilidades</h3>
+<p>Las siguientes responsabilidades representan funciones necesarias dentro del proceso de calidad y no cargos adicionales del proyecto. Debido a que SofInventory es desarrollado por un equipo de dos aprendices, una misma persona puede asumir varias funciones según la actividad realizada. La asignación concreta debe registrarse al iniciar cada ciclo.</p>
+<table>
+<thead>
+<tr>
+<th>Actividad</th>
+<th>Desarrollo</th>
+<th>Líder técnico</th>
+<th>QA</th>
+<th>Responsable funcional</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan y trazabilidad</td>
+<td>Participa</td>
+<td>Aprueba viabilidad</td>
+<td>Responsable</td>
+<td>Aprueba alcance</td>
+</tr>
+<tr>
+<td>Código y pruebas unitarias</td>
+<td>Responsable</td>
+<td>Revisa</td>
+<td>Consulta</td>
+<td>Informado</td>
+</tr>
+<tr>
+<td>Ejecución funcional</td>
+<td>Participa</td>
+<td>Consulta</td>
+<td>Responsable</td>
+<td>Valida aceptación</td>
+</tr>
+<tr>
+<td>Defectos y causa raíz</td>
+<td>Corrige</td>
+<td>Responsable técnico</td>
+<td>Administra</td>
+<td>Prioriza</td>
+</tr>
+<tr>
+<td>Puerta de liberación</td>
+<td>Informado</td>
+<td>Aprueba técnica</td>
+<td>Recomienda</td>
+<td>Aprueba negocio</td>
+</tr>
+<tr>
+<td>PSP/TSP y retrospectiva</td>
+<td>Registra</td>
+<td>Facilita</td>
+<td>Consolida métricas</td>
+<td>Participa</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93-criterios-de-control">9.3 Criterios de control</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Criterio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Entrada</td>
+<td>Requisitos y aceptación aprobados; ambiente, datos ficticios y responsables disponibles; versión desplegable.</td>
+</tr>
+<tr>
+<td>Suspensión</td>
+<td>Ambiente inestable, pérdida de datos, más de 20 % de casos bloqueados o hallazgo crítico que invalida la ejecución.</td>
+</tr>
+<tr>
+<td>Reanudación</td>
+<td>Causa corregida, smoke aprobado, datos restaurados y decisión registrada.</td>
+</tr>
+<tr>
+<td>Salida</td>
+<td>100 % de críticos ejecutados, al menos 95 % aprobados, cero críticos/altos abiertos y regresión aprobada.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-instrumentos-de-calidad">10. Instrumentos de calidad</h2>
+<h3 id="101-instrumento-1-plan-de-pruebas">10.1 Instrumento 1 — Plan de pruebas</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Definición actual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identificación</td>
+<td><code>QA-PLAN-SOF-001</code> · versión interna 1.0 · propietario: QA</td>
+</tr>
+<tr>
+<td>Objetivo</td>
+<td>Verificar funciones críticas, seguridad, integridad y experiencia antes de liberar.</td>
+</tr>
+<tr>
+<td>Alcance</td>
+<td>Los 13 grupos funcionales documentados en la matriz.</td>
+</tr>
+<tr>
+<td>Estrategia</td>
+<td>Backend SQLite + PostgreSQL; frontend Node; build Angular; API/DB-R; E2E y revisión visual.</td>
+</tr>
+<tr>
+<td>Ambiente</td>
+<td>Angular 19.2.21, Django 6.0.4, DRF 3.17.1, PostgreSQL 15.18, Node 20 y Nginx 1.31.3.</td>
+</tr>
+<tr>
+<td>Datos</td>
+<td>Exclusivamente ficticios y temporales; limpieza posterior obligatoria.</td>
+</tr>
+<tr>
+<td>Entregables</td>
+<td>Plan, matriz, casos, scripts, resultados, defectos, evidencias, métricas y decisión.</td>
+</tr>
+<tr>
+<td>Aprobación</td>
+<td>Cumplimiento de la puerta de salida y aceptación técnica/funcional.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="tipos-de-prueba">Tipos de prueba</h4>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Objeto</th>
+<th>Ejemplos</th>
+<th style="text-align: center;">Prioridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Smoke</td>
+<td>Disponibilidad básica</td>
+<td>Login, Dashboard y endpoints principales</td>
+<td style="text-align: center;">P0</td>
+</tr>
+<tr>
+<td>Funcional</td>
+<td>Reglas del negocio</td>
+<td>Usuarios, compra, venta, anulaciones</td>
+<td style="text-align: center;">P0</td>
+</tr>
+<tr>
+<td>Integración</td>
+<td>Frontend–API–BD</td>
+<td>Persistencia, relaciones y stock</td>
+<td style="text-align: center;">P0</td>
+</tr>
+<tr>
+<td>Seguridad</td>
+<td>Sesión, autorización y archivos</td>
+<td>Expiración, rol, bloqueo y subida falsa</td>
+<td style="text-align: center;">P0</td>
+</tr>
+<tr>
+<td>Regresión</td>
+<td>Flujos después de cambios</td>
+<td>Inventario tras compras/ventas</td>
+<td style="text-align: center;">P1</td>
+</tr>
+<tr>
+<td>Usabilidad</td>
+<td>Mensajes y recuperación</td>
+<td>Foco, resúmenes, ayuda y errores</td>
+<td style="text-align: center;">P1</td>
+</tr>
+<tr>
+<td>Compatibilidad</td>
+<td>Navegadores y pantalla</td>
+<td>Escritorio, tableta, móvil y temas</td>
+<td style="text-align: center;">P2</td>
+</tr>
+<tr>
+<td>Rendimiento</td>
+<td>Respuesta bajo carga acordada</td>
+<td>Dashboard e inventario</td>
+<td style="text-align: center;">P2</td>
+</tr>
+</tbody>
+</table>
+<h4 id="calendario-por-ciclo">Calendario por ciclo</h4>
+<table>
+<thead>
+<tr>
+<th>Momento</th>
+<th>Actividad</th>
+<th>Evidencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inicio</td>
+<td>Actualizar alcance, riesgos, matriz y datos.</td>
+<td>Plan y trazabilidad</td>
+</tr>
+<tr>
+<td>Desarrollo</td>
+<td>Pruebas unitarias, revisión y checklist por cambio.</td>
+<td>Resultados de construcción</td>
+</tr>
+<tr>
+<td>Candidata</td>
+<td>Smoke, suites, integración, seguridad y regresión.</td>
+<td>Logs y evidencias</td>
+</tr>
+<tr>
+<td>Cierre</td>
+<td>Re-pruebas, decisión, métricas y retrospectiva.</td>
+<td>Informe y acciones</td>
+</tr>
+</tbody>
+</table>
+<h3 id="102-instrumento-2-matriz-de-trazabilidad">10.2 Instrumento 2 — Matriz de trazabilidad</h3>
+<p>La matriz completa se mantiene en un único documento para evitar duplicación: <a href="../test-cases/MATRIZ_COBERTURA/">MATRIZ_COBERTURA.md</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Área / requisito</th>
+<th>Riesgo principal</th>
+<th>Caso o evidencia</th>
+<th>Automatización</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Autenticación y sesión</td>
+<td>Acceso indebido / expiración</td>
+<td><code>TC-LOGIN-001</code> a <code>007</code></td>
+<td>Backend + API + manual</td>
+<td>Condicionado por <code>BUG-LOGIN-001</code></td>
+</tr>
+<tr>
+<td>Usuarios</td>
+<td>Escalamiento / datos inválidos</td>
+<td><code>TC-USR-001</code> a <code>008</code></td>
+<td>Backend + frontend + API</td>
+<td>Condicionado por <code>BUG-USR-003</code></td>
+</tr>
+<tr>
+<td>Categorías</td>
+<td>Duplicados / relaciones</td>
+<td><code>TC-CAT-001</code> a <code>004</code></td>
+<td>Backend + E2E</td>
+<td>Aprobado</td>
+</tr>
+<tr>
+<td>Productos</td>
+<td>Catálogo e imagen</td>
+<td><code>TC-PRD-001</code> a <code>006</code></td>
+<td>Backend + API + visual</td>
+<td>Fallo crítico en alta</td>
+</tr>
+<tr>
+<td>Proveedores</td>
+<td>Datos / dependencia</td>
+<td><code>TC-PRV-001</code> a <code>005</code></td>
+<td>Backend + frontend + API</td>
+<td>Fallo en eliminación relacionada</td>
+</tr>
+<tr>
+<td>Clientes</td>
+<td>Identidad / dependencia</td>
+<td><code>TC-CLI-001</code> a <code>006</code></td>
+<td>Backend + frontend + API</td>
+<td>Fallo en eliminación relacionada</td>
+</tr>
+<tr>
+<td>Almacenes</td>
+<td>Integridad y permisos</td>
+<td><code>TC-ALM-001</code> a <code>005</code></td>
+<td>Backend + API</td>
+<td>Aprobado</td>
+</tr>
+<tr>
+<td>Inventario</td>
+<td>Stock negativo / carrera</td>
+<td><code>TC-INV-001</code> a <code>007</code></td>
+<td>Backend PG + API + DB-R</td>
+<td>Aprobado</td>
+</tr>
+<tr>
+<td>Compras</td>
+<td>Stock y atomicidad</td>
+<td><code>TC-COM-001</code> a <code>006</code></td>
+<td>Backend + API + DB-R</td>
+<td>Producto inactivo pendiente</td>
+</tr>
+<tr>
+<td>Ventas</td>
+<td>Stock, pagos y totales</td>
+<td><code>TC-VTA-001</code> a <code>007</code></td>
+<td>Backend + API + UI</td>
+<td>Pago condicional pendiente</td>
+</tr>
+<tr>
+<td>Empresa</td>
+<td>Singleton, identidad y logo</td>
+<td><code>TC-EMP-001</code> a <code>005</code></td>
+<td>Backend + API + visual</td>
+<td>Validación NIT/teléfono pendiente</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>Métricas y recuperación</td>
+<td><code>TC-DSH-001</code> a <code>005</code></td>
+<td>Backend + E2E</td>
+<td>Mensaje técnico pendiente</td>
+</tr>
+<tr>
+<td>Frontend compartido</td>
+<td>Tema, formulario y sesión</td>
+<td><code>TC-FE-001</code> a <code>007</code></td>
+<td>Node + manual</td>
+<td>Condicionado por sesión/error</td>
+</tr>
+</tbody>
+</table>
+<h4 id="reglas-de-mantenimiento">Reglas de mantenimiento</h4>
+<ul>
+<li>No aceptar un requisito sin identificador y criterio verificable.</li>
+<li>No marcar un caso como cubierto si falta resultado real, ambiente, fecha o evidencia.</li>
+<li>Vincular cada defecto con el requisito y el caso que lo detectó.</li>
+<li>Actualizar la matriz cuando cambien la regla, el código HTTP o el entorno.</li>
+<li>Mantener una sola fuente consolidada; los documentos por módulo detallan los pasos.</li>
+</ul>
+<h3 id="103-instrumento-3-casos-de-prueba-representativos">10.3 Instrumento 3 — Casos de prueba representativos</h3>
+<h4 id="caso-a-tc-inv-007-concurrencia-sin-stock-negativo">Caso A: <code>TC-INV-007</code> — Concurrencia sin stock negativo</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Especificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Objetivo</td>
+<td>Confirmar que dos salidas simultáneas no producen stock negativo.</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>P0 — Integridad crítica</td>
+</tr>
+<tr>
+<td>Precondición</td>
+<td>Producto activo con 5 unidades en PostgreSQL; dos sesiones autorizadas.</td>
+</tr>
+<tr>
+<td>Datos</td>
+<td>Dos solicitudes concurrentes de salida por 4 unidades.</td>
+</tr>
+<tr>
+<td>Acción</td>
+<td>Ejecutar ambas transacciones de forma simultánea.</td>
+</tr>
+<tr>
+<td>Esperado</td>
+<td>Una operación aprobada, otra rechazada y stock final igual a 1.</td>
+</tr>
+<tr>
+<td>Resultado</td>
+<td><strong>Aprobado</strong> en PostgreSQL aislado.</td>
+</tr>
+<tr>
+<td>Evidencia</td>
+<td><code>AUTO-PG</code>, API y consulta <code>DB-R</code>.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="caso-b-tc-prd-001-alta-de-producto-con-imagen-opcional">Caso B: <code>TC-PRD-001</code> — Alta de producto con imagen opcional</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Especificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Objetivo</td>
+<td>Crear un producto válido con y sin imagen sin pasar campos auxiliares al modelo.</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>P0 — Función esencial</td>
+</tr>
+<tr>
+<td>Precondición</td>
+<td>Administrador/Supervisor autenticado y categoría activa.</td>
+</tr>
+<tr>
+<td>Datos</td>
+<td>Nombre comercial válido, marca, referencia, precios, IVA e imagen PNG válida opcional.</td>
+</tr>
+<tr>
+<td>Esperado</td>
+<td>HTTP 201, producto pendiente, stock inicial 0 e imagen segura cuando aplica.</td>
+</tr>
+<tr>
+<td>Resultado actual</td>
+<td><strong>Falló</strong>: puede devolver 500 por <code>quitar_imagen</code>.</td>
+</tr>
+<tr>
+<td>Evidencia</td>
+<td><a href="../test-cases/04-modulo-productos/evidencias/frontend/PRD-alta-error-e2e.png">Captura del error</a> y <code>BUG-PRD-001</code>.</td>
+</tr>
+<tr>
+<td>Cierre</td>
+<td>Retirar el campo auxiliar antes de <code>Producto.objects.create</code> y ejecutar regresión API/UI.</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Evidencia de alta de producto fallida" loading="lazy" src="../test-cases/04-modulo-productos/evidencias/frontend/PRD-alta-error-e2e.png" /></p>
+<p><em>Figura 3. Evidencia E2E del defecto crítico de creación de producto.</em></p>
+<h4 id="caso-c-tc-emp-004-seguridad-del-logo">Caso C: <code>TC-EMP-004</code> — Seguridad del logo</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Especificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Objetivo</td>
+<td>Validar contenido, tamaño, reemplazo, eliminación y conservación del logo.</td>
+</tr>
+<tr>
+<td>Prioridad</td>
+<td>P0 — Seguridad de archivos</td>
+</tr>
+<tr>
+<td>Particiones válidas</td>
+<td>PNG, JPG/JPEG y WebP reales dentro del límite.</td>
+</tr>
+<tr>
+<td>Particiones inválidas</td>
+<td>SVG, HTML, script disfrazado, MIME/extensión incoherentes y archivo mayor de 2 MB.</td>
+</tr>
+<tr>
+<td>Esperado</td>
+<td>Aceptar solo imágenes reales; usar nombre UUID; conservar el logo anterior ante otro error.</td>
+</tr>
+<tr>
+<td>Resultado</td>
+<td><strong>Aprobado</strong> en backend y flujo de configuración.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="caso-d-tc-vta-007-detalle-y-comprobante-historico">Caso D: <code>TC-VTA-007</code> — Detalle y comprobante histórico</h4>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Especificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Objetivo</td>
+<td>Comprobar que el detalle y la reimpresión coinciden con la venta guardada.</td>
+</tr>
+<tr>
+<td>Datos verificados</td>
+<td>Empresa, cliente, vendedor, almacén, fecha, pago, productos, IVA, descuento, total, efectivo y cambio.</td>
+</tr>
+<tr>
+<td>Históricos</td>
+<td>Responsable nulo muestra “No disponible”; datos económicos provienen del registro/snapshot.</td>
+</tr>
+<tr>
+<td>Resultado</td>
+<td><strong>Aprobado</strong>.</td>
+</tr>
+<tr>
+<td>Evidencia</td>
+<td><a href="../test-cases/10-modulo-ventas/evidencias/frontend/VTA-detalle-comprobante-e2e.png">Detalle y comprobante</a>.</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Detalle y comprobante de venta" loading="lazy" src="../test-cases/10-modulo-ventas/evidencias/frontend/VTA-detalle-comprobante-e2e.png" /></p>
+<p><em>Figura 4. Comprobante generado a partir de una venta de prueba y su información histórica.</em></p>
+<h3 id="104-instrumento-4-scripts-y-comandos-reproducibles">10.4 Instrumento 4 — Scripts y comandos reproducibles</h3>
+<p>Los comandos se ejecutan sobre entornos de prueba. Nunca deben apuntar a una base productiva ni incluir secretos en la salida.</p>
+<h4 id="suite-backend-rapida">Suite backend rápida</h4>
+<div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">compose</span> <span class="n">exec</span> <span class="n">-T</span> <span class="n">backend</span> <span class="p">`</span>
+  <span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">test</span> <span class="p">-</span><span class="n">-settings</span><span class="p">=</span><span class="n">config</span><span class="p">.</span><span class="n">test_settings</span>
+</code></pre></div>
+<h4 id="comprobacion-de-django-y-migraciones">Comprobación de Django y migraciones</h4>
+<div class="highlight"><pre><span></span><code><span class="n">docker</span> <span class="n">compose</span> <span class="n">exec</span> <span class="n">-T</span> <span class="n">backend</span> <span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">check</span>
+<span class="n">docker</span> <span class="n">compose</span> <span class="n">exec</span> <span class="n">-T</span> <span class="n">backend</span> <span class="p">`</span>
+  <span class="n">python</span> <span class="n">manage</span><span class="p">.</span><span class="n">py</span> <span class="n">makemigrations</span> <span class="p">-</span><span class="n">-check</span> <span class="p">-</span><span class="n">-dry-run</span>
+</code></pre></div>
+<h4 id="suite-frontend-y-compilacion">Suite frontend y compilación</h4>
+<div class="highlight"><pre><span></span><code><span class="nb">Set-Location</span> <span class="n">frontend</span>
+<span class="n">npm</span><span class="p">.</span><span class="n">cmd</span> <span class="n">test</span>
+<span class="n">npm</span><span class="p">.</span><span class="n">cmd</span> <span class="n">run</span> <span class="n">build</span>
+</code></pre></div>
+<h4 id="publicacion-documental">Publicación documental</h4>
+<div class="highlight"><pre><span></span><code><span class="n">mkdocs</span> <span class="n">build</span> <span class="p">-</span><span class="n">-strict</span>
+<span class="n">mkdocs</span> <span class="n">serve</span>
+</code></pre></div>
+<p>El procedimiento completo, incluidos los resultados PostgreSQL, está registrado en el <a href="../test-cases/evidencias-ejecucion/">manifiesto de evidencia automatizada</a>.</p>
+<h3 id="105-instrumento-5-resultados-y-defectos">10.5 Instrumento 5 — Resultados y defectos</h3>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Línea base actual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Versión documental</td>
+<td><strong>v1.0</strong></td>
+</tr>
+<tr>
+<td>Fecha de referencia de ejecución integral</td>
+<td>8 de agosto de 2026</td>
+</tr>
+<tr>
+<td>Casos funcionales</td>
+<td>78</td>
+</tr>
+<tr>
+<td>Aprobados / parciales / fallidos</td>
+<td>67 / 1 / 10</td>
+</tr>
+<tr>
+<td>Suites backend</td>
+<td>99/99 SQLite y 99/99 PostgreSQL</td>
+</tr>
+<tr>
+<td>Suite frontend</td>
+<td>24/24</td>
+</tr>
+<tr>
+<td>Build</td>
+<td>Aprobado con advertencias</td>
+</tr>
+<tr>
+<td>Defectos</td>
+<td>9 abiertos; 2 resueltos/revalidados</td>
+</tr>
+<tr>
+<td>Decisión</td>
+<td>Aprobación condicionada</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ciclo-obligatorio-de-un-defecto">Ciclo obligatorio de un defecto</h4>
+<ol>
+<li><strong>Nuevo:</strong> registrar entorno, pasos, esperado, real, evidencia, severidad y requisito.</li>
+<li><strong>Confirmado:</strong> reproducir y evaluar alcance e impacto.</li>
+<li><strong>Asignado:</strong> definir responsable, prioridad y objetivo.</li>
+<li><strong>Corregido:</strong> enlazar cambio, prueba nueva y causa raíz.</li>
+<li><strong>Re-prueba:</strong> ejecutar el caso original y la regresión relacionada.</li>
+<li><strong>Cerrado:</strong> actualizar matriz, resultados y documentación.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Severidad</th>
+<th>Criterio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Crítica</td>
+<td>Compromete disponibilidad, seguridad o integridad esencial sin alternativa.</td>
+</tr>
+<tr>
+<td>Alta</td>
+<td>Afecta una función importante, datos o regla central.</td>
+</tr>
+<tr>
+<td>Media</td>
+<td>Degrada la experiencia o tiene una alternativa operativa.</td>
+</tr>
+<tr>
+<td>Baja</td>
+<td>Impacto cosmético o menor.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="106-instrumento-6-psp-y-tsp">10.6 Instrumento 6 — PSP y TSP</h3>
+<p>El repositorio conserva resultados y defectos, pero no una bitácora histórica completa de tiempo por fase. Para evitar fabricar métricas, los valores no medidos permanecen como <strong>N/D</strong>. La disciplina PSP/TSP se adopta desde el siguiente ciclo de corrección.</p>
+<table>
+<thead>
+<tr>
+<th>Medida PSP-0</th>
+<th>Valor base</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tamaño funcional</td>
+<td>78 casos consolidados</td>
+</tr>
+<tr>
+<td>Automatización ejecutada</td>
+<td>99 pruebas backend ejecutadas en SQLite y las mismas 99 en PostgreSQL; 24 pruebas frontend y build Angular</td>
+</tr>
+<tr>
+<td>Tiempo histórico por fase</td>
+<td>N/D</td>
+</tr>
+<tr>
+<td>Defectos registrados</td>
+<td>11</td>
+</tr>
+<tr>
+<td>Defectos abiertos</td>
+<td>9</td>
+</tr>
+<tr>
+<td>Aprobación estricta</td>
+<td>85,9 %</td>
+</tr>
+<tr>
+<td>Postmortem</td>
+<td>Priorizar críticos, regresión, CI y coherencia documental</td>
+</tr>
+</tbody>
+</table>
+<h4 id="formato-de-tiempo-psp">Formato de tiempo PSP</h4>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Inicio</th>
+<th>Fin</th>
+<th style="text-align: right;">Interrupción</th>
+<th>Fase</th>
+<th>Actividad</th>
+<th style="text-align: right;">Tiempo neto</th>
+<th>Observación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AAAA-MM-DD</td>
+<td>HH:MM</td>
+<td>HH:MM</td>
+<td style="text-align: right;">0 min</td>
+<td>PSP</td>
+<td>Descripción breve</td>
+<td style="text-align: right;">0,00 h</td>
+<td>Motivo de desvío</td>
+</tr>
+</tbody>
+</table>
+<h4 id="formato-de-defecto-psp">Formato de defecto PSP</h4>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Inyección</th>
+<th>Detección</th>
+<th style="text-align: right;">Corrección</th>
+<th>Causa</th>
+<th>Prevención</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PSP-DEF-###</code></td>
+<td>AAAA-MM-DD</td>
+<td>Validación/lógica/datos</td>
+<td>Diseño</td>
+<td>Prueba</td>
+<td style="text-align: right;">0 min</td>
+<td>Descripción</td>
+<td>Cambio al proceso</td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-metricas-y-puertas-de-calidad">11. Métricas y puertas de calidad</h2>
+<h3 id="111-metricas">11.1 Métricas</h3>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Fórmula</th>
+<th style="text-align: right;">Línea base</th>
+<th style="text-align: right;">Meta</th>
+<th>Decisión</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aprobación funcional</td>
+<td>Aprobados / ejecutados × 100</td>
+<td style="text-align: right;">85,9 %</td>
+<td style="text-align: right;">≥95 %</td>
+<td>Bloquea si falla P0/P1</td>
+</tr>
+<tr>
+<td>Cobertura de requisitos</td>
+<td>Requisitos con evidencia / alcance × 100</td>
+<td style="text-align: right;">Consolidada por 78 casos</td>
+<td style="text-align: right;">100 % críticos</td>
+<td>No liberar sin traza</td>
+</tr>
+<tr>
+<td>Cierre de defectos</td>
+<td>Cerrados verificados / registrados × 100</td>
+<td style="text-align: right;">18,2 %</td>
+<td style="text-align: right;">100 % críticos/altos</td>
+<td>Bloquea liberación</td>
+</tr>
+<tr>
+<td>Automatización</td>
+<td>Casos automáticos / regresión acordada × 100</td>
+<td style="text-align: right;">Requiere inventario homogéneo</td>
+<td style="text-align: right;">Creciente</td>
+<td>Priorizar repetitivos</td>
+</tr>
+<tr>
+<td>Escape de defectos</td>
+<td>Posliberación / total × 100</td>
+<td style="text-align: right;">N/D</td>
+<td style="text-align: right;">Descendente</td>
+<td>Activa causa raíz</td>
+</tr>
+<tr>
+<td>Precisión PSP</td>
+<td>Horas reales / planificadas</td>
+<td style="text-align: right;">N/D</td>
+<td style="text-align: right;">0,8–1,2</td>
+<td>Ajustar estimación</td>
+</tr>
+<tr>
+<td>Presupuesto frontend</td>
+<td>Tamaño real / límite</td>
+<td style="text-align: right;">Exceso en bundle y Dashboard</td>
+<td style="text-align: right;">≤100 %</td>
+<td>Evitar crecimiento</td>
+</tr>
+</tbody>
+</table>
+<h3 id="112-puerta-de-liberacion">11.2 Puerta de liberación</h3>
+<ul>
+<li>[x] Todos los requisitos críticos tienen caso, resultado y evidencia.</li>
+<li>[x] Se ejecutó el 100 % de los casos críticos.</li>
+<li>[ ] La aprobación funcional es al menos del 95 %.</li>
+<li>[ ] No existen defectos críticos o altos abiertos.</li>
+<li>[ ] Las re-pruebas y la regresión están aprobadas.</li>
+<li>[x] El ambiente, la versión y la fecha están identificados.</li>
+<li>[x] Las migraciones y <code>manage.py check</code> no presentan inconsistencias en la ejecución documentada.</li>
+<li>[x] El build y las suites automatizadas están aprobados.</li>
+<li>[x] La documentación y el código cuentan con trazabilidad vigente.</li>
+<li>[ ] La decisión final de liberación ha sido aprobada por los responsables correspondientes.</li>
+</ul>
+<p><strong>Resultado actual:</strong> la puerta de liberación definitiva no fue aprobada. Se alcanzó una aprobación funcional del <strong>85,9 %</strong>, inferior a la meta mínima del <strong>95 %</strong>, y permanecen abiertos dos defectos críticos y cuatro de severidad alta.</p>
+<h2 id="12-plan-priorizado-de-mejora">12. Plan priorizado de mejora</h2>
+<table>
+<thead>
+<tr>
+<th>Prioridad</th>
+<th>Acción</th>
+<th>Responsable</th>
+<th>Criterio de terminado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P0</td>
+<td>Corregir <code>BUG-PRD-001</code>.</td>
+<td>Backend / Frontend</td>
+<td>Alta 201 con/sin imagen y regresión aprobada.</td>
+</tr>
+<tr>
+<td>P0</td>
+<td>Corregir <code>BUG-COM-001</code>.</td>
+<td>Backend</td>
+<td>Producto inactivo rechazado antes de persistir o mover stock.</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Controlar <code>ProtectedError</code> en clientes y proveedores.</td>
+<td>Backend</td>
+<td>Respuesta 400/409, mensaje español y relaciones intactas.</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Validar datos condicionales de pago.</td>
+<td>Backend / Frontend</td>
+<td>Cada método exige solo sus datos aplicables.</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Validar NIT y teléfono de empresa.</td>
+<td>Backend / Frontend</td>
+<td>Entradas inválidas rechazadas por campo.</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Unificar expiración 401/403.</td>
+<td>Backend / Frontend</td>
+<td>Limpieza, redirección y mensaje aprobados en E2E.</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Hacer reactivo el buscador de usuarios.</td>
+<td>Frontend</td>
+<td>Filtrado por nombre, usuario y correo probado.</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Sustituir el mensaje técnico del Dashboard.</td>
+<td>Frontend</td>
+<td>Mensaje seguro, reintento y detalle solo en logs.</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Incorporar CI, lint y cobertura.</td>
+<td>Equipo / DevOps</td>
+<td>Merge bloqueado ante fallo crítico.</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Reducir advertencias de presupuesto.</td>
+<td>Frontend</td>
+<td>Bundle y CSS dentro de límites acordados.</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>Añadir rendimiento, accesibilidad avanzada y seguridad.</td>
+<td>QA</td>
+<td>Umbrales reproducibles y aprobados.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="121-secuencia-recomendada">12.1 Secuencia recomendada</h3>
+<ol>
+<li>Resolver los defectos críticos de Productos y Compras.</li>
+<li>Corregir integridad y permisos de terceros, pagos y Empresa.</li>
+<li>Unificar la recuperación de sesión y mensajes de error.</li>
+<li>Agregar una prueba de regresión por cada corrección.</li>
+<li>Reejecutar las suites y los 11 casos condicionados.</li>
+<li>Actualizar matriz, resultados, defectos y decisión.</li>
+<li>Automatizar la puerta mediante integración continua.</li>
+</ol>
+<h2 id="13-seguridad-privacidad-y-gestion-de-evidencia">13. Seguridad, privacidad y gestión de evidencia</h2>
+<h3 id="131-controles-vigentes">13.1 Controles vigentes</h3>
+<ul>
+<li>Tokens aleatorios con vigencia, sesión única y revocación.</li>
+<li>Hash de contraseñas y política backend.</li>
+<li>Autorización por rol en endpoints.</li>
+<li>Responsables derivados del usuario autenticado.</li>
+<li>Transacciones y bloqueo de filas en operaciones críticas.</li>
+<li>Validación real de archivos, tamaño, MIME, extensión y nombre seguro.</li>
+<li>Configuración empresarial singleton.</li>
+<li>Snapshots históricos sin duplicar imágenes por operación.</li>
+<li>Volúmenes persistentes para PostgreSQL y medios.</li>
+</ul>
+<h3 id="132-reglas-para-evidencias">13.2 Reglas para evidencias</h3>
+<ul>
+<li>No incluir contraseñas, hashes completos, tokens, cookies o encabezados <code>Authorization</code>.</li>
+<li>Usar datos ficticios y entornos temporales.</li>
+<li>Sanitizar respuestas, capturas y trazas.</li>
+<li>Preferir consultas agregadas o de solo lectura.</li>
+<li>No presentar una captura como prueba de atomicidad, permisos o concurrencia.</li>
+<li>Eliminar usuarios, sesiones, contenedores y datos temporales al finalizar.</li>
+<li>Conservar evidencia histórica, pero rotularla cuando ya no demuestra el estado actual.</li>
+</ul>
+<h2 id="14-conclusiones">14. Conclusiones</h2>
+<ul>
+<li>La elaboración de este documento nos permitió organizar en una sola evidencia el proceso de calidad aplicado a SofInventory, incluyendo el plan de pruebas, la matriz de trazabilidad, los casos por módulo, los resultados obtenidos, los defectos encontrados y las acciones de mejora.</li>
+<li>La consolidación de 78 casos funcionales nos ayudó a evaluar el sistema de una manera más amplia y ordenada. De estos casos, 67 fueron aprobados, uno obtuvo un resultado parcial y 10 presentaron fallos, lo que demuestra avances importantes, pero también la necesidad de continuar trabajando en las funciones afectadas.</li>
+<li>Las pruebas automatizadas del backend fueron aprobadas tanto en SQLite como en PostgreSQL, y las pruebas del frontend también finalizaron satisfactoriamente. Sin embargo, aprendimos que estos resultados no son suficientes por sí solos para afirmar que todo el sistema funciona correctamente, porque algunas dificultades solamente se identificaron mediante pruebas de integración, revisión manual y uso directo de la interfaz.</li>
+<li>La matriz de trazabilidad y el registro de defectos nos permitieron relacionar cada hallazgo con su respectivo módulo, caso de prueba, nivel de prioridad y criterio de cierre. Esto facilita saber qué debemos corregir y qué verificaciones debemos repetir después de realizar cada mejora.</li>
+<li>También comprobamos la importancia de utilizar información ficticia y evidencias sanitizadas. De esta manera, pudimos documentar los resultados sin exponer contraseñas, tokens, credenciales, datos personales ni otra información sensible.</li>
+<li>Con base en los resultados registrados, consideramos que SofInventory puede continuar utilizándose en un entorno controlado, pero su aprobación sigue siendo condicionada. Antes de una liberación definitiva debemos corregir los defectos críticos y altos, repetir los casos afectados y ejecutar las pruebas de regresión correspondientes.</li>
+<li>Finalmente, esta actividad nos permitió entender que aplicar buenas prácticas de calidad no consiste únicamente en llenar formatos. Se trata de planificar, comprobar, registrar los resultados con honestidad y utilizar lo aprendido para mejorar tanto el software como nuestra forma de trabajar en equipo.</li>
+</ul>
+<h2 id="15-glosario">15. Glosario</h2>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aseguramiento de calidad (SQA)</td>
+<td>Actividades planificadas que proporcionan confianza sobre procesos y resultados.</td>
+</tr>
+<tr>
+<td>Atomicidad</td>
+<td>Una operación termina completa o no deja cambios parciales.</td>
+</tr>
+<tr>
+<td>Automatización</td>
+<td>Verificación ejecutada por código con resultado repetible.</td>
+</tr>
+<tr>
+<td>Caso de prueba</td>
+<td>Precondiciones, datos, pasos, esperado, real y evidencia para verificar un requisito.</td>
+</tr>
+<tr>
+<td>Cobertura</td>
+<td>Proporción del alcance con pruebas y evidencia verificable.</td>
+</tr>
+<tr>
+<td>Defecto</td>
+<td>Diferencia entre el comportamiento esperado y el observado.</td>
+</tr>
+<tr>
+<td>Idempotencia</td>
+<td>Repetir una operación no duplica su efecto.</td>
+</tr>
+<tr>
+<td>Integración continua</td>
+<td>Compilación y prueba automática de cambios antes de integrarlos.</td>
+</tr>
+<tr>
+<td>Matriz de trazabilidad</td>
+<td>Relación entre requisito, riesgo, caso, resultado, defecto y evidencia.</td>
+</tr>
+<tr>
+<td>Postmortem</td>
+<td>Revisión del ciclo para comparar plan y ejecución y definir mejoras.</td>
+</tr>
+<tr>
+<td>PSP</td>
+<td>Disciplina personal para registrar tiempo, tamaño y defectos.</td>
+</tr>
+<tr>
+<td>Puerta de calidad</td>
+<td>Condiciones objetivas requeridas para aprobar una liberación.</td>
+</tr>
+<tr>
+<td>Regresión</td>
+<td>Reejecución para comprobar que un cambio no afectó funciones existentes.</td>
+</tr>
+<tr>
+<td>Re-prueba</td>
+<td>Ejecución del caso original para verificar una corrección.</td>
+</tr>
+<tr>
+<td>Snapshot</td>
+<td>Copia de valores relevantes conservada con una operación histórica.</td>
+</tr>
+<tr>
+<td>TSP</td>
+<td>Coordinación de roles, compromisos y métricas del equipo.</td>
+</tr>
+</tbody>
+</table>
+<p>El <a href="../test-cases/GLOSARIO/">glosario de pruebas</a> conserva las definiciones técnicas y el ambiente de referencia completo.</p>
+<h2 id="16-referencias">16. Referencias</h2>
+<ul>
+<li>
+<p>Espejo Chavarría, A., Bayona Oré, S., &amp; Pastor, C. (2016). <a href="https://dialnet.unirioja.es/servlet/articulo?codigo=6671345"><em>Aseguramiento de la calidad en el proceso de desarrollo de software utilizando CMMI, TSP y PSP</em></a>. Revista Ibérica de Sistemas y Tecnologías de Información, 20, 62–77.</p>
+</li>
+<li>
+<p>International Organization for Standardization. (2021). <a href="https://www.iso.org/standard/79429.html"><em>ISO/IEC/IEEE 29119-3:2021. Pruebas de software — Parte 3: Documentación de pruebas</em></a>. ISO.</p>
+</li>
+<li>
+<p>ISO 25000. (s. f.). <a href="https://iso25000.com/index.php/11-espanol/iso-iec-25010"><em>ISO/IEC 25010: modelo de calidad del producto software</em></a>.</p>
+</li>
+<li>
+<p>Maida, E. G., &amp; Pacienzia, J. (2015). <a href="https://repositorio.uca.edu.ar/handle/123456789/522"><em>Metodologías de desarrollo de software</em></a>. Universidad Católica Argentina.</p>
+</li>
+<li>
+<p>Servicio Nacional de Aprendizaje. (s. f.). <a href="https://zajuna.sena.edu.co/Repositorio/Titulada/institution/SENA/Tecnologia/228118/Contenido/OVA/CF47/index.html#/"><em>Fundamentos de calidad de software</em></a>. Componente formativo, plataforma Zajuna.</p>
+</li>
+<li>
+<p>SofInventory. (2026). <a href="https://github.com/AlejandroSepulvedaDuarte/SofInventory"><em>Repositorio del proyecto SofInventory: código, manuales, arquitectura, estándares, casos de prueba, resultados, defectos y evidencias</em></a>. GitHub.</p>
+</li>
+<li>
+<p>Universidad Católica de Murcia. (s. f.). <a href="https://www.youtube.com/watch?v=Hf-47kSvkHc"><em>Calidad del software: concepto de calidad</em></a> [Video]. YouTube.</p>
+</li>
+</ul>
+<h2 id="17-anexos-y-navegacion-documental">17. Anexos y navegación documental</h2>
+<h3 id="171-documentos-transversales">17.1 Documentos transversales</h3>
+<table>
+<thead>
+<tr>
+<th>Documento</th>
+<th>Propósito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../MANUAL_USUARIO/">Manual de usuario</a></td>
+<td>Operación del sistema por roles y flujos.</td>
+</tr>
+<tr>
+<td><a href="../MANUAL_TECNICO/">Manual técnico</a></td>
+<td>Arquitectura, datos, seguridad, despliegue y mantenimiento.</td>
+</tr>
+<tr>
+<td><a href="../test-cases/MATRIZ_COBERTURA/">Matriz de cobertura</a></td>
+<td>Inventario consolidado de 78 casos.</td>
+</tr>
+<tr>
+<td><a href="../test-cases/RESULTADOS_EJECUCION_2026-08-08/">Resultados de ejecución</a></td>
+<td>Ambiente, resultados y decisión vigente.</td>
+</tr>
+<tr>
+<td><a href="../test-cases/DEFECTOS/">Registro de defectos</a></td>
+<td>Hallazgos, causas, impacto y cierre.</td>
+</tr>
+<tr>
+<td><a href="../test-cases/evidencias-ejecucion/">Manifiesto de evidencias</a></td>
+<td>Evidencias automatizadas y manuales sanitizadas.</td>
+</tr>
+<tr>
+<td><a href="../frontend-architecture/">Arquitectura frontend</a></td>
+<td>Componentes, servicios, estado y convenciones Angular.</td>
+</tr>
+<tr>
+<td><a href="../coding-standards/">Estándares de codificación</a></td>
+<td>Reglas Python, TypeScript, HTML/CSS y seguridad.</td>
+</tr>
+<tr>
+<td><a href="../accessibility-visual-guide/">Guía visual y de accesibilidad</a></td>
+<td>Temas, teclado, foco, responsive y mensajes.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="172-casos-por-modulo">17.2 Casos por módulo</h3>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Documento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Usuarios</td>
+<td><a href="../test-cases/01-modulo-usuarios/casos-usuarios/">Casos de Usuarios</a></td>
+</tr>
+<tr>
+<td>Login</td>
+<td><a href="../test-cases/02-modulo-login/casos-login/">Casos de Login</a></td>
+</tr>
+<tr>
+<td>Categorías</td>
+<td><a href="../test-cases/03-modulo-categorias/casos-categorias/">Casos de Categorías</a></td>
+</tr>
+<tr>
+<td>Productos</td>
+<td><a href="../test-cases/04-modulo-productos/casos-productos/">Casos de Productos</a></td>
+</tr>
+<tr>
+<td>Proveedores</td>
+<td><a href="../test-cases/05-modulo-proveedores/casos-proveedores/">Casos de Proveedores</a></td>
+</tr>
+<tr>
+<td>Clientes</td>
+<td><a href="../test-cases/06-modulo-clientes/casos-clientes/">Casos de Clientes</a></td>
+</tr>
+<tr>
+<td>Almacenes</td>
+<td><a href="../test-cases/07-modulo-almacenes/casos-almacenes/">Casos de Almacenes</a></td>
+</tr>
+<tr>
+<td>Inventario</td>
+<td><a href="../test-cases/08-modulo-inventario/casos-inventario/">Casos de Inventario</a></td>
+</tr>
+<tr>
+<td>Compras</td>
+<td><a href="../test-cases/09-modulo-compras/casos-compras/">Casos de Compras</a></td>
+</tr>
+<tr>
+<td>Ventas</td>
+<td><a href="../test-cases/10-modulo-ventas/casos-ventas/">Casos de Ventas</a></td>
+</tr>
+<tr>
+<td>Empresa</td>
+<td><a href="../test-cases/11-modulo-empresa/casos-empresa/">Casos de Empresa</a></td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td><a href="../test-cases/12-modulo-dashboard/casos-dashboard/">Casos de Dashboard</a></td>
+</tr>
+<tr>
+<td>Frontend compartido</td>
+<td><a href="../test-cases/13-frontend-compartido/casos-frontend-compartido/">Casos transversales</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="173-registro-de-aprobacion">17.3 Registro de aprobación</h3>
+<table>
+<thead>
+<tr>
+<th>Rol</th>
+<th>Nombre</th>
+<th>Decisión</th>
+<th>Fecha</th>
+<th>Firma / observación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aprendices / equipo de desarrollo</td>
+<td>Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo</td>
+<td>Elaborado</td>
+<td>10/08/2026</td>
+<td>Versión documental v1.0</td>
+</tr>
+<tr>
+<td>Responsable QA</td>
+<td></td>
+<td>Revisar</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Líder técnico</td>
+<td></td>
+<td>Aprobar / devolver</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Instructor / evaluador</td>
+<td></td>
+<td>Evaluar</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<div align="center">
+<h3>🛠️ SofInventory ERP</h3>
+<p>Aplicación de buenas prácticas de calidad de software</p>
+<p><strong>Versión documental v1.0 · © 2026 SofInventory.</strong><br>
+Documento elaborado por el Equipo de Desarrollo de Software — SENA</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,263 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1800" viewBox="0 0 1200 1800" role="img" aria-labelledby="title desc">
+  <title id="title">Proceso de calidad de software de SofInventory</title>
+  <desc id="desc">Infografía del ciclo de calidad aplicado a trece grupos funcionales. Resume 78 casos funcionales, 67 aprobados, uno parcial, diez fallidos, 85,9 por ciento de aprobación, 99 de 99 pruebas backend aprobadas en SQLite y PostgreSQL, 24 de 24 pruebas frontend aprobadas, once defectos registrados, nueve abiertos, dos resueltos y revalidados, y una decisión de aprobación condicionada.</desc>
+
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071a2b"/>
+      <stop offset="0.52" stop-color="#0b2438"/>
+      <stop offset="1" stop-color="#10192d"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#22d3c8"/>
+    </linearGradient>
+    <linearGradient id="decision" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3a2a16"/>
+      <stop offset="1" stop-color="#17283a"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#020617" flood-opacity="0.34"/>
+    </filter>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#7dd3fc" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #f8fbff; }
+      .muted { fill: #b9cee2; }
+      .soft { fill: #dceaf6; }
+      .accent { fill: #67e8f9; }
+      .section-title { font-size: 30px; font-weight: 700; letter-spacing: 0.2px; }
+      .label { font-size: 20px; font-weight: 600; }
+      .caption { font-size: 18px; fill: #b9cee2; }
+      .metric { font-size: 40px; font-weight: 800; }
+      .panel { fill: #102d42; stroke: #2b526b; stroke-width: 2; }
+      .card { fill: #15364c; stroke: #2c5972; stroke-width: 2; }
+      .line-icon { fill: none; stroke: #7dd3fc; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="1800" fill="url(#background)"/>
+  <rect width="1200" height="1800" fill="url(#grid)"/>
+  <circle cx="1040" cy="150" r="250" fill="#0ea5e9" opacity="0.07"/>
+  <circle cx="116" cy="1670" r="210" fill="#14b8a6" opacity="0.06"/>
+
+  <!-- Encabezado e identidad -->
+  <g transform="translate(70 52)">
+    <g aria-hidden="true">
+      <path d="M18 20 56 2l38 18v44L56 84 18 64Z" fill="#0c2b41" stroke="#67e8f9" stroke-width="3"/>
+      <path d="M18 20 56 40 94 20M56 40v44" class="line-icon"/>
+      <path d="M39 29 56 20l17 9" fill="none" stroke="#f8fbff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <text x="116" y="35" font-size="38" font-weight="800">SofInventory</text>
+    <text x="116" y="69" font-size="20" class="muted" letter-spacing="1.2">GESTIÓN CON EVIDENCIA</text>
+  </g>
+
+  <g transform="translate(70 164)">
+    <text x="0" y="0" font-size="56" font-weight="800">Proceso de calidad de software</text>
+    <text x="0" y="48" font-size="25" class="soft">Resultados, trazabilidad y mejora continua</text>
+  </g>
+
+  <g transform="translate(870 14)">
+    <rect width="260" height="94" rx="22" fill="#133d53" stroke="#38bdf8" stroke-width="2"/>
+    <text x="130" y="40" text-anchor="middle" font-size="38" font-weight="800" class="accent">13</text>
+    <text x="130" y="70" text-anchor="middle" font-size="19" class="soft">grupos funcionales</text>
+  </g>
+
+  <!-- Ciclo -->
+  <text x="70" y="310" class="section-title">Un ciclo que deja evidencia</text>
+  <text x="70" y="344" class="caption">Cada paso produce una salida verificable y alimenta la siguiente iteración.</text>
+
+  <g transform="translate(70 380)" filter="url(#shadow)">
+    <g transform="translate(0 0)">
+      <rect width="137" height="176" rx="20" class="card"/>
+      <circle cx="68.5" cy="47" r="25" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+      <text x="68.5" y="56" text-anchor="middle" font-size="26" font-weight="800">1</text>
+      <text x="68.5" y="103" text-anchor="middle" class="label">Planificar</text>
+      <text x="68.5" y="136" text-anchor="middle" class="caption">alcance</text>
+      <text x="68.5" y="158" text-anchor="middle" class="caption">y riesgo</text>
+    </g>
+    <path d="M141 88h12m-6-7 7 7-7 7" class="line-icon"/>
+    <g transform="translate(154 0)">
+      <rect width="137" height="176" rx="20" class="card"/>
+      <circle cx="68.5" cy="47" r="25" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+      <text x="68.5" y="56" text-anchor="middle" font-size="26" font-weight="800">2</text>
+      <text x="68.5" y="103" text-anchor="middle" class="label">Trazar</text>
+      <text x="68.5" y="136" text-anchor="middle" class="caption">requisito</text>
+      <text x="68.5" y="158" text-anchor="middle" class="caption">y caso</text>
+    </g>
+    <path d="M295 88h12m-6-7 7 7-7 7" class="line-icon"/>
+    <g transform="translate(308 0)">
+      <rect width="137" height="176" rx="20" class="card"/>
+      <circle cx="68.5" cy="47" r="25" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+      <text x="68.5" y="56" text-anchor="middle" font-size="26" font-weight="800">3</text>
+      <text x="68.5" y="103" text-anchor="middle" class="label">Verificar</text>
+      <text x="68.5" y="136" text-anchor="middle" class="caption">AUTO · API</text>
+      <text x="68.5" y="158" text-anchor="middle" class="caption">DB-R · MAN</text>
+    </g>
+    <path d="M449 88h12m-6-7 7 7-7 7" class="line-icon"/>
+    <g transform="translate(462 0)">
+      <rect width="137" height="176" rx="20" class="card"/>
+      <circle cx="68.5" cy="47" r="25" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+      <text x="68.5" y="56" text-anchor="middle" font-size="26" font-weight="800">4</text>
+      <text x="68.5" y="103" text-anchor="middle" class="label">Registrar</text>
+      <text x="68.5" y="136" text-anchor="middle" class="caption">resultado</text>
+      <text x="68.5" y="158" text-anchor="middle" class="caption">y evidencia</text>
+    </g>
+    <path d="M603 88h12m-6-7 7 7-7 7" class="line-icon"/>
+    <g transform="translate(616 0)">
+      <rect width="137" height="176" rx="20" class="card"/>
+      <circle cx="68.5" cy="47" r="25" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+      <text x="68.5" y="56" text-anchor="middle" font-size="26" font-weight="800">5</text>
+      <text x="68.5" y="103" text-anchor="middle" class="label">Corregir</text>
+      <text x="68.5" y="136" text-anchor="middle" class="caption">causa</text>
+      <text x="68.5" y="158" text-anchor="middle" class="caption">localizada</text>
+    </g>
+    <path d="M757 88h12m-6-7 7 7-7 7" class="line-icon"/>
+    <g transform="translate(770 0)">
+      <rect width="137" height="176" rx="20" class="card"/>
+      <circle cx="68.5" cy="47" r="25" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+      <text x="68.5" y="56" text-anchor="middle" font-size="26" font-weight="800">6</text>
+      <text x="68.5" y="98" text-anchor="middle" class="label">Volver a</text>
+      <text x="68.5" y="124" text-anchor="middle" class="label">probar</text>
+      <text x="68.5" y="156" text-anchor="middle" class="caption">re-prueba</text>
+    </g>
+    <path d="M911 88h12m-6-7 7 7-7 7" class="line-icon"/>
+    <g transform="translate(924 0)">
+      <rect width="137" height="176" rx="20" class="card"/>
+      <circle cx="68.5" cy="47" r="25" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+      <text x="68.5" y="56" text-anchor="middle" font-size="26" font-weight="800">7</text>
+      <text x="68.5" y="103" text-anchor="middle" class="label">Mejorar</text>
+      <text x="68.5" y="136" text-anchor="middle" class="caption">métricas</text>
+      <text x="68.5" y="158" text-anchor="middle" class="caption">y proceso</text>
+    </g>
+  </g>
+
+  <!-- Resultados -->
+  <g transform="translate(70 610)" filter="url(#shadow)">
+    <rect width="1060" height="450" rx="28" class="panel"/>
+    <text x="40" y="58" class="section-title">Resultados funcionales y automatización</text>
+    <text x="40" y="92" class="caption">Ejecución consolidada del 8 de agosto de 2026</text>
+
+    <g transform="translate(72 142)">
+      <circle cx="126" cy="126" r="103" fill="none" stroke="#28495e" stroke-width="28"/>
+      <circle cx="126" cy="126" r="103" fill="none" stroke="url(#brand)" stroke-width="28" pathLength="100" stroke-dasharray="85.9 14.1" stroke-linecap="round" transform="rotate(-90 126 126)"/>
+      <text x="126" y="120" text-anchor="middle" font-size="52" font-weight="800">85,9 %</text>
+      <text x="126" y="154" text-anchor="middle" class="caption">aprobación estricta</text>
+      <text x="126" y="204" text-anchor="middle" font-size="22" class="soft">67 de 78 casos</text>
+    </g>
+
+    <g transform="translate(375 122)">
+      <g>
+        <rect width="195" height="112" rx="18" fill="#123f3b" stroke="#4ade80" stroke-width="2"/>
+        <text x="24" y="47" class="metric" fill="#86efac">67</text>
+        <text x="24" y="82" class="label">aprobados</text>
+      </g>
+      <g transform="translate(215 0)">
+        <rect width="195" height="112" rx="18" fill="#493817" stroke="#fbbf24" stroke-width="2"/>
+        <text x="24" y="47" class="metric" fill="#fde68a">1</text>
+        <text x="24" y="82" class="label">parcial</text>
+      </g>
+      <g transform="translate(430 0)">
+        <rect width="195" height="112" rx="18" fill="#48232b" stroke="#fb7185" stroke-width="2"/>
+        <text x="24" y="47" class="metric" fill="#fecdd3">10</text>
+        <text x="24" y="82" class="label">fallidos</text>
+      </g>
+
+      <g transform="translate(0 145)">
+        <text x="0" y="24" class="label">Backend · SQLite</text>
+        <rect x="225" y="2" width="400" height="26" rx="13" fill="#26495e"/>
+        <rect x="225" y="2" width="400" height="26" rx="13" fill="#15803d"/>
+        <text x="610" y="23" text-anchor="end" font-size="18" font-weight="700">99 / 99</text>
+      </g>
+      <g transform="translate(0 200)">
+        <text x="0" y="24" class="label">Backend · PostgreSQL</text>
+        <rect x="225" y="2" width="400" height="26" rx="13" fill="#26495e"/>
+        <rect x="225" y="2" width="400" height="26" rx="13" fill="#15803d"/>
+        <text x="610" y="23" text-anchor="end" font-size="18" font-weight="700">99 / 99</text>
+      </g>
+      <g transform="translate(0 255)">
+        <text x="0" y="24" class="label">Frontend · Node</text>
+        <rect x="225" y="2" width="400" height="26" rx="13" fill="#26495e"/>
+        <rect x="225" y="2" width="400" height="26" rx="13" fill="#15803d"/>
+        <text x="610" y="23" text-anchor="end" font-size="18" font-weight="700">24 / 24</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Defectos -->
+  <g transform="translate(70 1100)" filter="url(#shadow)">
+    <rect width="1060" height="240" rx="28" class="panel"/>
+    <text x="40" y="58" class="section-title">Defectos: registrar no significa cerrar</text>
+    <text x="40" y="92" class="caption">El cierre exige corrección, re-prueba, regresión y evidencia.</text>
+
+    <g transform="translate(40 120)">
+      <g>
+        <rect width="245" height="86" rx="18" fill="#17384d"/>
+        <text x="24" y="42" class="metric">11</text>
+        <text x="92" y="39" class="label">registrados</text>
+        <text x="92" y="66" class="caption">total trazado</text>
+      </g>
+      <g transform="translate(265 0)">
+        <rect width="245" height="86" rx="18" fill="#48232b" stroke="#fb7185" stroke-width="2"/>
+        <text x="24" y="42" class="metric" fill="#fecdd3">9</text>
+        <text x="92" y="39" class="label">abiertos</text>
+        <text x="92" y="66" class="caption">2 críticos · 4 altos</text>
+      </g>
+      <g transform="translate(530 0)">
+        <rect width="450" height="86" rx="18" fill="#123f3b" stroke="#4ade80" stroke-width="2"/>
+        <text x="24" y="42" class="metric" fill="#86efac">2</text>
+        <text x="92" y="39" class="label">resueltos y revalidados</text>
+        <text x="92" y="66" class="caption">con evidencia automatizada vigente</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Decisión -->
+  <g transform="translate(70 1380)" filter="url(#shadow)">
+    <rect width="1060" height="150" rx="28" fill="url(#decision)" stroke="#fbbf24" stroke-width="3"/>
+    <g transform="translate(36 35)" aria-hidden="true">
+      <path d="M42 2 80 70H4Z" fill="#fbbf24" opacity="0.18" stroke="#fbbf24" stroke-width="3"/>
+      <path d="M42 25v22M42 58v2" stroke="#fde68a" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <text x="150" y="61" font-size="22" font-weight="700" fill="#fde68a" letter-spacing="1">DECISIÓN VIGENTE</text>
+    <text x="150" y="111" font-size="37" font-weight="800">Aprobación condicionada</text>
+    <text x="700" y="72" class="soft" font-size="19">Continuar solo en entorno controlado.</text>
+    <text x="700" y="105" class="caption">No corresponde a una liberación definitiva.</text>
+  </g>
+
+  <!-- Próximas acciones -->
+  <g transform="translate(70 1570)">
+    <text x="0" y="0" class="section-title">Acciones siguientes</text>
+    <g transform="translate(0 34)">
+      <g>
+        <circle cx="32" cy="48" r="29" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+        <text x="32" y="57" text-anchor="middle" font-size="25" font-weight="800">1</text>
+        <text x="76" y="38" class="label">Corregir defectos</text>
+        <text x="76" y="66" class="caption">críticos y altos</text>
+      </g>
+      <g transform="translate(275 0)">
+        <circle cx="32" cy="48" r="29" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+        <text x="32" y="57" text-anchor="middle" font-size="25" font-weight="800">2</text>
+        <text x="76" y="38" class="label">Reejecutar</text>
+        <text x="76" y="66" class="caption">casos afectados</text>
+      </g>
+      <g transform="translate(540 0)">
+        <circle cx="32" cy="48" r="29" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+        <text x="32" y="57" text-anchor="middle" font-size="25" font-weight="800">3</text>
+        <text x="76" y="38" class="label">Ejecutar</text>
+        <text x="76" y="66" class="caption">regresión</text>
+      </g>
+      <g transform="translate(795 0)">
+        <circle cx="32" cy="48" r="29" fill="#164e63" stroke="#67e8f9" stroke-width="2"/>
+        <text x="32" y="57" text-anchor="middle" font-size="25" font-weight="800">4</text>
+        <text x="76" y="38" class="label">Actualizar</text>
+        <text x="76" y="66" class="caption">métricas y evidencia</text>
+      </g>
+    </g>
+  </g>
+
+  <line x1="70" y1="1735" x2="1130" y2="1735" stroke="#2b526b" stroke-width="2"/>
+  <text x="70" y="1772" font-size="19" class="muted">SofInventory · Calidad basada en resultados verificables · 10 de agosto de 2026</text>
+  <text x="1130" y="1772" text-anchor="end" font-size="19" class="accent">SENA · Ficha 3118526</text>
+</svg>

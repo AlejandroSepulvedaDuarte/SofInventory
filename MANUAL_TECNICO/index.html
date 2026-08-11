@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Manuales técnico y de usuario del sistema SofInventory.">
+        <meta name="description" content="Manuales y documentación de calidad del sistema SofInventory.">
       
       
         <meta name="author" content="Alejandro Sepúlveda Duarte y Lucy Estefany Izquierdo Jaramillo">
@@ -15,6 +15,8 @@
       
         <link rel="prev" href="../MANUAL_USUARIO/">
       
+      
+        <link rel="next" href="../Aplicacion_buenas_practicas_calidad_SofInventory/">
       
       
         
@@ -50,6 +52,8 @@
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../docs/extra.css">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -242,6 +246,26 @@
 
       </a>
     </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Aplicacion_buenas_practicas_calidad_SofInventory/" class="md-tabs__link">
+          
+  
+  
+  Evidencias de calidad
+
+        </a>
+      </li>
+    
   
 
       
@@ -1654,6 +1678,147 @@
     </ul>
   
 </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evidencias de calidad
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Evidencias de calidad
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Aplicacion_buenas_practicas_calidad_SofInventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aplicación de buenas prácticas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Diligenciamiento_instrumentos_calidad_SofInventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instrumentos diligenciados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Bitacora_procesos_documentados_SofInventory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bitácora de procesos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -5073,7 +5238,7 @@ INITIAL_ADMIN_TIPO_DOCUMENTO=CC
 INITIAL_ADMIN_NUMERO_DOCUMENTO=&lt;documento-autorizado&gt;
 </code></pre></div>
 <p>Dentro del contenedor backend, Compose completa la conexión con <code>DB_HOST=db</code>, no <code>localhost</code>. Los servicios se resuelven por nombre dentro de la red interna.</p>
-<div class="admonition warning">
+<div class="admonition advertencia">
 <p class="admonition-title">Secretos y bootstrap</p>
 <p>Genere valores únicos para <code>SECRET_KEY</code>, <code>POSTGRES_PASSWORD</code> e <code>INITIAL_ADMIN_PASSWORD</code>. Si la contraseña inicial queda vacía, <code>seed_data</code> crea una aleatoria y la muestra una sola vez en los logs del primer arranque; no capture ni publique ese log.</p>
 </div>
@@ -5677,9 +5842,9 @@ curl<span class="w"> </span>-i<span class="w"> </span>http://localhost:8000/api/
 </tr>
 </tbody>
 </table>
-<div class="admonition warning">
+<div class="admonition advertencia">
 <p class="admonition-title">No confundir suite verde con liberación completa</p>
-<p>Las suites automatizadas aprobaron, pero los casos E2E detectaron defectos de contrato, interfaz y reglas de negocio. La liberación no debe declararse totalmente aprobada hasta corregir y reejecutar los casos fallidos. Consulte <a href="../test-cases/RESULTADOS_EJECUCION_2026-08-08/">Resultados de ejecución</a> y <a href="../test-cases/DEFECTOS/">Registro de defectos</a>.</p>
+<p>Los casos E2E detectaron defectos de contrato, interfaz y reglas de negocio. La liberación no debe declararse totalmente aprobada hasta corregir y reejecutar los casos fallidos. Consulte <a href="../test-cases/RESULTADOS_EJECUCION_2026-08-08/">Resultados de ejecución</a> y <a href="../test-cases/DEFECTOS/">Registro de defectos</a>.</p>
 </div>
 <table>
 <thead>
