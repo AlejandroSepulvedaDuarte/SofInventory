@@ -121,6 +121,19 @@
 }
 
 .md-typeset pre {
+  --md-code-hl-color: #2f5066;
+  --md-code-hl-number-color: #f9e2af;
+  --md-code-hl-special-color: #f5c2e7;
+  --md-code-hl-function-color: #cba6f7;
+  --md-code-hl-constant-color: #b4befe;
+  --md-code-hl-keyword-color: #89b4fa;
+  --md-code-hl-string-color: #a6e3a1;
+  --md-code-hl-name-color: #edf7f8;
+  --md-code-hl-operator-color: #f2d5cf;
+  --md-code-hl-punctuation-color: #cdd6f4;
+  --md-code-hl-comment-color: #b8c4ce;
+  --md-code-hl-generic-color: #cdd6f4;
+  --md-code-hl-variable-color: #f5e0dc;
   background: #172b3a;
   border-radius: 4px;
 }
@@ -149,15 +162,6 @@
   box-shadow: none;
 }
 
-/* Ocultar la columna de navegación izquierda */
-.md-sidebar--primary {
-  display: none !important;
-}
-
-/* Permitir que el contenido ocupe todo el lado izquierdo libre */
-.md-content {
-  margin-left: 0 !important;
-}
 @media screen and (max-width: 76.2344em) {
   .md-content {
     border: 0;
