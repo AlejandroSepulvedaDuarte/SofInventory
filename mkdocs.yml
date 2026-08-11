@@ -7,20 +7,9 @@ theme:
   name: material
   language: es
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-7
-        name: Cambiar a modo oscuro
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/brightness-4
-        name: Cambiar a modo claro
+    scheme: default
+    primary: indigo
+    accent: indigo
   features:
     - navigation.tabs          # Pestañas superiores
     - navigation.top           # Botón para volver arriba
@@ -48,8 +37,7 @@ extra_css:
 nav:
   - Manual de Usuario: MANUAL_USUARIO.md
   - Manual Técnico: MANUAL_TECNICO.md
-  - Evidencias de calidad:
-      - Aplicación de buenas prácticas: Aplicacion_buenas_practicas_calidad_SofInventory.md
-      - Instrumentos diligenciados: Diligenciamiento_instrumentos_calidad_SofInventory.md
-      - Bitácora de procesos: Bitacora_procesos_documentados_SofInventory.md
+  - Diseño y calidad del software: Aplicacion_buenas_practicas_calidad_SofInventory.md
+  - Instrumentos de calidad del software: Diligenciamiento_instrumentos_calidad_SofInventory.md
+  - Bitácora: Bitacora_procesos_documentados_SofInventory.md
 
